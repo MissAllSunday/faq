@@ -78,6 +78,7 @@ $txt['faqmod_manage_category_desc'] = 'From here you can manage your categories,
 -By user: The person who edited this category the last time.<br />';
 $txt['faqmod_admin_panel'] = 'FAQ mod admin panel';
 $txt['faqmod_admin_panel_desc'] = 'This is the main admin panel for the FAQ mod, in here you can easily add/edit/delete FAQs as well as setup the configuration.';
+$txt['faqmod_php_version'] = '<br /><span style="color:red;font-size:25px">This mod needs php 5.2+ to work properly, you won\'t be able to use this mod</span>';
 $txt['faqmod_num_faqs'] = 'Number of FAQs to show on each page.';
 $txt['faqmod_num_faqs_sub'] = 'If you have a lot of FAQs you can set a number here to active the pagination, leave it in blank or at 0 if you do not want to have pagination, otherwise put a number, for example, if you have 10 FAQs and you set this at 5 then you will have two pages, 10/5 = 2.';
 $txt['faqmod_sort_method'] = 'Sort the FAQ by:';

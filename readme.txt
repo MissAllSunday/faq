@@ -10,6 +10,7 @@
 
 Special thanks to [url=http://www.simplemachines.org/community/index.php?action=profile;u=11359]Spuds[/url] for that awesome debugging :D
 
+[b]This mod needs php 5.2+ to work properly[/b]
 
 [size=12pt][color=purple]Description[/color][/size]
 

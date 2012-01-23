@@ -136,13 +136,13 @@ class FaqQuery
 	/* We collect all the faqs here, cache when possible */
 	public function GetFaqs()
 	{
-		if (($this->GetFaqs = cache_get_data('FAQ:GetFaqs', 120)) == null)
+		if (($this->GetFaqs = cache_get_data('FAQ:GetFaqs', 240)) == null)
 		{
 			$this->Query('faq')->Params($this->query_params);
 			$this->Query('faq')->GetData($this->key);
 			$this->GetFaqs = $this->Query('faq')->DataResult();
 
-			cache_put_data('FAQ:GetFaqs', $this->Query('faq')->DataResult(), 120);
+			cache_put_data('FAQ:GetFaqs', $this->Query('faq')->DataResult(), 240);
 		}
 
 		return $this->GetFaqs;
@@ -151,13 +151,13 @@ class FaqQuery
 	/* Get all categories, cache when possible */
 	public function GetCategories()
 	{
-		if (($this->GetCategories = cache_get_data('FAQ:GetCategories', 120)) == null)
+		if (($this->GetCategories = cache_get_data('FAQ:GetCategories', 240)) == null)
 		{
 			$this->Query('category')->Params($this->query_params);
 			$this->Query('category')->GetData('category_id');
 			$this->GetCategories = $this->Query('category')->DataResult();
 
-			cache_put_data('FAQ:GetCategories', $this->Query('category')->DataResult(), 120);
+			cache_put_data('FAQ:GetCategories', $this->Query('category')->DataResult(), 240);
 		}
 
 		return $this->GetCategories;
@@ -252,7 +252,7 @@ class FaqQuery
 		return $this->GetReturn('GetFaqs', 'category_id', $CatID);
 	}
 
-	/* // Editing. */
+	/* Editing. */
 	function editFaq2($FaqID = '', $user)
 	{
 		/* Kill the cache */
@@ -275,7 +275,7 @@ class FaqQuery
 		$faqmod_title = $this->FaqClean($_POST['title'], false);
 		$faqmod_category = (int) $_POST['category_id'];
 
-		/* // Track the last person who edited this... */
+		/* Track the last person who edited this... */
 		$faqmod_last_user = (int) $user;
 
 		/* Don't ask questions... just do what I say! */
@@ -296,7 +296,7 @@ class FaqQuery
 		$this->Query('faq')->UpdateData();
 	}
 
-	/* // Bye bye FAQ... */
+	/* Bye bye FAQ... */
 	function delete2($FaqID = '')
 	{
 		/* Kill the cache */
@@ -319,7 +319,7 @@ class FaqQuery
 
 	function add2($user)
 	{
-		/* // No title/body no cookie... */
+		/* No title/body no cookie... */
 		if (empty($_POST['title']))
 			fatal_lang_error('faqmod_no_title', false);
 
@@ -329,12 +329,12 @@ class FaqQuery
 		if (empty($_POST['category_id']))
 			fatal_lang_error('faqmod_no_category', false);
 
-		/* // Cleaning up the mess */
+		/* Cleaning up the mess */
 		$faqmod_body = $this->FaqClean($_POST['body'], true);
 		$faqmod_title = $this->FaqClean($_POST['title'], false);
 		$faqmod_category = (int) $_POST['category_id'];
 
-		/* // Track the person who created this... */
+		/* Track the person who created this... */
 		$faqmod_last_user = (int) $user;
 
 		/* Kill the cache */
@@ -363,24 +363,24 @@ class FaqQuery
 		$this->Query('faq')->InsertData($data, $values, $indexes);
 	}
 
-	/* // Edit a category */
+	/* Edit a category */
 	function editCat2($CatID = '', $user)
 	{
-		/* // No name no cookie... */
+		/* No name no cookie... */
 		if (empty($_POST['category_name']))
 			fatal_lang_error('faqmod_no_category_name', false);
 
-		/* // Cleaning up the mess */
+		/* Cleaning up the mess */
 		$cat_name = $this->FaqClean($_POST['category_name'], false);
 
-		/* // Track the last person who edited this category... */
+		/* Track the last person who edited this category... */
 		$cat_last_user = (int) $user;
 
 		/* Kill the cache */
 		cache_put_data('FAQ:GetCategories', '');
 
 
-		/* // Update, do it quickly, I got more things to do you know... */
+		/* Update, do it quickly, I got more things to do you know... */
 		$this->query_params = array(
 			'set' =>'category_name={string:category_name}, category_last_user={int:category_last_user}',
 			'where' => 'category_id = {int:id}',
@@ -443,7 +443,7 @@ class FaqQuery
 		$this->Query('category')->DeleteData();
 	}
 
-	// Show me that you care
+	/* Show me that you care */
 	function FaqCare()
 	{
 		$faqmod_care = '<div class="smalltext" style="text-align:center;">
@@ -478,7 +478,18 @@ class FaqQuery
 		return $togetclean;
 	}
 
-	/* // Get the user's data */
+	/* Ugly I know, I also know I'm lazy enough to not do it properly or in a fancier way */
+	function phpVersion()
+	{
+		$dummy = '';
+
+		if (@version_compare(PHP_VERSION, '5.2') == -1)
+			$dummy = $this->get('php_version', 'Text');
+
+		return $dummy;
+	}
+
+	/* Get the user's data */
 	public function GetUser($userid)
 	{
 		global $scripturl, $memberContext, $context;
@@ -501,4 +512,4 @@ class FaqQuery
 		}
 	}
 }
-	/* // Believe in you. */
+	/* Believe in you. */

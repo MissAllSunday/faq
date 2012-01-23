@@ -42,10 +42,7 @@ abstract class FAQ
 {
 	public static $faq;
 
-	function __construct($var)
-	{
-
-	}
+	function __construct($var){}
 
 	public static function Load($file)
 	{
@@ -71,13 +68,13 @@ abstract class FAQ
 		self::$faq->Extract();
 	}
 
-	/* // Action hook */
+	/* Action hook */
 	static function FaqAction(&$actions)
 	{
 		$actions['faq'] = array('Faq.php', 'FAQ::FaqMain');
 	}
 
-	/* // Permission hook */
+	/* Permission hook */
 	static function FaqPermissions(&$permissionGroups, &$permissionList)
 	{
 		$permissionGroups['membergroup']['simple'] = array('faqper');
@@ -86,7 +83,7 @@ abstract class FAQ
 		$permissionList['membergroup']['faqperedit'] = array(false, 'faqper', 'faqper');
 	}
 
-	/* // Button menu hook */
+	/* Button menu hook */
 	static function FaqMenu(&$menu_buttons)
 	{
 		global $scripturl;
@@ -95,7 +92,7 @@ abstract class FAQ
 
 		$faqmod_insert = self::$faq->enable('menu_position') ? self::$faq->get('menu_position', 'Settings') : 'home';
 
-		/* Lets add our button next to the user's selection...
+		/* Let's add our button next to the user's selection...
 		 * Thanks to SlammedDime (http://mattzuba.com) for the example */
 		$counter = 0;
 		foreach ($menu_buttons as $area => $dummy)
@@ -139,7 +136,7 @@ abstract class FAQ
 		);
 	}
 
-	/* // Admin menu hook */
+	/* Admin menu hook */
 	static function FaqAdmin(&$admin_areas)
 	{
 		self::Essential();
@@ -157,7 +154,7 @@ abstract class FAQ
 		);
 	}
 
-	/* // The settings hook */
+	/* The settings hook */
 	static function ModifyFaqSettings($return_config = false)
 	{
 		global $scripturl, $context;
@@ -178,7 +175,7 @@ abstract class FAQ
 		// Load up all the tabs...
 		$context[$context['admin_menu_name']]['tab_data'] = array(
 			'title' => self::$faq->get('admin_panel', 'Text'),
-			'description' => self::$faq->get('admin_panel_desc', 'Text'),
+			'description' => self::$faq->get('admin_panel_desc', 'Text') . self::$faq->phpVersion(),
 			'tabs' => array(
 				'basic' => array(
 				),
@@ -191,7 +188,7 @@ abstract class FAQ
 		call_user_func($subActions[$_REQUEST['sa']]);
 	}
 
-	/* // Settings */
+	/* Settings */
 	static function BasicFaqSettings()
 	{
 		global $scripturl, $context;
@@ -262,7 +259,7 @@ abstract class FAQ
 
 		$context['post_url'] = $scripturl . '?action=admin;area=faqdmin;sa=basic;save';
 
-		/* // Saving? */
+		/* Saving? */
 		if (isset($_GET['save']))
 		{
 			checkSession();
@@ -273,19 +270,19 @@ abstract class FAQ
 		prepareDBSettingContext($config_vars);
 	}
 
-	/* // A whole function for a redirect... yep, sounds about right :P */
+	/* A whole function for a redirect... yep, sounds about right :P */
 	static function EditFaqAdminPage()
 	{
 		redirectexit('action=faq;sa=manage');
 	}
 
-	/* // Again?  this is MADNESS! */
+	/* Again?  this is MADNESS! */
 	static function AddFaqAdminPage()
 	{
 		redirectexit('action=faq;sa=add');
 	}
 
-	/* // Main function */
+	/* Main function */
 	static function FaqMain()
 	{
 		global $context, $scripturl, $modSettings;
@@ -294,10 +291,10 @@ abstract class FAQ
 		self::Essential();
 		writeLog(true);
 
-		/* // Do the permission check, you might not be allowed here. */
+		/* Do the permission check, you might not be allowed here. */
 		isAllowedTo('faqperview');
 
-		/* // Echo the javascript and css bits. */
+		/* Echo the javascript and css bits. */
 		self::Headers();
 
 		if (!isset($context['FAQ']['AllCategories']))
@@ -355,14 +352,14 @@ abstract class FAQ
 			$context['canonical_url'] = $scripturl . '?action=faq';
 			$context['sub_template'] = 'faqmod_main';
 
-			/* // Does the admin do not want her/his Faq page to be indexed by search engines? */
+			/* Does the admin do not want her/his Faq page to be indexed by search engines? */
 			if(!empty($modSettings['faqmod_search_engines']))
 				$context['robot_no_index'] = true;
 		}
 
 		if (empty($context['preview_message']))
 		{
-			/* // Needed for the WYSIWYG editor, we all love the WYSIWYG editor... */
+			/* Needed for the WYSIWYG editor, we all love the WYSIWYG editor... */
 			$modSettings['disable_wysiwyg'] = !empty($modSettings['disable_wysiwyg']) || empty($modSettings['enableBBC']);
 
 			$editorOptions = array(
@@ -376,7 +373,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // Manage the FAQs, show a nice table please... */
+	/* Manage the FAQs, show a nice table please... */
 	static function FaqManage()
 	{
 		global $context, $scripturl;
@@ -396,7 +393,7 @@ abstract class FAQ
 		);
 	}
 
-	/* // Editing, get the info and show a nice editing form */
+	/* Editing, get the info and show a nice editing form */
 	static function FaqEdit()
 	{
 		global $context, $scripturl;
@@ -419,7 +416,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // Got the data?  let's update the FAQ ^o^ */
+	/* Got the data?  let's update the FAQ ^o^ */
 	function FaqEdit2()
 	{
 		global $context;
@@ -435,23 +432,23 @@ abstract class FAQ
 		{
 			global $txt;
 
-			/* // Want to see your masterpiece before others? */
+			/* Want to see your masterpiece before others? */
 			if (isset($_REQUEST['preview'])){
 
 				$context['edit']['current'] = $context['FAQ']['AllFaqs'][$_GET['faqid']];
 
-				/* // Set everything up to be displayed. */
+				/* Set everything up to be displayed. */
 				$context['preview_subject'] = self::$faq->FaqClean($_REQUEST['title']);
 				$context['preview_message'] = self::$faq->FaqClean($_REQUEST['body'], true);
 
-				/* // Parse out the BBC if it is enabled. */
+				/* Parse out the BBC if it is enabled. */
 				$context['preview_message'] = parse_bbc($context['preview_message']);
 
-				/* // We Censor for your protection... */
+				/* We Censor for your protection... */
 				censorText($context['preview_subject']);
 				censorText($context['preview_message']);
 
-				/* // Set a descriptive title. */
+				/* Set a descriptive title. */
 				$context['page_title'] = $txt['preview'] .' - ' . $context['preview_subject'];
 
 				// Back to the form we go
@@ -466,7 +463,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // Lets ask the user if (s)he really want to do this... */
+	/* Lets ask the user if (s)he really want to do this... */
 	static function FaqDelete()
 	{
 		global $context, $scripturl;
@@ -506,7 +503,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // Fill out the form to get a nice brand new FAQ... */
+	/* Fill out the form to get a nice brand new FAQ... */
 	static function FaqAdd()
 	{
 		global $context, $scripturl;
@@ -522,7 +519,7 @@ abstract class FAQ
 		);
 	}
 
-	/* // Adding... */
+	/* Adding... */
 	static function FaqAdd2()
 	{
 		global $context, $scripturl;
@@ -531,26 +528,26 @@ abstract class FAQ
 		isAllowedTo('faqperedit');
 		self::Essential();
 
-		/* // Want to see your masterpiece before others? */
+		/* Want to see your masterpiece before others? */
 		if (isset($_REQUEST['preview']))
 		{
 			global $txt;
 
-			/* // Set everything up to be displayed. */
+			/* Set everything up to be displayed. */
 			$context['preview_subject'] = self::$faq->FaqClean($_REQUEST['title']);
 			$context['preview_message'] = self::$faq->FaqClean($_REQUEST['body'], true);
 
-			/* // Parse out the BBC if it is enabled. */
+			/* Parse out the BBC if it is enabled. */
 			$context['preview_message'] = parse_bbc($context['preview_message']);
 
-			/* // We Censor for your protection... */
+			/* We Censor for your protection... */
 			censorText($context['preview_subject']);
 			censorText($context['preview_message']);
 
-			/* // Set a descriptive title. */
+			/* Set a descriptive title. */
 			$context['page_title'] = $txt['preview'] . ' - ' . $context['preview_subject'];
 
-			/* // Back to the form we go */
+			/* Back to the form we go */
 			self::FaqPreview('faqmod_add');
 		}
 
@@ -561,7 +558,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // Manage the categoriess, show a nice table ...again */
+	/* Manage the categoriess, show a nice table ...again */
 	static function FaqManageCat()
 	{
 		global $context, $scripturl;
@@ -580,7 +577,7 @@ abstract class FAQ
 		);
 	}
 
-	/* // Editing, get the info and show a nice editing form */
+	/* Editing, get the info and show a nice editing form */
 	static function FaqEditCat()
 	{
 		global $context, $scripturl;
@@ -603,7 +600,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // So, it appears the user has finished with the edits already, fair enough, give her/him some kudos... */
+	/* So, it appears the user has finished with the edits already, fair enough, give her/him some kudos... */
 	static function FaqEditCat2()
 	{
 		global $context;
@@ -621,7 +618,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // This time the user will try to delete a category, lets see if (s)he succeeded... */
+	/* This time the user will try to delete a category, lets see if (s)he succeeded... */
 	static function FaqDeleteCat()
 	{
 		global $context;
@@ -640,7 +637,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // OMG!  (s)he did it!! */
+	/* OMG!  (s)he did it!! */
 	static function FaqDeleteCat2()
 	{
 		checkSession('post', '', true);
@@ -657,7 +654,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // Fill out the form and you will get yourself a nice brand new category ready to be used... */
+	/* Fill out the form and you will get yourself a nice brand new category ready to be used... */
 	static function FaqAddCat()
 	{
 		global $context;
@@ -669,7 +666,7 @@ abstract class FAQ
 		$context['page_title'] = self::$faq->get('adding_cat', 'Text');
 	}
 
-	/* // Adding the category   ...finally! */
+	/* Adding the category   ...finally! */
 	static function FaqAddCat2()
 	{
 		global $context;
@@ -681,7 +678,7 @@ abstract class FAQ
 		redirectexit('action=faq;sa=managecat');
 	}
 
-	/* // Show the FAQs within a category */
+	/* Show the FAQs within a category */
 	static function FaqCategory()
 	{
 		global $context, $scripturl;
@@ -706,7 +703,7 @@ abstract class FAQ
 		}
 	}
 
-	/* // Last but not least, let's show a single FAQ... */
+	/* Last but not least, let's show a single FAQ... */
 	static function FaqShow()
 	{
 		global $context, $scripturl;
@@ -730,12 +727,12 @@ abstract class FAQ
 		}
 	}
 
-	/* // All the template headers, css, js, etc */
+	/* All the template headers, css, js, etc */
 	static function Headers()
 	{
 		global $context, $modSettings;
 
-		/* // Some variables for the width... */
+		/* Some variables for the width... */
 		if(empty($modSettings['faqmod_sidebar_size'])){
 			$faqmod_width = 80;
 			$sidebar_width = 18;
@@ -795,7 +792,7 @@ width:'.$faqmod_width.'%;
 max-width:80%;
 }
 
-.faqmod_list ul, .faq_categories ul {
+.faqmod_list ul, .faqmod_categories ul {
 list-style-image: none;
 list-style-position: outside;
 list-style-type: none;
