@@ -82,6 +82,7 @@ class FaqQuery
 		loadLanguage('Faq');
 
 		$this->pattern = '/faqmod_/';
+		$this->matchesSettings = array();
 
 		/* Get only the settings that we need */
 		foreach ($modSettings as $km => $vm)
@@ -90,9 +91,6 @@ class FaqQuery
 				$km = str_replace('faqmod_', '', $km);
 				$this->matchesSettings[$km] = $vm;
 			}
-
-			else
-				$this->matchesSettings = array();
 
 		$this->Settings = $this->matchesSettings;
 

@@ -35,8 +35,27 @@
 	if (!defined('SMF'))
 		die('Hacking attempt...');
 
-	/* Wraper function for SMF */
+	/* A bunch of wrapper functions for SMF */
 	function FAQWrapperModifySettings(){ FAQ::ModifyFaqSettings(); }
+	function WrapperFaqManage(){ FAQ::FaqManage(); }
+	function WrapperFaqEdit(){ FAQ::FaqEdit(); }
+	function WrapperFaqEdit2(){ FAQ::FaqEdit2(); }
+	function WrapperFaqDelete(){ FAQ::FaqDelete(); }
+	function WrapperFaqDelete2(){ FAQ::FaqDelete2(); }
+	function WrapperFaqAdd(){ FAQ::FaqAdd(); }
+	function WrapperFaqAdd2(){ FAQ::FaqAdd2(); }
+	function WrapperFaqManageCat(){ FAQ::FaqManageCat(); }
+	function WrapperFaqEditCat(){ FAQ::FaqEditCat(); }
+	function WrapperFaqEditCat2(){ FAQ::FaqEditCat2(); }
+	function WrapperFaqDeleteCat(){ FAQ::FaqDeleteCat(); }
+	function WrapperFaqDeleteCat2(){ FAQ::FaqDeleteCat2(); }
+	function WrapperFaqAddCat(){ FAQ::FaqAddCat(); }
+	function WrapperFaqAddCat2(){ FAQ::FaqAddCat2(); }
+	function WrapperFaqCategory(){ FAQ::FaqCategory(); }
+	function WrapperFaqShow(){ FAQ::FaqShow(); }
+	function WrapperBasicFaqSettings() { FAQ::BasicFaqSettings(); }
+	function WrapperEditFaqAdminPage() { FAQ::EditFaqAdminPage(); }
+	function WrapperAddFaqAdminPage() { FAQ::AddFaqAdminPage(); }
 
 abstract class FAQ
 {
@@ -165,9 +184,9 @@ abstract class FAQ
 		$context['page_title'] = self::$faq->get('admin_panel', 'Text');
 
 		$subActions = array(
-			'basic' => 'FAQ::BasicFaqSettings',
-			'edit' => 'FAQ::EditFaqAdminPage',
-			'add' => 'FAQ::AddFaqAdminPage',
+			'basic' => 'WrapperBasicFaqSettings',
+			'edit' => 'WrapperEditFaqAdminPage',
+			'add' => 'WrapperAddFaqAdminPage',
 		);
 
 		loadGeneralSettingParameters($subActions, 'basic');
@@ -185,7 +204,7 @@ abstract class FAQ
 			),
 		);
 
-		call_user_func($subActions[$_REQUEST['sa']]);
+		$subActions[$_REQUEST['sa']]();
 	}
 
 	/* Settings */
@@ -315,22 +334,22 @@ abstract class FAQ
 		}
 
 		$subActions = array(
-			'manage' => 'self::FaqManage',
-			'edit' => 'self::FaqEdit',
-			'edit2' => 'self::FaqEdit2',
-			'delete' => 'self::FaqDelete',
-			'delete2' => 'self::FaqDelete2',
-			'add' => 'self::FaqAdd',
-			'add2' => 'self::FaqAdd2',
-			'managecat' => 'self::FaqManageCat',
-			'editcat' => 'self::FaqEditCat',
-			'editcat2' => 'self::FaqEditCat2',
-			'deletecat' => 'self::FaqDeleteCat',
-			'deletecat2' => 'self::FaqDeleteCat2',
-			'addcat' => 'self::FaqAddCat',
-			'addcat2' => 'self::FaqAddCat2',
-			'category' => 'self::FaqCategory',
-			'show' => 'self::FaqShow',
+			'manage' => 'WrapperFaqManage',
+			'edit' => 'WrapperFaqEdit',
+			'edit2' => 'WrapperFaqEdit2',
+			'delete' => 'WrapperFaqDelete',
+			'delete2' => 'WrapperFaqDelete2',
+			'add' => 'WrapperFaqAdd',
+			'add2' => 'WrapperFaqAdd2',
+			'managecat' => 'WrapperFaqManageCat',
+			'editcat' => 'WrapperFaqEditCat',
+			'editcat2' => 'WrapperFaqEditCat2',
+			'deletecat' => 'WrapperFaqDeleteCat',
+			'deletecat2' => 'WrapperFaqDeleteCat2',
+			'addcat' => 'WrapperFaqAddCat',
+			'addcat2' => 'WrapperFaqAddCat2',
+			'category' => 'WrapperFaqCategory',
+			'show' => 'WrapperFaqShow',
 		);
 
 		// Default to no sub action if nothing was provided or we don't know what they want ;)
@@ -338,7 +357,7 @@ abstract class FAQ
 
 		// Call the right subaction, assuming there is one.
 		if (!empty($_REQUEST['sa']))
-			call_user_func($subActions[$_REQUEST['sa']]);
+			$subActions[$_REQUEST['sa']]();
 
 		else
 		{
