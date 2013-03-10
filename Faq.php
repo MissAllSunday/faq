@@ -61,7 +61,7 @@ abstract class FAQ
 {
 	public static $faq;
 
-	function __construct($var){}
+	function __construct(){}
 
 	public static function Load($file)
 	{

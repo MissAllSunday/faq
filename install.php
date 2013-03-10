@@ -32,6 +32,14 @@
  *
  */
 
+	if (file_exists(dirname(__FILE__) . '/SSI.php') && !defined('SMF'))
+		require_once(dirname(__FILE__) . '/SSI.php');
+	elseif (!defined('SMF'))
+		exit('<b>Error:</b> Cannot install - please verify you put this in the same place as SMF\'s index.php.');
+
+	/* This mod needs php 5.2 or greater, sorry */
+	FAQCheck();
+
 	// You can't go fishing without hooks
 	$hooks = array(
 		'integrate_pre_include' => '$sourcedir/Faq.php',
@@ -45,3 +53,9 @@
 
 	foreach ($hooks as $hook => $function)
 		$call($hook, $function);
+
+	function FAQCheck()
+	{
+		if (version_compare(PHP_VERSION, '5.2.0', '<'))
+			fatal_error('This mod needs PHP 5.2 or greater. You will not be able to install/use this mod, contact your host and ask for a php upgrade.');
+	}
