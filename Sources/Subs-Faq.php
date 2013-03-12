@@ -63,7 +63,7 @@ class Faq
 		$smcFunc['db_insert']('',
 			'{db_prefix}faq',
 			array(
-				'category_id' => 'int', 'last_user' => 'int', 'title' => 'string-255', 'body' => 'string-65534',
+				'category_id' => 'int', 'last_user' => 'int', 'title' => 'string-255', 'body' => 'string-65534', 'last_time' => 'int',
 			),
 			$data,
 			array('id')
@@ -81,7 +81,7 @@ class Faq
 
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}' . ($this->_table['faq']['table']) . '
-			SET last_user = {int:last_user}, title = {string:title}, body = {string:body}
+			SET last_user = {int:last_user}, last_time = {int:last_time} title = {string:title}, body = {string:body}
 			WHERE id = {int:id}',
 			$data
 		);
@@ -380,5 +380,22 @@ class Faq
 
 		/* Send the string */
 		return $return;
+	}
+
+	public function truncateString($string, $limit, $break = ' ', $pad = '...')
+	{
+		if(empty($limit))
+			$limit = 30;
+
+		 /* return with no change if string is shorter than $limit */
+		if(strlen($string) <= $limit)
+			return $string;
+
+		/* is $break present between $limit and the end of the string? */
+		if(false !== ($breakpoint = strpos($string, $break, $limit)))
+			if($breakpoint < strlen($string) - 1)
+				$string = substr($string, 0, $breakpoint) . $pad;
+
+		return $string;
 	}
 }
