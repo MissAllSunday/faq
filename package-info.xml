@@ -8,7 +8,7 @@
 
 	<install for="2.0 - 2.0.99">
 		<readme parsebbc="true">readme.txt</readme>
-		<code>install.php</code>
+		<code>hooks.php</code>
 		<database>database.php</database>
 		<modification>Faq.xml</modification>
 		<require-file name="Faq.php" destination="$sourcedir">The file that handles everything</require-file>
