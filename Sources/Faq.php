@@ -256,7 +256,7 @@ function faq_edit($faqObject)
 		$context['sub_template'] = 'faq_add';
 		$context['page_title'] = $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'];
 		$context['linktree'][] = array(
-			'url' => $scripturl. '?action=faq;sa=edit;lid='. $lid,
+			'url' => $scripturl. '?action=faq;sa=edit;fid='. $lid,
 			'name' => $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'],
 		);
 
@@ -344,7 +344,7 @@ function faq_single($faqObject)
 
 	/* Set all we need */
 	$context['sub_template'] = 'faq_single';
-	$context['canonical_url'] = $scripturl . '?action=faq;sa=single;lid=' . $id;
+	$context['canonical_url'] = $scripturl . '?action=faq;sa=single;fid=' . $id;
 	$context['page_title'] = $context['faq']['single']['title'] .' - '. $context['faq']['single']['artist'];
 	$context['linktree'][] = array(
 		'url' => $context['canonical_url'],
@@ -369,10 +369,10 @@ function faq_artist($faqObject)
 	$lid = $faqObject->clean($_GET['lid']);
 
 	$context['sub_template'] = 'faq_artist';
-	$context['canonical_url'] = $scripturl . '?action=faq;sa=artist;lid='. $lid;
+	$context['canonical_url'] = $scripturl . '?action=faq;sa=artist;fid='. $lid;
 	$context['page_title'] = $txt['faq_artist_title'] . $lid;
 	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq;sa=artist;lid='. $lid,
+		'url' => $scripturl. '?action=faq;sa=artist;fid='. $lid,
 		'name' => $context['page_title'],
 	);
 

@@ -78,9 +78,9 @@
 					'default' => '',
 				),
 				array(
-					'name' => 'timestamp',
-					'type' => 'timestamp',
-					'size' => '',
+					'name' => 'last_time',
+					'type' => 'int',
+					'size' => 11,
 					'default' => null,
 				),
 			),

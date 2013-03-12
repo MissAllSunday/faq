@@ -82,7 +82,7 @@ function template_faq_main()
 		{
 			echo '
 						<li>
-							<a href="', $scripturl, '?action=faq;sa=single;lid=', $latest['id'] ,'">', $latest['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action=faq;sa=artist;lid=', urlencode($latest['artist']) ,'">', $latest['artist'] ,'</a>  ', $context['faq']['object']->crud($latest['id']) ,'
+							<a href="', $scripturl, '?action=faq;sa=single;fid=', $latest['id'] ,'">', $latest['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action=faq;sa=artist;fid=', urlencode($latest['artist']) ,'">', $latest['artist'] ,'</a>  ', $context['faq']['object']->crud($latest['id']) ,'
 						</li>';
 		}
 
@@ -132,7 +132,7 @@ function template_faq_add()
 						<br />';
 
 		echo '
-		<form action="', $scripturl, '?action=faq;sa=add2;', !empty($context['faq']['edit']) ? 'lid='.  $context['faq']['edit']['id'] .';edit' : '','" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
+		<form action="', $scripturl, '?action=faq;sa=add2;', !empty($context['faq']['edit']) ? 'fid='.  $context['faq']['edit']['id'] .';edit' : '','" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
 			<div class="cat_bar">
 				<h3 class="catbg">',(!empty($context['faq']['edit']) ?  $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'] : $txt['faq_preview_add']),'</h3>
 			</div>
@@ -244,7 +244,7 @@ function template_faq_artist()
 		{
 			echo '
 					<li>
-						<a href="', $scripturl, '?action=faq;sa=single;lid=', urlencode($artist['id']) ,'">', $artist['title'] ,'</a>
+						<a href="', $scripturl, '?action=faq;sa=single;fid=', urlencode($artist['id']) ,'">', $artist['title'] ,'</a>
 					</li>';
 		}
 	}
@@ -332,7 +332,7 @@ function template_faq_list()
 		{
 			echo '
 						<li>
-							<a href="', $scripturl, '?action=faq;sa=single;lid=', $all['id'] ,'">', $all['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action=faq;sa=artist;lid=', urlencode($all['artist']) ,'">', $all['artist'] ,'</a> ', $context['faq']['object']->crud($all['id']) ,'
+							<a href="', $scripturl, '?action=faq;sa=single;fid=', $all['id'] ,'">', $all['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action=faq;sa=artist;fid=', urlencode($all['artist']) ,'">', $all['artist'] ,'</a> ', $context['faq']['object']->crud($all['id']) ,'
 						</li>';
 		}
 
@@ -414,10 +414,10 @@ function template_faq_manage()
 								',$all['user']['link'],'
 							</td>
 							<td>
-								', $context['faq']['object']->permissions('edit') == true ? '<a href="'. $scripturl .'?action=faq;sa=edit;lid='. $all['id'] .'">'. $txt['faq_edit'] .'</a>' : $txt['faq_edit'] ,'
+								', $context['faq']['object']->permissions('edit') == true ? '<a href="'. $scripturl .'?action=faq;sa=edit;fid='. $all['id'] .'">'. $txt['faq_edit'] .'</a>' : $txt['faq_edit'] ,'
 							</td>
 							<td>
-								', $context['faq']['object']->permissions('delete') == true ? '<a href="'. $scripturl .'?action=faq;sa=delete;lid='. $all['id'] .'">'.  $txt['faq_delete'] .'</a>' : $txt['faq_delete'] ,'
+								', $context['faq']['object']->permissions('delete') == true ? '<a href="'. $scripturl .'?action=faq;sa=delete;fid='. $all['id'] .'">'.  $txt['faq_delete'] .'</a>' : $txt['faq_delete'] ,'
 							</td>
 						</tr>';
 			}

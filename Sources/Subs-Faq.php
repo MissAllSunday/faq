@@ -36,14 +36,14 @@ if (!defined('SMF'))
 	die('No direct access');
 
 
-class Faq {
-
+class Faq
+{
 	protected $_table = array(
 		'faq' => array(
 			'table' => 'faq',
 			'columns' => array('id', 'category_id', 'last_user', 'title', 'body', 'timestamp',),
 		),
-		'faq_categories' => array(
+		'cat' => array(
 			'table' => 'faq_categories',
 			'columns' => array('category_id', 'category_last_user', 'category_name',),
 		);
@@ -58,17 +58,18 @@ class Faq {
 		global $smcFunc;
 
 		/* Clear the cache */
-		cache_put_data(faq::$name .'_latest', '', 120);
+		cache_put_data(faq::$name .'_main', '', 120);
 
 		$smcFunc['db_insert']('',
 			'{db_prefix}faq',
 			array(
-				'user' => 'int', 'artist' => 'string-255', 'title' => 'string-255', 'body' => 'string-65534',
+				'category_id' => 'int', 'last_user' => 'int', 'title' => 'string-255', 'body' => 'string-65534',
 			),
 			$data,
 			array('id')
 		);
-			return $id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
+
+		return $id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
 	}
 
 	public function edit($data)
@@ -76,11 +77,11 @@ class Faq {
 		global $smcFunc;
 
 		/* Clear the cache */
-		cache_put_data(faq::$name .'_latest', '', 120);
+		cache_put_data(faq::$name .'_main', '', 120);
 
 		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}' . ($this->_table['table']) . '
-			SET artist = {string:artist}, title = {string:title}, body = {string:body}
+			UPDATE {db_prefix}' . ($this->_table['faq']['table']) . '
+			SET last_user = {int:last_user}, title = {string:title}, body = {string:body}
 			WHERE id = {int:id}',
 			$data
 		);
@@ -94,9 +95,10 @@ class Faq {
 		if (($return = cache_get_data(faq::$name .'_latest', 120)) == null)
 		{
 			$result = $smcFunc['db_query']('', '
-				SELECT '. (implode(', l.', $this->_table['columns'])) .', m.member_name, m.real_name
-				FROM {db_prefix}' . ($this->_table['table']) . ' AS l
+				SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
+				FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 					LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
+					LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
 				ORDER BY {raw:sort}
 				LIMIT {int:limit}',
 				array(
@@ -108,10 +110,14 @@ class Faq {
 			while ($row = $smcFunc['db_fetch_assoc']($result))
 				$return[$row['id']] = array(
 					'id' => $row['id'],
-					'artist' => $row['artist'],
 					'title' => $row['title'],
-					'keywords' => $row['keywords'],
 					'body' => parse_bbc($row['body']),
+					'cat' => array(
+						'id' => $row['category_id'],
+						'name' => $row['category_name'],
+						'link' => '<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $this->clean($id) .'">'. $row['category_name'] .'</a>'
+					),
+					'time' = $row['last_time'],
 					'user' => array(
 						'id' => $row['user'],
 						'username' => $row['member_name'],
@@ -287,7 +293,7 @@ class Faq {
 		global $smcFunc;
 
 		/* Clear the cache */
-		cache_put_data(faq::$name .'_latest', '', 120);
+		cache_put_data(faq::$name .'_main', '', 120);
 
 		/* Do not waste my time... */
 		if (empty($id))
@@ -365,10 +371,10 @@ class Faq {
 
 		/* Let's check if you have what it takes... */
 		if ($edit == true)
-			$return .= '<a href="'. $scripturl .'?action=faq;sa=edit;lid='. $this->clean($id) .'">'. $txt['faq_edit'] .'</a>';
+			$return .= '<a href="'. $scripturl .'?action=faq;sa=edit;fid='. $this->clean($id) .'">'. $txt['faq_edit'] .'</a>';
 
 		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action=faq;sa=delete;lid='. $this->clean($id) .'">'. $txt['faq_delete'] .'</a>';
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action=faq;sa=delete;fid='. $this->clean($id) .'">'. $txt['faq_delete'] .'</a>';
 
 		/* Send the string */
 		return $return;
