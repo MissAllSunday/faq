@@ -135,7 +135,7 @@ class Faq
 		}
 
 		/* Done? */
-		return $return;
+		return !empty($return) ? $return : false;
 	}
 
 	public function getSingle($id)
@@ -180,7 +180,7 @@ class Faq
 		$smcFunc['db_free_result']($result);
 
 		/* Done? */
-		return $return;
+		return !empty($return) ? $return : false;
 	}
 
 	public function getBy($table, $column, $value, $sort = 'title ASC', $limit = false, $like = false)
@@ -191,7 +191,7 @@ class Faq
 			$likeString = !empty($like) && $like == true ? 'LIKE' : '=';
 
 		/* We actually need some tuff to work on... */
-		if (empty($table) || empty($column) || !in_array($column, $this->_table['columns']) || empty($value))
+		if (empty($table) || empty($column) || !in_array($column, $this->_table[$table]['columns']) || empty($value))
 			return false;
 
 		$return = array();
@@ -209,17 +209,23 @@ class Faq
 				'sort' => $sort,
 				'value' => $value,
 				'column' => $column,
-				'limit' => !empty($limit) ? (int) $limit : 0,
+				'limit' => !empty($limit) ? $limit : 0,
 			)
 		);
 
 		while ($row = $smcFunc['db_fetch_assoc']($result))
 			$return[$row['id']] = array(
 				'id' => $row['id'],
-				'artist' => $row['artist'],
 				'title' => $row['title'],
-				'keywords' => $row['keywords'],
+				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => parse_bbc($row['body']),
+				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
+				'cat' => array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+				),
+				'time' = $row['last_time'],
 				'user' => array(
 					'id' => $row['user'],
 					'username' => $row['member_name'],
@@ -246,25 +252,32 @@ class Faq
 		$sortArray = array('title', 'artist', 'latest');
 
 		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', ', $this->_table['columns'])) .', m.member_name, m.real_name
-			FROM {db_prefix}' . ($this->_table['table']) . ' AS l
+			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
+			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
+				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
 			array(
 				'start' => $_REQUEST['start'],
 				'maxindex' => $maxIndex,
-				'sort' => isset($_REQUEST['lSort']) && in_array(trim(htmlspecialchars($_REQUEST['lSort'])), $sortArray) ? $_REQUEST['lSort'] : 'title'
+				'sort' => 'title'
 			)
 		);
 
 		while ($row = $smcFunc['db_fetch_assoc']($result))
 			$return[$row['id']] = array(
 				'id' => $row['id'],
-				'artist' => $row['artist'],
 				'title' => $row['title'],
-				'keywords' => $row['keywords'],
+				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => parse_bbc($row['body']),
+				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
+				'cat' => array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+				),
+				'time' = $row['last_time'],
 				'user' => array(
 					'id' => $row['user'],
 					'username' => $row['member_name'],
@@ -280,7 +293,7 @@ class Faq
 		$context['page_index'] = constructPageIndex($scripturl . '?action='. faq::$name .';sa='. $page .'', $_REQUEST['start'], $total, $maxIndex, false);
 
 		/* Done? */
-		return $return;
+		return !empty($return) ? $return : false;
 	}
 
 	protected function getCount()
@@ -289,7 +302,7 @@ class Faq
 
 		$result = $smcFunc['db_query']('', '
 			SELECT id
-			FROM {db_prefix}' . ($this->_table['table']),
+			FROM {db_prefix}' . ($this->_table['faq']['table']),
 			array()
 		);
 
@@ -371,7 +384,7 @@ class Faq
 
 		/* We need an ID... */
 		if (empty($id))
-			return $return;
+			return !empty($return) ? $return : false;
 
 		/* Set the pertinent permissions */
 		$edit = $this->permissions('edit');
@@ -385,7 +398,7 @@ class Faq
 			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .'">'. $txt['faq_delete'] .'</a>';
 
 		/* Send the string */
-		return $return;
+		return !empty($return) ? $return : false;
 	}
 
 	public function truncateString($string, $limit, $break = ' ', $pad = '...')
