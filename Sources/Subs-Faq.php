@@ -72,16 +72,18 @@ class Faq
 		return $id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
 	}
 
-	public function edit($data)
+	public function edit($data, $table)
 	{
 		global $smcFunc;
+
+		$set = $table == faq::$name ? 'last_user = {int:last_user}, last_time = {int:last_time} title = {string:title}, body = {string:body}' : 'category_last_user = {int:category_last_user}, category_name = {string:category_name}';
 
 		/* Clear the cache */
 		cache_put_data(faq::$name .'_main', '', 120);
 
 		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}' . ($this->_table['faq']['table']) . '
-			SET last_user = {int:last_user}, last_time = {int:last_time} title = {string:title}, body = {string:body}
+			UPDATE {db_prefix}' . ($this->_table[$table]['table']) . '
+			SET '. ($set) .'
 			WHERE id = {int:id}',
 			$data
 		);
@@ -296,20 +298,20 @@ class Faq
 		return !empty($return) ? $return : false;
 	}
 
-	protected function getCount()
+	protected function getCount($table = 'faq')
 	{
 		global $smcFunc;
 
 		$result = $smcFunc['db_query']('', '
 			SELECT id
-			FROM {db_prefix}' . ($this->_table['faq']['table']),
+			FROM {db_prefix}' . ($this->_table[$table]['table']),
 			array()
 		);
 
 		return $smcFunc['db_num_rows']($result);
 	}
 
-	public function delete($id)
+	public function delete($id, $table)
 	{
 		global $smcFunc;
 
@@ -317,11 +319,11 @@ class Faq
 		cache_put_data(faq::$name .'_main', '', 120);
 
 		/* Do not waste my time... */
-		if (empty($id))
+		if (empty($id) || empty($table))
 			return false;
 
 		$smcFunc['db_query']('', '
-			DELETE FROM {db_prefix}' . ($this->_table['table']) .'
+			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
 			WHERE id = {int:id}',
 			array(
 				'id' => (int) $id,
