@@ -11,12 +11,9 @@
 		<code>hooks.php</code>
 		<database>database.php</database>
 		<modification>Faq.xml</modification>
-		<require-file name="Faq.php" destination="$sourcedir">The file that handles everything</require-file>
-		<require-file name="Faq.template.php" destination="$themedir">The file that shows the FAQs and handles the html stuff</require-file>
-		<require-file name="Subs-Faq.php" destination="$sourcedir">The file that makes the queries to the database</require-file>
-		<require-file name="Faq-Db.php" destination="$sourcedir">DB class</require-file>
-		<require-dir name="languages" destination="$themedir">The folder with the translations</require-dir>
-		<redirect url="$scripturl?action=admin;area=faqdmin" timeout="3000">redirect.txt</redirect>
+		<require-dir name="Themes" destination="$boarddir">Source files</require-dir>
+		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
+		<redirect url="?action=admin;area=modsettings;sa=faq"></redirect>
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
@@ -25,7 +22,7 @@
 		<modification reverse="true">Faq.xml</modification>
 		<remove-file name="$sourcedir/Faq.php" />
 		<remove-file name="$sourcedir/Subs-Faq.php" />
-		<remove-file name="$sourcedir/Faq-Db.php" />
+		<remove-file name="$sourcedir/FaqHooks.php" />
 		<remove-file name="$themedir/Faq.template.php" />
 		<remove-file name="$languagedir/Faq.english.php" />
 <!-- 		<remove-file name="$languagedir/Faq.english-utf8.php" />
