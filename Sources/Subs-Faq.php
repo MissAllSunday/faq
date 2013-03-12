@@ -39,8 +39,14 @@ if (!defined('SMF'))
 class Faq {
 
 	protected $_table = array(
-		'table' => 'faq',
-		'columns' => array('id', 'artist', 'title', 'keywords', 'body', 'user'),
+		'faq' => array(
+			'table' => 'faq',
+			'columns' => array('id', 'category_id', 'last_user', 'title', 'body', 'timestamp',),
+		),
+		'faq_categories' => array(
+			'table' => 'faq_categories',
+			'columns' => array('category_id', 'category_last_user', 'category_name',),
+		);
 	);
 
 	public static $name = 'faq';
