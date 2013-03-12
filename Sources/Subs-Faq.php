@@ -113,6 +113,7 @@ class Faq
 					'title' => $row['title'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 					'body' => parse_bbc($row['body']),
+					'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
 					'cat' => array(
 						'id' => $row['category_id'],
 						'name' => $row['category_name'],
@@ -154,26 +155,27 @@ class Faq
 			)
 		);
 
-			while ($row = $smcFunc['db_fetch_assoc']($result))
-				$return[$row['id']] = array(
-					'id' => $row['id'],
-					'title' => $row['title'],
-					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-					'body' => parse_bbc($row['body']),
-					'cat' => array(
-						'id' => $row['category_id'],
-						'name' => $row['category_name'],
-						'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
-					),
-					'time' = $row['last_time'],
-					'user' => array(
-						'id' => $row['user'],
-						'username' => $row['member_name'],
-						'name' => isset($row['real_name']) ? $row['real_name'] : '',
-						'href' => $scripturl . '?action=profile;u=' . $row['user'],
-						'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
-					),
-				);
+		while ($row = $smcFunc['db_fetch_assoc']($result))
+			$return[$row['id']] = array(
+				'id' => $row['id'],
+				'title' => $row['title'],
+				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+				'body' => parse_bbc($row['body']),
+				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
+				'cat' => array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+				),
+				'time' = $row['last_time'],
+				'user' => array(
+					'id' => $row['user'],
+					'username' => $row['member_name'],
+					'name' => isset($row['real_name']) ? $row['real_name'] : '',
+					'href' => $scripturl . '?action=profile;u=' . $row['user'],
+					'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
+				),
+			);
 
 		$smcFunc['db_free_result']($result);
 
@@ -181,9 +183,12 @@ class Faq
 		return $return;
 	}
 
-	public function getBy($table, $column, $value, $limit = false)
+	public function getBy($table, $column, $value, $sort = 'title ASC', $limit = false, $like = false)
 	{
 		global $smcFunc, $scripturl, $txt;
+
+		if (!empty($like) && $like == true)
+			$likeString = !empty($like) && $like == true ? 'LIKE' : '=';
 
 		/* We actually need some tuff to work on... */
 		if (empty($table) || empty($column) || !in_array($column, $this->_table['columns']) || empty($value))
@@ -192,15 +197,16 @@ class Faq
 		$return = array();
 
 		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', l.', $this->_table['columns'])) .', m.member_name, m.real_name
-			FROM {db_prefix}' . ($this->_table['table']) . ' AS l
+			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
+			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-			WHERE '. $column .' '. (is_int($value) ? '= {int:value} ' : 'LIKE {string:value} ') .'
+				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
+			WHERE '. $column .' '. (is_int($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
 			ORDER BY {raw:sort}
 			'. (!empty($limit) ? '
 			LIMIT {int:limit}' : '') .'',
 			array(
-				'sort' => 'title ASC',
+				'sort' => $sort,
 				'value' => $value,
 				'column' => $column,
 				'limit' => !empty($limit) ? (int) $limit : 0,
