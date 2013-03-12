@@ -98,13 +98,13 @@ $txt['faq_error_no_valid_action'] = 'This isn\'t a valid action';
 $txt['faq_error_enable'] = 'The mod must be enable';
 
 /* Permissions strings */
-$txt['cannot_faqMod_viewfaq'] = 'I\'m sorry, you are not allowed to view the faq page.';
-$txt['cannot_faqMod_addfaq'] = 'I\'m sorry, you are not allowed to add faq.';
-$txt['cannot_faqMod_editfaq'] = 'I\'m sorry, you are not allowed to edit faq.';
-$txt['cannot_faqMod_deletefaq'] = 'I\'m sorry, you are not allowed to delete faq.';
-$txt['permissiongroup_simple_faqMod_per_simple'] = 'faq mod permissions';
-$txt['permissiongroup_faqMod_per_classic'] = 'faq mod permissions';
-$txt['permissionname_faqMod_viewfaq'] = 'View the faq pages';
-$txt['permissionname_faqMod_addfaq'] = 'Add faq entries';
-$txt['permissionname_faqMod_editfaq'] = 'Edit faq entries';
-$txt['permissionname_faqMod_deletefaq'] = 'Delete faq entries';
+$txt['cannot_faq_viewfaq'] = 'I\'m sorry, you are not allowed to view the faq page.';
+$txt['cannot_faq_addfaq'] = 'I\'m sorry, you are not allowed to add faq.';
+$txt['cannot_faq_editfaq'] = 'I\'m sorry, you are not allowed to edit faq.';
+$txt['cannot_faq_deletefaq'] = 'I\'m sorry, you are not allowed to delete faq.';
+$txt['permissiongroup_simple_faq_per_simple'] = 'faq mod permissions';
+$txt['permissiongroup_faq_per_classic'] = 'faq mod permissions';
+$txt['permissionname_faq_viewfaq'] = 'View the faq pages';
+$txt['permissionname_faq_addfaq'] = 'Add faq entries';
+$txt['permissionname_faq_editfaq'] = 'Edit faq entries';
+$txt['permissionname_faq_deletefaq'] = 'Delete faq entries';

@@ -69,24 +69,24 @@ function faq_menu($menu_buttons)
 			'href' => $scripturl . '?action=faq',
 			'show' => empty($modSettings['faq_enable']) ? false : true,
 			'sub_buttons' => array(
-				'faqmod_admin' => array(
+				'faq_admin' => array(
 					'title' => self::$faq->get('manage', 'Text'),
 					'href' => $scripturl . '?action=faq;sa=manage',
 					'show' => allowedTo('faqperedit'),
 					'sub_buttons' => array(
-						'faqmod_add' => array(
+						'faq_add' => array(
 							'title' => self::$faq->get('add_send', 'Text'),
 							'href' => $scripturl . '?action=faq;sa=add',
 							'show' => allowedTo('faqperedit'),
 						),
 					),
 				),
-				'faqmod_category' => array(
+				'faq_category' => array(
 					'title' => self::$faq->get('manage_category', 'Text'),
 					'href' => $scripturl . '?action=faq;sa=managecat',
 					'show' => allowedTo('faqperedit'),
 					'sub_buttons' => array(
-						'faqmod_add' => array(
+						'faq_add' => array(
 							'title' => self::$faq->get('addcat_send', 'Text'),
 							'href' => $scripturl . '?action=faq;sa=addcat',
 							'show' => allowedTo('faqperedit'),
@@ -110,13 +110,40 @@ function faq_modify_modifications($sub_actions)
 function modify_faq_post_settings($return_config = false)
 {
 	global $context, $scripturl, $txt;
-
+$config_vars = array(
+			array(
+				'int',
+				'faq_num_faqs',
+				'size' => 3,
+				'subtext' => self::$faq->get('num_faqs_sub', 'Text')
+			),
+			array(
+				'select',
+				'faq_sort_method',
+				array(
+					'id' => self::$faq->get('id', 'Text'),
+					'title' => self::$faq->get('title', 'Text'),
+					'timestamp' => self::$faq->get('date', 'Text')
+				),
+				'subtext' => self::$faq->get('sort_method_sub', 'Text')
+			),
+			array(
+				'select',
+				'faq_menu_position',
+				array(
+					'home' => self::$faq->get('menu_home', 'Text'),
+					'help' => self::$faq->get('menu_help', 'Text'),
+					'search' => self::$faq->get('menu_search', 'Text'),
+					'login' => self::$faq->get('menu_login', 'Text'),
+					'register' => self::$faq->get('menu_register', 'Text')
+				),
+				'subtext' => self::$faq->get('menu_position_sub', 'Text')
+			),
+		);
 	$config_vars = array(
 		array('desc', 'faq_admin_desc'),
 		array('check', 'faq_enable', 'subtext' => $txt['faq_enable_desc']),
-		array('int', 'faq_latest_limit', 'subtext' => $txt['faq_latest_limit_desc'], 'size' => 3),
 		array('int', 'faq_pag_limit', 'subtext' => $txt['faq_pag_limit_desc'], 'size' => 3),
-		array('large_text', 'faq_static_content', 'subtext' => $txt['faq_static_content_desc'], '6" style="width:95%'),
 		array(
 			'select',
 			'faq_menu_position',
@@ -129,6 +156,12 @@ function modify_faq_post_settings($return_config = false)
 			),
 			'subtext' => $txt['faq_menu_position_desc']
 		),
+		array('int', 'faq_sidebar_size','subtext' => $txt['faq_sidebar_size_desc']),
+		array('check','faq_sidebar_side', 'subtext' => $txt['faq_sidebar_side_desc']),
+		array('check', 'faq_search_engines', 'subtext' => $txt['faq_search_engines_desc']),
+		array('check', 'faq_use_javascript', 'subtext' => $txt['']),
+		array('check', 'faq_show_all', 'subtext' => $txt['faq_show_all_desc'])),
+		array('check', 'faq_care', 'subtext' => $txt['faq_care_desc']),
 	);
 
 	if ($return_config)
@@ -157,26 +190,26 @@ function modify_faq_post_settings($return_config = false)
 
 function faq_permissions($permissionGroups, $permissionList)
 {
-	$permissionGroups['membergroup']['simple'] = array('faqMod_per_simple');
-	$permissionGroups['membergroup']['classic'] = array('faqMod_per_classic');
+	$permissionGroups['membergroup']['simple'] = array('faq_per_simple');
+	$permissionGroups['membergroup']['classic'] = array('faq_per_classic');
 
-	$permissionList['membergroup']['faqMod_viewfaq'] = array(
+	$permissionList['membergroup']['faq_viewfaq'] = array(
 		false,
-		'faqMod_per_classic',
-		'faqMod_per_simple');
+		'faq_per_classic',
+		'faq_per_simple');
 
-	$permissionList['membergroup']['faqMod_deletefaq'] = array(
+	$permissionList['membergroup']['faq_deletefaq'] = array(
 		false,
-		'faqMod_per_classic',
-		'faqMod_per_simple');
-	$permissionList['membergroup']['faqMod_addfaq'] = array(
+		'faq_per_classic',
+		'faq_per_simple');
+	$permissionList['membergroup']['faq_addfaq'] = array(
 		false,
-		'faqMod_per_classic',
-		'faqMod_per_simple');
-	$permissionList['membergroup']['faqMod_editfaq'] = array(
+		'faq_per_classic',
+		'faq_per_simple');
+	$permissionList['membergroup']['faq_editfaq'] = array(
 		false,
-		'faqMod_per_classic',
-		'faqMod_per_simple');
+		'faq_per_classic',
+		'faq_per_simple');
 }
 
 function faq_care()

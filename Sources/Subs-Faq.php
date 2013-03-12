@@ -36,7 +36,7 @@ if (!defined('SMF'))
 	die('No direct access');
 
 
-class faq {
+class Faq {
 
 	protected $_table = array(
 		'table' => 'faq',
@@ -327,12 +327,12 @@ class faq {
 
 		/* colect the permissions */
 		foreach ($type as $t)
-				$allowed[] = (allowedTo('faqMod_'. $t .'faq') == true ? 1 : 0);
+				$allowed[] = (allowedTo('faq_'. $t .'faq') == true ? 1 : 0);
 
 
 		/* You need at least 1 permission to be true */
 		if ($fatal_error == true && !in_array(1, $allowed))
-			isAllowedTo('faqMod_'. $t .'faq');
+			isAllowedTo('faq_'. $t .'faq');
 
 		elseif ($fatal_error == false && !in_array(1, $allowed))
 			return false;

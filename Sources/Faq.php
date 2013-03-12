@@ -46,9 +46,8 @@ function faq_dispatch()
 			'add2',
 			'delete',
 			'edit',
-			'list',
+			'categories',
 			'search',
-			'artist',
 			'single',
 			'success',
 			'manage',
@@ -57,7 +56,7 @@ function faq_dispatch()
 		if (empty($faqObject))
 		{
 			require_once($sourcedir .'/Subs-faq.php');
-			$faqObject = new faq();
+			$faqObject = new Faq();
 		}
 
 		/* Load both language and template files */
