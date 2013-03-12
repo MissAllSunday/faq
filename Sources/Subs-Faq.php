@@ -111,11 +111,12 @@ class Faq
 				$return[$row['id']] = array(
 					'id' => $row['id'],
 					'title' => $row['title'],
+					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 					'body' => parse_bbc($row['body']),
 					'cat' => array(
 						'id' => $row['category_id'],
 						'name' => $row['category_name'],
-						'link' => '<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $this->clean($id) .'">'. $row['category_name'] .'</a>'
+						'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 					),
 					'time' = $row['last_time'],
 					'user' => array(
@@ -141,9 +142,10 @@ class Faq
 		global $smcFunc, $scripturl, $txt;
 
 		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', l.', $this->_table['columns'])) .', m.member_name, m.real_name
-			FROM {db_prefix}' . ($this->_table['table']) . ' AS l
+			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
+			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
+				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
 			WHERE id = ({int:id})
 			LIMIT {int:limit}',
 			array(
@@ -152,21 +154,26 @@ class Faq
 			)
 		);
 
-		while ($row = $smcFunc['db_fetch_assoc']($result))
-			$return = array(
-				'id' => $row['id'],
-				'artist' => $row['artist'],
-				'title' => $row['title'],
-				'keywords' => $row['keywords'],
-				'body' => parse_bbc($row['body']),
-				'user' => array(
-					'id' => $row['user'],
-					'username' => $row['member_name'],
-					'name' => isset($row['real_name']) ? $row['real_name'] : '',
-					'href' => $scripturl . '?action=profile;u=' . $row['user'],
-					'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
-				),
-			);
+			while ($row = $smcFunc['db_fetch_assoc']($result))
+				$return[$row['id']] = array(
+					'id' => $row['id'],
+					'title' => $row['title'],
+					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+					'body' => parse_bbc($row['body']),
+					'cat' => array(
+						'id' => $row['category_id'],
+						'name' => $row['category_name'],
+						'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+					),
+					'time' = $row['last_time'],
+					'user' => array(
+						'id' => $row['user'],
+						'username' => $row['member_name'],
+						'name' => isset($row['real_name']) ? $row['real_name'] : '',
+						'href' => $scripturl . '?action=profile;u=' . $row['user'],
+						'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
+					),
+				);
 
 		$smcFunc['db_free_result']($result);
 
@@ -174,17 +181,12 @@ class Faq
 		return $return;
 	}
 
-	public function getByLetter($l)
-	{
-		if (empty($l) || strlen($l) != 1)
-			return false;
-	}
-
-	public function getBy($column, $value, $limit = false)
+	public function getBy($table, $column, $value, $limit = false)
 	{
 		global $smcFunc, $scripturl, $txt;
 
-		if (empty($column) || !in_array($column, $this->_table['columns']) || empty($value))
+		/* We actually need some tuff to work on... */
+		if (empty($table) || empty($column) || !in_array($column, $this->_table['columns']) || empty($value))
 			return false;
 
 		$return = array();
@@ -269,7 +271,7 @@ class Faq
 		$smcFunc['db_free_result']($result);
 
 		/* Build the pagination */
-		$context['page_index'] = constructPageIndex($scripturl . '?action=faq;sa='. $page .'', $_REQUEST['start'], $total, $maxIndex, false);
+		$context['page_index'] = constructPageIndex($scripturl . '?action='. faq::$name .';sa='. $page .'', $_REQUEST['start'], $total, $maxIndex, false);
 
 		/* Done? */
 		return $return;
@@ -371,10 +373,10 @@ class Faq
 
 		/* Let's check if you have what it takes... */
 		if ($edit == true)
-			$return .= '<a href="'. $scripturl .'?action=faq;sa=edit;fid='. $this->clean($id) .'">'. $txt['faq_edit'] .'</a>';
+			$return .= '<a href="'. $scripturl .'?action='. faq::$name .';sa=edit;fid='. $this->clean($id) .'">'. $txt['faq_edit'] .'</a>';
 
 		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action=faq;sa=delete;fid='. $this->clean($id) .'">'. $txt['faq_delete'] .'</a>';
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .'">'. $txt['faq_delete'] .'</a>';
 
 		/* Send the string */
 		return $return;

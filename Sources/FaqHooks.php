@@ -71,24 +71,24 @@ function faq_menu($menu_buttons)
 			'sub_buttons' => array(
 				'faq_admin' => array(
 					'title' => self::$faq->get('manage', 'Text'),
-					'href' => $scripturl . '?action=faq;sa=manage',
+					'href' => $scripturl . '?action='. faq::$name .';sa=manage',
 					'show' => allowedTo('faqperedit'),
 					'sub_buttons' => array(
 						'faq_add' => array(
 							'title' => self::$faq->get('add_send', 'Text'),
-							'href' => $scripturl . '?action=faq;sa=add',
+							'href' => $scripturl . '?action='. faq::$name .';sa=add',
 							'show' => allowedTo('faqperedit'),
 						),
 					),
 				),
 				'faq_category' => array(
 					'title' => self::$faq->get('manage_category', 'Text'),
-					'href' => $scripturl . '?action=faq;sa=managecat',
+					'href' => $scripturl . '?action='. faq::$name .';sa=managecat',
 					'show' => allowedTo('faqperedit'),
 					'sub_buttons' => array(
 						'faq_add' => array(
 							'title' => self::$faq->get('addcat_send', 'Text'),
-							'href' => $scripturl . '?action=faq;sa=addcat',
+							'href' => $scripturl . '?action='. faq::$name .';sa=addcat',
 							'show' => allowedTo('faqperedit'),
 						),
 					),

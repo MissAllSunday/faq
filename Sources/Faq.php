@@ -102,7 +102,7 @@ function faq_add($faqObject)
 	$context['sub_template'] = 'faq_add';
 	$context['page_title'] = $txt['faq_post_title'];
 	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq;sa=add',
+		'url' => $scripturl. '?action='. faq::$name .';sa=add',
 		'name' => $txt['faq_post_title'],
 	);
 
@@ -155,7 +155,7 @@ function faq_add2($faqObject)
 
 		/* Build the link tree.... */
 		$context['linktree'][] = array(
-			'url' => $scripturl . '?action=faq;sa=add',
+			'url' => $scripturl . '?action='. faq::$name .';sa=add',
 			'name' => $txt['faq_preview_add'],
 		);
 
@@ -256,7 +256,7 @@ function faq_edit($faqObject)
 		$context['sub_template'] = 'faq_add';
 		$context['page_title'] = $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'];
 		$context['linktree'][] = array(
-			'url' => $scripturl. '?action=faq;sa=edit;fid='. $lid,
+			'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
 			'name' => $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'],
 		);
 
@@ -303,7 +303,7 @@ function faq_success($faqObject)
 
 		/* Build the link tree.... */
 		$context['linktree'][] = array(
-			'url' => $scripturl . '?action=faq;sa=success',
+			'url' => $scripturl . '?action='. faq::$name .';sa=success',
 			'name' => $txt['faq_success_message_title'],
 		);
 
@@ -344,7 +344,7 @@ function faq_single($faqObject)
 
 	/* Set all we need */
 	$context['sub_template'] = 'faq_single';
-	$context['canonical_url'] = $scripturl . '?action=faq;sa=single;fid=' . $id;
+	$context['canonical_url'] = $scripturl . '?action='. faq::$name .';sa=single;fid=' . $id;
 	$context['page_title'] = $context['faq']['single']['title'] .' - '. $context['faq']['single']['artist'];
 	$context['linktree'][] = array(
 		'url' => $context['canonical_url'],
@@ -369,10 +369,10 @@ function faq_artist($faqObject)
 	$lid = $faqObject->clean($_GET['lid']);
 
 	$context['sub_template'] = 'faq_artist';
-	$context['canonical_url'] = $scripturl . '?action=faq;sa=artist;fid='. $lid;
+	$context['canonical_url'] = $scripturl . '?action='. faq::$name .';sa=artist;fid='. $lid;
 	$context['page_title'] = $txt['faq_artist_title'] . $lid;
 	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq;sa=artist;fid='. $lid,
+		'url' => $scripturl. '?action='. faq::$name .';sa=artist;fid='. $lid,
 		'name' => $context['page_title'],
 	);
 
@@ -394,7 +394,7 @@ function faq_list($faqObject)
 	$context['sub_template'] = 'faq_list';
 	$context['page_title'] = $txt['faq_list_title'];
 	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq;sa=list',
+		'url' => $scripturl. '?action='. faq::$name .';sa=list',
 		'name' => $txt['faq_list_title'],
 	);
 
@@ -410,7 +410,7 @@ function faq_list($faqObject)
 		/* Replace the linktree and title with something more specific */
 		$context['page_title'] = $txt['faq_list_title_by_letter'] . $lidletter;
 		$context['linktree'][] = array(
-			'url' => $scripturl. '?action=faq;sa=list;lidletter='. $lidletter,
+			'url' => $scripturl. '?action='. faq::$name .';sa=list;lidletter='. $lidletter,
 			'name' => $txt['faq_list_title_by_letter'] . $lidletter,
 		);
 
@@ -435,7 +435,7 @@ function faq_manage($faqObject)
 	$context['sub_template'] = 'faq_manage';
 	$context['page_title'] = $txt['faq_manage_title'];
 	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq;sa=manage',
+		'url' => $scripturl. '?action='. faq::$name .';sa=manage',
 		'name' => $context['page_title'],
 	);
 
@@ -451,7 +451,7 @@ function faq_manage($faqObject)
 		/* Replace the linktree and title with something more specific */
 		$context['page_title'] = $txt['faq_list_title_by_letter'] . $lidletter;
 		$context['linktree'][] = array(
-			'url' => $scripturl. '?action=faq;sa=list;lidletter='. $lidletter,
+			'url' => $scripturl. '?action='. faq::$name .';sa=list;lidletter='. $lidletter,
 			'name' => $txt['faq_list_title_by_letter'] . $lidletter,
 		);
 
@@ -483,7 +483,7 @@ function faq_search($faqObject)
 	$context['sub_template'] = 'faq_list';
 	$context['page_title'] = $txt['faq_search_title'] . $value;
 	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq;sa=search',
+		'url' => $scripturl. '?action='. faq::$name .';sa=search',
 		'name' => $txt['faq_list_title_by_letter'] . $value,
 	);
 
