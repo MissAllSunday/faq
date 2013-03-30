@@ -53,7 +53,8 @@ function faq_menu($menu_buttons)
 {
 		global $scripturl, $modSettings, $txt, $context;
 
-		loadLanguage('faq');
+		if (!isset($txt['faq_title']))
+			loadLanguage('faq');
 
 		$insert = !empty($modSettings['faq_menu_position']) ? $modSettings['faq_menu_position'] : 'home';
 		$counter = 0;
@@ -70,24 +71,24 @@ function faq_menu($menu_buttons)
 				'show' => empty($modSettings['faq_enable']) ? false : true,
 				'sub_buttons' => array(
 					'faq_admin' => array(
-						'title' => self::$faq->get('manage', 'Text'),
+						'title' => $txt['faqmod_manage'],
 						'href' => $scripturl . '?action='. faq::$name .';sa=manage',
 						'show' => allowedTo('faqperedit'),
 						'sub_buttons' => array(
 							'faq_add' => array(
-								'title' => self::$faq->get('add_send', 'Text'),
+								'title' => $txt['faqmod_add_send'],
 								'href' => $scripturl . '?action='. faq::$name .';sa=add',
 								'show' => allowedTo('faqperedit'),
 							),
 						),
 					),
 					'faq_category' => array(
-						'title' => self::$faq->get('manage_category', 'Text'),
+						'title' => $txt['faqmod_manage_category'],
 						'href' => $scripturl . '?action='. faq::$name .';sa=managecat',
 						'show' => allowedTo('faqperedit'),
 						'sub_buttons' => array(
 							'faq_add' => array(
-								'title' => self::$faq->get('addcat_send', 'Text'),
+								'title' => $txt['faqmod_addcat_send'],
 								'href' => $scripturl . '?action='. faq::$name .';sa=addcat',
 								'show' => allowedTo('faqperedit'),
 							),
@@ -118,29 +119,29 @@ $config_vars = array(
 				'int',
 				'faq_num_faqs',
 				'size' => 3,
-				'subtext' => self::$faq->get('num_faqs_sub', 'Text')
+				'subtext' => $txt['faqmod_num_faqs_sub']
 			),
 			array(
 				'select',
 				'faq_sort_method',
 				array(
-					'id' => self::$faq->get('id', 'Text'),
-					'title' => self::$faq->get('title', 'Text'),
-					'timestamp' => self::$faq->get('date', 'Text')
+					'id' => $txt['faqmod_id'],
+					'title' => $txt['faqmod_title'],
+					'timestamp' => $txt['faqmod_date']
 				),
-				'subtext' => self::$faq->get('sort_method_sub', 'Text')
+				'subtext' => $txt['faqmod_sort_method_sub']
 			),
 			array(
 				'select',
 				'faq_menu_position',
 				array(
-					'home' => self::$faq->get('menu_home', 'Text'),
-					'help' => self::$faq->get('menu_help', 'Text'),
-					'search' => self::$faq->get('menu_search', 'Text'),
-					'login' => self::$faq->get('menu_login', 'Text'),
-					'register' => self::$faq->get('menu_register', 'Text')
+					'home' => $txt['faqmod_menu_home'],
+					'help' => $txt['faqmod_menu_help'],
+					'search' => $txt['faqmod_menu_search'],
+					'login' => $txt['faqmod_menu_login'],
+					'register' => $txt['faqmod_menu_register']
 				),
-				'subtext' => self::$faq->get('menu_position_sub', 'Text')
+				'subtext' => $txt['faqmod_menu_position_sub']
 			),
 		);
 	$config_vars = array(
