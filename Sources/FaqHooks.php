@@ -51,7 +51,7 @@ function faq_actions($actions)
 
 function faq_menu($menu_buttons)
 {
-		global $scripturl, $modSettings, $txt;
+		global $scripturl, $modSettings, $txt, $context;
 
 		loadLanguage('faq');
 
@@ -65,38 +65,41 @@ function faq_menu($menu_buttons)
 		$menu_buttons = array_merge(
 			array_slice($menu_buttons, 0, $counter),
 			array('faq' => array(
-			'title' => $txt['faq_title'],
-			'href' => $scripturl . '?action=faq',
-			'show' => empty($modSettings['faq_enable']) ? false : true,
-			'sub_buttons' => array(
-				'faq_admin' => array(
-					'title' => self::$faq->get('manage', 'Text'),
-					'href' => $scripturl . '?action='. faq::$name .';sa=manage',
-					'show' => allowedTo('faqperedit'),
-					'sub_buttons' => array(
-						'faq_add' => array(
-							'title' => self::$faq->get('add_send', 'Text'),
-							'href' => $scripturl . '?action='. faq::$name .';sa=add',
-							'show' => allowedTo('faqperedit'),
+				'title' => $txt['faq_title'],
+				'href' => $scripturl . '?action=faq',
+				'show' => empty($modSettings['faq_enable']) ? false : true,
+				'sub_buttons' => array(
+					'faq_admin' => array(
+						'title' => self::$faq->get('manage', 'Text'),
+						'href' => $scripturl . '?action='. faq::$name .';sa=manage',
+						'show' => allowedTo('faqperedit'),
+						'sub_buttons' => array(
+							'faq_add' => array(
+								'title' => self::$faq->get('add_send', 'Text'),
+								'href' => $scripturl . '?action='. faq::$name .';sa=add',
+								'show' => allowedTo('faqperedit'),
+							),
+						),
+					),
+					'faq_category' => array(
+						'title' => self::$faq->get('manage_category', 'Text'),
+						'href' => $scripturl . '?action='. faq::$name .';sa=managecat',
+						'show' => allowedTo('faqperedit'),
+						'sub_buttons' => array(
+							'faq_add' => array(
+								'title' => self::$faq->get('addcat_send', 'Text'),
+								'href' => $scripturl . '?action='. faq::$name .';sa=addcat',
+								'show' => allowedTo('faqperedit'),
+							),
 						),
 					),
 				),
-				'faq_category' => array(
-					'title' => self::$faq->get('manage_category', 'Text'),
-					'href' => $scripturl . '?action='. faq::$name .';sa=managecat',
-					'show' => allowedTo('faqperedit'),
-					'sub_buttons' => array(
-						'faq_add' => array(
-							'title' => self::$faq->get('addcat_send', 'Text'),
-							'href' => $scripturl . '?action='. faq::$name .';sa=addcat',
-							'show' => allowedTo('faqperedit'),
-						),
-					),
-				),
-			),
-		)),
+			)),
 			array_slice($menu_buttons, $counter)
 		);
+
+     if (isset($context['current_action']) && $context['current_action'] == 'credits')
+        $context['copyrights']['mods'][] = faq_care();
 }
 
 function faq_modify_modifications($sub_actions)
