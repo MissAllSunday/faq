@@ -98,8 +98,8 @@ function faq_menu($menu_buttons)
 			array_slice($menu_buttons, $counter)
 		);
 
-     if (isset($context['current_action']) && $context['current_action'] == 'credits')
-        $context['copyrights']['mods'][] = faq_care();
+	if (isset($context['current_action']) && $context['current_action'] == 'credits')
+		$context['copyrights']['mods'][] = faq_care();
 }
 
 function faq_modify_modifications($sub_actions)

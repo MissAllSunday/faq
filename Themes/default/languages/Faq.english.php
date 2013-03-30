@@ -34,77 +34,99 @@
 
 global $scripturl, $txt;
 
-$txt['faq_title'] = 'faq';
-$txt['faq_title_index'] = 'faq Index';
-$txt['faq_post_title'] = 'Post a new lyric';
-$txt['faq_post_by'] = ' by ';
-$txt['faq_static_content_default'] = 'You can change this text in your admin settings';
-$txt['faq_static_content'] = 'Set a custom text to be show on the faq main page';
-$txt['faq_static_content_desc'] = 'You can use bbc code';
-$txt['faq_latest_limit'] = 'How many entries will be showd on the latest faq block';
-$txt['faq_latest_limit_desc'] = 'If left empty, it will show the latest 10';
-$txt['faq_pag_limit'] = 'The amount of faq to be show when showing all faq.';
-$txt['faq_pag_limit_desc'] = 'This controls the pagination section, if left empty it will use the dafault value: 20';
-$txt['faq_static_title'] = 'General info';
-$txt['faq_preview_edit'] = 'Editing a lyric\'s content';
-$txt['faq_preview_add'] = 'Adding a new faq entry';
-$txt['faq_no_valid_id'] = 'The faq you specified doesn\'t exists';
-$txt['faq_no_faq_with_letter'] = 'There are no titles with this letter';
-$txt['faq_admin_desc'] = 'From here you can configure your faq mod';
-$txt['faq_enable'] = 'Enable the faq mod';
-$txt['faq_enable_desc'] = 'This setting must be enable for the mod to work properly.';
-$txt['faq_menu_position'] = 'Set the position for the faq mod';
-$txt['faq_menu_position_desc'] = 'It will be placed next to the option you choose';
-$txt['faq_no_latest'] = 'There are no faq yet.';
-$txt['faq_latest_title'] = 'Latest faq added';
-$txt['faq_adding'] = 'Adding';
-$txt['faq_success_title'] = 'successfully done';
-$txt['faq_success_no_access'] = 'You can\'t access this page directly';
-$txt['faq_success_message_title'] = 'Thank you';
-$txt['faq_success_message_generic'] = '<a href="'. $scripturl .'?action=faq" >Go to the faq Index</a>';
-$txt['faq_success_message_add'] = 'You have successfully added a new faq entry';
-$txt['faq_success_message_edit'] = 'You have successfully edited this faq entry';
-$txt['faq_success_message_delete'] = 'You have successfully deleted this entry';
-$txt['faq_artist_title'] = 'faq by ';
-$txt['faq_artist_no_content'] = 'There are no faq for this artist';
-$txt['faq_list_title'] = 'faq list';
-$txt['faq_list_title_sort_by'] = 'sort by ';
-$txt['faq_list_title_sort_by_id'] = 'ID';
-$txt['faq_list_title_sort_by_title'] = 'Title';
-$txt['faq_list_title_sort_by_artist'] = 'Artist';
-$txt['faq_list_title_sort_by_latest'] = 'Latest';
-$txt['faq_list_title_sort_by_user'] = 'Created by user';
-$txt['faq_list_title_by_letter'] = 'faq by letter ';
-$txt['faq_list_view_all'] = 'View all faq';
-$txt['faq_list_manage_all'] = 'Manage all faq';
-$txt['faq_list_artist_list'] = 'Artist list';
-$txt['faq_manage_title'] = 'faq manage page';
-$txt['faq_manage_desc'] = 'From here you can manage all the faq, you can edit or delete each individual entry.';
-$txt['faq_search_title'] = 'Search faq '; 
-$txt['faq_search_button'] = 'Search'; 
+$txt['faqmod_title_main'] = 'FAQ';
+$txt['faqmod_edit'] = 'Edit';
+$txt['faqmod_editing'] = 'Editing';
+$txt['faqmod_send'] = 'Send';
+$txt['faqmod_title_edit'] = 'Title:';
+$txt['faqmod_no_category_name'] = 'Yo must provide a name for this category.';
+$txt['faqmod_no_category'] = 'You must select a category.';
+$txt['faqmod_no_title'] = 'You must provide a title.';
+$txt['faqmod_no_body'] = 'You must provide a body.';
+$txt['faqmod_last_edit'] = 'Last edit on: ';
+$txt['faqmod_delete'] = 'Delete? ';
+$txt['faqmod_delete_con'] = 'Do you really want to delete this: ';
+$txt['faqmod_delete_send'] = 'Delete this';
+$txt['faqmod_deleting'] = 'Deleting';
+$txt['faqmod_add_send'] = 'Add a new FAQ';
+$txt['faqmod_edit_send'] = 'Edit this FAQ';
+$txt['faqmod_adding'] = 'Adding a new FAQ';
+$txt['faqmod_no_faq'] = 'There are no FAQs to show.';
+$txt['faqmod_no_cat_admin'] = 'You need to add a category before you can add a FAQ <br /> <a href="'.$scripturl.'?action=faq;sa=addcat">Add a category</a>';
+$txt['faqmod_no_cat'] = 'There are not categories, you must add a category first before you can add FAQs.';
+$txt['faqmod_adding_cat'] = 'Adding a new category.';
+$txt['faqmod_editing_cat'] = 'Editing category';
+$txt['faqmod_addcat_send'] = 'Add a new category';
+$txt['faqmod_editcat_send'] = 'Edit this category';
+$txt['faqmod_no_cat'] = '<span style="color:red;">Without category</span>';
+$txt['faqmod_na'] = 'N/A';
 
-/* Form */
-$txt['faq_title_edit'] = 'Title:';
-$txt['faq_title_artist'] = 'Artist:';
-$txt['faq_title_body'] = 'faq:';
-$txt['faq_create_new'] = 'Add a new entry';
-$txt['faq_add_send'] = 'Send';
-$txt['faq_edit'] = 'Edit';
-$txt['faq_delete'] = 'Delete';
-$txt['faq_editing'] = 'Editing';
+// Settings strings
+$txt['faqmod_basic_settings'] = 'Basic Settings';
+$txt['faqmod_edit_page'] = 'Edit the FAQs';
+$txt['faqmod_manage'] = 'Manage the FAQs';
+$txt['faqmod_manage_desc'] = 'From here you can manage your FAQs, you can edit/delete/add as many as you want, here\'s some descriptions:<br />
+-ID:  its the numeric reference for the faqs, used to manage the faqs without to much problems.<br />
+-Title: the name for the faq.<br />
+-Category: The category where this faq is hosted.<br />
+-Last Edit: the last time this faq was edited.<br />
+-By user: The person who edited this faq the last time.<br />';
+$txt['faqmod_manage_category'] = 'Manage the Categories';
+$txt['faqmod_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want, here\'s some descriptions:<br />
+-ID:  its the numeric reference for the categories, used to manage them without to much problems.<br />
+-Name: the name for the category.<br />
+-By user: The person who edited this category the last time.<br />';
+$txt['faqmod_admin_panel'] = 'FAQ mod admin panel';
+$txt['faqmod_admin_panel_desc'] = 'This is the main admin panel for the FAQ mod, in here you can easily add/edit/delete FAQs as well as setup the configuration.';
+$txt['faqmod_php_version'] = '<br /><span style="color:red;font-size:25px">This mod needs php 5.2+ to work properly, you won\'t be able to use this mod</span>';
+$txt['faqmod_num_faqs'] = 'Number of FAQs to show on each page.';
+$txt['faqmod_num_faqs_sub'] = 'If you have a lot of FAQs you can set a number here to active the pagination, leave it in blank or at 0 if you do not want to have pagination, otherwise put a number, for example, if you have 10 FAQs and you set this at 5 then you will have two pages, 10/5 = 2.';
+$txt['faqmod_sort_method'] = 'Sort the FAQ by:';
+$txt['faqmod_sort_method_sub'] = 'Select how the FAQs will be sorted, default is by ID.';
+$txt['faqmod_date'] = 'By Last edit';
+$txt['faqmod_id'] = 'By ID';
+$txt['faqmod_title'] = 'By Title';
+$txt['faqmod_use_javascript'] = 'Use Javascript to hide the body?';
+$txt['faqmod_use_javascript_sub'] = 'If enable, this mod will use javascript to hide the FAQ content, this is useful if you have multiple FAQs and want to save some space, to show the content just click on the FAQ title/question.';
+$txt['faqmod_show_all'] = 'Show all the FAQs on a list';
+$txt['faqmod_show_all_sub'] = 'If checked, a block below the categories will be showed with all the current FAQs';
+$txt['faqmod_menu_position'] = 'Select the position for the FAQ button in the menu';
+$txt['faqmod_menu_position_sub'] = 'By default is next to home.';
+$txt['faqmod_menu_home'] = 'Next to the Home button';
+$txt['faqmod_menu_help'] = 'Next to the Help button';
+$txt['faqmod_menu_search'] = 'Next to the Search button';
+$txt['faqmod_menu_login'] = 'Next to the Login button';
+$txt['faqmod_menu_register'] = 'Next to the Register button';
+$txt['faqmod_care'] = 'Show the mod author\'s copyright at the bottom of the FAQ page?';
+$txt['faqmod_care_sub'] = 'If checked, the copyright will be displayed only in the FAQ page, at the bottom, this will help the mod author to provide more useful and free mods.';
+$txt['faqmod_search_engines'] = 'Do not let search engines index the Faq page';
+$txt['faqmod_search_engines_sub'] = 'If checked, this mod will place a metatag to discourage search engines from indexing the FAQ page.';
+$txt['faqmod_sidebar_side'] = 'Show the side bar at left?';
+$txt['faqmod_sidebar_side_sub'] = 'By default, the side bar is showed at right side, if you check this option it will appear at left side.';
+$txt['faqmod_sidebar_size'] = 'Size of the FAQs';
+$txt['faqmod_sidebar_size_sub'] = 'the width size in percentage % for the FAQs,  the larger the FAQs the smaller will be the side bar, for example, if you set up a width of 50%  then the side bar will have a width of 48%,  enter just the number.<br /> By default is 80 for the FAQs, 18 for the sidebar.';
 
-/* Error */
-$txt['faq_error_no_valid_action'] = 'This isn\'t a valid action';
-$txt['faq_error_enable'] = 'The mod must be enable';
 
-/* Permissions strings */
-$txt['cannot_faq_viewfaq'] = 'I\'m sorry, you are not allowed to view the faq page.';
-$txt['cannot_faq_addfaq'] = 'I\'m sorry, you are not allowed to add faq.';
-$txt['cannot_faq_editfaq'] = 'I\'m sorry, you are not allowed to edit faq.';
-$txt['cannot_faq_deletefaq'] = 'I\'m sorry, you are not allowed to delete faq.';
-$txt['permissiongroup_simple_faq_per_simple'] = 'faq mod permissions';
-$txt['permissiongroup_faq_per_classic'] = 'faq mod permissions';
-$txt['permissionname_faq_viewfaq'] = 'View the faq pages';
-$txt['permissionname_faq_addfaq'] = 'Add faq entries';
-$txt['permissionname_faq_editfaq'] = 'Edit faq entries';
-$txt['permissionname_faq_deletefaq'] = 'Delete faq entries';
+
+// Template strings
+$txt['faqmod_edit_title'] = 'Title';
+$txt['faqmod_edit_id'] = 'ID';
+$txt['faqmod_edit_last_edit'] = 'Last Edit';
+$txt['faqmod_edit_last_edit_by'] = 'By user';
+$txt['faqmod_edit_edit'] = 'Edit';
+$txt['faqmod_edit_delete'] = 'Delete';
+$txt['faqmod_edit_category'] = 'Category';
+$txt['faqmod_edit_name'] = 'Name';
+$txt['faqmod_show_categories'] = 'Categories';
+$txt['faqmod_show_faqmod_list'] = 'FAQ list';
+
+// Permissions strings
+$txt['cannot_faqperview'] = 'I\'m sorry, you are not allowed to view the FAQ page.';
+$txt['permissiongroup_faqper'] = 'FAQ mod permissions';
+$txt['permissiongroup_simple_faqper'] = 'FAQ mod permissions';
+$txt['permissionname_faqperview'] = 'View the FAQ page';
+$txt['permissionname_faqperedit'] = 'Edit/Add/Delete FAQs and categories';
+$txt['cannot_faqperedit'] = 'I\'m sorry, you are not allowed to administrate the FAQ page.';
+
+// Who's online strings
+$txt['whoall_faq'] = 'Viewing the <a href="'. $scripturl. '?action=faq">FAQ page</a>.';
