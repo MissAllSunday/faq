@@ -41,7 +41,7 @@ class Faq
 	protected $_table = array(
 		'faq' => array(
 			'table' => 'faq',
-			'columns' => array('id', 'category_id', 'last_user', 'title', 'body', 'timestamp',),
+			'columns' => array('id', 'category_id', 'last_user', 'title', 'body', 'last_time',),
 		),
 		'cat' => array(
 			'table' => 'faq_categories',
@@ -75,6 +75,9 @@ class Faq
 	public function edit($data, $table)
 	{
 		global $smcFunc;
+
+		if (empty($data) || empty($table))
+			return false;
 
 		$set = $table == faq::$name ? 'last_user = {int:last_user}, last_time = {int:last_time} title = {string:title}, body = {string:body}' : 'category_last_user = {int:category_last_user}, category_name = {string:category_name}';
 

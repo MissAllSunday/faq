@@ -75,11 +75,11 @@ function faq_main($faqObject)
 	$faqObject->permissions('view', true);
 
 	$context['sub_template'] = 'faq_main';
-	$context['canonical_url'] = $scripturl . '?action=yrics';
-	$context['page_title'] = $txt['faq_title'];
+	$context['canonical_url'] = $scripturl . '?action=faq';
+	$context['page_title'] = $txt['faq_title_main'];
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action=faq',
-		'name' => $txt['faq_title_index'],
+		'name' => $context['page_title'],
 	);
 
 	/* Pass the object to the template */
@@ -89,7 +89,7 @@ function faq_main($faqObject)
 	$context['faq']['static_content'] = parse_bbc(empty($modSettings['faq_static_content']) ? $txt['faq_static_content_default'] : $modSettings['faq_static_content']);
 
 	/* Get the latest faq from DB */
-	$context['faq']['latest'] = $faqObject->getLatest(empty($modSettings['faq_latest_limit']) ? 10 : $modSettings['faq_latest_limit']);
+	$context['faq']['all'] = $faqObject->getLatest(empty($modSettings['faq_latest_limit']) ? 10 : $modSettings['faq_latest_limit']);
 }
 
 function faq_add($faqObject)
@@ -472,7 +472,7 @@ function faq_search($faqObject)
 	/* Are you allowed to see this page? */
 	$faqObject->permissions('view', true);
 
-	/* We need a valur to serch and a column */
+	/* We need a value to serch and a column */
 	if (!isset($_REQUEST['l_search_value']) || empty($_REQUEST['l_search_value']) || !isset($_REQUEST['l_column']) || empty($_REQUEST['l_column']))
 		fatal_lang_error('faq_error_no_valid_action', false);
 
