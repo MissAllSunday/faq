@@ -58,7 +58,7 @@ class Faq
 		global $smcFunc;
 
 		/* Clear the cache */
-		cache_put_data(faq::$name .'_main', '', 120);
+		cache_put_data(faq::$name .'_latest', '', 60);
 
 		$smcFunc['db_insert']('',
 			'{db_prefix}faq',
@@ -81,8 +81,10 @@ class Faq
 
 		$set = $table == faq::$name ? 'last_user = {int:last_user}, last_time = {int:last_time} title = {string:title}, body = {string:body}' : 'category_last_user = {int:category_last_user}, category_name = {string:category_name}';
 
-		/* Clear the cache */
-		cache_put_data(faq::$name .'_main', '', 120);
+		/* Does the cache has this entry? */
+		if (($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
+			if (!empty($gotIt[$data['id']]))
+				cache_put_data(faq::$name .'_latest', '', 60);
 
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}' . ($this->_table[$table]['table']) . '
