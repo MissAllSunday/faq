@@ -246,7 +246,7 @@ class Faq
 		return !empty($return) ? $return : false;
 	}
 
-	public function getAll($page = 'list')
+	public function getAll($page = '')
 	{
 		global $smcFunc, $scripturl, $txt, $modSettings, $context;
 
@@ -295,7 +295,7 @@ class Faq
 		$smcFunc['db_free_result']($result);
 
 		/* Build the pagination */
-		$context['page_index'] = constructPageIndex($scripturl . '?action='. faq::$name .';sa='. $page .'', $_REQUEST['start'], $total, $maxIndex, false);
+		$context['page_index'] = constructPageIndex($scripturl . '?action='. faq::$name . (!empty($page) ? ';sa='. $page .'' : ''), $_REQUEST['start'], $total, $maxIndex, false);
 
 		/* Done? */
 		return !empty($return) ? $return : false;

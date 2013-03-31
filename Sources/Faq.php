@@ -85,11 +85,9 @@ function faq_main($faqObject)
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
 
-	/* Static content defined by the admin */
-	$context['faq']['static_content'] = parse_bbc(empty($modSettings['faq_static_content']) ? $txt['faq_static_content_default'] : $modSettings['faq_static_content']);
 
 	/* Get the latest faq from DB */
-	$context['faq']['all'] = $faqObject->getLatest(empty($modSettings['faq_latest_limit']) ? 10 : $modSettings['faq_latest_limit']);
+	$context['faq']['all'] = $faqObject->getAll(empty($modSettings['faq_latest_limit']) ? 10 : $modSettings['faq_latest_limit']);
 }
 
 function faq_add($faqObject)
