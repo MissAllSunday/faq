@@ -197,7 +197,7 @@ class Faq
 		if (!empty($like) && $like == true)
 			$likeString = !empty($like) && $like == true ? 'LIKE' : '=';
 
-		/* We actually need some tuff to work on... */
+		/* We actually need some stuff to work on... */
 		if (empty($table) || empty($column) || !in_array($column, $this->_table[$table]['columns']) || empty($value))
 			return false;
 
@@ -320,8 +320,13 @@ class Faq
 	{
 		global $smcFunc;
 
-		/* Clear the cache */
-		cache_put_data(faq::$name .'_main', '', 120);
+		if (empty($id) || empty($table))
+			return false;
+
+		/* Does the cache has this entry? */
+		if ($table == faq::$name && ($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
+			if (!empty($gotIt[$id))
+				cache_put_data(faq::$name .'_latest', '', 60);
 
 		/* Do not waste my time... */
 		if (empty($id) || empty($table))
@@ -365,10 +370,9 @@ class Faq
 		if (empty($modSettings['faq_enable']))
 			fatal_lang_error('faq_error_enable', false);
 
-		/* colect the permissions */
+		/* collect the permissions */
 		foreach ($type as $t)
 				$allowed[] = (allowedTo('faq_'. $t .'faq') == true ? 1 : 0);
-
 
 		/* You need at least 1 permission to be true */
 		if ($fatal_error == true && !in_array(1, $allowed))
