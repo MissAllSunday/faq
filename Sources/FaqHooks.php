@@ -39,7 +39,8 @@ function faq_admin_areas(&$areas)
 {
 	global $txt;
 
-	loadLanguage('faq');
+	if (!isset($txt['faqmod_title']))
+		loadLanguage('faq');
 
 	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faqmod_title']);
 }
@@ -101,16 +102,6 @@ function faq_menu(&$menu_buttons)
 
 	if (isset($context['current_action']) && $context['current_action'] == 'credits')
 		$context['copyrights']['mods'][] = faq_care();
-}
-
-function faq_admin_areas(&$areas)
-{
-	global $txt;
-
-	if (!isset($txt['faqmod_title']))
-		loadLanguage('faq');
-
-	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faq_title_admin']);
 }
 
 function faq_modify_modifications(&$sub_actions)
