@@ -41,7 +41,7 @@ function faq_admin_areas(&$areas)
 
 	loadLanguage('faq');
 
-	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faq_title']);
+	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faqmod_title']);
 }
 
 function faq_actions(&$actions)
@@ -51,56 +51,66 @@ function faq_actions(&$actions)
 
 function faq_menu(&$menu_buttons)
 {
-		global $scripturl, $modSettings, $txt, $context;
+	global $scripturl, $modSettings, $txt, $context;
 
-		if (!isset($txt['faq_title']))
-			loadLanguage('faq');
+	if (!isset($txt['faqmod_title']))
+		loadLanguage('faq');
 
-		$insert = !empty($modSettings['faq_menu_position']) ? $modSettings['faq_menu_position'] : 'home';
-		$counter = 0;
+	$insert = !empty($modSettings['faq_menu_position']) ? $modSettings['faq_menu_position'] : 'home';
+	$counter = 0;
 
-		foreach ($menu_buttons as $area => $dummy)
-			if (++$counter && $area == $insert )
-				break;
+	foreach ($menu_buttons as $area => $dummy)
+		if (++$counter && $area == $insert )
+			break;
 
-		$menu_buttons = array_merge(
-			array_slice($menu_buttons, 0, $counter),
-			array('faq' => array(
-				'title' => $txt['faq_title'],
-				'href' => $scripturl . '?action=faq',
-				'show' => empty($modSettings['faq_enable']) ? false : true,
-				'sub_buttons' => array(
-					'faq_admin' => array(
-						'title' => $txt['faqmod_manage'],
-						'href' => $scripturl . '?action='. faq::$name .';sa=manage',
-						'show' => allowedTo('faqperedit'),
-						'sub_buttons' => array(
-							'faq_add' => array(
-								'title' => $txt['faqmod_add_send'],
-								'href' => $scripturl . '?action='. faq::$name .';sa=add',
-								'show' => allowedTo('faqperedit'),
-							),
-						),
-					),
-					'faq_category' => array(
-						'title' => $txt['faqmod_manage_category'],
-						'href' => $scripturl . '?action='. faq::$name .';sa=managecat',
-						'show' => allowedTo('faqperedit'),
-						'sub_buttons' => array(
-							'faq_add' => array(
-								'title' => $txt['faqmod_addcat_send'],
-								'href' => $scripturl . '?action='. faq::$name .';sa=addcat',
-								'show' => allowedTo('faqperedit'),
-							),
+	$menu_buttons = array_merge(
+		array_slice($menu_buttons, 0, $counter),
+		array('faq' => array(
+			'title' => $txt['faqmod_title'],
+			'href' => $scripturl . '?action=faq',
+			'show' => empty($modSettings['faq_enable']) ? false : true,
+			'sub_buttons' => array(
+				'faq_admin' => array(
+					'title' => $txt['faqmod_manage'],
+					'href' => $scripturl . '?action=faq;sa=manage',
+					'show' => allowedTo('faqperedit'),
+					'sub_buttons' => array(
+						'faq_add' => array(
+							'title' => $txt['faqmod_add_send'],
+							'href' => $scripturl . '?action=faq;sa=add',
+							'show' => allowedTo('faqperedit'),
 						),
 					),
 				),
-			)),
-			array_slice($menu_buttons, $counter)
-		);
+				'faq_category' => array(
+					'title' => $txt['faqmod_manage_category'],
+					'href' => $scripturl . '?action=faq;sa=managecat',
+					'show' => allowedTo('faqperedit'),
+					'sub_buttons' => array(
+						'faq_add' => array(
+							'title' => $txt['faqmod_addcat_send'],
+							'href' => $scripturl . '?action=faq;sa=addcat',
+							'show' => allowedTo('faqperedit'),
+						),
+					),
+				),
+			),
+		)),
+		array_slice($menu_buttons, $counter)
+	);
 
 	if (isset($context['current_action']) && $context['current_action'] == 'credits')
 		$context['copyrights']['mods'][] = faq_care();
+}
+
+function faq_admin_areas(&$areas)
+{
+	global $txt;
+
+	if (!isset($txt['faqmod_title']))
+		loadLanguage('faq');
+
+	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faq_title_admin']);
 }
 
 function faq_modify_modifications(&$sub_actions)
@@ -150,7 +160,7 @@ function modify_faq_post_settings(&$return_config = false)
 		return $config_vars;
 
 	$context['post_url'] = $scripturl . '?action=admin;area=modsettings;save;sa=faq';
-	$context['settings_title'] = $txt['faq_title'];
+	$context['settings_title'] = $txt['faqmod_title'];
 
 	if (empty($config_vars))
 	{

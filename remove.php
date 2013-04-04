@@ -39,6 +39,7 @@
 		'integrate_menu_buttons' => 'faq_menu',
 		'integrate_actions' => 'faq_actions',
 		'integrate_load_permissions' => 'faq_permissions',
+		'integrate_admin_areas' => 'faq_admin_areas',
 		'integrate_modify_modifications' => 'faq_modify_modifications',
 	);
 

@@ -34,7 +34,8 @@
 
 global $scripturl, $txt;
 
-$txt['faqmod_title_main'] = 'FAQ';
+$txt['faqmod_title'] = 'FAQ';
+$txt['faq_title_admin'] = 'FAQ mod admin settings':
 $txt['faqmod_edit'] = 'Edit';
 $txt['faqmod_editing'] = 'Editing';
 $txt['faqmod_send'] = 'Send';
