@@ -55,7 +55,7 @@
 					'auto' => true
 				),
 				array(
-					'name' => 'category_id',
+					'name' => 'cat_id',
 					'type' => 'int',
 					'size' => 5,
 					'null' => false

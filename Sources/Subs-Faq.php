@@ -41,7 +41,7 @@ class Faq
 	protected $_table = array(
 		'faq' => array(
 			'table' => 'faq',
-			'columns' => array('id', 'category_id', 'last_user', 'title', 'body', 'last_time',),
+			'columns' => array('id', 'cat_id', 'last_user', 'title', 'body', 'last_time',),
 		),
 		'cat' => array(
 			'table' => 'faq_categories',
@@ -105,7 +105,7 @@ class Faq
 				SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
 				FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 					LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-					LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
+					LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
 				ORDER BY {raw:sort}
 				LIMIT {int:limit}',
 				array(
@@ -153,7 +153,7 @@ class Faq
 			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
 			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
+				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
 			WHERE id = ({int:id})
 			LIMIT {int:limit}',
 			array(
@@ -207,7 +207,7 @@ class Faq
 			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
 			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
+				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
 			WHERE '. $column .' '. (is_int($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
 			ORDER BY {raw:sort}
 			'. (!empty($limit) ? '
@@ -259,10 +259,10 @@ class Faq
 		$sortArray = array('title', 'artist', 'latest');
 
 		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
+			SELECT '. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
 			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.category_id)
+				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
 			array(
