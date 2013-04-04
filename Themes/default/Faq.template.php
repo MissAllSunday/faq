@@ -39,7 +39,7 @@ function template_faq_main()
 
 	faq_header();
 
-	/* Static content */
+	/* Sidebar */
 	echo '
 	<div class="floatleft nopadding" style="width:40%;">
 		<div class="cat_bar">
@@ -57,44 +57,41 @@ function template_faq_main()
 		</div>
 	</div>';
 
-	//Show 'em
-	echo '
+	/* Show a nice message if no FAQs are avaliable */
+	if (empty($context['faq']['all']))
+			echo '
 		<div class="floatright nopadding" style="width:59%;">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="ie6_header floatleft">faq title</span>
 				</h3>
 			</div>
-
 			<div class="windowbg">
 				<span class="topslice"><span></span></span>
-				<div class="content">';
+				<div class="content">
+				', $txt['faqmod_no_faq'] ,'
+				</div>
+				<span class="botslice"><span></span></span>
+			</div>
+		</div>';
 
-	if (empty($context['faq']['all']))
-		echo $txt['faqmod_no_faq'];
-
+	/* There are some, lets show em all */
 	else
 	{
 		echo '
 					<ul class="reset">';
 
-		foreach($context['faq']['latest'] as $latest)
+		foreach($context['faq']['all'] as $faq)
 		{
 			echo '
 						<li>
-							<a href="', $scripturl, '?action='. faq::$name .';sa=single;fid=', $latest['id'] ,'">', $latest['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action='. faq::$name .';sa=artist;fid=', urlencode($latest['artist']) ,'">', $latest['artist'] ,'</a>  ', $context['faq']['object']->crud($latest['id']) ,'
+							<a href="', $scripturl, '?action='. faq::$name .';sa=single;fid=', $faq['id'] ,'">', $faq['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action='. faq::$name .';sa=artist;fid=', urlencode($faq['artist']) ,'">', $faq['artist'] ,'</a>  ', $context['faq']['object']->crud($faq['id']) ,'
 						</li>';
 		}
 
 		echo '
 					</ul>';
 	}
-
-	echo '
-				</div>
-				<span class="botslice"><span></span></span>
-			</div>
-		</div>';
 
 	echo '
 		<div class="clear">';
@@ -104,7 +101,7 @@ function template_faq_main()
 		echo '
 			<div id="confirm_buttons">
 				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="sbtn" value="', $txt['faqmod_add_send'] ,'" />
+					<input type="submit" name="send" class="input_text" value="', $txt['faqmod_add_send'] ,'" />
 				</form>
 			</div>';
 

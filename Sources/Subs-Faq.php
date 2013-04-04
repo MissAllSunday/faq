@@ -55,7 +55,7 @@ class Faq
 	public function __construct()
 	{
 		// Query construct, this is used on all queries
-		$this->queryConstruct = 'SELECT '. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
+		$this->queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
 			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
 	}

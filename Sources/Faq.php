@@ -64,7 +64,8 @@ function faq_dispatch()
 		loadtemplate('faq', 'admin');
 
 		/* It is faster to use $var() than use call_user_func_array */
-		$call = isset($_GET['sa']) && !empty($_GET['sa']) && isset($subActions[trim(htmlspecialchars($_GET['sa'], ENT_QUOTES))]) ? 'faq_'. $_GET['sa'] : 'faq_main';
+		$func = $faqObject->clean($_GET['sa']);
+		$call = 'faq_' .(!empty($func) && in_array($func, array_values($subActions)) ?  $func : 'main');
 
 		// Call the appropiate function
 		$call($faqObject);
@@ -95,7 +96,7 @@ function faq_main($faqObject)
 function faq_add($faqObject)
 {
 	global $context, $scripturl, $txt, $sourcedir;
-
+var_Dump($faqObject);die;
 	/* Check permissions */
 	$faqObject->permissions('add', true);
 
