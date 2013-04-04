@@ -34,7 +34,7 @@
 
 global $scripturl, $txt;
 
-$txt['faqmod_title'] = 'FAQ';
+$txt['faqmod_title_main'] = 'FAQ';
 $txt['faq_title_admin'] = 'FAQ mod admin settings';
 $txt['faqmod_edit'] = 'Edit';
 $txt['faqmod_editing'] = 'Editing';
@@ -63,6 +63,8 @@ $txt['faqmod_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['faqmod_na'] = 'N/A';
 
 // Settings strings
+$txt['faqmod_enable'] = 'Enable the FAQ mod';
+$txt['faqmod_enable_sub'] = 'This is the master setting, needs ot be enable for th emod to work properly.';
 $txt['faqmod_basic_settings'] = 'Basic Settings';
 $txt['faqmod_edit_page'] = 'Edit the FAQs';
 $txt['faqmod_manage'] = 'Manage the FAQs';

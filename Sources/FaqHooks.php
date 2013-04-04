@@ -39,10 +39,10 @@ function faq_admin_areas(&$areas)
 {
 	global $txt;
 
-	if (!isset($txt['faqmod_title']))
+	if (!isset($txt['faqmod_title_main']))
 		loadLanguage('faq');
 
-	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faqmod_title']);
+	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faqmod_title_main']);
 }
 
 function faq_actions(&$actions)
@@ -54,7 +54,7 @@ function faq_menu(&$menu_buttons)
 {
 	global $scripturl, $modSettings, $txt, $context;
 
-	if (!isset($txt['faqmod_title']))
+	if (!isset($txt['faqmod_title_main']))
 		loadLanguage('faq');
 
 	$insert = !empty($modSettings['faq_menu_position']) ? $modSettings['faq_menu_position'] : 'home';
@@ -67,7 +67,7 @@ function faq_menu(&$menu_buttons)
 	$menu_buttons = array_merge(
 		array_slice($menu_buttons, 0, $counter),
 		array('faq' => array(
-			'title' => $txt['faqmod_title'],
+			'title' => $txt['faqmod_title_main'],
 			'href' => $scripturl . '?action=faq',
 			'show' => empty($modSettings['faq_enable']) ? false : true,
 			'sub_buttons' => array(
@@ -117,25 +117,17 @@ function modify_faq_post_settings(&$return_config = false)
 	global $context, $scripturl, $txt;
 
 	$config_vars = array(
-		array(
-			'int',
-			'faq_num_faqs',
-			'size' => 3,
-			'subtext' => $txt['faqmod_num_faqs_sub']
-		),
-		array(
-			'select',
-			'faq_sort_method',
+		array('check', 'faqmod_enable', 'subtext' => $txt['faqmod_enable_sub']),
+		array('int', 'faqmod_num_faqs', 'size' => 3, 'subtext' => $txt['faqmod_num_faqs_sub'] ),
+		array( 'select', 'faqmod_sort_method',
 			array(
 				'id' => $txt['faqmod_id'],
-				'title' => $txt['faqmod_title'],
+				'title' => $txt['faqmod_title_main'],
 				'timestamp' => $txt['faqmod_date']
 			),
 			'subtext' => $txt['faqmod_sort_method_sub']
 		),
-		array(
-			'select',
-			'faq_menu_position',
+		array( 'select', 'faqmod_menu_position',
 			array(
 				'home' => $txt['home'],
 				'help' => $txt['help'],
@@ -151,7 +143,7 @@ function modify_faq_post_settings(&$return_config = false)
 		return $config_vars;
 
 	$context['post_url'] = $scripturl . '?action=admin;area=modsettings;save;sa=faq';
-	$context['settings_title'] = $txt['faqmod_title'];
+	$context['settings_title'] = $txt['faqmod_title_main'];
 
 	if (empty($config_vars))
 	{
