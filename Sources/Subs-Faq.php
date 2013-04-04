@@ -38,6 +38,7 @@ if (!defined('SMF'))
 
 class Faq
 {
+	protected $queryConstruct = '';
 	protected $_table = array(
 		'faq' => array(
 			'table' => 'faq',
@@ -51,7 +52,13 @@ class Faq
 
 	public static $name = 'faq';
 
-	public function __construct(){}
+	public function __construct()
+	{
+		// Query construct, this is used on all queries
+		$this->queryConstruct = 'SELECT '. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
+			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
+				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
+	}
 
 	public function add($data)
 	{
@@ -63,7 +70,7 @@ class Faq
 		$smcFunc['db_insert']('',
 			'{db_prefix}faq',
 			array(
-				'category_id' => 'int', 'log' => 'int', 'title' => 'string-255', 'body' => 'string-65534', 'last_time' => 'int',
+				'category_id' => 'int', 'log' => 'string-65534', 'title' => 'string-255', 'body' => 'string-65534', 'last_time' => 'int',
 			),
 			$data,
 			array('id')
@@ -79,7 +86,7 @@ class Faq
 		if (empty($data) || empty($table))
 			return false;
 
-		$set = $table == faq::$name ? 'log = {int:log}, last_time = {int:last_time} title = {string:title}, body = {string:body}' : 'category_log = {int:category_log}, category_name = {string:category_name}';
+		$set = $table == faq::$name ? 'cat_id = {int:cat_id}, log = {string:log}, last_time = {int:last_time} title = {string:title}, body = {string:body}' : 'category_log = {int:category_log}, category_name = {string:category_name}';
 
 		/* Does the cache has this entry? */
 		if (($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
@@ -101,11 +108,7 @@ class Faq
 		 /* Use the cache when possible */
 		if (($return = cache_get_data(faq::$name .'_latest', 120)) == null)
 		{
-			$result = $smcFunc['db_query']('', '
-				SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
-				FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
-					LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-					LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
+			$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
 				ORDER BY {raw:sort}
 				LIMIT {int:limit}',
 				array(
@@ -149,11 +152,7 @@ class Faq
 	{
 		global $smcFunc, $scripturl, $txt;
 
-		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
-			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
-				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
+		$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
 			WHERE id = ({int:id})
 			LIMIT {int:limit}',
 			array(
@@ -203,11 +202,7 @@ class Faq
 
 		$return = array();
 
-		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', f.', $this->_table['faq']['columns']) . implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
-			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
-				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
+		$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
 			WHERE '. $column .' '. (is_int($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
 			ORDER BY {raw:sort}
 			'. (!empty($limit) ? '
@@ -258,11 +253,7 @@ class Faq
 		/* Safety first! */
 		$sortArray = array('title', 'artist', 'latest');
 
-		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .', m.member_name, m.real_name
-			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
-				LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.user)
-				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)
+		$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
 			array(

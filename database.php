@@ -105,7 +105,7 @@
 					'auto' => true,
 				),
 				array(
-					'name' => 'category_last_user',
+					'name' => 'category_log',
 					'type' => 'int',
 					'size' => 11,
 				),
