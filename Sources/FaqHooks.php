@@ -69,7 +69,7 @@ function faq_menu(&$menu_buttons)
 		array('faq' => array(
 			'title' => $txt['faqmod_title_main'],
 			'href' => $scripturl . '?action=faq',
-			'show' => empty($modSettings['faq_enable']) ? false : true,
+			'show' => empty($modSettings['faqmod_enable']) ? false : true,
 			'sub_buttons' => array(
 				'faq_admin' => array(
 					'title' => $txt['faqmod_manage'],

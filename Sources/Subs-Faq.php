@@ -46,7 +46,7 @@ class Faq
 		'cat' => array(
 			'table' => 'faq_categories',
 			'columns' => array('category_id', 'category_last_user', 'category_name',),
-		);
+		),
 	);
 
 	public static $name = 'faq';
@@ -120,13 +120,13 @@ class Faq
 					'title' => $row['title'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 					'body' => parse_bbc($row['body']),
-					'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
+					'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...'),
 					'cat' => array(
 						'id' => $row['category_id'],
 						'name' => $row['category_name'],
-						'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+						'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>',
 					),
-					'time' = $row['last_time'],
+					'time' => $row['last_time'],
 					'user' => array(
 						'id' => $row['user'],
 						'username' => $row['member_name'],
@@ -168,13 +168,13 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => parse_bbc($row['body']),
-				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
+				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
-				'time' = $row['last_time'],
+				'time' => $row['last_time'],
 				'user' => array(
 					'id' => $row['user'],
 					'username' => $row['member_name'],
@@ -226,13 +226,13 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => parse_bbc($row['body']),
-				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
+				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
-				'time' = $row['last_time'],
+				'time' => $row['last_time'],
 				'user' => array(
 					'id' => $row['user'],
 					'username' => $row['member_name'],
@@ -278,13 +278,13 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => parse_bbc($row['body']),
-				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...')
+				'preview' => $this->truncateString(parse_bbc($row['body']), 50, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
-				'time' = $row['last_time'],
+				'time' => $row['last_time'],
 				'user' => array(
 					'id' => $row['user'],
 					'username' => $row['member_name'],
@@ -325,7 +325,7 @@ class Faq
 
 		/* Does the cache has this entry? */
 		if ($table == faq::$name && ($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
-			if (!empty($gotIt[$id))
+			if (!empty($gotIt[$id]))
 				cache_put_data(faq::$name .'_latest', '', 60);
 
 		/* Do not waste my time... */
@@ -367,7 +367,7 @@ class Faq
 			return false;
 
 		/* The mod must be enable */
-		if (empty($modSettings['faq_enable']))
+		if (empty($modSettings['faqmod_enable']))
 			fatal_lang_error('faq_error_enable', false);
 
 		/* collect the permissions */
