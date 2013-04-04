@@ -69,10 +69,11 @@ $txt['faqmod_settings_enable_sub'] = 'This is the master setting, needs to be en
 $txt['faqmod_settings_search'] = 'Enable searching on FAQs';
 $txt['faqmod_settings_search_sub'] = 'This setting needs to be enable to be able to perform searches, users still need to have the proper permission to be able to search.'; 
 $txt['faqmod_settings_letterlist'] = 'Enable a simple A to Z list';
-$txt['faqmod_settings_letterlist_sub'] = 'Will place an horizontal list form A to > with links to a page containing all possible Faqs that start with that letter.';
+$txt['faqmod_settings_letterlist_sub'] = 'Will place an horizontal list from A to Z with links to a page containing all possible Faqs that start with that letter.';
 $txt['faqmod_basic_settings'] = 'Basic Settings';
 $txt['faqmod_edit_page'] = 'Edit the FAQs';
 $txt['faqmod_manage'] = 'Manage the FAQs';
+$txt['faq_list_view_all'] = 'View all';
 $txt['faqmod_manage_desc'] = 'From here you can manage your FAQs, you can edit/delete/add as many as you want, here\'s some descriptions:<br />
 -ID:  its the numeric reference for the faqs, used to manage the faqs without to much problems.<br />
 -Title: the name for the faq.<br />
@@ -112,7 +113,7 @@ $txt['faqmod_search_engines_sub'] = 'If checked, this mod will place a metatag t
 $txt['faqmod_sidebar_side'] = 'Show the side bar at left?';
 $txt['faqmod_sidebar_side_sub'] = 'By default, the side bar is showed at right side, if you check this option it will appear at left side.';
 $txt['faqmod_sidebar_size'] = 'Size of the FAQs';
-$txt['faqmod_sidebar_size_sub'] = 'the width size in percentage % for the FAQs,  the larger the FAQs the smaller will be the side bar, for example, if you set up a width of 50%  then the side bar will have a width of 48%,  enter just the number.<br /> By default is 80 for the FAQs, 18 for the sidebar.';
+$txt['faqmod_sidebar_size_sub'] = 'The width size in percentage % for the FAQs,  the larger the FAQs the smaller will be the side bar, for example, if you set up a width of 50%  then the side bar will have a width of 48%,  enter just the number.<br /> By default is 80 for the FAQs, 18 for the sidebar.';
 
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';

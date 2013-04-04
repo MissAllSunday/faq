@@ -79,7 +79,7 @@ function faq_main($faqObject)
 
 	$context['sub_template'] = 'faq_main';
 	$context['canonical_url'] = $scripturl . '?action=faq';
-	$context['page_title'] = $txt['faq_title_main'];
+	$context['page_title'] = $txt['faqmod_title_main'];
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action=faq',
 		'name' => $context['page_title'],

@@ -44,14 +44,14 @@ function template_faq_main()
 	<div class="floatleft nopadding" style="width:40%;">
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['faq_static_title'] ,'</span>
+				<span class="ie6_header floatleft">sidebar title or something</span>
 			</h3>
 		</div>
 
 		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
 			<div class="content">
-				', $context['faq']['static_content'] ,'
+				side bar stuff here
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>
@@ -62,7 +62,7 @@ function template_faq_main()
 		<div class="floatright nopadding" style="width:59%;">
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="ie6_header floatleft">', $txt['faq_latest_title'] ,'</span>
+					<span class="ie6_header floatleft">faq title</span>
 				</h3>
 			</div>
 
@@ -70,8 +70,8 @@ function template_faq_main()
 				<span class="topslice"><span></span></span>
 				<div class="content">';
 
-	if (empty($context['faq']['latest']))
-		echo $txt['faq_no_latest'];
+	if (empty($context['faq']['all']))
+		echo $txt['faqmod_no_faq'];
 
 	else
 	{
@@ -104,7 +104,7 @@ function template_faq_main()
 		echo '
 			<div id="confirm_buttons">
 				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="sbtn" value="', $txt['faq_create_new'] ,'" />
+					<input type="submit" name="send" class="sbtn" value="', $txt['faqmod_add_send'] ,'" />
 				</form>
 			</div>';
 
@@ -373,7 +373,7 @@ function template_faq_manage()
 			<div class="roundframe rfix">
 				<div class="innerframe">
 					<div class="content">
-						', $txt['faq_no_latest'] ,'
+						', $txt['faqmod_no_faq'] ,'
 					</div>
 				</div>
 			</div>
@@ -431,7 +431,7 @@ function template_faq_manage()
 		echo '
 			<div id="confirm_buttons">
 				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="sbtn" value="', $txt['faq_create_new'] ,'" />
+					<input type="submit" name="send" class="sbtn" value="', $txt['faqmod_add_send'] ,'" />
 				</form>
 			</div>';
 
@@ -455,21 +455,17 @@ function faq_header()
 
 	/* Create a link for managing faq */
 	if ($context['faq']['object']->permissions(array('edit', 'delete')))
-		$memberlist_buttons['manage'] =  array('text' => 'faq_list_manage_all', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manage', 'active'=> false);
+		$memberlist_buttons['manage'] =  array('text' => 'faqmod_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manage', 'active'=> false);
 
 	echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="floatleft">', $txt['faq_list_title_by_letter'] , '', $letter_links , '</span>
+				<span class="floatleft">', $letter_links , '</span>
 				<object id="quick_search">
 					<form action="', $scripturl, '?action='. faq::$name .';sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
 						<img src="', $settings['images_url'] , '/filter.gif" alt="" />
-						<input type="text" name="l_search_value" value="', $txt['faq_search_button'] , '" onclick="if (this.value == \'', $txt['faq_search_button'] , '\') this.value = \'\';" class="input_text" />
-						<select name="l_column">
-							<option value="title" selected="selected">', $txt['faq_list_title_sort_by_title'] , '</option>
-							<option value="artist">', $txt['faq_list_title_sort_by_artist'] , '</option>
-						</select>
-						<input type="submit" name="search_go" id="search_go" value="', $txt['faq_search_button'] , '" class="button_submit" />
+						<input type="text" name="l_search_value" value="', $txt['search'] , '" onclick="if (this.value == \'', $txt['search'] , '\') this.value = \'\';" class="input_text" />
+						<input type="submit" name="search_go" id="search_go" value="', $txt['search'] , '" class="button_submit" />
 					</form>
 				</object>
 			</h3>
