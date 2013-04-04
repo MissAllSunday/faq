@@ -41,11 +41,11 @@ class Faq
 	protected $_table = array(
 		'faq' => array(
 			'table' => 'faq',
-			'columns' => array('id', 'cat_id', 'last_user', 'title', 'body', 'last_time',),
+			'columns' => array('id', 'cat_id', 'log', 'title', 'body', 'last_time',),
 		),
 		'cat' => array(
 			'table' => 'faq_categories',
-			'columns' => array('category_id', 'category_last_user', 'category_name',),
+			'columns' => array('category_id', 'category_log', 'category_name',),
 		),
 	);
 
@@ -63,7 +63,7 @@ class Faq
 		$smcFunc['db_insert']('',
 			'{db_prefix}faq',
 			array(
-				'category_id' => 'int', 'last_user' => 'int', 'title' => 'string-255', 'body' => 'string-65534', 'last_time' => 'int',
+				'category_id' => 'int', 'log' => 'int', 'title' => 'string-255', 'body' => 'string-65534', 'last_time' => 'int',
 			),
 			$data,
 			array('id')
@@ -79,7 +79,7 @@ class Faq
 		if (empty($data) || empty($table))
 			return false;
 
-		$set = $table == faq::$name ? 'last_user = {int:last_user}, last_time = {int:last_time} title = {string:title}, body = {string:body}' : 'category_last_user = {int:category_last_user}, category_name = {string:category_name}';
+		$set = $table == faq::$name ? 'log = {int:log}, last_time = {int:last_time} title = {string:title}, body = {string:body}' : 'category_log = {int:category_log}, category_name = {string:category_name}';
 
 		/* Does the cache has this entry? */
 		if (($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)

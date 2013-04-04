@@ -61,9 +61,10 @@
 					'null' => false
 				),
 				array(
-					'name' => 'last_user',
-					'type' => 'int',
-					'size' => 11,
+					'name' => 'log',
+					'type' => 'text',
+					'size' => '',
+					'default' => '',
 				),
 				array(
 					'name' => 'title',
