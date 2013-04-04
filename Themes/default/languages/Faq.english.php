@@ -63,8 +63,9 @@ $txt['faqmod_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['faqmod_na'] = 'N/A';
 
 // Settings strings
+$txt['faqmod_desc'] = 'This page gathers all possible settings for the FAQ mod';
 $txt['faqmod_enable'] = 'Enable the FAQ mod';
-$txt['faqmod_enable_sub'] = 'This is the master setting, needs ot be enable for the mod to work properly.';
+$txt['faqmod_enable_sub'] = 'This is the master setting, needs to be enable for the mod to work properly.';
 $txt['faqmod_basic_settings'] = 'Basic Settings';
 $txt['faqmod_edit_page'] = 'Edit the FAQs';
 $txt['faqmod_manage'] = 'Manage the FAQs';
