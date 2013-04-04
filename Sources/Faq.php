@@ -88,8 +88,7 @@ function faq_main($faqObject)
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
 
-
-	/* Get the latest faq from DB */
+	/* Get all */
 	$context['faq']['all'] = $faqObject->getAll(empty($modSettings['faq_latest_limit']) ? 10 : $modSettings['faq_latest_limit']);
 }
 

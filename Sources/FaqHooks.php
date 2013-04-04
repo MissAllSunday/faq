@@ -114,36 +114,37 @@ function faq_modify_modifications($sub_actions)
 function modify_faq_post_settings($return_config = false)
 {
 	global $context, $scripturl, $txt;
-$config_vars = array(
+
+	$config_vars = array(
+		array(
+			'int',
+			'faq_num_faqs',
+			'size' => 3,
+			'subtext' => $txt['faqmod_num_faqs_sub']
+		),
+		array(
+			'select',
+			'faq_sort_method',
 			array(
-				'int',
-				'faq_num_faqs',
-				'size' => 3,
-				'subtext' => $txt['faqmod_num_faqs_sub']
+				'id' => $txt['faqmod_id'],
+				'title' => $txt['faqmod_title'],
+				'timestamp' => $txt['faqmod_date']
 			),
+			'subtext' => $txt['faqmod_sort_method_sub']
+		),
+		array(
+			'select',
+			'faq_menu_position',
 			array(
-				'select',
-				'faq_sort_method',
-				array(
-					'id' => $txt['faqmod_id'],
-					'title' => $txt['faqmod_title'],
-					'timestamp' => $txt['faqmod_date']
-				),
-				'subtext' => $txt['faqmod_sort_method_sub']
+				'home' => $txt['faqmod_menu_home'],
+				'help' => $txt['faqmod_menu_help'],
+				'search' => $txt['faqmod_menu_search'],
+				'login' => $txt['faqmod_menu_login'],
+				'register' => $txt['faqmod_menu_register']
 			),
-			array(
-				'select',
-				'faq_menu_position',
-				array(
-					'home' => $txt['faqmod_menu_home'],
-					'help' => $txt['faqmod_menu_help'],
-					'search' => $txt['faqmod_menu_search'],
-					'login' => $txt['faqmod_menu_login'],
-					'register' => $txt['faqmod_menu_register']
-				),
-				'subtext' => $txt['faqmod_menu_position_sub']
-			),
-		);
+			'subtext' => $txt['faqmod_menu_position_sub']
+		),
+	);
 	$config_vars = array(
 		array('desc', 'faq_admin_desc'),
 		array('check', 'faq_enable', 'subtext' => $txt['faq_enable_desc']),
