@@ -136,10 +136,10 @@
 		foreach ($tables as $table)
 		{
 			// Does the table exist?
-			if (in_array($real_prefix . $table['table_name'], $current_tables)){
-
+			if (in_array($real_prefix . $table['table_name'], $current_tables))
+			{
 				foreach ($table['columns'] as $column)
-					if ($column['type'] != 'timestamp')
+					if ($column['type'] != 'last_time')
 						$smcFunc['db_add_column']($db_prefix . $table['table_name'], $column);
 
 				foreach ($table['indexes'] as $index)
