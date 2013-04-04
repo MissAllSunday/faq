@@ -32,13 +32,14 @@
  *
  */
 
-	// You can't go fishing without hooks
+	// Everybody likes hooks, especially the ones who adds an extra file everywhere!!
 	$hooks = array(
 		'integrate_pre_include' => '$sourcedir/Faq.php',
-		'integrate_menu_buttons' => 'FAQ::FaqMenu',
-		'integrate_actions' => 'FAQ::FaqAction',
-		'integrate_load_permissions' => 'FAQ::FaqPermissions',
-		'integrate_admin_areas' => 'FAQ::FaqAdmin',
+		'integrate_pre_include' => '$sourcedir/FaqHooks.php',
+		'integrate_menu_buttons' => 'faq_menu',
+		'integrate_actions' => 'faq_actions',
+		'integrate_load_permissions' => 'faq_permissions',
+		'integrate_modify_modifications' => 'faq_modify_modifications',
 	);
 
 	$call = 'remove_integration_function';

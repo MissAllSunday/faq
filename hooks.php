@@ -32,7 +32,7 @@
  *
  */
 
-	/* We need the hooks file, we need it everywhere!!! */
+	// Everybody likes hooks, especially the ones who adds an extra file everywhere!!
 	$hooks = array(
 		'integrate_pre_include' => '$sourcedir/Faq.php',
 		'integrate_pre_include' => '$sourcedir/FaqHooks.php',
