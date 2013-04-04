@@ -114,7 +114,8 @@ $txt['faqmod_sidebar_side_sub'] = 'By default, the side bar is showed at right s
 $txt['faqmod_sidebar_size'] = 'Size of the FAQs';
 $txt['faqmod_sidebar_size_sub'] = 'the width size in percentage % for the FAQs,  the larger the FAQs the smaller will be the side bar, for example, if you set up a width of 50%  then the side bar will have a width of 48%,  enter just the number.<br /> By default is 80 for the FAQs, 18 for the sidebar.';
 
-
+// Error strings
+$txt['faq_error_enable'] = 'The FAQ mod is not enable.';
 
 // Template strings
 $txt['faqmod_edit_title'] = 'Title';
@@ -129,12 +130,13 @@ $txt['faqmod_show_categories'] = 'Categories';
 $txt['faqmod_show_faqmod_list'] = 'FAQ list';
 
 // Permissions strings
-$txt['cannot_faqperview'] = 'I\'m sorry, you are not allowed to view the FAQ page.';
-$txt['permissiongroup_faqper'] = 'FAQ mod permissions';
-$txt['permissiongroup_simple_faqper'] = 'FAQ mod permissions';
-$txt['permissionname_faqperview'] = 'View the FAQ page';
-$txt['permissionname_faqperedit'] = 'Edit/Add/Delete FAQs and categories';
-$txt['cannot_faqperedit'] = 'I\'m sorry, you are not allowed to administrate the FAQ page.';
+$txt['permissiongroup_simple_faq_per_simple'] = 'FAQ mod permissions';
+$txt['permissiongroup_faq_per_classic'] = 'FAQ mod permissions';
+$txt['permissionname_faq_search'] = 'Search the FAQs';
+$txt['permissionname_faq_edit'] = 'Edit the FAQs';
+$txt['permissionname_faq_view'] = 'View the FAQs';
+$txt['permissionname_faq_add'] = 'Add the FAQs';
+$txt['permissionname_faq_delete'] = 'Delete the FAQs';
 
 // Who's online strings
 $txt['whoall_faq'] = 'Viewing the <a href="'. $scripturl. '?action=faq">FAQ page</a>.';

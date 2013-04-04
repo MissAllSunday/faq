@@ -163,6 +163,7 @@ function modify_faq_post_settings(&$return_config = false)
 		saveDBSettings($save_vars);
 		redirectexit('action=admin;area=modsettings;sa=faq');
 	}
+
 	prepareDBSettingContext($config_vars);
 }
 
@@ -171,20 +172,24 @@ function faq_permissions(&$permissionGroups, &$permissionList)
 	$permissionGroups['membergroup']['simple'] = array('faq_per_simple');
 	$permissionGroups['membergroup']['classic'] = array('faq_per_classic');
 
-	$permissionList['membergroup']['faq_viewfaq'] = array(
+	$permissionList['membergroup']['faq_view'] = array(
 		false,
 		'faq_per_classic',
 		'faq_per_simple');
 
-	$permissionList['membergroup']['faq_deletefaq'] = array(
+	$permissionList['membergroup']['faq_delete'] = array(
 		false,
 		'faq_per_classic',
 		'faq_per_simple');
-	$permissionList['membergroup']['faq_addfaq'] = array(
+	$permissionList['membergroup']['faq_add'] = array(
 		false,
 		'faq_per_classic',
 		'faq_per_simple');
-	$permissionList['membergroup']['faq_editfaq'] = array(
+	$permissionList['membergroup']['faq_edit'] = array(
+		false,
+		'faq_per_classic',
+		'faq_per_simple');
+	$permissionList['membergroup']['faq_search'] = array(
 		false,
 		'faq_per_classic',
 		'faq_per_simple');
