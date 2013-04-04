@@ -69,7 +69,7 @@ function faq_menu(&$menu_buttons)
 		array('faq' => array(
 			'title' => $txt['faqmod_title_main'],
 			'href' => $scripturl . '?action=faq',
-			'show' => empty($modSettings['faqmod_enable']) ? false : true,
+			'show' => empty($modSettings['faqmod_settings_enable']) ? false : true,
 			'sub_buttons' => array(
 				'faq_admin' => array(
 					'title' => $txt['faqmod_manage'],
@@ -118,7 +118,9 @@ function modify_faq_post_settings(&$return_config = false)
 
 	$config_vars = array(
 		array('desc', 'faqmod_desc'),
-		array('check', 'faqmod_enable', 'subtext' => $txt['faqmod_enable_sub']),
+		array('check', 'faqmod_settings_enable', 'subtext' => $txt['faqmod_settings_enable_sub']),
+		array('check', 'faqmod_settings_search', 'subtext' => $txt['faqmod_settings_search_sub']),
+		array('check', 'faqmod_settings_letterlist', 'subtext' => $txt['faqmod_settings_letterlist_sub']),
 		array('int', 'faqmod_num_faqs', 'size' => 3, 'subtext' => $txt['faqmod_num_faqs_sub'] ),
 		array( 'select', 'faqmod_sort_method',
 			array(

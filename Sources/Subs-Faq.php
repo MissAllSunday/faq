@@ -358,7 +358,7 @@ class Faq
 			return false;
 
 		/* The mod must be enable */
-		if (empty($modSettings['faqmod_enable']))
+		if (empty($modSettings['faqmod_settings_enable']))
 			fatal_lang_error('faq_error_enable', false);
 
 		/* collect the permissions */
