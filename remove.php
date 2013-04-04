@@ -42,7 +42,5 @@
 		'integrate_modify_modifications' => 'faq_modify_modifications',
 	);
 
-	$call = 'remove_integration_function';
-
 	foreach ($hooks as $hook => $function)
-		$call($hook, $function);
+		remove_integration_function($hook, $function);
