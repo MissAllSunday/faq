@@ -3,7 +3,7 @@
 /**
  * @package FAQ mod
  * @version 2.0
- * @author Jessica González <missallsunday@simplemachines.org>
+ * @author Jessica González <suki@missallsunday.com>
  * @copyright Copyright (c) 2013, Jessica González
  * @license http://www.mozilla.org/MPL/MPL-1.1.html
  */
