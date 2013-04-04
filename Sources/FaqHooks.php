@@ -136,37 +136,14 @@ function modify_faq_post_settings(&$return_config = false)
 			'select',
 			'faq_menu_position',
 			array(
-				'home' => $txt['faqmod_menu_home'],
-				'help' => $txt['faqmod_menu_help'],
-				'search' => $txt['faqmod_menu_search'],
-				'login' => $txt['faqmod_menu_login'],
-				'register' => $txt['faqmod_menu_register']
-			),
-			'subtext' => $txt['faqmod_menu_position_sub']
-		),
-	);
-	$config_vars = array(
-		array('desc', 'faq_admin_desc'),
-		array('check', 'faq_enable', 'subtext' => $txt['faq_enable_desc']),
-		array('int', 'faq_pag_limit', 'subtext' => $txt['faq_pag_limit_desc'], 'size' => 3),
-		array(
-			'select',
-			'faq_menu_position',
-			array(
 				'home' => $txt['home'],
 				'help' => $txt['help'],
 				'search' => $txt['search'],
 				'login' => $txt['login'],
 				'register' => $txt['register']
 			),
-			'subtext' => $txt['faq_menu_position_desc']
+			'subtext' => $txt['faqmod_menu_position_sub']
 		),
-		array('int', 'faq_sidebar_size','subtext' => $txt['faq_sidebar_size_desc']),
-		array('check','faq_sidebar_side', 'subtext' => $txt['faq_sidebar_side_desc']),
-		array('check', 'faq_search_engines', 'subtext' => $txt['faq_search_engines_desc']),
-		array('check', 'faq_use_javascript', 'subtext' => $txt['']),
-		array('check', 'faq_show_all', 'subtext' => $txt['faq_show_all_desc'])),
-		array('check', 'faq_care', 'subtext' => $txt['faq_care_desc']),
 	);
 
 	if ($return_config)
