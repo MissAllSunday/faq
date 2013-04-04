@@ -63,8 +63,11 @@ function faq_dispatch()
 		loadLanguage('faq');
 		loadtemplate('faq', 'admin');
 
-		/* Call the right function and pass the object to it */
-		call_user_func_array(isset($_GET['sa']) && !empty($_GET['sa']) && in_array(trim(htmlspecialchars($_GET['sa'], ENT_QUOTES)), $subActions) ? 'faq_'. $_GET['sa'] : 'faq_main', array($faqObject));
+		/* It is faster to use $var() than use call_user_func_array */
+		$call = isset($_GET['sa']) && !empty($_GET['sa']) && isset($subActions[trim(htmlspecialchars($_GET['sa'], ENT_QUOTES))]) ? 'faq_'. $_GET['sa'] : 'faq_main';
+
+		// Call the appropiate function
+		$call($faqObject);
 }
 
 function faq_main($faqObject)
