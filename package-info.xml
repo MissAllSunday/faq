@@ -10,7 +10,6 @@
 		<readme parsebbc="true">readme.txt</readme>
 		<code>hooks.php</code>
 		<database>database.php</database>
-		<modification>Faq.xml</modification>
 		<require-dir name="Themes" destination="$boarddir">Source files</require-dir>
 		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
 		<redirect url="?action=admin;area=modsettings;sa=faq"></redirect>
@@ -19,7 +18,6 @@
 	<uninstall for="2.0 - 2.0.99">
 		<code>remove.php</code>
 		<database>database.php</database>
-		<modification reverse="true">Faq.xml</modification>
 		<remove-file name="$sourcedir/Faq.php" />
 		<remove-file name="$sourcedir/Subs-Faq.php" />
 		<remove-file name="$sourcedir/FaqHooks.php" />
