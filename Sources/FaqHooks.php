@@ -35,7 +35,7 @@
 if (!defined('SMF'))
 	die('No direct access');
 
-function faq_admin_areas($areas)
+function faq_admin_areas(&$areas)
 {
 	global $txt;
 
@@ -44,12 +44,12 @@ function faq_admin_areas($areas)
 	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faq_title']);
 }
 
-function faq_actions($actions)
+function faq_actions(&$actions)
 {
 	$actions['faq'] = array('Faq.php', 'faq_dispatch');
 }
 
-function faq_menu($menu_buttons)
+function faq_menu(&$menu_buttons)
 {
 		global $scripturl, $modSettings, $txt, $context;
 
@@ -103,7 +103,7 @@ function faq_menu($menu_buttons)
 		$context['copyrights']['mods'][] = faq_care();
 }
 
-function faq_modify_modifications($sub_actions)
+function faq_modify_modifications(&$sub_actions)
 {
 	global $context;
 
@@ -111,7 +111,7 @@ function faq_modify_modifications($sub_actions)
 	$context[$context['admin_menu_name']]['tab_data']['tabs']['faq'] = array();
 }
 
-function modify_faq_post_settings($return_config = false)
+function modify_faq_post_settings(&$return_config = false)
 {
 	global $context, $scripturl, $txt;
 
@@ -193,7 +193,7 @@ function modify_faq_post_settings($return_config = false)
 	prepareDBSettingContext($config_vars);
 }
 
-function faq_permissions($permissionGroups, $permissionList)
+function faq_permissions(&$permissionGroups, &$permissionList)
 {
 	$permissionGroups['membergroup']['simple'] = array('faq_per_simple');
 	$permissionGroups['membergroup']['classic'] = array('faq_per_classic');
