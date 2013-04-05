@@ -173,7 +173,7 @@ function template_faq_add()
 			echo '
 				<div id="confirm_buttons">
 					<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-					<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) ? $txt['faq_edit'] : $txt['faq_add_send']),'" />
+					<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) ? $txt['faqmod_edit_send'] : $txt['faqmod_create_send']),'" />
 					<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
 				</div>
 				</div>

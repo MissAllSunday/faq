@@ -50,6 +50,7 @@ $txt['faqmod_delete_con'] = 'Do you really want to delete this: ';
 $txt['faqmod_delete_send'] = 'Delete this';
 $txt['faqmod_deleting'] = 'Deleting';
 $txt['faqmod_add_send'] = 'Add a new FAQ';
+$txt['faqmod_create_send'] = 'Create the FAQ';
 $txt['faqmod_edit_send'] = 'Edit this FAQ';
 $txt['faqmod_adding'] = 'Adding a new FAQ';
 $txt['faqmod_no_faq'] = 'There are no FAQs to show.';

@@ -332,6 +332,28 @@ class Faq
 		);
 	}
 
+	public function getCats()
+	{
+		global $smcFunc;
+
+		$result = $smcFunc['db_query']('', '
+			SELECT '. implode(', ', $this->_table['cat']['columns'])) .'
+			FROM {db_prefix}' . ($this->_table['cat']['table']),
+			array()
+		);
+
+		while ($row = $smcFunc['db_fetch_assoc']($result))
+			$return[$row['category_id']] = array(
+			'id' => $row['category_id'],
+			'log' => $row['category_log'],
+			'name' => $row['category_name'],
+			);
+
+		$smcFunc['db_free_result']($result);
+
+		return $return;
+	}
+
 	public function clean($string, $body = false)
 	{
 		global $smcFunc, $sourcedir;

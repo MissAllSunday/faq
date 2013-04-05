@@ -96,15 +96,15 @@ function faq_main($faqObject)
 function faq_add($faqObject)
 {
 	global $context, $scripturl, $txt, $sourcedir;
-var_Dump($faqObject);die;
+
 	/* Check permissions */
 	$faqObject->permissions('add', true);
 
 	$context['sub_template'] = 'faq_add';
-	$context['page_title'] = $txt['faq_post_title'];
+	$context['page_title'] = $txt['faqmod_adding'];
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action='. faq::$name .';sa=add',
-		'name' => $txt['faq_post_title'],
+		'name' => $context['page_title'],
 	);
 
 	/* Pass the object to the template */
