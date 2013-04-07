@@ -421,7 +421,25 @@ class Faq
 			/* Gotta unserialize to work with it */
 			$log = unserialize($log);
 
-			/* Do tedious work here :( */
+			/* If this user already modified this, just udate the time */
+			if (!empty($log)&& is_array($log))
+			{
+				foreach ($log as $l)
+					if ($l['user'] == $user_info['id'])
+					{
+						/* Add the new time */
+						$log[$l]['time'] = time();
+						break;
+						return serialize($log);
+					}
+
+				/* New user huh? */
+				$log[] = array(
+					'id' => $id,
+					'user' => $user_info['id'],
+					'time' => time(),
+				);
+			}
 		}
 
 		/* Either way, return it */
