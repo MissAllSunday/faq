@@ -403,10 +403,6 @@ class Faq
 	{
 		global $user_info;
 
-		/* Don't waste my time... */
-		if (empty($id) || !is_int($id))
-			return false;
-
 		/* If log is empty, it means we are adding */
 		if (!$log)
 			$log[] = array(

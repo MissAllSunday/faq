@@ -301,22 +301,23 @@ function faq_success($faqObject)
 {
 	global $context, $scripturl, $smcFunc, $txt;
 
+	/* No direct access please */
 	if (!isset($_GET['pin']) || empty($_GET['pin']))
 		redirectexit('action=faq');
 
-	$context['faq']['pin'] = trim($smcFunc['htmlspecialchars']($_GET['pin']));
+	$context['faq']['pin'] = $faqObject->clean($_GET['pin']);
 
-		/* Build the link tree.... */
-		$context['linktree'][] = array(
-			'url' => $scripturl . '?action='. faq::$name .';sa=success',
-			'name' => $txt['faq_success_message_title'],
-		);
+	/* Build the link tree.... */
+	$context['linktree'][] = array(
+		'url' => $scripturl . '?action='. faq::$name .';sa=success',
+		'name' => $txt['faq_success_message_title'],
+	);
 
-		$context['sub_template'] = 'faq_success';
-		$context['faq']['message'] = $txt['faq_success_message_'. $context['faq']['pin']];
+	$context['sub_template'] = 'faq_success';
+	$context['faq']['message'] = $txt['faq_success_message_'. $context['faq']['pin']];
 
-		/* Set a descriptive title. */
-		$context['page_title'] = $txt['faq_success_title'];
+	/* Set a descriptive title. */
+	$context['page_title'] = $txt['faq_success_title'];
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;

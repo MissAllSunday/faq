@@ -120,6 +120,15 @@ $txt['faqmod_sidebar_size_sub'] = 'The width size in percentage % for the FAQs, 
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
 $txt['faqmod_no_valid_id'] = 'This is not a valid action.';
 
+// Success
+$txt['faqmod_success_title'] = 'successfully done';
+$txt['faqmod_success_no_access'] = 'You can\'t access this page directly';
+$txt['faqmod_success_message_title'] = 'Thank you';
+$txt['faqmod_success_message_generic'] = '<a href="'. $scripturl .'?action=faq" >Go to the FAQ Index</a>';
+$txt['faqmod_success_message_add'] = 'You have successfully added a new FAQ entry';
+$txt['faqmod_success_message_edit'] = 'You have successfully edited this FAQ entry';
+$txt['faqmod_success_message_delete'] = 'You have successfully deleted this entry';
+
 // Template strings
 $txt['faqmod_edit_title'] = 'Title';
 $txt['faqmod_edit_id'] = 'ID';
