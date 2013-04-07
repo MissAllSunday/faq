@@ -117,7 +117,7 @@ function template_faq_add()
 	if (isset($context['preview_message']))
 	echo '
 						<div class="cat_bar">
-							<h3 class="catbg">', $context['preview_subject'], '</h3>
+							<h3 class="catbg">', $context['preview_title'], '</h3>
 						</div>
 						<div class="windowbg">
 						<span class="topslice"><span></span></span>
@@ -148,7 +148,7 @@ function template_faq_add()
 							<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
 						</dt>
 						<dd>
-							<input type="text" name="title" size="55" tabindex="1" maxlength="55" value="', isset($context['preview_subject']) ? $context['preview_subject'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+							<input type="text" name="title" size="55" tabindex="1" maxlength="55" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
 						</dd>';
 
 			/* Show the category select field */

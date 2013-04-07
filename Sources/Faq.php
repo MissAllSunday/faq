@@ -148,16 +148,16 @@ function faq_add2($faqObject)
 	if (isset($_REQUEST['preview']))
 	{
 		/* Set everything up to be displayed. */
-		$context['preview_subject'] = $faqObject->clean($_REQUEST['title']);
+		$context['preview_title'] = $faqObject->clean($_REQUEST['title']);
 		$context['preview_message'] = parse_bbc($faqObject->clean($_REQUEST['body'], true));
 		$context['preview_cat'] = $faqObject->clean($_REQUEST['category_id']);
 
 		/* We Censor for your protection... */
-		censorText($context['preview_subject']);
+		censorText($context['preview_title']);
 		censorText($context['preview_message']);
 
 		/* Set a descriptive title. */
-		$context['page_title'] = $txt['preview'] .' - ' . $context['preview_subject'];
+		$context['page_title'] = $txt['preview'] .' - ' . $context['preview_title'];
 
 		/* Build the link tree... */
 		$context['linktree'][] = array(
@@ -213,8 +213,8 @@ function faq_add2($faqObject)
 		redirectexit('action=faq;sa=success;pin=edit');
 	}
 
-	/* Lastly, Adding */
-	else
+	/* Lastly, adding, make sure it gets exacuted on adding only */
+	elseif (!isset($_REQUEST['edit']) || !isset($_REQUEST['preview']))
 	{
 		/* Create the data */
 		$data = array(
