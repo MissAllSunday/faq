@@ -110,6 +110,9 @@ function faq_add($faqObject)
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
 
+	/* Get the cats */
+	$context['faq']['cats'] = $faqobject->getCats();
+
 	/* Tell the template we are adding, not editing */
 	$context['faq']['edit'] = false;
 
