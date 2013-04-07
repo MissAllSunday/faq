@@ -337,8 +337,8 @@ class Faq
 		global $smcFunc;
 
 		$result = $smcFunc['db_query']('', '
-			SELECT '. implode(', ', $this->_table['cat']['columns'])) .'
-			FROM {db_prefix}' . ($this->_table['cat']['table']),
+			SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
+			FROM {db_prefix}' . ($this->_table['cat']['table']) .'',
 			array()
 		);
 

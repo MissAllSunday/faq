@@ -147,14 +147,14 @@ function template_faq_add()
 			{
 				echo'
 							<dt>
-								<span id="caption_subject">',$txt['faq_title_edit'],'</span>
+								<span id="caption_subject">', $txt['faqmod_edit_category'] ,':</span>
 							</dt>
 							<dd>
 								<select name="category_id">';
 
-				foreach($context['FAQ']['AllCategories'] as $cats)
+				foreach($context['faq']['cats'] as $cats)
 					echo '
-								<option value="', $cats['category_id'] ,'" ', (isset($context['edit']['current']['category_id']) && $cats['category_id'] == $context['edit']['current']['category_id'] ? 'selected="selected"' : '') ,'>', $cats['category_name'] ,'</option>';
+								<option value="', $cats['id'] ,'" ', (isset($context['edit']['current']['category_id']) && $cats['category_id'] == $context['edit']['current']['category_id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
 				echo '
 								</select>';
