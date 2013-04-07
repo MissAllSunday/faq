@@ -131,52 +131,65 @@ function template_faq_add()
 		echo '
 		<form action="', $scripturl, '?action='. faq::$name .';sa=add2;', !empty($context['faq']['edit']) ? 'fid='.  $context['faq']['edit']['id'] .';edit' : '','" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
 			<div class="cat_bar">
-				<h3 class="catbg">',(!empty($context['faq']['edit']) ?  $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'] : $txt['faq_preview_add']),'</h3>
+				<h3 class="catbg">
+					',(!empty($context['faq']['edit']) ?  $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'] : $txt['faq_preview_add']),'
+				</h3>
 			</div>
 			<span class="clear upperframe">
 					<span></span>
 				</span>
 				<div class="roundframe rfix">
 					<div class="innerframe">
-					<dl id="post_header">';
+						<dl id="post_header">';
 
-			/* Title */
-			echo '
-						<dt>
-							<span id="caption_subject">',$txt['faq_title_edit'],'</span>
-						</dt>
-						<dd>
-							<input type="text" name="title" size="55" tabindex="1" maxlength="55" value="', isset($context['preview_subject']) ? $context['preview_subject'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
-						</dd>
-						';
+			/* Show the category select field */
+			if(!empty($context['faq']['cats']))
+			{
+				echo'
+							<dt>
+								<span id="caption_subject">',$txt['faq_title_edit'],'</span>
+							</dt>
+							<dd>
+								<select name="category_id">';
 
-		/* Artist */
-		echo '
-						<dt>
-							<span id="caption_subject">',$txt['faq_title_artist'],'</span>
-						</dt>
-						<dd>
-							<input type="text" name="artist" size="55" tabindex="1" maxlength="55" value="', isset($context['preview_artist']) ? $context['preview_artist'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['artist'] : '') ,'" class="input_text" />
-						</dd>';
+				foreach($context['FAQ']['AllCategories'] as $cats)
+					echo '
+								<option value="', $cats['category_id'] ,'" ', (isset($context['edit']['current']['category_id']) && $cats['category_id'] == $context['edit']['current']['category_id'] ? 'selected="selected"' : '') ,'>', $cats['category_name'] ,'</option>';
+
+				echo '
+								</select>';
+			}
+
+			else
+				echo '
+								<div class="faqmod_warning">
+									',$txt['faqmod_no_cat_admin'],'
+								</div>';
+
+						echo'
+							</dd>
+						</dl>';
 
 					echo'
 					</dl>';
 
-						if ($context['show_bbc'])
-							echo '<div id="bbcBox_message"></div>';
+			if ($context['show_bbc'])
+				echo '
+						<div id="bbcBox_message"></div>';
 
-						if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))
-							echo '<div id="smileyBox_message"></div>';
+			if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))
+				echo '
+						<div id="smileyBox_message"></div>';
 
-						echo template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
+			echo template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
 
 			echo '
-				<div id="confirm_buttons">
-					<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-					<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) ? $txt['faqmod_edit_send'] : $txt['faqmod_create_send']),'" />
-					<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
-				</div>
-				</div>
+						<div id="confirm_buttons">
+							<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+							<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) ? $txt['faqmod_edit_send'] : $txt['faqmod_create_send']),'" />
+							<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
+						</div>
+					</div>
 				</div>
 				<span class="lowerframe">
 					<span></span>
