@@ -77,10 +77,7 @@ class Faq
 		);
 
 		/* Set the ID */
-		$id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
-
-		/* Create the log */
-		$this->createLog($id);
+		return $id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
 	}
 
 	public function edit($data, $table)
@@ -400,6 +397,35 @@ class Faq
 
 		elseif ($fatal_error == false && in_array(1, $allowed))
 			return true;
+	}
+
+	protected function createLog($log = array())
+	{
+		global $user_info;
+
+		/* Don't waste my time... */
+		if (empty($id) || !is_int($id))
+			return false;
+
+		/* If log is empty, it means we are adding */
+		if (!$log)
+			$log[] = array(
+				'id' => $id,
+				'user' => $user_info['id'],
+				'time' => time(),
+			);
+
+		/* Handle editing */
+		elseif (!empty($log))
+		{
+			/* Gotta unserialize to work with it */
+			$log = unserialize($log);
+
+			/* Do tedious work here :( */
+		}
+
+		/* Either way, return it */
+		return serialize($log);
 	}
 
 	/* Creates simple links to edit/delete based on the users permissions */

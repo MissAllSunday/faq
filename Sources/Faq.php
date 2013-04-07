@@ -219,7 +219,7 @@ function faq_add2($faqObject)
 		/* Create the data, log would be populated later */
 		$data = array(
 			'cat_id' => $faqObject->clean($_REQUEST['category_id']),
-			'log' => '',
+			'log' => $faqObject->createLog(),
 			'title' => $faqObject->clean($_REQUEST['title']),
 			'body' => $faqObject->clean($_REQUEST['body'], true),
 		);
