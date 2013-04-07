@@ -64,7 +64,9 @@ function faq_dispatch()
 		loadtemplate('faq', 'admin');
 
 		/* It is faster to use $var() than use call_user_func_array */
-		$func = $faqObject->clean($_GET['sa']);
+		if (isset($_GET['sa']))
+			$func = $faqObject->clean($_GET['sa']);
+
 		$call = 'faq_' .(!empty($func) && in_array($func, array_values($subActions)) ?  $func : 'main');
 
 		// Call the appropiate function
@@ -147,24 +149,26 @@ function faq_add2($faqObject)
 	{
 		/* Set everything up to be displayed. */
 		$context['preview_subject'] = $faqObject->clean($_REQUEST['title']);
-		$context['preview_artist'] = $faqObject->clean($_REQUEST['artist']);
-		$context['preview_message'] = $faqObject->clean($_REQUEST['body'], true);
-
-		/* Parse out the BBC if it is enabled. */
-		$context['preview_message'] = parse_bbc($context['preview_message']);
+		$context['preview_message'] = parse_bbc($faqObject->clean($_REQUEST['body'], true));
+		$context['preview_cat'] = $faqObject->clean($_REQUEST['category_id']);
 
 		/* We Censor for your protection... */
 		censorText($context['preview_subject']);
-		censorText($context['preview_artist']);
 		censorText($context['preview_message']);
 
-		/* Build the link tree.... */
+		/* Set a descriptive title. */
+		$context['page_title'] = $txt['preview'] .' - ' . $context['preview_subject'];
+
+		/* Build the link tree... */
 		$context['linktree'][] = array(
 			'url' => $scripturl . '?action='. faq::$name .';sa=add',
-			'name' => $txt['faq_preview_add'],
+			'name' => $context['page_title'],
 		);
 
-		/* We need make sure we have this. */
+		/* Get the cats */
+		$context['faq']['cats'] = $faqObject->getCats();
+
+		/* We need to make sure we have this. */
 		require_once($sourcedir . '/Subs-Editor.php');
 
 		/* Create it... */
@@ -179,9 +183,6 @@ function faq_add2($faqObject)
 		/* ... and store the ID again for use in the form */
 		$context['post_box_name'] = $editorOptions['id'];
 		$context['sub_template'] = 'faq_add';
-
-		/* Set a descriptive title. */
-		$context['page_title'] = $txt['preview'] .' - ' . $context['preview_subject'];
 	}
 
 	/* Editing */
@@ -190,14 +191,14 @@ function faq_add2($faqObject)
 		if (!isset($_GET['lid']) || empty($_GET['lid']))
 			redirectexit('action=faq');
 
-		$lid = (int) $faqObject->clean($_GET['lid']);
+		$lid = $faqObject->clean($_GET['lid']);
 
-		/* Make usre it does exists... */
+		/* Make sure it does exists... */
 		$current = $faqObject->getBy('id', $lid, 1);
 
 		/* Tell the user this entry doesn't exists anymore */
 		if (empty($current))
-			fatal_lang_error('faq_no_valid_id', false);
+			fatal_lang_error('faqmod_no_valid_id', false);
 
 		/* Let us continue... */
 		$editData = array(

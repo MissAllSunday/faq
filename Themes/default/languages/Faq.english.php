@@ -118,6 +118,7 @@ $txt['faqmod_sidebar_size_sub'] = 'The width size in percentage % for the FAQs, 
 
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
+$txt['faqmod_no_valid_id'] = 'This is not a valid action.';
 
 // Template strings
 $txt['faqmod_edit_title'] = 'Title';

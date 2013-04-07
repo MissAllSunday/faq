@@ -149,11 +149,10 @@ function template_faq_add()
 						</dt>
 						<dd>
 							<input type="text" name="title" size="55" tabindex="1" maxlength="55" value="', isset($context['preview_subject']) ? $context['preview_subject'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
-						</dd>
-						';
+						</dd>';
 
 			/* Show the category select field */
-			if(!empty($context['faq']['cats']))
+			if(!empty($context['faq']['cats']) || !empty($context['preview_cat']))
 			{
 				echo'
 							<dt>
@@ -164,7 +163,7 @@ function template_faq_add()
 
 				foreach($context['faq']['cats'] as $cats)
 					echo '
-								<option value="', $cats['id'] ,'" ', (isset($context['edit']['current']['category_id']) && $cats['category_id'] == $context['edit']['current']['category_id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
+								<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['id']) && $cats['id'] == $context['faq']['edit']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
 				echo '
 								</select>';
