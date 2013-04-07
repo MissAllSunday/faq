@@ -132,7 +132,7 @@ function template_faq_add()
 		<form action="', $scripturl, '?action='. faq::$name .';sa=add2;', !empty($context['faq']['edit']) ? 'fid='.  $context['faq']['edit']['id'] .';edit' : '','" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
 			<div class="cat_bar">
 				<h3 class="catbg">
-					',(!empty($context['faq']['edit']) ?  $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'] : $txt['faq_preview_add']),'
+					',(!empty($context['faq']['edit']) ?  $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'] : $txt['faqmod_adding']),'
 				</h3>
 			</div>
 			<span class="clear upperframe">
