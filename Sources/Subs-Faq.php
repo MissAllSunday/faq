@@ -399,14 +399,13 @@ class Faq
 			return true;
 	}
 
-	protected function createLog($log = array())
+	public function createLog($log = array())
 	{
 		global $user_info;
 
 		/* If log is empty, it means we are adding */
 		if (!$log)
 			$log[] = array(
-				'id' => $id,
 				'user' => $user_info['id'],
 				'time' => time(),
 			);
@@ -431,7 +430,6 @@ class Faq
 
 				/* New user huh? */
 				$log[] = array(
-					'id' => $id,
 					'user' => $user_info['id'],
 					'time' => time(),
 				);

@@ -218,7 +218,7 @@ function template_faq_success()
 	<div class="nopadding" style="width:98%; text-align:center;">
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['faq_success_message_title'] ,'</span>
+				<span class="ie6_header floatleft">', $txt['faqmod_success_message_title'] ,'</span>
 			</h3>
 		</div>
 
@@ -226,7 +226,7 @@ function template_faq_success()
 			<span class="topslice"><span></span></span>
 			<div class="content">
 				', $context['faq']['message'] ,'<p />
-				', $txt['faq_success_message_generic'] ,'
+				', $txt['faqmod_success_message_generic'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>

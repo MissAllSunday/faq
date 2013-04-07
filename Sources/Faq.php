@@ -310,14 +310,14 @@ function faq_success($faqObject)
 	/* Build the link tree.... */
 	$context['linktree'][] = array(
 		'url' => $scripturl . '?action='. faq::$name .';sa=success',
-		'name' => $txt['faq_success_message_title'],
+		'name' => $txt['faqmod_success_message_title'],
 	);
 
 	$context['sub_template'] = 'faq_success';
-	$context['faq']['message'] = $txt['faq_success_message_'. $context['faq']['pin']];
+	$context['faq']['message'] = $txt['faqmod_success_message_'. $context['faq']['pin']];
 
 	/* Set a descriptive title. */
-	$context['page_title'] = $txt['faq_success_title'];
+	$context['page_title'] = $txt['faqmod_success_title'];
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
