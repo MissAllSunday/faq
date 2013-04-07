@@ -107,9 +107,6 @@ function faq_add($faqObject)
 		'name' => $context['page_title'],
 	);
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-
 	/* Get the cats */
 	$context['faq']['cats'] = $faqObject->getCats();
 
@@ -126,10 +123,14 @@ function faq_add($faqObject)
 		'width' => '90%',
 	);
 
+	/* Magic! */
 	create_control_richedit($editorOptions);
 
 	/* ... and store the ID again for use in the form */
 	$context['post_box_name'] = $editorOptions['id'];
+
+	/* Pass the object to the template, don't know when is gonna be needed */
+	$context['faq']['object'] = $faqObject;
 }
 
 function faq_add2($faqObject)

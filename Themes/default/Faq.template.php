@@ -142,6 +142,16 @@ function template_faq_add()
 					<div class="innerframe">
 						<dl id="post_header">';
 
+			/* Title */
+			echo '
+						<dt>
+							<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
+						</dt>
+						<dd>
+							<input type="text" name="title" size="55" tabindex="1" maxlength="55" value="', isset($context['preview_subject']) ? $context['preview_subject'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+						</dd>
+						';
+
 			/* Show the category select field */
 			if(!empty($context['faq']['cats']))
 			{
