@@ -137,7 +137,7 @@ function faq_add($faqObject)
 
 function faq_add2($faqObject)
 {
-	global $context, $scripturl, $user_info, $sourcedir, $txt, $smcFunc;
+	global $context, $scripturl, $sourcedir, $txt, $smcFunc;
 
 	checkSession('post', '', true);
 
@@ -213,13 +213,13 @@ function faq_add2($faqObject)
 		redirectexit('action=faq;sa=success;pin=edit');
 	}
 
-	/* Lastly, adding, make sure it gets exacuted on adding only */
+	/* Lastly, adding, make sure it gets executed on adding only */
 	elseif (!isset($_REQUEST['edit']) || !isset($_REQUEST['preview']))
 	{
-		/* Create the data */
+		/* Create the data, log would be populated later */
 		$data = array(
-			'user' => $user_info['id'],
-			'artist' => $faqObject->clean($_REQUEST['artist']),
+			'cat_id' => $faqObject->clean($_REQUEST['category_id']),
+			'log' => '',
 			'title' => $faqObject->clean($_REQUEST['title']),
 			'body' => $faqObject->clean($_REQUEST['body'], true),
 		);
@@ -227,7 +227,6 @@ function faq_add2($faqObject)
 		$faqObject->add($data);
 		redirectexit('action=faq;sa=success;pin=add');
 	}
-
 }
 
 function faq_edit($faqObject)

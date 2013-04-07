@@ -70,13 +70,17 @@ class Faq
 		$smcFunc['db_insert']('',
 			'{db_prefix}faq',
 			array(
-				'category_id' => 'int', 'log' => 'string-65534', 'title' => 'string-255', 'body' => 'string-65534', 'last_time' => 'int',
+				'cat_id' => 'int', 'log' => 'string-65534', 'title' => 'string-255', 'body' => 'string-65534',
 			),
 			$data,
 			array('id')
 		);
 
-		return $id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
+		/* Set the ID */
+		$id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
+
+		/* Create the log */
+		$this->createLog($id);
 	}
 
 	public function edit($data, $table)

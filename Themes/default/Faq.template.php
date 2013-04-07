@@ -148,7 +148,7 @@ function template_faq_add()
 							<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
 						</dt>
 						<dd>
-							<input type="text" name="title" size="55" tabindex="1" maxlength="55" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
 						</dd>';
 
 			/* Show the category select field */

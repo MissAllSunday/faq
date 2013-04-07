@@ -78,12 +78,6 @@
 					'size' => '',
 					'default' => '',
 				),
-				array(
-					'name' => 'last_time',
-					'type' => 'int',
-					'size' => 11,
-					'default' => null,
-				),
 			),
 			'indexes' => array(
 				array(
