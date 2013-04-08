@@ -56,8 +56,8 @@ class Faq
 	{
 		// Query construct, this is used on all queries
 		$this->queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
-			FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
-				LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
+	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
+		LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
 	}
 
 	public function add($data)
@@ -276,14 +276,7 @@ class Faq
 					'name' => $row['category_name'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
-				'time' => $row['last_time'],
-				'user' => array(
-					'id' => $row['user'],
-					'username' => $row['member_name'],
-					'name' => isset($row['real_name']) ? $row['real_name'] : '',
-					'href' => $scripturl . '?action=profile;u=' . $row['user'],
-					'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
-				),
+				'log' => ($row['log']),
 			);
 
 		$smcFunc['db_free_result']($result);
@@ -461,7 +454,7 @@ class Faq
 			$return .= '<a href="'. $scripturl .'?action='. faq::$name .';sa=edit;fid='. $this->clean($id) .'">'. $txt['faqmod_edit_edit'] .'</a>';
 
 		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .'">'. $txt['faq_delete'] .'</a>';
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .'">'. $txt['faqmod_delete'] .'</a>';
 
 		/* Send the string */
 		return !empty($return) ? $return : false;

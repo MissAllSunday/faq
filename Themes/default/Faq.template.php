@@ -79,18 +79,27 @@ function template_faq_main()
 	else
 	{
 		echo '
-					<ul class="reset">';
+		<div class="floatright nopadding" style="width:70%;">';
 
 		foreach($context['faq']['all'] as $faq)
 		{
 			echo '
-						<li>
-							<a href="', $scripturl, '?action='. faq::$name .';sa=single;fid=', $faq['id'] ,'">', $faq['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action='. faq::$name .';sa=artist;fid=', urlencode($faq['artist']) ,'">', $faq['artist'] ,'</a>  ', $context['faq']['object']->crud($faq['id']) ,'
-						</li>';
+			<div class="cat_bar">
+				<h3 class="catbg">
+					<span class="ie6_header floatleft">faq title</span>
+				</h3>
+			</div>
+			<div class="windowbg">
+				<span class="topslice"><span></span></span>
+				<div class="content">
+				', $txt['faqmod_no_faq'] ,'
+				</div>
+				<span class="botslice"><span></span></span>
+			</div>';
 		}
 
 		echo '
-					</ul>';
+		</div>';
 	}
 
 	echo '
