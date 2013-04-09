@@ -281,7 +281,7 @@ function faq_edit($faqObject)
 
 		$editorOptions = array(
 			'id' => 'body',
-			'value' => html_to_bbc(un_htmlspecialchars($context['faq']['edit']['body'])),
+			'value' => un_htmlspecialchars(html_to_bbc($context['faq']['edit']['body'])),
 			'width' => '90%',
 		);
 
