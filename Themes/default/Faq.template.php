@@ -41,7 +41,7 @@ function template_faq_main()
 
 	/* Sidebar */
 	echo '
-	<div class="floatleft nopadding" style="width:40%;">
+	<div class="floatleft nopadding">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">sidebar title or something</span>
@@ -60,7 +60,7 @@ function template_faq_main()
 	/* Show a nice message if no FAQs are avaliable */
 	if (empty($context['faq']['all']))
 			echo '
-		<div class="floatright nopadding" style="width:59%;">
+		<div class="floatright nopadding" style="width:80%;">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="ie6_header floatleft">faq title</span>
@@ -79,23 +79,24 @@ function template_faq_main()
 	else
 	{
 		echo '
-		<div class="floatright nopadding" style="width:70%;">';
+		<div class="floatright nopadding" style="width:80%;">';
 
 		foreach($context['faq']['all'] as $faq)
 		{
 			echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="ie6_header floatleft">faq title</span>
+					<span class="ie6_header floatleft">', $faq['title'] ,'</span>
 				</h3>
 			</div>
 			<div class="windowbg">
 				<span class="topslice"><span></span></span>
 				<div class="content">
-				', $txt['faqmod_no_faq'] ,'
+				', $faq['body'] ,'
 				</div>
 				<span class="botslice"><span></span></span>
-			</div>';
+			</div>
+			<br />';
 		}
 
 		echo '
