@@ -250,19 +250,22 @@ function faq_edit($faqObject)
 			$_POST['body'] = $_REQUEST['body'];
 		}
 
-		$lid = (int) $faqObject->clean($_GET['fid']);
+		$lid = $faqObject->clean($_GET['fid']);
 
-		$temp = $faqObject->getBy('id', $lid, 1);
+		if (empty($lid))
+			fatal_lang_error('faqmod_no_valid_id', false);
+
+		$temp = $faqObject->getBy('faq', 'id', $lid, 1);
 
 		if (empty($temp))
-			fatal_lang_error('faq_no_valid_id', false);
+			fatal_lang_error('faqmod_no_valid_id', false);
 
 		$context['faq']['edit'] = $temp[$lid];
 		$context['sub_template'] = 'faq_add';
-		$context['page_title'] = $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'];
+		$context['page_title'] = $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'];
 		$context['linktree'][] = array(
 			'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
-			'name' => $txt['faq_preview_edit'] .' - '. $context['faq']['edit']['title'],
+			'name' => $context['page_title'],
 		);
 
 		require_once($sourcedir .'/Subs-Editor.php');

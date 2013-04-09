@@ -176,7 +176,7 @@ class Faq
 		return !empty($return) ? $return : false;
 	}
 
-	public function getBy($table, $column, $value, $sort = 'title ASC', $limit = false, $like = false)
+	public function getBy($table, $column, $value, $limit = false, $like = false, $sort = 'title ASC')
 	{
 		global $smcFunc, $scripturl, $txt;
 
@@ -190,7 +190,7 @@ class Faq
 		$return = array();
 
 		$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
-			WHERE '. $column .' '. (is_int($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
+			WHERE '. $column .' '. (is_numeric($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
 			ORDER BY {raw:sort}
 			'. (!empty($limit) ? '
 			LIMIT {int:limit}' : '') .'',
