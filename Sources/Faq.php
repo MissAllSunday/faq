@@ -188,10 +188,10 @@ function faq_add2($faqObject)
 	/* Editing */
 	elseif (isset($_REQUEST['edit']))
 	{
-		if (!isset($_GET['lid']) || empty($_GET['lid']))
+		if (!isset($_GET['fid']) || empty($_GET['fid']))
 			redirectexit('action=faq');
 
-		$lid = $faqObject->clean($_GET['lid']);
+		$lid = $faqObject->clean($_GET['fid']);
 
 		/* Make sure it does exists... */
 		$current = $faqObject->getBy('id', $lid, 1);
@@ -235,7 +235,7 @@ function faq_edit($faqObject)
 
 	$faqObject->permissions('edit', true);
 
-	if (!isset($_GET['lid']) || empty($_GET['lid']))
+	if (!isset($_GET['fid']) || empty($_GET['fid']))
 		redirectexit('action=faq');
 
 	else
@@ -250,7 +250,7 @@ function faq_edit($faqObject)
 			$_POST['body'] = $_REQUEST['body'];
 		}
 
-		$lid = (int) $faqObject->clean($_GET['lid']);
+		$lid = (int) $faqObject->clean($_GET['fid']);
 
 		$temp = $faqObject->getBy('id', $lid, 1);
 
@@ -286,12 +286,12 @@ function faq_delete($faqObject)
 
 	$faqObject->permissions('delete', true);
 
-	if (!isset($_GET['lid']) || empty($_GET['lid']))
+	if (!isset($_GET['fid']) || empty($_GET['fid']))
 		redirectexit('action=faq');
 
 	else
 	{
-		$lid = (int) $faqObject->clean($_GET['lid']);
+		$lid = (int) $faqObject->clean($_GET['fid']);
 		$faqObject->delete($lid);
 		redirectexit('action=faq;sa=success;pin=delete');
 	}
@@ -328,14 +328,14 @@ function faq_single($faqObject)
 	global $context, $scripturl, $txt, $user_info;
 
 	/* Forget it... */
-	if (!isset($_GET['lid']) || empty($_GET['lid']))
+	if (!isset($_GET['fid']) || empty($_GET['fid']))
 		fatal_lang_error('faq_error_no_valid_action', false);
 
 	/* Are you allowed to see this page? */
 	$faqObject->permissions('view', true);
 
 	/* Get a valid ID */
-	$id = $faqObject->clean($_GET['lid']);
+	$id = $faqObject->clean($_GET['fid']);
 
 	if (empty($id))
 		fatal_lang_error('faq_error_no_valid_action', false);
@@ -366,13 +366,13 @@ function faq_artist($faqObject)
 	global $context, $scripturl, $txt, $user_info;
 
 	/* Forget it... */
-	if (!isset($_GET['lid']) || empty($_GET['lid']))
+	if (!isset($_GET['fid']) || empty($_GET['fid']))
 		fatal_lang_error('faq_error_no_valid_action', false);
 
 	/* Are you allowed to see this page? */
 	$faqObject->permissions('view', true);
 
-	$lid = $faqObject->clean($_GET['lid']);
+	$lid = $faqObject->clean($_GET['fid']);
 
 	$context['sub_template'] = 'faq_artist';
 	$context['canonical_url'] = $scripturl . '?action='. faq::$name .';sa=artist;fid='. $lid;
