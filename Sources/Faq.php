@@ -268,6 +268,9 @@ function faq_edit($faqObject)
 			'name' => $context['page_title'],
 		);
 
+		/* Get the cats */
+		$context['faq']['cats'] = $faqObject->getCats();
+
 		require_once($sourcedir .'/Subs-Editor.php');
 		/* Needed for the WYSIWYG editor, we all love the WYSIWYG editor... */
 		$modSettings['disable_wysiwyg'] = !empty($modSettings['disable_wysiwyg']) || empty($modSettings['enableBBC']);

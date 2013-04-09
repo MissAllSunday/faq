@@ -123,7 +123,7 @@ function template_faq_main()
 function template_faq_add()
 {
 	global $context, $scripturl, $txt;
-
+var_Dump($context['faq']['cats']);
 	// Show the preview
 	if (isset($context['preview_message']))
 	echo '
@@ -163,7 +163,7 @@ function template_faq_add()
 						</dd>';
 
 			/* Show the category select field */
-			if(!empty($context['faq']['cats']) || !empty($context['preview_cat']))
+			if(!empty($context['faq']['cats']) && !empty($context['preview_cat']) || !empty($context['faq']['edit']))
 			{
 				echo'
 							<dt>
