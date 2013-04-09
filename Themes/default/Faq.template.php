@@ -63,7 +63,7 @@ function template_faq_main()
 		<div class="floatright nopadding" style="width:80%;">
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="ie6_header floatleft">faq title</span>
+					<span class="ie6_header floatleft">', $txt['faqmod_no_faq'] ,'</span>
 				</h3>
 			</div>
 			<div class="windowbg">
@@ -87,6 +87,7 @@ function template_faq_main()
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="ie6_header floatleft">', $faq['title'] ,'</span>
+					<span class="floatright">', $context['faq']['object']->crud($faq['id']) ,'</span>
 				</h3>
 			</div>
 			<div class="windowbg">
