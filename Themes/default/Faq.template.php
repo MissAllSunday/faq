@@ -123,7 +123,7 @@ function template_faq_main()
 function template_faq_add()
 {
 	global $context, $scripturl, $txt;
-var_Dump($context['faq']['cats']);
+
 	// Show the preview
 	if (isset($context['preview_message']))
 	echo '
