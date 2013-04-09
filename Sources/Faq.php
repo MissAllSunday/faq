@@ -193,8 +193,11 @@ function faq_add2($faqObject)
 
 		$lid = $faqObject->clean($_GET['fid']);
 
+		if (empty($lid))
+			fatal_lang_error('faqmod_no_valid_id', false);
+
 		/* Make sure it does exists... */
-		$current = $faqObject->getBy('id', $lid, 1);
+		$current = $faqObject->getBy('faq', 'id', $lid, 1);
 
 		/* Tell the user this entry doesn't exists anymore */
 		if (empty($current))
