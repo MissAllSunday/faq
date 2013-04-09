@@ -119,6 +119,7 @@ $txt['faqmod_sidebar_size_sub'] = 'The width size in percentage % for the FAQs, 
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
 $txt['faqmod_no_valid_id'] = 'This is not a valid action.';
+$txt['cannot_faq_view'] = 'I\'m sorry, you aren\'t allowed to see the FAQ page';
 
 // Success
 $txt['faqmod_success_title'] = 'successfully done';
