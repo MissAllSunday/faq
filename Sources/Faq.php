@@ -185,7 +185,6 @@ function faq_add2($faqObject)
 		if (isset($_REQUEST['edit']))
 			$_REQUEST['previewEdit'] = $faqObject->clean($_GET['fid']);
 
-
 		/* ... and store the ID again for use in the form */
 		$context['post_box_name'] = $editorOptions['id'];
 		$context['sub_template'] = 'faq_add';

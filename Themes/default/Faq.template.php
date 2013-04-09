@@ -140,7 +140,7 @@ function template_faq_add()
 						<br />';
 
 		echo '
-		<form action="', $scripturl, '?action='. faq::$name .';sa=add2;', !empty($context['faq']['edit']) ? 'fid='.  $context['faq']['edit']['id'] .';edit' : '','" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
+		<form action="', $scripturl, '?action='. faq::$name .';sa=add2;', (!empty($context['faq']['edit']) || isset($_REQUEST['previewEdit']) ? 'fid='.  (!empty($context['faq']['edit']['id']) ? $context['faq']['edit']['id'] : $_REQUEST['previewEdit']) .';edit' : ''),'" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
 			<div class="cat_bar">
 				<h3 class="catbg">
 					',(!empty($context['faq']['edit']) ?  $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'] : $txt['faqmod_adding']),'
@@ -206,7 +206,7 @@ function template_faq_add()
 			echo '
 						<div id="confirm_buttons">
 							<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-							<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) ? $txt['faqmod_edit_send'] : $txt['faqmod_create_send']),'" />
+							<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) || !empty($_REQUEST['previewEdit']) ? $txt['faqmod_edit_send'] : $txt['faqmod_create_send']),'" />
 							<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
 						</div>
 					</div>
