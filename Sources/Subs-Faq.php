@@ -128,16 +128,9 @@ class Faq
 					'cat' => array(
 						'id' => $row['category_id'],
 						'name' => $row['category_name'],
-						'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>',
+						'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 					),
-					'time' => $row['last_time'],
-					'user' => array(
-						'id' => $row['user'],
-						'username' => $row['member_name'],
-						'name' => isset($row['real_name']) ? $row['real_name'] : '',
-						'href' => $scripturl . '?action=profile;u=' . $row['user'],
-						'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
-					),
+					'log' => ($row['log']),
 				);
 
 			$smcFunc['db_free_result']($result);
@@ -174,14 +167,7 @@ class Faq
 					'name' => $row['category_name'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
-				'time' => $row['last_time'],
-				'user' => array(
-					'id' => $row['user'],
-					'username' => $row['member_name'],
-					'name' => isset($row['real_name']) ? $row['real_name'] : '',
-					'href' => $scripturl . '?action=profile;u=' . $row['user'],
-					'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
-				),
+				'log' => ($row['log']),
 			);
 
 		$smcFunc['db_free_result']($result);
@@ -228,14 +214,7 @@ class Faq
 					'name' => $row['category_name'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
-				'time' => $row['last_time'],
-				'user' => array(
-					'id' => $row['user'],
-					'username' => $row['member_name'],
-					'name' => isset($row['real_name']) ? $row['real_name'] : '',
-					'href' => $scripturl . '?action=profile;u=' . $row['user'],
-					'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['user'] . '" title="' . $txt['profile_of'] . ' ' . $row['real_name'] . '">' . $row['real_name'] . '</a>',
-				),
+				'log' => ($row['log']),
 			);
 
 		$smcFunc['db_free_result']($result);
