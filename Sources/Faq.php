@@ -205,14 +205,15 @@ function faq_add2($faqObject)
 
 		/* Let us continue... */
 		$editData = array(
-			'id' => $lid,
-			'artist' => $faqObject->clean($_REQUEST['artist']),
+			'cat_id' => $faqObject->clean($_REQUEST['category_id']),
+			'log' => $faqObject->createLog(),
 			'title' => $faqObject->clean($_REQUEST['title']),
 			'body' => $faqObject->clean($_REQUEST['body'], true),
+			'id' => $lid
 		);
 
 		/* Finally, store the data and tell the user */
-		$faqObject->edit($editData);
+		$faqObject->edit($editData, 'faq');
 		redirectexit('action=faq;sa=success;pin=edit');
 	}
 
