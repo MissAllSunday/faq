@@ -504,3 +504,30 @@ function faq_header()
 			', template_button_strip($memberlist_buttons, 'right'), '
 		</div>';
 }
+
+/* Creates simple links to edit/delete based on the users permissions */
+function faq_crud($id)
+{
+	global $scripturl, $txt, $context;
+
+	/* By default lets send nothing! */
+	$return = '';
+
+	/* We need an ID... */
+	if (empty($id))
+		return !empty($return) ? $return : false;
+
+	/* Set the pertinent permissions */
+	$edit = $context['faq']['object']->permissions('edit');
+	$delete = $context['faq']['object']->permissions('delete');
+
+	/* Let's check if you have what it takes... */
+	if ($edit == true)
+		$return .= '<a href="'. $scripturl .'?action='. faq::$name .';sa=edit;fid='. $this->clean($id) .'">'. $txt['faqmod_edit_edit'] .'</a>';
+
+	if ($delete == true)
+		$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .'">'. $txt['faqmod_delete'] .'</a>';
+
+	/* Send the string */
+	return !empty($return) ? $return : false;
+}
