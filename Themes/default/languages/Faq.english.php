@@ -114,11 +114,13 @@ $txt['faqmod_sidebar_side_sub'] = 'By default, the side bar is showed at right s
 $txt['faqmod_sidebar_size'] = 'Size of the FAQs';
 $txt['faqmod_sidebar_size_sub'] = 'The width size in percentage % for the FAQs,  the larger the FAQs the smaller will be the side bar, for example, if you set up a width of 50%  then the side bar will have a width of 48%,  enter just the number.<br /> By default is 80 for the FAQs, 18 for the sidebar.';
 $txt['faqmod_categories_list'] = 'FAQs within category ';
+$txt['faqmod_searc_results'] = 'Search results for ';
 
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
 $txt['faqmod_no_valid_id'] = 'This is not a valid action.';
 $txt['cannot_faq_view'] = 'I\'m sorry, you aren\'t allowed to see the FAQ page';
+$txt['faqmod_no_search_results'] = 'No results were found';
 
 // Success
 $txt['faqmod_success_title'] = 'successfully done';

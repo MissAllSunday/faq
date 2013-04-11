@@ -509,7 +509,7 @@ function template_faq_list()
 		echo '
 			</div>
 			<span class="botslice"><span></span></span>
-		</div>';
+		</div><br />';
 
 	/* Pagination */
 	if(!empty($context['page_index']))

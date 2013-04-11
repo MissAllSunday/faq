@@ -588,16 +588,16 @@ function faq_search($faqObject)
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_list';
-	$context['page_title'] = $txt['search'] .' - '. $value;
+	$context['page_title'] = $txt['faqmod_searc_results'] .' - '. $value;
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action='. faq::$name .';sa=search',
 		'name' => $context['page_title'],
 	);
 
-	$context['faq']['all'] = $faqObject->getBy(false, 'faq', 'body', '%'. $value .'%');
+	$context['faq']['all'] = $faqObject->getBy(false, 'faq', $column, '%'. $value .'%', false, true);
 
-	if (empty($context['faq']['list']))
-		fatal_lang_error('faq_no_faq_with_letter', false);
+	if (empty($context['faq']['all']))
+		fatal_lang_error('faqmod_no_search_results', false);
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
