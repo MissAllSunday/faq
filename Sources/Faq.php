@@ -43,6 +43,7 @@ function faq_dispatch()
 		/* Safety first, hardcode the actions */
 		$subActions = array(
 			'add',
+			'addCat',
 			'add2',
 			'delete',
 			'edit',
@@ -295,6 +296,24 @@ function faq_edit($faqObject)
 
 		create_control_richedit($editorOptions);
 		$context['post_box_name'] = $editorOptions['id'];
+	}
+}
+
+function faq_addCat($faqObject)
+{
+	global $context, $txt;
+
+	$faqObject->permissions('add', true);
+
+	/* Gotta have something to work with */
+	if (!isset($_GET['title']) || empty($_GET['title']))
+		redirectexit('action=faq');
+
+	else
+	{
+		$title = $faqObject->clean($_GET['fid']);
+		$faqObject->addCat(array('category_name' => $title));
+		redirectexit('action=faq;sa=success;pin=addCat');
 	}
 }
 

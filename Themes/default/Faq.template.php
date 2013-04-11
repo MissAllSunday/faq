@@ -472,6 +472,7 @@ function template_faq_manageCat()
 		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
 
 	/* A nice form for adding a new cat */
+	if ($context['faq']['object']->permissions('add') == true)
 		echo '
 			<span class="clear upperframe">
 				<span></span>

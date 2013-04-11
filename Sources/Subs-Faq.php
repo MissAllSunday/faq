@@ -80,6 +80,23 @@ class Faq
 		return $id = $smcFunc['db_insert_id']('{db_prefix}faq', 'id');
 	}
 
+	public function addCat($data)
+	{
+		global $smcFunc;
+
+		$smcFunc['db_insert']('',
+			'{db_prefix}' . ($this->_table['cat']['table']) . '',
+			array(
+				'category_name' => 'string-255',
+			),
+			$data,
+			array('category_id')
+		);
+
+		/* Set the ID */
+		return $id = $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['cat']['table']), 'id');
+	}
+
 	public function edit($data, $table)
 	{
 		global $smcFunc;

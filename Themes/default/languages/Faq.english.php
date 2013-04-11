@@ -124,6 +124,7 @@ $txt['faqmod_success_no_access'] = 'You can\'t access this page directly';
 $txt['faqmod_success_message_title'] = 'Thank you';
 $txt['faqmod_success_message_generic'] = '<a href="'. $scripturl .'?action=faq" >Go to the FAQ Index</a>';
 $txt['faqmod_success_message_add'] = 'You have successfully added a new FAQ entry';
+$txt['faqmod_success_message_addCat'] = 'You have successfully added a new category';
 $txt['faqmod_success_message_edit'] = 'You have successfully edited this FAQ entry';
 $txt['faqmod_success_message_delete'] = 'You have successfully deleted this entry';
 
