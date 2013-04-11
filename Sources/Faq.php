@@ -302,13 +302,15 @@ function faq_delete($faqObject)
 
 	$faqObject->permissions('delete', true);
 
+	/* Gotta have an ID to work with */
 	if (!isset($_GET['fid']) || empty($_GET['fid']))
 		redirectexit('action=faq');
 
 	else
 	{
 		$lid = (int) $faqObject->clean($_GET['fid']);
-		$faqObject->delete($lid);
+		$table = $faqObject->clean($_GET['table']);
+		$faqObject->delete($lid, $table);
 		redirectexit('action=faq;sa=success;pin=delete');
 	}
 }

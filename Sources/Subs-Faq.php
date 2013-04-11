@@ -413,7 +413,7 @@ class Faq
 	}
 
 	/* Creates simple links to edit/delete based on the users permissions */
-	public function crud($id)
+	public function crud($id, $table = 'faq')
 	{
 		global $scripturl, $txt;
 
@@ -430,10 +430,10 @@ class Faq
 
 		/* Let's check if you have what it takes... */
 		if ($edit == true)
-			$return .= '<a href="'. $scripturl .'?action='. faq::$name .';sa=edit;fid='. $this->clean($id) .'">'. $txt['faqmod_edit_edit'] .'</a>';
+			$return .= '<a href="'. $scripturl .'?action='. faq::$name .';sa=edit;fid='. $this->clean($id) .';table='. $table .'">'. $txt['faqmod_edit_edit'] .'</a>';
 
 		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .'" onclick="return confirm(\'Are you sure you want to delete?\')">'. $txt['faqmod_delete'] .'</a>';
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\'Are you sure you want to delete?\')">'. $txt['faqmod_delete'] .'</a>';
 
 		/* Send the string */
 		return !empty($return) ? $return : false;
