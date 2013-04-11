@@ -421,85 +421,6 @@ function faq_success($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function faq_single($faqObject)
-{
-	global $context, $scripturl, $txt, $user_info;
-
-	/* Forget it... */
-	if (!isset($_GET['fid']) || empty($_GET['fid']))
-		fatal_lang_error('faqmod_no_valid_id', false);
-
-	/* Are you allowed to see this page? */
-	$faqObject->permissions('view', true);
-
-	/* Get a valid ID */
-	$id = $faqObject->clean($_GET['fid']);
-
-	if (empty($id))
-		fatal_lang_error('faqmod_no_valid_id', false);
-
-	/* Does the data has been already loaded? */
-	if (!empty($context['faq_all'][$id]))
-		$context['faq']['single'] = $context['faq_all'][$id];
-
-	/* No? bugger.. well, get it from the DB */
-	else
-		$context['faq']['single'] = $faqObject->getSingle($id);
-
-	/* Set all we need */
-	$context['sub_template'] = 'faq_single';
-	$context['canonical_url'] = $scripturl . '?action='. faq::$name .';sa=single;fid=' . $id;
-	$context['page_title'] = $context['faq']['single']['title'] .' - '. $context['faq']['single']['artist'];
-	$context['linktree'][] = array(
-		'url' => $context['canonical_url'],
-		'name' => $context['page_title'],
-	);
-
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
-
-function faq_list($faqObject)
-{
-	global $context, $txt, $scripturl;
-
-	/* Are you allowed to see this page? */
-	$faqObject->permissions('view', true);
-
-	/* Page stuff */
-	$context['sub_template'] = 'faq_list';
-	$context['page_title'] = $txt['faq_list_title'];
-	$context['linktree'][] = array(
-		'url' => $scripturl. '?action='. faq::$name .';sa=list',
-		'name' => $txt['faq_list_title'],
-	);
-
-	/* No letter? then show the main page */
-	if (!isset($_GET['lidletter']) || empty($_GET['lidletter']))
-		$context['faq']['list'] = $faqObject->getAll();
-
-	/* Show a list of faq starting with X letter */
-	elseif (isset($_GET['lidletter']))
-	{
-		$lidletter = $faqObject->clean($_GET['lidletter']);
-
-		/* Replace the linktree and title with something more specific */
-		$context['page_title'] = $txt['faq_list_title_by_letter'] . $lidletter;
-		$context['linktree'][] = array(
-			'url' => $scripturl. '?action='. faq::$name .';sa=list;lidletter='. $lidletter,
-			'name' => $txt['faq_list_title_by_letter'] . $lidletter,
-		);
-
-		$context['faq']['list'] = $faqObject->getBy('title', $lidletter .'%');
-
-		if (empty($context['faq']['list']))
-			fatal_lang_error('faq_no_faq_with_letter', false);
-	}
-
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
-
 function faq_manage($faqObject)
 {
 	global $context, $txt, $scripturl;
@@ -618,25 +539,26 @@ function faq_single($faqObject)
 	$id = $faqObject->clean($_GET['fid']);
 
 	if (empty($id))
-		fatal_lang_error('lyrics_error_no_valid_action', false);
+		fatal_lang_error('faqmod_no_valid_id', false);
 
-	/* Does the data has been already loaded? */
-	if (!empty($context['lyrics_all'][$id]))
-		$context['lyrics']['single'] = $context['lyrics_all'][$id];
+	/* All the single ladies! */
+	$temp = $faqObject->getBy(false, 'faq', 'id', $id, 1, false);
 
-	/* No? bugger.. well, get it from the DB */
+	if (is_array($temp) && !empty($temp[$id]))
+		$context['faq']['single'] = $temp[$id];
+
 	else
-		$context['lyrics']['single'] = $faqObject->getSingle($id);
+		fatal_lang_error('faqmod_no_valid_id', false);
 
 	/* Set all we need */
-	$context['sub_template'] = 'lyrics_single';
-	$context['canonical_url'] = $scripturl . '?action=lyrics;sa=single;lid=' . $id;
-	$context['page_title'] = $context['lyrics']['single']['title'] .' - '. $context['lyrics']['single']['artist'];
+	$context['sub_template'] = 'faq_single';
+	$context['canonical_url'] = $scripturl . '?action=faq;sa=single;fid=' . $id;
+	$context['page_title'] = $context['faq']['single']['title'];
 	$context['linktree'][] = array(
 		'url' => $context['canonical_url'],
 		'name' => $context['page_title'],
 	);
 
 	/* Pass the object to the template */
-	$context['lyrics']['object'] = $faqObject;
+	$context['faq']['object'] = $faqObject;
 }

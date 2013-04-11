@@ -500,7 +500,7 @@ function template_faq_list()
 		foreach($context['faq']['all'] as $all)
 			echo '
 						<li>
-							<a href="', $scripturl, '?action=faq;sa=single;lid=', $all['id'] ,'">', $all['title'] ,'</a> ', $context['faq']['object']->crud($all['id']) ,'
+							<a href="', $scripturl, '?action=faq;sa=single;fid=', $all['id'] ,'">', $all['title'] ,'</a> ', $context['faq']['object']->crud($all['id']) ,'
 						</li>';
 
 		echo '
