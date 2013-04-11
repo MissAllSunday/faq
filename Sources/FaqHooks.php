@@ -89,6 +89,12 @@ function faq_menu(&$menu_buttons)
 					'show' => allowedTo(array('faq_delete', 'faq_add', 'faq_edit')),
 					'sub_buttons' => array(),
 				),
+				'faq_admin_settings' => array(
+					'title' => $txt['faq_title_admin'],
+					'href' => $scripturl . '?action=admin;area=modsettings;sa=faq',
+					'show' => allowedTo('admin_forum'),
+					'sub_buttons' => array(),
+				),
 			),
 		)),
 		array_slice($menu_buttons, $counter)
