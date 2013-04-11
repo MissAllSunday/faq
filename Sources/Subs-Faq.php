@@ -123,7 +123,7 @@ class Faq
 					'id' => $row['id'],
 					'title' => $row['title'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-					'body' => $row['body'],
+					'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 					'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
 					'cat' => array(
 						'id' => $row['category_id'],
@@ -160,7 +160,7 @@ class Faq
 				'id' => $row['id'],
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-				'body' => $row['body'],
+				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 				'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
@@ -176,7 +176,7 @@ class Faq
 		return !empty($return) ? $return : false;
 	}
 
-	public function getBy($table, $column, $value, $limit = false, $like = false, $sort = 'title ASC')
+	public function getBy($page = '', $table, $column, $value, $limit = false, $like = false, $sort = 'title ASC')
 	{
 		global $smcFunc, $scripturl, $txt;
 
@@ -207,7 +207,7 @@ class Faq
 				'id' => $row['id'],
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-				'body' => $row['body'],
+				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 				'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
@@ -228,7 +228,7 @@ class Faq
 		global $smcFunc, $scripturl, $txt, $modSettings, $context;
 
 		$total = $this->getCount();
-		$maxIndex = !empty($modSettings['faq_pag_limit']) ? $modSettings['faq_pag_limit'] : 20;
+		$maxIndex = !empty($modSettings['faqmod_num_faqs']) ? $modSettings['faqmod_num_faqs'] : 20;
 
 		/* Safety first! */
 		$sortArray = array('title', 'artist', 'latest');

@@ -155,29 +155,33 @@ function template_faq_add()
 
 			/* Title */
 			echo '
-						<dt>
-							<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
-						</dt>
-						<dd>
-							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
-						</dd>';
+							<dt>
+								<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
+							</dt>
+							<dd>
+								<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+							</dd>';
+
+			echo'
+							<dt>
+								<span id="caption_subject">', $txt['faqmod_edit_category'] ,':</span>
+							</dt>
+							<dd>';
 
 			/* Show the category select field */
 			if (!empty($context['faq']['cats']))
 			{
-				echo'
-							<dt>
-								<span id="caption_subject">', $txt['faqmod_edit_category'] ,':</span>
-							</dt>
-							<dd>
+				foreach($context['faq']['cats'] as $cats)
+				{
+					echo '
 								<select name="category_id">';
 
-				foreach($context['faq']['cats'] as $cats)
 					echo '
-								<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['id']) && $cats['id'] == $context['faq']['edit']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
+									<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['id']) && $cats['id'] == $context['faq']['edit']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
-				echo '
+					echo '
 								</select>';
+				}
 			}
 
 			else
@@ -186,12 +190,9 @@ function template_faq_add()
 									',$txt['faqmod_no_cat_admin'],'
 								</div>';
 
-						echo'
+			echo'
 							</dd>
 						</dl>';
-
-					echo'
-					</dl>';
 
 			if ($context['show_bbc'])
 				echo '
@@ -388,7 +389,7 @@ function template_faq_manage()
 	global $context, $txt, $scripturl;
 
 	echo '<div class="cat_bar">
-			<h3 class="catbg">', $txt['faq_manage_title'] ,'</h3>
+			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
 		</div>
 		<div class="windowbg description">
 			', $txt['faqmod_manage_desc']  ,'

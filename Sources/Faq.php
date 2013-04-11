@@ -92,7 +92,7 @@ function faq_main($faqObject)
 	$context['faq']['object'] = $faqObject;
 
 	/* Get all */
-	$context['faq']['all'] = $faqObject->getAll(empty($modSettings['faq_latest_limit']) ? 10 : $modSettings['faq_latest_limit']);
+	$context['faq']['all'] = $faqObject->getAll();
 }
 
 function faq_add($faqObject)
@@ -202,7 +202,7 @@ function faq_add2($faqObject)
 			fatal_lang_error('faqmod_no_valid_id', false);
 
 		/* Make sure it does exists... */
-		$current = $faqObject->getBy('faq', 'id', $lid, 1);
+		$current = $faqObject->getBy(false, 'faq', 'id', $lid, 1);
 
 		/* Tell the user this entry doesn't exists anymore */
 		if (empty($current))
@@ -265,7 +265,8 @@ function faq_edit($faqObject)
 		if (empty($lid))
 			fatal_lang_error('faqmod_no_valid_id', false);
 
-		$temp = $faqObject->getBy('faq', 'id', $lid, 1);
+		/* Get the FAQ in question, tell the method this is "manage" */
+		$temp = $faqObject->getBy('manage', 'faq', 'id', $lid, 1);
 
 		if (empty($temp))
 			fatal_lang_error('faqmod_no_valid_id', false);
@@ -465,6 +466,9 @@ function faq_manage($faqObject)
 
 	/* Get the cats */
 	$context['faq']['cats'] = $faqObject->getCats();
+
+	/* Get all FAQs, show pagination if needed */
+	$context['faq']['all'] = $faqObject->getAll('manage');
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
