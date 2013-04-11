@@ -335,6 +335,10 @@ function faq_success($faqObject)
 	$context['sub_template'] = 'faq_success';
 	$context['faq']['message'] = $txt['faqmod_success_message_'. $context['faq']['pin']];
 
+	/* Do not waste my time boy */
+	if (!isset($context['faq']['message']))
+		redirectexit('action=faq');
+
 	/* Set a descriptive title. */
 	$context['page_title'] = $txt['faqmod_success_title'];
 

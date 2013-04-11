@@ -127,17 +127,17 @@ function template_faq_add()
 	// Show the preview
 	if (isset($context['preview_message']))
 	echo '
-						<div class="cat_bar">
-							<h3 class="catbg">', $context['preview_title'], '</h3>
-						</div>
-						<div class="windowbg">
-						<span class="topslice"><span></span></span>
-							<div class="content">
-								', $context['preview_message'], '
-							</div>
-						<span class="botslice"><span></span></span>
-						</div>
-						<br />';
+		<div class="cat_bar">
+			<h3 class="catbg">', $context['preview_title'], '</h3>
+		</div>
+		<div class="windowbg">
+		<span class="topslice"><span></span></span>
+			<div class="content">
+				', $context['preview_message'], '
+			</div>
+		<span class="botslice"><span></span></span>
+		</div>
+		<br />';
 
 		echo '
 		<form action="', $scripturl, '?action='. faq::$name .';sa=add2;', (!empty($context['faq']['edit']) || isset($_REQUEST['previewEdit']) ? 'fid='.  (!empty($context['faq']['edit']['id']) ? $context['faq']['edit']['id'] : $_REQUEST['previewEdit']) .';edit' : ''),'" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
