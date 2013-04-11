@@ -471,7 +471,28 @@ function template_faq_manageCat()
 	if(!empty($context['page_index']))
 		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
 
-	/* Put a nice form for adding a new cat here */
+	/* A nice form for adding a new cat */
+		echo '
+			<span class="clear upperframe">
+				<span></span>
+			</span>
+			<div class="roundframe rfix">
+				<div class="innerframe">
+					<form action="', $scripturl, '?action='. faq::$name .';sa=addCat" method="post" target="_self">
+						<dl id="post_header">
+							<dt>
+								<span id="caption_subject">', $txt['faqmod_addcat_send'] ,'</span>
+							</dt>
+							<dd>
+								<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['faqmod_createCat_send'] ,'" />
+							</dd>
+						</dl>
+					</form>
+				</div>
+			</div>
+			<span class="clear lowerframe">
+				<span></span>
+			</span><br />';
 }
 
 function faq_header()
