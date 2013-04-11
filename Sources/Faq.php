@@ -572,6 +572,33 @@ function faq_manageCat($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
+function faq_categories($faqObject)
+{
+	global $context;
+
+	/* Are you allowed to see this page? */
+	$faqObject->permissions('view', true);
+
+	if (!isset($_GET['fid']) || empty($_GET['fid']))
+		redirectexit('action=faq');
+
+	$lid = $faqObject->clean($_GET['fid']);
+
+	/* Get all FAQs within certain category */
+	$context['cat'][$lid] = $faqObject->getBy(false, 'faq', 'id', $lid, 1);
+
+	$context['sub_template'] = 'faq_main';
+	$context['canonical_url'] = $scripturl . '?action=faq;sa=categories';
+	$context['page_title'] = $txt['faqmod_categories_list'] - ;
+	$context['linktree'][] = array(
+		'url' => $scripturl. '?action=faq',
+		'name' => $context['page_title'],
+	);
+
+	/* Pass the object to the template */
+	$context['faq']['object'] = $faqObject;
+}
+
 function faq_search($faqObject)
 {
 	global $context, $txt, $scripturl;

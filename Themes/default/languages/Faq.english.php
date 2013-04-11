@@ -112,6 +112,7 @@ $txt['faqmod_sidebar_side'] = 'Show the side bar at left?';
 $txt['faqmod_sidebar_side_sub'] = 'By default, the side bar is showed at right side, if you check this option it will appear at left side.';
 $txt['faqmod_sidebar_size'] = 'Size of the FAQs';
 $txt['faqmod_sidebar_size_sub'] = 'The width size in percentage % for the FAQs,  the larger the FAQs the smaller will be the side bar, for example, if you set up a width of 50%  then the side bar will have a width of 48%,  enter just the number.<br /> By default is 80 for the FAQs, 18 for the sidebar.';
+$txt['faqmod_categories_list'] = 'FAQs within category ';
 
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
