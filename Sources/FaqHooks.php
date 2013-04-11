@@ -79,21 +79,15 @@ function faq_menu(&$menu_buttons)
 						'faq_add' => array(
 							'title' => $txt['faqmod_add_send'],
 							'href' => $scripturl . '?action=faq;sa=add',
-							'show' => allowedTo('faqperedit'),
+							'show' => allowedTo('faq_add'),
 						),
 					),
 				),
 				'faq_category' => array(
 					'title' => $txt['faqmod_manage_category'],
-					'href' => $scripturl . '?action=faq;sa=managecat',
-					'show' => allowedTo('faqperedit'),
-					'sub_buttons' => array(
-						'faq_add' => array(
-							'title' => $txt['faqmod_addcat_send'],
-							'href' => $scripturl . '?action=faq;sa=addcat',
-							'show' => allowedTo('faqperedit'),
-						),
-					),
+					'href' => $scripturl . '?action=faq;sa=manageCat',
+					'show' => allowedTo(array('faq_delete', 'faq_add', 'faq_edit')),
+					'sub_buttons' => array(),
 				),
 			),
 		)),

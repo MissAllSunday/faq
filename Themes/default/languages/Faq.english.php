@@ -81,10 +81,7 @@ $txt['faqmod_manage_desc'] = 'From here you can manage your FAQs, you can edit/d
 -Category: The category where this faq is hosted.<br />
 -Log: A link to a separate page with info a bout the FAQ, shows who has edited the FAQ and the last time they did it.<br />';
 $txt['faqmod_manage_category'] = 'Manage Categories';
-$txt['faqmod_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want, here\'s some descriptions:<br />
--ID:  its the numeric reference for the categories, used to manage them without to much problems.<br />
--Name: the name for the category.<br />
--By user: The person who edited this category the last time.<br />';
+$txt['faqmod_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want.<br />';
 $txt['faqmod_admin_panel'] = 'FAQ mod admin panel';
 $txt['faqmod_admin_panel_desc'] = 'This is the main admin panel for the FAQ mod, in here you can easily add/edit/delete FAQs as well as setup the configuration.';
 $txt['faqmod_php_version'] = '<br /><span style="color:red;font-size:25px">This mod needs php 5.2+ to work properly, you won\'t be able to use this mod</span>';

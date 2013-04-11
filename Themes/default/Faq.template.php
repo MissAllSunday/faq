@@ -433,7 +433,7 @@ function template_faq_manageCat()
 			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
 		</div>
 		<div class="windowbg description">
-			', $txt['faqmod_manage_desc']  ,'
+			', $txt['faqmod_manage_category_desc'] ,'
 		</div>';
 
 		echo '
@@ -441,15 +441,13 @@ function template_faq_manageCat()
 				<thead>
 					<tr class="catbg">
 						<th scope="col" class="first_th">', $txt['faqmod_edit_id']  ,'</th>
-						<th scope="col">', $txt['faqmod_edit_title'] ,'</th>
-						<th scope="col">', $txt['faqmod_edit_log'] ,'</th>
-						<th scope="col">', $txt['faqmod_edit_category']  ,'</th>
+						<th scope="col">', $txt['faqmod_edit_name']  ,'</th>
 						<th scope="col" class="last_th">', $txt['faqmod_edit/delete'] ,'</th>
 					</tr>
 				</thead>
 			<tbody>';
 
-		foreach($context['faq']['all'] as $all)
+		foreach($context['faq']['cats']['all'] as $all)
 		{
 			echo '
 				<tr class="windowbg" style="text-align: center">
@@ -457,16 +455,10 @@ function template_faq_manageCat()
 						', $all['id'] ,'
 					</td>
 					<td>
-						',$all['title'],'
+						',$all['name'],'
 					</td>
 					<td>
-						log
-					</td>
-					<td>
-						', $all['cat']['link'] ,'
-					</td>
-					<td>
-						', $context['faq']['object']->crud($all['id']) ,'
+						', $context['faq']['object']->crud($all['id'], 'cat') ,'
 					</td>
 				</tr>';
 		}
@@ -475,18 +467,11 @@ function template_faq_manageCat()
 			</tbody>
 		</table><br />';
 
-	/* Button for adding a new entry */
-	if ($context['faq']['object']->permissions('add') == true)
-		echo '
-			<div id="confirm_buttons">
-				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="sbtn" value="', $txt['faqmod_add_send'] ,'" />
-				</form>
-			</div>';
-
 	/* Pagination */
 	if(!empty($context['page_index']))
 		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
+
+	/* Put a nice form for adding a new cat here */
 }
 
 function faq_header()

@@ -318,7 +318,6 @@ class Faq
 		while ($row = $smcFunc['db_fetch_assoc']($result))
 			$return[$row['category_id']] = array(
 				'id' => $row['category_id'],
-				'log' => $row['category_log'],
 				'name' => $row['category_name'],
 			);
 
