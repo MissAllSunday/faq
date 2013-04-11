@@ -147,26 +147,27 @@ function template_faq_add()
 				</h3>
 			</div>
 			<span class="clear upperframe">
-					<span></span>
-				</span>
-				<div class="roundframe rfix">
-					<div class="innerframe">
-						<dl id="post_header">';
+				<span></span>
+			</span>
+			<div class="roundframe rfix">
+				<div class="innerframe">
+					<dl id="post_header">';
 
 			/* Title */
 			echo '
-							<dt>
-								<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
-							</dt>
-							<dd>
-								<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
-							</dd>';
+						<dt>
+							<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
+						</dt>
+						<dd>
+							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+						</dd>';
 
+			/* Category select field */
 			echo'
-							<dt>
-								<span id="caption_subject">', $txt['faqmod_edit_category'] ,':</span>
-							</dt>
-							<dd>';
+						<dt>
+							<span id="caption_subject">', $txt['faqmod_edit_category'] ,':</span>
+						</dt>
+						<dd>';
 
 			/* Show the category select field */
 			if (!empty($context['faq']['cats']))
@@ -174,25 +175,25 @@ function template_faq_add()
 				foreach($context['faq']['cats'] as $cats)
 				{
 					echo '
-								<select name="category_id">';
+							<select name="category_id">';
 
 					echo '
-									<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['id']) && $cats['id'] == $context['faq']['edit']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
+								<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['cat']['id']) && $cats['id'] == $context['faq']['edit']['cat']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
 					echo '
-								</select>';
+							</select>';
 				}
 			}
 
 			else
 				echo '
-								<div class="faqmod_warning">
-									',$txt['faqmod_no_cat_admin'],'
-								</div>';
+							<div class="faqmod_warning">
+								',$txt['faqmod_no_cat_admin'],'
+							</div>';
 
 			echo'
-							</dd>
-						</dl>';
+						</dd>
+					</dl>';
 
 			if ($context['show_bbc'])
 				echo '
@@ -396,7 +397,7 @@ function template_faq_manage()
 		</div>';
 
 	/* There are no faq to show */
-	if (empty($context['faq']['list']))
+	if (empty($context['faq']['all']))
 		echo '
 			<span class="clear upperframe">
 				<span></span>
@@ -427,7 +428,7 @@ function template_faq_manage()
 				</thead>
 			<tbody>';
 
-		foreach($context['faq']['list'] as $all)
+		foreach($context['faq']['all'] as $all)
 		{
 			echo '
 				<tr class="windowbg" style="text-align: center">
@@ -441,7 +442,7 @@ function template_faq_manage()
 						log
 					</td>
 					<td>
-						', $context['faq']['cats'][$all['id_cat']] ,'
+						', $all['cat']['link'] ,'
 					</td>
 					<td>
 						', $context['faq']['object']->crud($all['id']) ,'

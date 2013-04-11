@@ -79,8 +79,7 @@ $txt['faqmod_manage_desc'] = 'From here you can manage your FAQs, you can edit/d
 -ID:  its the numeric reference for the faqs, used to manage the faqs without to much problems.<br />
 -Title: the name for the faq.<br />
 -Category: The category where this faq is hosted.<br />
--Last Edit: the last time this faq was edited.<br />
--By user: The person who edited this faq the last time.<br />';
+-Log: A link to a separate page with info a bout the FAQ, shows who has edited the FAQ and the last time they did it.<br />';
 $txt['faqmod_manage_category'] = 'Manage the Categories';
 $txt['faqmod_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want, here\'s some descriptions:<br />
 -ID:  its the numeric reference for the categories, used to manage them without to much problems.<br />

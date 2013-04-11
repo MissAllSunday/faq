@@ -468,9 +468,6 @@ function faq_manage($faqObject)
 		'name' => $context['page_title'],
 	);
 
-	/* Get the cats */
-	$context['faq']['cats'] = $faqObject->getCats();
-
 	/* Get all FAQs, show pagination if needed */
 	$context['faq']['all'] = $faqObject->getAll('manage');
 
