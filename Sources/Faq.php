@@ -47,6 +47,7 @@ function faq_dispatch()
 			'add2',
 			'delete',
 			'edit',
+			'editCat'
 			'categories',
 			'search',
 			'single',
@@ -257,11 +258,24 @@ function faq_edit($faqObject)
 		$lid = $faqObject->clean($_GET['fid']);
 		$table = $faqObject->clean($_GET['table']);
 
+		/* Get the cats */
+		$context['faq']['cats'] = $faqObject->getCats();
+
 		/* Are we editing a category?, a FAQ? */
 		switch($table)
 		{
 			/* Cats are easier to handle... */
 			case 'cat':
+
+				/* Set all the usual stuff */
+				$context['faq']['cat']['edit'] = $context['faq']['cats'][$lid];
+				$context['sub_template'] = 'faq_addCat';
+				$context['page_title'] = $txt['faqmod_editing_cat'] .' - '. $context['faq']['cats'][$lid]['name'];
+				$context['linktree'][] = array(
+					'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
+					'name' => $context['page_title'],
+				);
+
 			break;
 
 			/* Handle FAqs */
@@ -284,6 +298,7 @@ function faq_edit($faqObject)
 				if (empty($temp))
 					fatal_lang_error('faqmod_no_valid_id', false);
 
+				/* Set all the usual stuff */
 				$context['faq']['edit'] = $temp[$lid];
 				$context['sub_template'] = 'faq_add';
 				$context['page_title'] = $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'];
@@ -291,9 +306,6 @@ function faq_edit($faqObject)
 					'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
 					'name' => $context['page_title'],
 				);
-
-				/* Get the cats */
-				$context['faq']['cats'] = $faqObject->getCats();
 
 				require_once($sourcedir .'/Subs-Editor.php');
 				/* Needed for the WYSIWYG editor, we all love the WYSIWYG editor... */
@@ -333,6 +345,30 @@ function faq_addCat($faqObject)
 		$title = $faqObject->clean($_POST['title']);
 		$faqObject->addCat(array('category_name' => $title));
 		redirectexit('action=faq;sa=success;pin=addCat');
+	}
+}
+
+function faq_editCat($faqObject)
+{
+	global $context, $txt;
+
+	$faqObject->permissions('edit', true);
+
+	/* Gotta have something to work with */
+	if (!isset($_POST['title']) || empty($_POST['title']))
+		redirectexit('action=faq');
+
+	else
+	{
+		$title = $faqObject->clean($_POST['title']);
+
+		$editData = array(
+			'category_name' => $title,
+		);
+
+		/* Finally, store the data and tell the user */
+		$faqObject->edit($editData, 'faq');
+		redirectexit('action=faq;sa=success;pin=edit');
 	}
 }
 
