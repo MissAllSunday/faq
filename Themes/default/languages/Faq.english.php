@@ -126,6 +126,7 @@ $txt['faqmod_success_message_generic'] = '<a href="'. $scripturl .'?action=faq" 
 $txt['faqmod_success_message_add'] = 'You have successfully added a new FAQ entry';
 $txt['faqmod_success_message_addCat'] = 'You have successfully added a new category';
 $txt['faqmod_success_message_edit'] = 'You have successfully edited this FAQ entry';
+$txt['faqmod_success_message_editCat'] = 'You have successfully edited this category';
 $txt['faqmod_success_message_delete'] = 'You have successfully deleted this entry';
 $txt['faqmod_success_message_deleteCat'] = 'You have successfully deleted this category';
 

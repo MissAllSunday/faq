@@ -47,7 +47,7 @@ function faq_dispatch()
 			'add2',
 			'delete',
 			'edit',
-			'editCat'
+			'editCat',
 			'categories',
 			'search',
 			'single',
@@ -367,8 +367,8 @@ function faq_editCat($faqObject)
 		);
 
 		/* Finally, store the data and tell the user */
-		$faqObject->edit($editData, 'faq');
-		redirectexit('action=faq;sa=success;pin=edit');
+		$faqObject->edit($editData, 'cat');
+		redirectexit('action=faq;sa=success;pin=editCat');
 	}
 }
 

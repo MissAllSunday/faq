@@ -436,7 +436,7 @@ function template_faq_addCat()
 		</span>
 		<div class="roundframe rfix">
 			<div class="innerframe">
-				<form action="', $scripturl, '?action='. faq::$name .';sa=addCat" method="post" target="_self">
+				<form action="', $scripturl, '?action='. faq::$name .';sa=editCat" method="post" target="_self">
 					<dl id="post_header">
 						<dt>
 							<span id="caption_subject">', $txt['faqmod_editcat_send'] ,'</span>
@@ -533,13 +533,13 @@ function faq_header()
 	for ($i = 97; $i < 123; $i++)
 		$letter_links .= '<a href="' . $scripturl . '?action='. faq::$name .';sa=list;lidletter=' . chr($i) .'">' . strtoupper(chr($i)) . '</a> ';
 
-	$memberlist_buttons = array(
-			'view_all' => array('text' => 'faq_list_view_all', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=list', 'active'=> true),
-		);
-
 	/* Create a link for managing faq */
 	if ($context['faq']['object']->permissions(array('edit', 'delete')))
-		$memberlist_buttons['manage'] =  array('text' => 'faqmod_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manage', 'active'=> false);
+			$memberlist_buttons = array(
+			'manage' => array('text' => 'faqmod_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manage', 'active'=> false),
+			'manageCat' => array('text' => 'faqmod_manage_category', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manageCat', 'active'=> false),
+		);
+
 
 	echo '
 		<div class="cat_bar">
