@@ -93,6 +93,7 @@ $txt['faqmod_sort_method_sub'] = 'Select how the FAQs will be sorted, default is
 $txt['faqmod_date'] = 'By Last edit';
 $txt['faqmod_id'] = 'By ID';
 $txt['faqmod_title'] = 'By Title';
+$txt['faqmod_body'] = 'By Body';
 $txt['faqmod_use_javascript'] = 'Use Javascript to hide the body?';
 $txt['faqmod_use_javascript_sub'] = 'If enable, this mod will use javascript to hide the FAQ content, this is useful if you have multiple FAQs and want to save some space, to show the content just click on the FAQ title/question.';
 $txt['faqmod_show_all'] = 'Show all the FAQs on a list';

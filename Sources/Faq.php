@@ -427,7 +427,7 @@ function faq_single($faqObject)
 
 	/* Forget it... */
 	if (!isset($_GET['fid']) || empty($_GET['fid']))
-		fatal_lang_error('faq_error_no_valid_action', false);
+		fatal_lang_error('faqmod_no_valid_id', false);
 
 	/* Are you allowed to see this page? */
 	$faqObject->permissions('view', true);
@@ -436,7 +436,7 @@ function faq_single($faqObject)
 	$id = $faqObject->clean($_GET['fid']);
 
 	if (empty($id))
-		fatal_lang_error('faq_error_no_valid_action', false);
+		fatal_lang_error('faqmod_no_valid_id', false);
 
 	/* Does the data has been already loaded? */
 	if (!empty($context['faq_all'][$id]))
@@ -454,34 +454,6 @@ function faq_single($faqObject)
 		'url' => $context['canonical_url'],
 		'name' => $context['page_title'],
 	);
-
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
-
-function faq_artist($faqObject)
-{
-	global $context, $scripturl, $txt, $user_info;
-
-	/* Forget it... */
-	if (!isset($_GET['fid']) || empty($_GET['fid']))
-		fatal_lang_error('faq_error_no_valid_action', false);
-
-	/* Are you allowed to see this page? */
-	$faqObject->permissions('view', true);
-
-	$lid = $faqObject->clean($_GET['fid']);
-
-	$context['sub_template'] = 'faq_artist';
-	$context['canonical_url'] = $scripturl . '?action='. faq::$name .';sa=artist;fid='. $lid;
-	$context['page_title'] = $txt['faq_artist_title'] . $lid;
-	$context['linktree'][] = array(
-		'url' => $scripturl. '?action='. faq::$name .';sa=artist;fid='. $lid,
-		'name' => $context['page_title'],
-	);
-
-	/* Get the latest faq from DB */
-	$context['faq']['artist'] = $faqObject->getBy('artist', $lid , false);
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
@@ -574,7 +546,7 @@ function faq_manageCat($faqObject)
 
 function faq_categories($faqObject)
 {
-	global $context;
+	global $context, $txt, $scripturl;
 
 	/* Are you allowed to see this page? */
 	$faqObject->permissions('view', true);
@@ -585,13 +557,14 @@ function faq_categories($faqObject)
 	$lid = $faqObject->clean($_GET['fid']);
 
 	/* Get all FAQs within certain category */
-	$context['cat'][$lid] = $faqObject->getBy(false, 'faq', 'id', $lid, 1);
+	$context['faq']['all'] = $faqObject->getBy(false, 'faq', 'cat_id', $lid, false);
 
+	/* The usual stuff */
 	$context['sub_template'] = 'faq_main';
 	$context['canonical_url'] = $scripturl . '?action=faq;sa=categories';
-	$context['page_title'] = $txt['faqmod_categories_list'] - ;
+	$context['page_title'] = $txt['faqmod_categories_list'];
 	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq',
+		'url' => $scripturl . '?action=faq;sa=categories',
 		'name' => $context['page_title'],
 	);
 
@@ -604,28 +577,27 @@ function faq_search($faqObject)
 	global $context, $txt, $scripturl;
 
 	/* Are you allowed to see this page? */
-	$faqObject->permissions('view', true);
+	$faqObject->permissions(array('view', 'search'), true);
 
 	/* We need a value to serch and a column */
 	if (!isset($_REQUEST['l_search_value']) || empty($_REQUEST['l_search_value']) || !isset($_REQUEST['l_column']) || empty($_REQUEST['l_column']))
-		fatal_lang_error('faq_error_no_valid_action', false);
+		fatal_lang_error('faqmod_no_valid_id', false);
 
 	$value = urlencode($faqObject->clean($_REQUEST['l_search_value']));
 	$column = $faqObject->clean($_REQUEST['l_column']);
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_list';
-	$context['page_title'] = $txt['faq_search_title'] . $value;
+	$context['page_title'] = $txt['search'] .' - '. $value;
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action='. faq::$name .';sa=search',
-		'name' => $txt['faq_list_title_by_letter'] . $value,
+		'name' => $context['page_title'],
 	);
 
-	$context['faq']['list'] = $faqObject->getBy($column, '%'. $value .'%');
+	$context['faq']['all'] = $faqObject->getBy(false, 'faq', 'body', '%'. $value .'%');
 
 	if (empty($context['faq']['list']))
 		fatal_lang_error('faq_no_faq_with_letter', false);
-
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;

@@ -256,7 +256,7 @@ function template_faq_single()
 		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
 			<div class="content">
-				', $txt['faq_error_no_valid_action'] ,'
+				', $txt['faqmod_no_valid_id'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>';
@@ -278,64 +278,6 @@ function template_faq_single()
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>
-	</div>';
-}
-
-function template_faq_list()
-{
-	global $txt, $context, $scripturl, $modSettings;
-
-	faq_header();
-
-	/* No direct access */
-	if (empty($context['faq']['list']) || !is_array($context['faq']['list']))
-		echo '
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">
-				', $txt['faq_error_no_valid_action'] ,'
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>';
-
-	else
-		echo '
-	<div class="nopadding" style="width:98%;">
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $context['page_title'] ,'</span>
-			</h3>
-		</div>
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">';
-
-			/* List */
-		echo '
-					<ul class="reset">';
-
-		foreach($context['faq']['list'] as $all)
-		{
-			echo '
-						<li>
-							<a href="', $scripturl, '?action='. faq::$name .';sa=single;fid=', $all['id'] ,'">', $all['title'] ,'</a>', $txt['faq_post_by'] ,'<a href="', $scripturl, '?action='. faq::$name .';sa=artist;fid=', urlencode($all['artist']) ,'">', $all['artist'] ,'</a> ', $context['faq']['object']->crud($all['id']) ,'
-						</li>';
-		}
-
-		echo '
-					</ul>';
-
-		echo '
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>';
-
-	/* Pagination */
-	if(!empty($context['page_index']))
-		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
-
-	/* End div */
-	echo '
 	</div>';
 }
 
@@ -522,6 +464,62 @@ function template_faq_manageCat()
 			</span><br />';
 }
 
+function template_faq_list()
+{
+	global $txt, $context, $scripturl, $modSettings;
+
+	faq_header();
+
+	/* No direct access */
+	if (empty($context['faq']['all']) || !is_array($context['faq']['all']))
+		echo '
+		<div class="windowbg nopadding">
+			<span class="topslice"><span></span></span>
+			<div class="content">
+				', $txt['lyrics_error_no_valid_action'] ,'
+			</div>
+			<span class="botslice"><span></span></span>
+		</div>';
+
+	else
+		echo '
+	<div class="nopadding" style="width:98%;">
+		<div class="cat_bar">
+			<h3 class="catbg">
+				<span class="ie6_header floatleft">', $context['page_title'] ,'</span>
+			</h3>
+		</div>
+		<div class="windowbg nopadding">
+			<span class="topslice"><span></span></span>
+			<div class="content">';
+
+		/* List */
+		echo '
+					<ul class="reset">';
+
+		foreach($context['faq']['all'] as $all)
+			echo '
+						<li>
+							<a href="', $scripturl, '?action=faq;sa=single;lid=', $all['id'] ,'">', $all['title'] ,'</a> ', $context['faq']['object']->crud($all['id']) ,'
+						</li>';
+
+		echo '
+					</ul>';
+
+		echo '
+			</div>
+			<span class="botslice"><span></span></span>
+		</div>';
+
+	/* Pagination */
+	if(!empty($context['page_index']))
+		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
+
+	/* End div */
+	echo '
+	</div>';
+}
+
 function faq_header()
 {
 	global $txt, $scripturl, $context, $settings;
@@ -547,6 +545,10 @@ function faq_header()
 					<form action="', $scripturl, '?action='. faq::$name .';sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
 						<img src="', $settings['images_url'] , '/filter.gif" alt="" />
 						<input type="text" name="l_search_value" value="', $txt['search'] , '" onclick="if (this.value == \'', $txt['search'] , '\') this.value = \'\';" class="input_text" />
+						<select name="l_column">
+							<option value="body" selected="selected">', $txt['faqmod_body'] ,'</option>
+							<option value="title">', $txt['faqmod_title'] ,'</option>
+						</select>
 						<input type="submit" name="search_go" id="search_go" value="', $txt['search'] , '" class="button_submit" />
 					</form>
 				</object>
