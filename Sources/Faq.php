@@ -252,6 +252,7 @@ function faq_edit($faqObject)
 		/* Pass the object to the template */
 		$context['faq']['object'] = $faqObject;
 
+		/* Trickery, don't ask! */
 		if (isset($_REQUEST['body']) && !empty($_REQUEST['body_mode']))
 		{
 			$_REQUEST['body'] = html_to_bbc($_REQUEST['body']);

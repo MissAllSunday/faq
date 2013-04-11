@@ -163,7 +163,7 @@ function template_faq_add()
 						</dd>';
 
 			/* Show the category select field */
-			if(!empty($context['faq']['cats']) && !empty($context['preview_cat']) || !empty($context['faq']['edit']))
+			if (!empty($context['faq']['cats']))
 			{
 				echo'
 							<dt>
