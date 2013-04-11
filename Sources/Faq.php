@@ -457,33 +457,14 @@ function faq_manage($faqObject)
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_manage';
-	$context['page_title'] = $txt['faq_manage_title'];
+	$context['page_title'] = $txt['faqmod_manage'];
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action='. faq::$name .';sa=manage',
 		'name' => $context['page_title'],
 	);
 
-	/* No letter? then show the main page */
-	if (!isset($_GET['lidletter']) || empty($_GET['lidletter']))
-		$context['faq']['list'] = $faqObject->getAll('manage');
-
-	/* Show a list of faq starting with X letter */
-	elseif (isset($_GET['lidletter']))
-	{
-		$lidletter = $faqObject->clean($_GET['lidletter']);
-
-		/* Replace the linktree and title with something more specific */
-		$context['page_title'] = $txt['faq_list_title_by_letter'] . $lidletter;
-		$context['linktree'][] = array(
-			'url' => $scripturl. '?action='. faq::$name .';sa=list;lidletter='. $lidletter,
-			'name' => $txt['faq_list_title_by_letter'] . $lidletter,
-		);
-
-		$context['faq']['list'] = $faqObject->getBy('title', $lidletter .'%');
-
-		if (empty($context['faq']['list']))
-			fatal_lang_error('faq_no_faq_with_letter', false);
-	}
+	/* Get the cats */
+	$context['faq']['cats'] = $faqObject->getCats();
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;

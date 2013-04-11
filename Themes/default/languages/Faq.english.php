@@ -137,10 +137,12 @@ $txt['faqmod_edit_last_edit'] = 'Last Edit';
 $txt['faqmod_edit_last_edit_by'] = 'By user';
 $txt['faqmod_edit_edit'] = 'Edit';
 $txt['faqmod_edit_delete'] = 'Delete';
+$txt['faqmod_edit/delete'] = 'Edit/Delete';
 $txt['faqmod_edit_category'] = 'Category';
 $txt['faqmod_edit_name'] = 'Name';
 $txt['faqmod_show_categories'] = 'Categories';
 $txt['faqmod_show_faqmod_list'] = 'FAQ list';
+$txt['faqmod_edit_log'] = 'Log'; 
 
 // Permissions strings
 $txt['permissiongroup_simple_faq_per_simple'] = 'FAQ mod permissions';

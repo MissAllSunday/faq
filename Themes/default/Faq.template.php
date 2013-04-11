@@ -391,7 +391,7 @@ function template_faq_manage()
 			<h3 class="catbg">', $txt['faq_manage_title'] ,'</h3>
 		</div>
 		<div class="windowbg description">
-			', $txt['faq_manage_desc']  ,'
+			', $txt['faqmod_manage_desc']  ,'
 		</div>';
 
 	/* There are no faq to show */
@@ -417,43 +417,40 @@ function template_faq_manage()
 			<table class="table_grid" cellspacing="0" width="100%">
 				<thead>
 					<tr class="catbg">
-						<th scope="col" class="first_th">', $txt['faq_list_title_sort_by_id'] ,'</th>
-						<th scope="col">', $txt['faq_list_title_sort_by_title'] ,'</th>
-						<th scope="col">', $txt['faq_list_title_sort_by_artist'] ,'</th>
-						<th scope="col">', $txt['faq_list_title_sort_by_user'] ,'</th>
-						<th scope="col">', $txt['faq_edit'] ,'</th>
-						<th scope="col" class="last_th">', $txt['faq_delete'] ,'</th>
+						<th scope="col" class="first_th">', $txt['faqmod_edit_id']  ,'</th>
+						<th scope="col">', $txt['faqmod_edit_title'] ,'</th>
+						<th scope="col">', $txt['faqmod_edit_log'] ,'</th>
+						<th scope="col">', $txt['faqmod_edit_category']  ,'</th>
+						<th scope="col" class="last_th">', $txt['faqmod_edit/delete'] ,'</th>
 					</tr>
 				</thead>
 			<tbody>';
 
-			foreach($context['faq']['list'] as $all)
-			{
-				echo '
-						<tr class="windowbg" style="text-align: center">
-							<td>
-								', $all['id'] ,'
-							</td>
-							<td>
-								',$all['title'],'
-							</td>
-							<td>
-								',$all['artist'],'
-							</td>
-							<td>
-								',$all['user']['link'],'
-							</td>
-							<td>
-								', $context['faq']['object']->permissions('edit') == true ? '<a href="'. $scripturl .'?action='. faq::$name .';sa=edit;fid='. $all['id'] .'">'. $txt['faq_edit'] .'</a>' : $txt['faq_edit'] ,'
-							</td>
-							<td>
-								', $context['faq']['object']->permissions('delete') == true ? '<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $all['id'] .'">'.  $txt['faq_delete'] .'</a>' : $txt['faq_delete'] ,'
-							</td>
-						</tr>';
-			}
+		foreach($context['faq']['list'] as $all)
+		{
+			echo '
+				<tr class="windowbg" style="text-align: center">
+					<td>
+						', $all['id'] ,'
+					</td>
+					<td>
+						',$all['title'],'
+					</td>
+					<td>
+						log
+					</td>
+					<td>
+						', $context['faq']['cats'][$all['id_cat']] ,'
+					</td>
+					<td>
+						', $context['faq']['object']->crud($all['id']) ,'
+					</td>
+				</tr>';
+		}
 
-			echo '</tbody>
-			</table><br />';
+		echo '
+			</tbody>
+		</table><br />';
 	}
 
 	/* Button for adding a new entry */
