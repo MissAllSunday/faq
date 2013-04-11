@@ -246,50 +246,6 @@ function template_faq_success()
 	</div>';
 }
 
-function template_faq_artist()
-{
-	global $txt, $context, $scripturl, $modSettings;
-
-	faq_header();
-
-	echo '
-	<div class="nopadding" style="width:98%; text-align:center;">
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $context['page_title'] ,'</span>
-			</h3>
-		</div>
-
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">';
-
-	if (empty($context['faq']['artist']))
-		echo $txt['faq_artist_no_content'];
-
-	else
-	{
-		echo '
-				<ul class="reset">';
-
-		foreach($context['faq']['artist'] as $artist)
-		{
-			echo '
-					<li>
-						<a href="', $scripturl, '?action='. faq::$name .';sa=single;fid=', urlencode($artist['id']) ,'">', $artist['title'] ,'</a>
-					</li>';
-		}
-	}
-
-	echo '
-				</ul>
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>
-	</div>
-	<br />';
-}
-
 function template_faq_single()
 {
 	global $txt, $context, $scripturl, $modSettings;
@@ -454,6 +410,70 @@ function template_faq_manage()
 			</tbody>
 		</table><br />';
 	}
+
+	/* Button for adding a new entry */
+	if ($context['faq']['object']->permissions('add') == true)
+		echo '
+			<div id="confirm_buttons">
+				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
+					<input type="submit" name="send" class="sbtn" value="', $txt['faqmod_add_send'] ,'" />
+				</form>
+			</div>';
+
+	/* Pagination */
+	if(!empty($context['page_index']))
+		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
+}
+
+function template_faq_manageCat()
+{
+	global $context, $txt, $scripturl;
+
+	echo '<div class="cat_bar">
+			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
+		</div>
+		<div class="windowbg description">
+			', $txt['faqmod_manage_desc']  ,'
+		</div>';
+
+		echo '
+			<table class="table_grid" cellspacing="0" width="100%">
+				<thead>
+					<tr class="catbg">
+						<th scope="col" class="first_th">', $txt['faqmod_edit_id']  ,'</th>
+						<th scope="col">', $txt['faqmod_edit_title'] ,'</th>
+						<th scope="col">', $txt['faqmod_edit_log'] ,'</th>
+						<th scope="col">', $txt['faqmod_edit_category']  ,'</th>
+						<th scope="col" class="last_th">', $txt['faqmod_edit/delete'] ,'</th>
+					</tr>
+				</thead>
+			<tbody>';
+
+		foreach($context['faq']['all'] as $all)
+		{
+			echo '
+				<tr class="windowbg" style="text-align: center">
+					<td>
+						', $all['id'] ,'
+					</td>
+					<td>
+						',$all['title'],'
+					</td>
+					<td>
+						log
+					</td>
+					<td>
+						', $all['cat']['link'] ,'
+					</td>
+					<td>
+						', $context['faq']['object']->crud($all['id']) ,'
+					</td>
+				</tr>';
+		}
+
+		echo '
+			</tbody>
+		</table><br />';
 
 	/* Button for adding a new entry */
 	if ($context['faq']['object']->permissions('add') == true)

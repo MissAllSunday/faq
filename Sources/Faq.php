@@ -484,15 +484,15 @@ function faq_manageCat($faqObject)
 	$faqObject->permissions(array('edit', 'delete'), true);
 
 	/* Page stuff */
-	$context['sub_template'] = 'faq_manage';
-	$context['page_title'] = $txt['faqmod_manage'];
+	$context['sub_template'] = 'faq_manageCat';
+	$context['page_title'] = $txt['faqmod_manage_category'] ;
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action='. faq::$name .';sa=manage',
 		'name' => $context['page_title'],
 	);
 
-	/* Get all FAQs, show pagination if needed */
-	$context['faq']['all'] = $faqObject->getAll('manage');
+	/* Get all possible cats */
+	$context['faq']['cats']['all'] = $faqObject->getCats();
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
