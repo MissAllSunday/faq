@@ -246,7 +246,7 @@ function faq_edit($faqObject)
 
 	$faqObject->permissions('edit', true);
 
-	if (!isset($_GET['fid']) || empty($_GET['fid']))
+	if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']) || empty($_GET['table']))
 		redirectexit('action=faq');
 
 	else
@@ -254,48 +254,67 @@ function faq_edit($faqObject)
 		/* Pass the object to the template */
 		$context['faq']['object'] = $faqObject;
 
-		/* Trickery, don't ask! */
-		if (isset($_REQUEST['body']) && !empty($_REQUEST['body_mode']))
-		{
-			$_REQUEST['body'] = html_to_bbc($_REQUEST['body']);
-			$_REQUEST['body'] = un_htmlspecialchars($_REQUEST['body']);
-			$_POST['body'] = $_REQUEST['body'];
-		}
-
 		$lid = $faqObject->clean($_GET['fid']);
+		$table = $faqObject->clean($_GET['table']);
 
-		if (empty($lid))
-			fatal_lang_error('faqmod_no_valid_id', false);
+		/* Are we editing a category?, a FAQ? */
+		switch($table)
+		{
+			/* Cats are easier to handle... */
+			case 'cat':
+			break;
 
-		/* Get the FAQ in question, tell the method this is "manage" */
-		$temp = $faqObject->getBy('manage', 'faq', 'id', $lid, 1);
+			/* Handle FAqs */
+			case 'faq':
 
-		if (empty($temp))
-			fatal_lang_error('faqmod_no_valid_id', false);
+				/* Trickery, don't ask! */
+				if (isset($_REQUEST['body']) && !empty($_REQUEST['body_mode']))
+				{
+					$_REQUEST['body'] = html_to_bbc($_REQUEST['body']);
+					$_REQUEST['body'] = un_htmlspecialchars($_REQUEST['body']);
+					$_POST['body'] = $_REQUEST['body'];
+				}
 
-		$context['faq']['edit'] = $temp[$lid];
-		$context['sub_template'] = 'faq_add';
-		$context['page_title'] = $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'];
-		$context['linktree'][] = array(
-			'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
-			'name' => $context['page_title'],
-		);
+				if (empty($lid))
+					fatal_lang_error('faqmod_no_valid_id', false);
 
-		/* Get the cats */
-		$context['faq']['cats'] = $faqObject->getCats();
+				/* Get the FAQ in question, tell the method this is "manage" */
+				$temp = $faqObject->getBy('manage', 'faq', 'id', $lid, 1);
 
-		require_once($sourcedir .'/Subs-Editor.php');
-		/* Needed for the WYSIWYG editor, we all love the WYSIWYG editor... */
-		$modSettings['disable_wysiwyg'] = !empty($modSettings['disable_wysiwyg']) || empty($modSettings['enableBBC']);
+				if (empty($temp))
+					fatal_lang_error('faqmod_no_valid_id', false);
 
-		$editorOptions = array(
-			'id' => 'body',
-			'value' => un_htmlspecialchars(html_to_bbc($context['faq']['edit']['body'])),
-			'width' => '90%',
-		);
+				$context['faq']['edit'] = $temp[$lid];
+				$context['sub_template'] = 'faq_add';
+				$context['page_title'] = $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'];
+				$context['linktree'][] = array(
+					'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
+					'name' => $context['page_title'],
+				);
 
-		create_control_richedit($editorOptions);
-		$context['post_box_name'] = $editorOptions['id'];
+				/* Get the cats */
+				$context['faq']['cats'] = $faqObject->getCats();
+
+				require_once($sourcedir .'/Subs-Editor.php');
+				/* Needed for the WYSIWYG editor, we all love the WYSIWYG editor... */
+				$modSettings['disable_wysiwyg'] = !empty($modSettings['disable_wysiwyg']) || empty($modSettings['enableBBC']);
+
+				$editorOptions = array(
+					'id' => 'body',
+					'value' => un_htmlspecialchars(html_to_bbc($context['faq']['edit']['body'])),
+					'width' => '90%',
+				);
+
+				create_control_richedit($editorOptions);
+				$context['post_box_name'] = $editorOptions['id'];
+
+			break;
+
+			/* Show a nice error message to those unwilling to play nice */
+			default;
+				fatal_lang_error('faqmod_no_valid_id', false);
+			break;
+		}
 	}
 }
 
