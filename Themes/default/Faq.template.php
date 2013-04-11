@@ -172,17 +172,15 @@ function template_faq_add()
 			/* Show the category select field */
 			if (!empty($context['faq']['cats']))
 			{
-				foreach($context['faq']['cats'] as $cats)
-				{
-					echo '
+				echo '
 							<select name="category_id">';
 
+				foreach($context['faq']['cats'] as $cats)
 					echo '
 								<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['cat']['id']) && $cats['id'] == $context['faq']['edit']['cat']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
-					echo '
+				echo '
 							</select>';
-				}
 			}
 
 			else
