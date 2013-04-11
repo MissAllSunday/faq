@@ -121,6 +121,7 @@ $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
 $txt['faqmod_no_valid_id'] = 'This is not a valid action.';
 $txt['cannot_faq_view'] = 'I\'m sorry, you aren\'t allowed to see the FAQ page';
 $txt['faqmod_no_search_results'] = 'No results were found';
+$txt['faqmod_search_disable'] = 'The search feature is disable';
 
 // Success
 $txt['faqmod_success_title'] = 'successfully done';

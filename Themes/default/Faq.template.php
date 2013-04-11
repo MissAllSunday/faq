@@ -522,12 +522,7 @@ function template_faq_list()
 
 function faq_header()
 {
-	global $txt, $scripturl, $context, $settings;
-
-	/* Build the letters links */
-	$letter_links = '';
-	for ($i = 97; $i < 123; $i++)
-		$letter_links .= '<a href="' . $scripturl . '?action='. faq::$name .';sa=list;lidletter=' . chr($i) .'">' . strtoupper(chr($i)) . '</a> ';
+	global $txt, $scripturl, $context, $settings, $modSettings;
 
 	/* Create a link for managing faq */
 	if ($context['faq']['object']->permissions(array('edit', 'delete')))
@@ -536,11 +531,13 @@ function faq_header()
 			'manageCat' => array('text' => 'faqmod_manage_category', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manageCat', 'active'=> false),
 		);
 
-
 	echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="floatleft">', $letter_links , '</span>
+				<span class="floatleft">', $txt['faqmod_title_main'] ,'</span>';
+
+	if (!empty($modSettings['faqmod_settings_search']) && $context['faq']['object']->permissions('search'))
+		echo '
 				<object id="quick_search">
 					<form action="', $scripturl, '?action='. faq::$name .';sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
 						<img src="', $settings['images_url'] , '/filter.gif" alt="" />
@@ -551,7 +548,9 @@ function faq_header()
 						</select>
 						<input type="submit" name="search_go" id="search_go" value="', $txt['search'] , '" class="button_submit" />
 					</form>
-				</object>
+				</object>';
+
+	echo '
 			</h3>
 		</div>
 		<div class="pagesection">

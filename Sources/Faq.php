@@ -495,7 +495,11 @@ function faq_categories($faqObject)
 
 function faq_search($faqObject)
 {
-	global $context, $txt, $scripturl;
+	global $context, $txt, $scripturl, $modSettings;
+
+	/* Admin says no! */
+	if (empty($modSettings['faqmod_settings_search']))
+		fatal_lang_error('faqmod_search_disable', false);
 
 	/* Are you allowed to see this page? */
 	$faqObject->permissions(array('view', 'search'), true);
