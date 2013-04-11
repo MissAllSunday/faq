@@ -51,6 +51,7 @@ function faq_dispatch()
 			'single',
 			'success',
 			'manage',
+			'manageCat',
 		);
 
 		if (empty($faqObject))
@@ -454,6 +455,28 @@ function faq_list($faqObject)
 }
 
 function faq_manage($faqObject)
+{
+	global $context, $txt, $scripturl;
+
+	/* Are you allowed to see this page? */
+	$faqObject->permissions(array('edit', 'delete'), true);
+
+	/* Page stuff */
+	$context['sub_template'] = 'faq_manage';
+	$context['page_title'] = $txt['faqmod_manage'];
+	$context['linktree'][] = array(
+		'url' => $scripturl. '?action='. faq::$name .';sa=manage',
+		'name' => $context['page_title'],
+	);
+
+	/* Get all FAQs, show pagination if needed */
+	$context['faq']['all'] = $faqObject->getAll('manage');
+
+	/* Pass the object to the template */
+	$context['faq']['object'] = $faqObject;
+}
+
+function faq_manageCat($faqObject)
 {
 	global $context, $txt, $scripturl;
 

@@ -87,10 +87,10 @@ class Faq
 		if (empty($data) || empty($table))
 			return false;
 
-		$set = $table == faq::$name ? 'cat_id = {int:cat_id}, log = {string:log}, title = {string:title}, body = {string:body}' : 'category_log = {int:category_log}, category_name = {string:category_name}';
+		$set = $table == faq::$name ? 'cat_id = {int:cat_id}, log = {string:log}, title = {string:title}, body = {string:body}' : 'category_name = {string:category_name}';
 
 		/* Does the cache has this entry? */
-		if (($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
+		if ($table == faq::$name && ($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
 			if (!empty($gotIt[$data['id']]))
 				cache_put_data(faq::$name .'_latest', '', 60);
 

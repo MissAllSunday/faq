@@ -99,11 +99,6 @@
 					'auto' => true,
 				),
 				array(
-					'name' => 'category_log',
-					'type' => 'int',
-					'size' => 11,
-				),
-				array(
 					'name' => 'category_name',
 					'type' => 'varchar',
 					'size' => 255,
