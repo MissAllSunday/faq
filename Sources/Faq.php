@@ -306,12 +306,12 @@ function faq_addCat($faqObject)
 	$faqObject->permissions('add', true);
 
 	/* Gotta have something to work with */
-	if (!isset($_GET['title']) || empty($_GET['title']))
+	if (!isset($_POST['title']) || empty($_POST['title']))
 		redirectexit('action=faq');
 
 	else
 	{
-		$title = $faqObject->clean($_GET['fid']);
+		$title = $faqObject->clean($_POST['title']);
 		$faqObject->addCat(array('category_name' => $title));
 		redirectexit('action=faq;sa=success;pin=addCat');
 	}
@@ -324,7 +324,7 @@ function faq_delete($faqObject)
 	$faqObject->permissions('delete', true);
 
 	/* Gotta have an ID to work with */
-	if (!isset($_GET['fid']) || empty($_GET['fid']))
+	if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']))
 		redirectexit('action=faq');
 
 	else
@@ -332,7 +332,7 @@ function faq_delete($faqObject)
 		$lid = (int) $faqObject->clean($_GET['fid']);
 		$table = $faqObject->clean($_GET['table']);
 		$faqObject->delete($lid, $table);
-		redirectexit('action=faq;sa=success;pin=delete');
+		redirectexit('action=faq;sa=success;pin=deleteCat');
 	}
 }
 

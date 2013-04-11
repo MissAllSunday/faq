@@ -315,7 +315,7 @@ class Faq
 
 		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
-			WHERE id = {int:id}',
+			WHERE '. ($table == faq::$name ? 'id' : 'category_id') .' = {int:id}',
 			array(
 				'id' => (int) $id,
 			)

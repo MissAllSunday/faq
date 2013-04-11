@@ -127,6 +127,7 @@ $txt['faqmod_success_message_add'] = 'You have successfully added a new FAQ entr
 $txt['faqmod_success_message_addCat'] = 'You have successfully added a new category';
 $txt['faqmod_success_message_edit'] = 'You have successfully edited this FAQ entry';
 $txt['faqmod_success_message_delete'] = 'You have successfully deleted this entry';
+$txt['faqmod_success_message_deleteCat'] = 'You have successfully deleted this category';
 
 // Template strings
 $txt['faqmod_edit_title'] = 'Title';
