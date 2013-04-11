@@ -248,7 +248,7 @@ class Faq
 				'id' => $row['id'],
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-				'body' => $row['body'],
+				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 				'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],

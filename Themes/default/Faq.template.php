@@ -93,7 +93,7 @@ function template_faq_main()
 			<div class="windowbg">
 				<span class="topslice"><span></span></span>
 				<div class="content">
-				', parse_bbc($faq['body']) ,'
+				', $faq['body'] ,'
 				</div>
 				<span class="botslice"><span></span></span>
 			</div>
@@ -318,7 +318,7 @@ function template_faq_single()
 		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
 			<div class="content">
-				', parse_bbc($context['faq']['single']['body']) ,'
+				', $context['faq']['single']['body'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>
