@@ -109,6 +109,8 @@ function template_faq_add()
 {
 	global $context, $scripturl, $txt;
 
+	faq_header();
+
 	// Show the preview
 	if (isset($context['preview_message']))
 	echo '
@@ -270,6 +272,8 @@ function template_faq_manage()
 {
 	global $context, $txt, $scripturl;
 
+	faq_header();
+
 	echo '<div class="cat_bar">
 			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
 		</div>
@@ -353,6 +357,8 @@ function template_faq_manage()
 function template_faq_addCat()
 {
 	global $context, $scripturl, $txt;
+	
+	faq_header();
 
 	/* A nice form for adding a new cat */
 	echo '
@@ -381,6 +387,8 @@ function template_faq_addCat()
 function template_faq_manageCat()
 {
 	global $context, $txt, $scripturl;
+	
+	faq_header();
 
 	echo '<div class="cat_bar">
 			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
@@ -545,10 +553,12 @@ function faq_header()
 
 function faq_sideBar()
 {
-	global $context, $scripturl, $txt;
+	global $context, $scripturl, $txt, $modSettings;
 
 	/* Show a nice category list */
-	echo '
+	if (!empty($modSettings['faqmod_show_catlist']))
+	{
+		echo '
 	<div class="floatleft nopadding" style="width:20%;">
 		<div class="cat_bar">
 			<h3 class="catbg">
@@ -573,4 +583,5 @@ function faq_sideBar()
 			<span class="botslice"><span></span></span>
 		</div>
 	</div>';
+	}
 }
