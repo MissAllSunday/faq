@@ -121,6 +121,7 @@ function modify_faq_post_settings(&$return_config = false)
 		array('check', 'faqmod_settings_enable', 'subtext' => $txt['faqmod_settings_enable_sub']),
 		array('int', 'faqmod_num_faqs', 'size' => 3, 'subtext' => $txt['faqmod_num_faqs_sub']),
 		array('check', 'faqmod_show_catlist', 'subtext' => $txt['faqmod_show_catlist_sub']),
+		array('int', 'faqmod_show_latest', 'size' => 3, 'subtext' => $txt['faqmod_show_latest_sub']),
 		array('check', 'faqmod_use_preview', 'subtext' => $txt['faqmod_use_preview_sub']),
 		array('int', 'faqmod_how_many', 'size' => 3, 'subtext' => $txt['faqmod_how_many_sub']),
 		array( 'select', 'faqmod_sort_method',
@@ -140,6 +141,7 @@ function modify_faq_post_settings(&$return_config = false)
 			),
 			'subtext' => $txt['faqmod_menu_position_sub']
 		),
+		array('check', 'faqmod_show_all', 'subtext' => $txt['faqmod_show_all_sub']),
 	);
 
 	if ($return_config)
