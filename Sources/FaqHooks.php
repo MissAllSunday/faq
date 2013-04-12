@@ -119,7 +119,6 @@ function modify_faq_post_settings(&$return_config = false)
 	$config_vars = array(
 		array('desc', 'faqmod_desc'),
 		array('check', 'faqmod_settings_enable', 'subtext' => $txt['faqmod_settings_enable_sub']),
-		array('check', 'faqmod_settings_search', 'subtext' => $txt['faqmod_settings_search_sub']),
 		array('int', 'faqmod_num_faqs', 'size' => 3, 'subtext' => $txt['faqmod_num_faqs_sub'] ),
 		array( 'select', 'faqmod_sort_method',
 			array(

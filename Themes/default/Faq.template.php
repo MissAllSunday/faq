@@ -536,7 +536,7 @@ function faq_header()
 			<h3 class="catbg">
 				<span class="floatleft">', $txt['faqmod_title_main'] ,'</span>';
 
-	if (!empty($modSettings['faqmod_settings_search']) && $context['faq']['object']->permissions('search'))
+	if (true == $context['faq']['object']->permissions('search'))
 		echo '
 				<object id="quick_search">
 					<form action="', $scripturl, '?action='. faq::$name .';sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
