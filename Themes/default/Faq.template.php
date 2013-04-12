@@ -357,7 +357,7 @@ function template_faq_manage()
 function template_faq_addCat()
 {
 	global $context, $scripturl, $txt;
-	
+
 	faq_header();
 
 	/* A nice form for adding a new cat */
@@ -387,7 +387,7 @@ function template_faq_addCat()
 function template_faq_manageCat()
 {
 	global $context, $txt, $scripturl;
-	
+
 	faq_header();
 
 	echo '<div class="cat_bar">
@@ -572,6 +572,36 @@ function faq_sideBar()
 				<ul class="reset">';
 
 		foreach($context['faq']['object']->getCats() as $all)
+			echo '
+					<li>
+						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
+					</li>';
+
+		echo '
+				</ul>
+			</div>
+			<span class="botslice"><span></span></span>
+		</div>
+	</div>';
+	}
+
+	/* Latest FAQs, calling a model method from the view? naughty naughty me! */
+	if (!empty($modSettings['faqmod_show_latest']))
+	{
+		echo '
+	<div class="floatleft nopadding" style="width:20%;">
+		<div class="cat_bar">
+			<h3 class="catbg">
+				<span class="ie6_header floatleft">', $txt['faqmod_sidebar_faq_cats'] ,'</span>
+			</h3>
+		</div>
+
+		<div class="windowbg nopadding">
+			<span class="topslice"><span></span></span>
+			<div class="content">
+				<ul class="reset">';
+
+		foreach($context['faq']['object']->getLatest($modSettings['faqmod_show_latest']) as $all)
 			echo '
 					<li>
 						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
