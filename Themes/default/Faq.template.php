@@ -40,22 +40,7 @@ function template_faq_main()
 	faq_header();
 
 	/* Sidebar */
-	echo '
-	<div class="floatleft nopadding">
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">sidebar title or something</span>
-			</h3>
-		</div>
-
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">
-				side bar stuff here
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>
-	</div>';
+	faq_sideBar();
 
 	/* Show a nice message if no FAQs are avaliable */
 	if (empty($context['faq']['all']))
@@ -556,4 +541,36 @@ function faq_header()
 		<div class="pagesection">
 			', template_button_strip($memberlist_buttons, 'right'), '
 		</div>';
+}
+
+function faq_sideBar()
+{
+	global $context, $scripturl, $txt;
+
+	/* Show a nice category list */
+	echo '
+	<div class="floatleft nopadding" style="width:20%;">
+		<div class="cat_bar">
+			<h3 class="catbg">
+				<span class="ie6_header floatleft">', $txt['faqmod_sidebar_faq_cats'] ,'</span>
+			</h3>
+		</div>
+
+		<div class="windowbg nopadding">
+			<span class="topslice"><span></span></span>
+			<div class="content">
+				<ul class="reset">';
+
+		foreach($context['faq']['object']->getCats() as $all)
+			echo '
+					<li>
+						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
+					</li>';
+
+		echo '
+				</ul>
+			</div>
+			<span class="botslice"><span></span></span>
+		</div>
+	</div>';
 }

@@ -63,6 +63,7 @@ $txt['faqmod_addcat_send'] = 'Add a new category';
 $txt['faqmod_editcat_send'] = 'Edit this category';
 $txt['faqmod_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['faqmod_na'] = 'N/A';
+$txt['faqmod_sidebar_faq_cats'] = 'Category list';
 
 // Settings strings
 $txt['faqmod_desc'] = 'This page gathers all possible settings for the FAQ mod';
