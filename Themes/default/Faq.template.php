@@ -42,7 +42,7 @@ function template_faq_main()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* Define the width, at elast one block must be enable*/
+	/* Define the width, at least one block must be enabled */
 	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100;
 
 	/* Show a nice message if no FAQs are avaliable */
@@ -67,7 +67,7 @@ function template_faq_main()
 	else
 	{
 		echo '
-		<div class="floatright nopadding" style="width:80%;">';
+		<div class="floatright nopadding" style="width:', $blockWidth ,'%;">';
 
 		foreach($context['faq']['all'] as $faq)
 		{
@@ -553,7 +553,7 @@ function faq_header()
 			</h3>
 		</div>
 		<div class="pagesection">
-			', template_button_strip($memberlist_buttons, 'right'), '
+			', $context['faq']['object']->permissions(array('edit', 'delete')) == true ? template_button_strip($memberlist_buttons, 'right') : '', '
 		</div>';
 }
 
@@ -561,11 +561,16 @@ function faq_sideBar()
 {
 	global $context, $scripturl, $txt, $modSettings;
 
+	/* Define the width, at least one block must be enabled */
+	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 20 : 0;
+
+	echo '
+	<div class="floatleft nopadding" style="width:', $blockWidth ,'%;">';
+
 	/* Show a nice category list */
 	if (!empty($modSettings['faqmod_show_catlist']))
 	{
 		echo '
-	<div class="floatleft nopadding" style="width:20%;">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">', $txt['faqmod_sidebar_faq_cats'] ,'</span>
@@ -587,15 +592,13 @@ function faq_sideBar()
 				</ul>
 			</div>
 			<span class="botslice"><span></span></span>
-		</div>
-	</div>';
+		</div>';
 	}
 
 	/* Latest FAQs, calling a model method from the view? naughty naughty me! */
 	if (!empty($modSettings['faqmod_show_latest']))
 	{
 		echo '
-	<div class="floatleft nopadding" style="width:20%;">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">', $txt['faqmod_sidebar_faq_cats'] ,'</span>
@@ -617,7 +620,9 @@ function faq_sideBar()
 				</ul>
 			</div>
 			<span class="botslice"><span></span></span>
-		</div>
-	</div>';
+		</div>';
 	}
+
+	echo '
+	</div>';
 }
