@@ -216,10 +216,16 @@ function template_faq_success()
 
 	faq_header();
 
+	/* Sidebar */
+	faq_sideBar();
+
+	/* Define the width, at least one block must be enabled */
+	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100;
+
 	/* No direct access */
 	if (!empty($context['faq']['pin']))
 		echo '
-	<div class="nopadding" style="width:98%; text-align:center;">
+	<div class="nopadding" style="width:', $blockWidth ,'%; text-align:center;">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">', $txt['faqmod_success_message_title'] ,'</span>
@@ -243,10 +249,16 @@ function template_faq_single()
 
 	faq_header();
 
+	/* Sidebar */
+	faq_sideBar();
+
+	/* Define the width, at least one block must be enabled */
+	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100;
+
 	/* No direct access */
 	if (empty($context['faq']['single']) || !is_array($context['faq']['single']))
 		echo '
-		<div class="windowbg nopadding">
+		<div class="windowbg nopadding" style="width:', $blockWidth ,'%;">
 			<span class="topslice"><span></span></span>
 			<div class="content">
 				', $txt['faqmod_no_valid_id'] ,'
@@ -256,7 +268,7 @@ function template_faq_single()
 
 	else
 		echo '
-	<div class="nopadding" style="width:98%;">
+	<div class="nopadding" style="width:', $blockWidth ,'%;">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">', $context['faq']['single']['title'] ,'</span>
