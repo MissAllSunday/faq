@@ -179,7 +179,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				
+
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -226,7 +226,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				
+
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -267,7 +267,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				
+
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -454,5 +454,12 @@ class Faq
 
 		/* Send the string */
 		return !empty($return) ? $return : false;
+	}
+
+	public function getBlockWidth()
+	{
+		global $modSettings;
+
+		return 'style="width:'. !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100 ,'%"';
 	}
 }
