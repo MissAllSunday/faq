@@ -78,7 +78,7 @@ function template_faq_main()
 			<div class="windowbg">
 				<span class="topslice"><span></span></span>
 				<div class="content">
-				', $faq['body'] ,'
+				', !empty($modSettings['faqmod_use_preview']) ? $faq['preview'] : $faq['body'] ,'
 				</div>
 				<span class="botslice"><span></span></span>
 			</div>
@@ -264,7 +264,7 @@ function template_faq_single()
 		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
 			<div class="content">
-				', $context['faq']['single']['body'] ,'
+				', !empty($modSettings['faqmod_use_preview']) ? $context['faq']['single']['preview'] : $context['faq']['single']['body'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>
