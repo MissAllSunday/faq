@@ -78,7 +78,7 @@ function template_faq_main()
 			<div class="windowbg">
 				<span class="topslice"><span></span></span>
 				<div class="content">
-				', !empty($modSettings['faqmod_use_preview']) ? $faq['preview'] ,'
+				', $faq['body'] ,'
 				</div>
 				<span class="botslice"><span></span></span>
 			</div>

@@ -122,8 +122,6 @@ function modify_faq_post_settings(&$return_config = false)
 		array('int', 'faqmod_num_faqs', 'size' => 3, 'subtext' => $txt['faqmod_num_faqs_sub']),
 		array('check', 'faqmod_show_catlist', 'subtext' => $txt['faqmod_show_catlist_sub']),
 		array('int', 'faqmod_show_latest', 'size' => 3, 'subtext' => $txt['faqmod_show_latest_sub']),
-		array('check', 'faqmod_use_preview', 'subtext' => $txt['faqmod_use_preview_sub']),
-		array('int', 'faqmod_how_many', 'size' => 3, 'subtext' => $txt['faqmod_how_many_sub']),
 		array( 'select', 'faqmod_sort_method',
 			array(
 				'id' => $txt['faqmod_id'],

@@ -56,8 +56,6 @@ class Faq
 	{
 		global $modSettings;
 
-		$this->truncateLimit = !empty($modSettings['faqmod_how_many']) ? $modSettings['faqmod_how_many'] : 50;
-
 		// Query construct, this is used on all queries
 		$this->queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
 	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
@@ -145,7 +143,6 @@ class Faq
 					'title' => $row['title'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 					'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-					'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
 					'cat' => array(
 						'id' => $row['category_id'],
 						'name' => $row['category_name'],
@@ -182,7 +179,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
+				
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -229,7 +226,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
+				
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -270,7 +267,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
+				
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -457,22 +454,5 @@ class Faq
 
 		/* Send the string */
 		return !empty($return) ? $return : false;
-	}
-
-	public function truncateString($string, $limit, $break = ' ', $pad = '...')
-	{
-		if(empty($limit))
-			$limit = 30;
-
-		 /* return with no change if string is shorter than $limit */
-		if(strlen($string) <= $limit)
-			return $string;
-
-		/* is $break present between $limit and the end of the string? */
-		if(false !== ($breakpoint = strpos($string, $break, $limit)))
-			if($breakpoint < strlen($string) - 1)
-				$string = substr($string, 0, $breakpoint) . $pad;
-
-		return $string;
 	}
 }
