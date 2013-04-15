@@ -42,10 +42,13 @@ function template_faq_main()
 	/* Sidebar */
 	faq_sideBar();
 
+	/* Define the width, at elast one block must be enable*/
+	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100;
+
 	/* Show a nice message if no FAQs are avaliable */
 	if (empty($context['faq']['all']))
 			echo '
-		<div class="floatright nopadding" style="width:80%;">
+		<div class="floatright nopadding" style="width:', $blockWidth ,'%;">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="ie6_header floatleft">', $txt['faqmod_no_faq'] ,'</span>
