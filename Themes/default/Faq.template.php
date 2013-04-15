@@ -90,12 +90,15 @@ function template_faq_main()
 	}
 
 	echo '
-		<div class="clear">';
+		<div class="clear" id="confirm_buttons"><p />';
+
+	/* Pagination */
+	echo $context['page_index'];
 
 	/* Button for adding a new entry */
 	if ($context['faq']['object']->permissions('add') == true)
 		echo '
-			<div id="confirm_buttons">
+			<div>
 				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
 					<input type="submit" name="send" class="input_text" value="', $txt['faqmod_add_send'] ,'" />
 				</form>
