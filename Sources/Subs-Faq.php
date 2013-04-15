@@ -54,6 +54,10 @@ class Faq
 
 	public function __construct()
 	{
+		global $modSettings;
+
+		$this->truncateLimit = !empty($modSettings['faqmod_how_many']) ? $modSettings['faqmod_how_many'] : 50;
+
 		// Query construct, this is used on all queries
 		$this->queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
 	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
@@ -141,7 +145,7 @@ class Faq
 					'title' => $row['title'],
 					'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 					'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-					'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
+					'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
 					'cat' => array(
 						'id' => $row['category_id'],
 						'name' => $row['category_name'],
@@ -178,7 +182,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
+				'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -225,7 +229,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
+				'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
@@ -266,7 +270,7 @@ class Faq
 				'title' => $row['title'],
 				'link' => '<a href="'. $scripturl .'?action='. faq::$name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-				'preview' => $this->truncateString($row['body'], 50, $break = ' ', $pad = '...'),
+				'preview' => $this->truncateString($row['body'], $this->truncateLimit, $break = ' ', $pad = '...'),
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
