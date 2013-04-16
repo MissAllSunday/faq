@@ -244,7 +244,7 @@ function faq_add2($faqObject)
 		);
 
 		/* Finally, store the data and tell the user */
-		$faqObject->edit($editData, 'faq');
+		$faqObject->edit($editData);
 		redirectexit('action=faq;sa=success;pin=edit');
 	}
 
@@ -392,7 +392,7 @@ function faq_editCat($faqObject)
 		);
 
 		/* Finally, store the data and tell the user */
-		$faqObject->edit($editData, 'cat');
+		$faqObject->editCat($editData);
 		redirectexit('action=faq;sa=success;pin=editCat');
 	}
 }

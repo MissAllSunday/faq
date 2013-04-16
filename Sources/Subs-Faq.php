@@ -121,7 +121,7 @@ class Faq
 			$data
 		);
 	}
-	
+
 	public function editCat($data)
 	{
 		global $smcFunc;
@@ -144,7 +144,7 @@ class Faq
 	{
 		global $smcFunc, $scripturl, $txt;
 
-		 /* Use the cache when possible */
+		/* Use the cache when possible */
 		if (($return = cache_get_data(faq::$name .'_latest', 120)) == null)
 		{
 			$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
@@ -321,6 +321,7 @@ class Faq
 	{
 		global $smcFunc;
 
+		/* Do not waste my time... */
 		if (empty($id) || empty($table))
 			return false;
 
@@ -329,9 +330,8 @@ class Faq
 			if (!empty($gotIt[$id]))
 				cache_put_data(faq::$name .'_latest', '', 60);
 
-		/* Do not waste my time... */
-		if (empty($id) || empty($table))
-			return false;
+		elseif ($table == 'cat')
+			cache_put_data(faq::$name .'_cats', '', 60);
 
 		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
@@ -346,19 +346,25 @@ class Faq
 	{
 		global $smcFunc;
 
-		$result = $smcFunc['db_query']('', '
-			SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
-			FROM {db_prefix}' . ($this->_table['cat']['table']) .'',
-			array()
-		);
-
-		while ($row = $smcFunc['db_fetch_assoc']($result))
-			$return[$row['category_id']] = array(
-				'id' => $row['category_id'],
-				'name' => $row['category_name'],
+		/* Use the cache when possible */
+		if (($return = cache_get_data(faq::$name .'_cats', 120)) == null)
+		{
+			$result = $smcFunc['db_query']('', '
+				SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
+				FROM {db_prefix}' . ($this->_table['cat']['table']) .'',
+				array()
 			);
 
-		$smcFunc['db_free_result']($result);
+			while ($row = $smcFunc['db_fetch_assoc']($result))
+				$return[$row['category_id']] = array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+				);
+
+			$smcFunc['db_free_result']($result);
+
+			cache_put_data(faq::$name .'_cats', $return, 120);
+		}
 
 		return $return;
 	}
