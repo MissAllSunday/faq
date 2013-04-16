@@ -342,7 +342,6 @@ function template_faq_manage()
 					<tr class="catbg">
 						<th scope="col" class="first_th">', $txt['faqmod_edit_id']  ,'</th>
 						<th scope="col">', $txt['faqmod_edit_title'] ,'</th>
-						<th scope="col">', $txt['faqmod_edit_log'] ,'</th>
 						<th scope="col">', $txt['faqmod_edit_category']  ,'</th>
 						<th scope="col" class="last_th">', $txt['faqmod_edit/delete'] ,'</th>
 					</tr>
@@ -358,9 +357,6 @@ function template_faq_manage()
 					</td>
 					<td>
 						',$all['link'],'
-					</td>
-					<td>
-						log
 					</td>
 					<td>
 						', $all['cat']['link'] ,'
