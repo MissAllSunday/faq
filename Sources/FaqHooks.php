@@ -139,6 +139,7 @@ function modify_faq_post_settings(&$return_config = false)
 			),
 			'subtext' => $txt['faqmod_menu_position_sub']
 		),
+		array('check', 'faqmod_care', 'subtext' => $txt['faqmod_care_sub']),
 	);
 
 	if ($return_config)
@@ -197,7 +198,5 @@ function faq_permissions(&$permissionGroups, &$permissionList)
 function faq_care()
 {
 	return '
-<div class="smalltext" style="text-align:center;">
-	<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">FAQ mod &copy; Suki</a>
-</div>';
+	<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">FAQ mod &copy; Suki</a>';
 }

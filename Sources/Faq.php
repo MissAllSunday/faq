@@ -66,6 +66,10 @@ function faq_dispatch()
 		loadLanguage('faq');
 		loadtemplate('faq', 'admin');
 
+		/* DUH! winning! */
+		if (!isset($_GET['sa']) && !empty($modSettings['faqmod_care']))
+			$context['insert_after_template'] .= '<div class="smalltext" style="text-align:center;">'. faq_care() .'</div>';
+
 		/* It is faster to use $var() than use call_user_func_array */
 		if (isset($_GET['sa']))
 			$func = $faqObject->clean($_GET['sa']);
