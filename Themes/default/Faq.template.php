@@ -109,6 +109,13 @@ function template_faq_add()
 
 	faq_header();
 
+	/* Sidebar */
+	faq_sideBar();
+
+	/* The main div */
+	echo '
+	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+
 	// Show the preview
 	if (isset($context['preview_message']))
 	echo '
@@ -200,6 +207,10 @@ function template_faq_add()
 					<span></span>
 				</span><br />
 		</form>';
+
+	echo '
+	</div>
+	<div class="clear"></div>';
 }
 
 function template_faq_success()
@@ -280,7 +291,8 @@ function template_faq_single()
 		</div>';
 
 	echo '
-	</div>';
+	</div>
+	<div class="clear"></div>';
 }
 
 function template_faq_manage()
@@ -289,9 +301,13 @@ function template_faq_manage()
 
 	faq_header();
 
+	/* Sidebar */
+	faq_sideBar();
+
 	/* The main div */
 	echo '
 	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+
 
 	echo '<div class="cat_bar">
 			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
@@ -371,6 +387,10 @@ function template_faq_manage()
 	/* Pagination */
 	if(!empty($context['page_index']))
 		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
+
+	echo '
+	</div>
+	<div class="clear"></div>';
 }
 
 function template_faq_addCat()
@@ -378,6 +398,13 @@ function template_faq_addCat()
 	global $context, $scripturl, $txt;
 
 	faq_header();
+
+	/* Sidebar */
+	faq_sideBar();
+
+	/* The main div */
+	echo '
+	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
 
 	/* A nice form for adding a new cat */
 	echo '
@@ -401,6 +428,10 @@ function template_faq_addCat()
 		<span class="clear lowerframe">
 			<span></span>
 		</span><br />';
+
+	echo '
+	</div>
+	<div class="clear"></div>';
 }
 
 function template_faq_manageCat()
@@ -409,7 +440,15 @@ function template_faq_manageCat()
 
 	faq_header();
 
-	echo '<div class="cat_bar">
+	/* Sidebar */
+	faq_sideBar();
+
+	/* The main div */
+	echo '
+	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+
+	echo '
+		<div class="cat_bar">
 			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
 		</div>
 		<div class="windowbg description">
@@ -474,6 +513,10 @@ function template_faq_manageCat()
 			<span class="clear lowerframe">
 				<span></span>
 			</span><br />';
+
+	echo '
+	</div>
+	<div class="clear"></div>';
 }
 
 function template_faq_list()
