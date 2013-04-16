@@ -42,58 +42,50 @@ function template_faq_main()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* Define the width, at least one block must be enabled */
-	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100;
+	/* The main div */
+	echo '
+	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
 
 	/* Show a nice message if no FAQs are avaliable */
 	if (empty($context['faq']['all']))
 			echo '
-		<div class="floatright nopadding" style="width:', $blockWidth ,'%;">
-			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft">', $txt['faqmod_no_faq'] ,'</span>
-				</h3>
+		<div class="cat_bar">
+			<h3 class="catbg">
+				<span class="ie6_header floatleft">', $txt['faqmod_no_faq'] ,'</span>
+			</h3>
+		</div>
+		<div class="windowbg">
+			<span class="topslice"><span></span></span>
+			<div class="content">
+			', $txt['faqmod_no_faq'] ,'
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
-				<div class="content">
-				', $txt['faqmod_no_faq'] ,'
-				</div>
-				<span class="botslice"><span></span></span>
-			</div>
+			<span class="botslice"><span></span></span>
 		</div>';
 
 	/* There are some, lets show em all */
 	else
-	{
-		echo '
-		<div class="floatright nopadding" style="width:', $blockWidth ,'%;">';
-
 		foreach($context['faq']['all'] as $faq)
-		{
 			echo '
-			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft">', $faq['title'] ,'</span>
-					<span class="floatright">', $context['faq']['object']->crud($faq['id']) ,'</span>
-				</h3>
+		<div class="cat_bar">
+			<h3 class="catbg">
+				<span class="ie6_header floatleft">', $faq['title'] ,'</span>
+				<span class="floatright">', $context['faq']['object']->crud($faq['id']) ,'</span>
+			</h3>
+		</div>
+		<div class="windowbg">
+			<span class="topslice"><span></span></span>
+			<div class="content">
+			', $faq['body'] ,'
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
-				<div class="content">
-				', $faq['body'] ,'
-				</div>
-				<span class="botslice"><span></span></span>
-			</div>
-			<br />';
-		}
+			<span class="botslice"><span></span></span>
+		</div>
+		<br />';
 
 		echo '
-		</div>';
-	}
+	</div>';
 
 	echo '
-		<div class="clear" id="confirm_buttons"><p />';
+	<div class="clear" id="confirm_buttons"><p />';
 
 	/* Pagination */
 	echo $context['page_index'];
@@ -101,14 +93,14 @@ function template_faq_main()
 	/* Button for adding a new entry */
 	if ($context['faq']['object']->permissions('add') == true)
 		echo '
-			<div>
-				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="input_text" value="', $txt['faqmod_add_send'] ,'" />
-				</form>
-			</div>';
+		<div>
+			<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
+				<input type="submit" name="send" class="input_text" value="', $txt['faqmod_add_send'] ,'" />
+			</form>
+		</div>';
 
 	echo '
-		</div>';
+	</div>';
 }
 
 function template_faq_add()

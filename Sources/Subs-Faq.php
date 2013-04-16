@@ -460,6 +460,7 @@ class Faq
 	{
 		global $modSettings;
 
-		return 'style="width:'. !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100 ,'%"';
+		/* Define the width, at least one block must be enabled */
+		return 'style="width:'. (!empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100) .'%"';
 	}
 }
