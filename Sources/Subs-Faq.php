@@ -116,7 +116,7 @@ class Faq
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}' . ($this->_table[$table]['table']) . '
 			SET '. ($set) .'
-			WHERE id = {int:id}',
+			WHERE '. ($table == faq::$name ? 'id' : 'category_id') .' = {int:id}',
 			$data
 		);
 	}

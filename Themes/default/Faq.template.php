@@ -420,6 +420,7 @@ function template_faq_addCat()
 							<span id="caption_subject">', $txt['faqmod_editcat_send'] ,'</span>
 						</dt>
 						<dd>
+							<input type="hidden" id="catID" name="catID" value="', $context['faq']['cat']['edit']['id'] ,'" />
 							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', $context['faq']['cat']['edit']['name'] ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['faqmod_editcat_send'] ,'" />
 						</dd>
 					</dl>

@@ -73,18 +73,18 @@ function faq_dispatch()
 		/* Does the user want to use javascript to show/hide the FAQs? */
 		if(!empty($modSettings['faqmod_use_javascript']) && $context['current_action'] == 'faq')
 			$context['html_headers'] .= '
-				<script language="JavaScript"  type="text/javascript">
-				<!--
-				function toggleDiv(divid){
-					if(document.getElementById(divid).style.display == \'none\'){
-						document.getElementById(divid).style.display = \'block\';
-					}
-					else{
-						document.getElementById(divid).style.display = \'none\';
-					}
-				}
-				//-->
-				</script>';
+	<script language="JavaScript"  type="text/javascript">
+	<!--
+	function toggleDiv(divid){
+		if(document.getElementById(divid).style.display == \'none\'){
+			document.getElementById(divid).style.display = \'block\';
+		}
+		else{
+			document.getElementById(divid).style.display = \'none\';
+		}
+	}
+	//-->
+	</script>';
 
 		/* It is faster to use $var() than use call_user_func_array */
 		if (isset($_GET['sa']))
@@ -384,8 +384,10 @@ function faq_editCat($faqObject)
 	else
 	{
 		$title = $faqObject->clean($_POST['title']);
+		$id = $faqObject->clean($_POST['catID']);
 
 		$editData = array(
+			'id' => $id,
 			'category_name' => $title,
 		);
 
