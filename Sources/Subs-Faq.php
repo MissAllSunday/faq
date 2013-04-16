@@ -86,6 +86,9 @@ class Faq
 	{
 		global $smcFunc;
 
+		/* Clear the cache */
+		cache_put_data(faq::$name .'_cats', '', 60);
+
 		$smcFunc['db_insert']('',
 			'{db_prefix}' . ($this->_table['cat']['table']) . '',
 			array(
@@ -99,14 +102,12 @@ class Faq
 		return $id = $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['cat']['table']), 'id');
 	}
 
-	public function edit($data, $table)
+	public function edit($data)
 	{
 		global $smcFunc;
 
-		if (empty($data) || empty($table))
+		if (empty($data))
 			return false;
-
-		$set = $table == faq::$name ? 'cat_id = {int:cat_id}, log = {string:log}, title = {string:title}, body = {string:body}' : 'category_name = {string:category_name}';
 
 		/* Does the cache has this entry? */
 		if ($table == faq::$name && ($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
@@ -114,9 +115,27 @@ class Faq
 				cache_put_data(faq::$name .'_latest', '', 60);
 
 		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}' . ($this->_table[$table]['table']) . '
-			SET '. ($set) .'
-			WHERE '. ($table == faq::$name ? 'id' : 'category_id') .' = {int:id}',
+			UPDATE {db_prefix}' . ($this->_table['faq']['table']) . '
+			SET cat_id = {int:cat_id}, log = {string:log}, title = {string:title}, body = {string:body}
+			WHERE id = {int:id}',
+			$data
+		);
+	}
+	
+	public function editCat($data)
+	{
+		global $smcFunc;
+
+		if (empty($data))
+			return false;
+
+		/* Clean the cache */
+		cache_put_data(faq::$name .'_cats', '', 60);
+
+		$smcFunc['db_query']('', '
+			UPDATE {db_prefix}faq_categories
+			SET category_name = {string:category_name}
+			WHERE category_id = {int:id}',
 			$data
 		);
 	}
