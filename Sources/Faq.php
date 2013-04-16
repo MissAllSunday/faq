@@ -191,6 +191,9 @@ function faq_add2($faqObject)
 		/* ... and store the ID again for use in the form */
 		$context['post_box_name'] = $editorOptions['id'];
 		$context['sub_template'] = 'faq_add';
+
+		/* Pass the object to the template */
+		$context['faq']['object'] = $faqObject;
 	}
 
 	/* Editing */

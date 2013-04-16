@@ -81,7 +81,7 @@ function template_faq_main()
 		</div>
 		<br />';
 
-		echo '
+	echo '
 	</div>';
 
 	echo '
@@ -211,13 +211,13 @@ function template_faq_success()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* Define the width, at least one block must be enabled */
-	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100;
+	/* The main div */
+	echo '
+	<div class="floatright" ', $context['faq']['object']->getBlockWidth() ,'>';
 
 	/* No direct access */
 	if (!empty($context['faq']['pin']))
 		echo '
-	<div class="nopadding" style="width:', $blockWidth ,'%; text-align:center;">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">', $txt['faqmod_success_message_title'] ,'</span>
@@ -231,8 +231,11 @@ function template_faq_success()
 				', $txt['faqmod_success_message_generic'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
-		</div>
-	</div>';
+		</div>';
+
+	echo '
+	</div>
+	<div class="clear"></div>';
 }
 
 function template_faq_single()
@@ -244,13 +247,14 @@ function template_faq_single()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* Define the width, at least one block must be enabled */
-	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 80 : 100;
+	/* The main div */
+	echo '
+	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
 
 	/* No direct access */
 	if (empty($context['faq']['single']) || !is_array($context['faq']['single']))
 		echo '
-		<div class="windowbg nopadding" style="width:', $blockWidth ,'%;">
+		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
 			<div class="content">
 				', $txt['faqmod_no_valid_id'] ,'
@@ -260,7 +264,6 @@ function template_faq_single()
 
 	else
 		echo '
-	<div class="nopadding" style="width:', $blockWidth ,'%;">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">', $context['faq']['single']['title'] ,'</span>
@@ -274,7 +277,9 @@ function template_faq_single()
 				', !empty($modSettings['faqmod_use_preview']) ? $context['faq']['single']['preview'] : $context['faq']['single']['body'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
-		</div>
+		</div>';
+
+	echo '
 	</div>';
 }
 
@@ -283,6 +288,10 @@ function template_faq_manage()
 	global $context, $txt, $scripturl;
 
 	faq_header();
+
+	/* The main div */
+	echo '
+	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
 
 	echo '<div class="cat_bar">
 			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
