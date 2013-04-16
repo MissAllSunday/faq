@@ -139,6 +139,7 @@ function modify_faq_post_settings(&$return_config = false)
 			),
 			'subtext' => $txt['faqmod_menu_position_sub']
 		),
+		array('check', 'faqmod_use_javascript', 'subtext' => $txt['faqmod_use_javascript_sub']),
 		array('check', 'faqmod_care', 'subtext' => $txt['faqmod_care_sub']),
 	);
 

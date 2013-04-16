@@ -37,6 +37,10 @@ function template_faq_main()
 {
 	global $txt, $context, $scripturl, $modSettings;
 
+	/* Some nice vars for the JavaScript trickery */
+	$faqmod_javascript = !empty($modSettings['faqmod_use_javascript']) ? 'onmousedown="toggleDiv(\'content_%d\');"' : '';
+	$faqmod_display = !empty($modSettings['faqmod_use_javascript']) ? 'style="display:none;"' : '';
+
 	faq_header();
 
 	/* Sidebar */
@@ -68,13 +72,13 @@ function template_faq_main()
 			echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $faq['link'] ,'</span>
+				<span class="ie6_header floatleft"><a href="', (!empty($modSettings['faqmod_use_javascript']) ? 'javascript:void(0)' : $scripturl .'?action='. faq::$name .';sa=single;fid='. $faq['id']) ,'" ', sprintf($faqmod_javascript, $faq['id']) ,'>'. $faq['title'] .'</a></span>
 				<span class="floatright">', $context['faq']['object']->crud($faq['id']) ,'</span>
 			</h3>
 		</div>
 		<div class="windowbg">
 			<span class="topslice"><span></span></span>
-			<div class="content">
+			<div class="content" id="content_', $faq['id'] ,'" ',$faqmod_display,'>
 			', $faq['body'] ,'
 			</div>
 			<span class="botslice"><span></span></span>

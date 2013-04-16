@@ -70,6 +70,22 @@ function faq_dispatch()
 		if (!isset($_GET['sa']) && !empty($modSettings['faqmod_care']))
 			$context['insert_after_template'] .= '<div class="smalltext" style="text-align:center;">'. faq_care() .'</div>';
 
+		/* Does the user want to use javascript to show/hide the FAQs? */
+		if(!empty($modSettings['faqmod_use_javascript']) && $context['current_action'] == 'faq')
+			$context['html_headers'] .= '
+				<script language="JavaScript"  type="text/javascript">
+				<!--
+				function toggleDiv(divid){
+					if(document.getElementById(divid).style.display == \'none\'){
+						document.getElementById(divid).style.display = \'block\';
+					}
+					else{
+						document.getElementById(divid).style.display = \'none\';
+					}
+				}
+				//-->
+				</script>';
+
 		/* It is faster to use $var() than use call_user_func_array */
 		if (isset($_GET['sa']))
 			$func = $faqObject->clean($_GET['sa']);
