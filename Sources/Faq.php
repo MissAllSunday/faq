@@ -145,7 +145,7 @@ function faq_add2($faqObject)
 	checkSession('post', '', true);
 
 	/* Check permissions */
-	$faqObject->permissions('add', true);
+	$faqObject->permissions(isset($_REQUEST['edit']) ? 'edit' : 'add', true);
 
 	/* Want to see your masterpiece before others? */
 	if (isset($_REQUEST['preview']))
