@@ -68,7 +68,7 @@ function template_faq_main()
 			echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $faq['title'] ,'</span>
+				<span class="ie6_header floatleft">', $faq['link'] ,'</span>
 				<span class="floatright">', $context['faq']['object']->crud($faq['id']) ,'</span>
 			</h3>
 		</div>
@@ -88,7 +88,8 @@ function template_faq_main()
 	<div class="clear" id="confirm_buttons"><p />';
 
 	/* Pagination */
-	echo $context['page_index'];
+	if (!empty($context['page_index']))
+		echo $context['page_index'];
 
 	/* Button for adding a new entry */
 	if ($context['faq']['object']->permissions('add') == true)
@@ -277,7 +278,7 @@ function template_faq_single()
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $context['faq']['single']['title'] ,'</span>
+				<span class="ie6_header floatleft">', $context['faq']['single']['link'] ,'</span>
 				<span class="floatright">', $context['faq']['object']->crud($context['faq']['single']['id']) ,'</span>
 			</h3>
 		</div>
@@ -356,7 +357,7 @@ function template_faq_manage()
 						', $all['id'] ,'
 					</td>
 					<td>
-						',$all['title'],'
+						',$all['link'],'
 					</td>
 					<td>
 						log
@@ -486,10 +487,6 @@ function template_faq_manageCat()
 			</tbody>
 		</table><br />';
 
-	/* Pagination */
-	if(!empty($context['page_index']))
-		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
-
 	/* A nice form for adding a new cat */
 	if ($context['faq']['object']->permissions('add') == true)
 		echo '
@@ -561,7 +558,7 @@ function template_faq_list()
 		foreach($context['faq']['all'] as $all)
 			echo '
 						<li>
-							<a href="', $scripturl, '?action=faq;sa=single;fid=', $all['id'] ,'">', $all['title'] ,'</a> ', $context['faq']['object']->crud($all['id']) ,'
+							', $all['link'] ,'  ', $context['faq']['object']->crud($all['id']) ,'
 						</li>';
 
 		echo '
@@ -677,7 +674,7 @@ function faq_sideBar()
 		foreach($context['faq']['object']->getLatest($modSettings['faqmod_show_latest']) as $all)
 			echo '
 					<li>
-						<a href="', $scripturl, '?action=faq;sa=single;fid=', $all['id'] ,'">', $all['title'] ,'</a>
+						', $all['link'] ,'
 					</li>';
 
 		echo '
