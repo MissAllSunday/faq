@@ -120,9 +120,13 @@ $txt['faqmod_searc_results'] = 'Search results for ';
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
 $txt['faqmod_no_valid_id'] = 'This is not a valid action.';
-$txt['cannot_faq_view'] = 'I\'m sorry, you aren\'t allowed to see the FAQ page';
 $txt['faqmod_no_search_results'] = 'No results were found';
 $txt['faqmod_search_disable'] = 'The search feature is disable';
+$txt['cannot_faq_view'] = 'I\'m sorry, you aren\'t allowed to see the FAQ page';
+$txt['cannot_faq_delete'] = 'I\'m sorry, you aren\'t allowed to delete any FAQs';
+$txt['cannot_faq_add'] = 'I\'m sorry, you aren\'t allowed to add new FAQs';
+$txt['cannot_faq_edit'] = 'I\'m sorry, you aren\'t allowed to edit any FAQs';
+$txt['cannot_faq_search'] = 'I\'m sorry, you aren\'t allowed to search the FAQs';
 
 // Success
 $txt['faqmod_success_title'] = 'successfully done';
