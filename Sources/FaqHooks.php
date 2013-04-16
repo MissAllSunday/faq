@@ -57,7 +57,7 @@ function faq_menu(&$menu_buttons)
 	if (!isset($txt['faqmod_title_main']))
 		loadLanguage('faq');
 
-	$insert = !empty($modSettings['faq_menu_position']) ? $modSettings['faq_menu_position'] : 'home';
+	$insert = !empty($modSettings['faqmod_menu_position']) ? $modSettings['faqmod_menu_position'] : 'home';
 	$counter = 0;
 
 	foreach ($menu_buttons as $area => $dummy)
