@@ -655,7 +655,8 @@ function faq_sideBar()
 				</ul>
 			</div>
 			<span class="botslice"><span></span></span>
-		</div>';
+		</div>
+		<br />';
 	}
 
 	/* Latest FAQs, calling a model method from the view? naughty naughty me! */
@@ -664,7 +665,7 @@ function faq_sideBar()
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['faqmod_sidebar_faq_cats'] ,'</span>
+				<span class="ie6_header floatleft">', $txt['faqmod_latest'] ,'</span>
 			</h3>
 		</div>
 
@@ -676,14 +677,15 @@ function faq_sideBar()
 		foreach($context['faq']['object']->getLatest($modSettings['faqmod_show_latest']) as $all)
 			echo '
 					<li>
-						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
+						<a href="', $scripturl, '?action=faq;sa=single;fid=', $all['id'] ,'">', $all['title'] ,'</a>
 					</li>';
 
 		echo '
 				</ul>
 			</div>
 			<span class="botslice"><span></span></span>
-		</div>';
+		</div>
+		<br />';
 	}
 
 	echo '

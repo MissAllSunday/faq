@@ -65,6 +65,7 @@ $txt['faqmod_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['faqmod_na'] = 'N/A';
 $txt['faqmod_sidebar_faq_cats'] = 'Category list';
 $txt['faqmod_you_sure'] = 'Are you sure you want to delete?';
+$txt['faqmod_latest'] = 'Latest FAQs';
 
 // Settings strings
 $txt['faqmod_desc'] = 'This page gathers all possible settings for the FAQ mod';

@@ -139,7 +139,6 @@ function modify_faq_post_settings(&$return_config = false)
 			),
 			'subtext' => $txt['faqmod_menu_position_sub']
 		),
-		array('check', 'faqmod_show_latest', 'subtext' => $txt['faqmod_show_latest_sub']),
 	);
 
 	if ($return_config)
