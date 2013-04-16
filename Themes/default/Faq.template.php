@@ -525,6 +525,13 @@ function template_faq_list()
 
 	faq_header();
 
+	/* Sidebar */
+	faq_sideBar();
+
+	/* The main div */
+	echo '
+	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+
 	/* No direct access */
 	if (empty($context['faq']['all']) || !is_array($context['faq']['all']))
 		echo '
@@ -538,7 +545,6 @@ function template_faq_list()
 
 	else
 		echo '
-	<div class="nopadding" style="width:98%;">
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">', $context['page_title'] ,'</span>
@@ -568,11 +574,12 @@ function template_faq_list()
 
 	/* Pagination */
 	if(!empty($context['page_index']))
-		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
+		echo '
+		<div style="text-align:center;">', $context['page_index'] ,'</div>';
 
-	/* End div */
 	echo '
-	</div>';
+	</div>
+	<div class="clear"></div>';
 }
 
 function faq_header()
