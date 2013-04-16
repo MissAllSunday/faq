@@ -285,7 +285,7 @@ function template_faq_single()
 		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
 			<div class="content">
-				', !empty($modSettings['faqmod_use_preview']) ? $context['faq']['single']['preview'] : $context['faq']['single']['body'] ,'
+				', $context['faq']['single']['body'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>';
