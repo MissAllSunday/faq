@@ -450,7 +450,7 @@ class Faq
 			$return .= '<a href="'. $scripturl .'?action='. faq::$name .';sa=edit;fid='. $this->clean($id) .';table='. $table .'">'. $txt['faqmod_edit_edit'] .'</a>';
 
 		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\'Are you sure you want to delete?\')">'. $txt['faqmod_delete'] .'</a>';
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $scripturl .'?action='. faq::$name .';sa=delete;fid='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\''. $txt['faqmod_you_sure'] .'\')">'. $txt['faqmod_delete'] .'</a>';
 
 		/* Send the string */
 		return !empty($return) ? $return : false;
