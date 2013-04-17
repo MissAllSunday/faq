@@ -97,6 +97,7 @@ $txt['faqmod_date'] = 'By Last edit';
 $txt['faqmod_id'] = 'By ID';
 $txt['faqmod_title'] = 'By Title';
 $txt['faqmod_body'] = 'By Body';
+$txt['faqmod_byCat'] = 'By Category';
 $txt['faqmod_use_preview'] = 'Show a short version of the FAQ in the main page.';
 $txt['faqmod_use_preview_sub'] = 'If enable, the main FAQ page will only show a fraction of the FAQS and the title will be converted to a link to a page that will display the entire FAQ.';
 $txt['faqmod_how_many'] = 'How many characters would be displayed before the body gets cut off.';

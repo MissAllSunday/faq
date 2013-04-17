@@ -125,7 +125,9 @@ function modify_faq_post_settings(&$return_config = false)
 		array( 'select', 'faqmod_sort_method',
 			array(
 				'id' => $txt['faqmod_id'],
-				'title' => $txt['faqmod_title']
+				'title' => $txt['faqmod_title'],
+				'cat_id' => $txt['faqmod_byCat'],
+				'body' => $txt['faqmod_body'],
 			),
 			'subtext' => $txt['faqmod_sort_method_sub']
 		),

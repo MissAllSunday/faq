@@ -110,7 +110,7 @@ class Faq
 			return false;
 
 		/* Does the cache has this entry? */
-		if ($table == faq::$name && ($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
+		if (($gotIt = cache_get_data(faq::$name .'_latest', 120)) != null)
 			if (!empty($gotIt[$data['id']]))
 				cache_put_data(faq::$name .'_latest', '', 60);
 
@@ -133,7 +133,7 @@ class Faq
 		cache_put_data(faq::$name .'_cats', '', 60);
 
 		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}faq_categories
+			UPDATE {db_prefix}' . ($this->_table['cat']['table']) . '
 			SET category_name = {string:category_name}
 			WHERE category_id = {int:id}',
 			$data
@@ -266,6 +266,7 @@ class Faq
 
 		$total = $this->getCount();
 		$maxIndex = !empty($modSettings['faqmod_num_faqs']) ? $modSettings['faqmod_num_faqs'] : 20;
+		$sort = !empty($modSettings['faqmod_sort_method']) ? $modSettings['faqmod_sort_method'] : 20;
 
 		$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
 			ORDER BY {raw:sort} ASC
@@ -273,7 +274,7 @@ class Faq
 			array(
 				'start' => $_REQUEST['start'],
 				'maxindex' => $maxIndex,
-				'sort' => 'title'
+				'sort' => $sort
 			)
 		);
 

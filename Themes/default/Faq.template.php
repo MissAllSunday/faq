@@ -657,7 +657,7 @@ function faq_sideBar()
 		<br />';
 	}
 
-	/* Latest FAQs, calling a model method from the view? naughty naughty me! */
+	/* Latest FAQs, calling a model method from the view? naughty, naughty me! */
 	if (!empty($modSettings['faqmod_show_latest']))
 	{
 		echo '
