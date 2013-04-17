@@ -69,12 +69,12 @@ function faq_menu(&$menu_buttons)
 		array('faq' => array(
 			'title' => $txt['faqmod_title_main'],
 			'href' => $scripturl . '?action=faq',
-			'show' => empty($modSettings['faqmod_settings_enable']) ? false : true,
+			'show' => empty($modSettings['faqmod_settings_enable']) && allowedTo('faq_view') ? false : true,
 			'sub_buttons' => array(
 				'faq_admin' => array(
 					'title' => $txt['faqmod_manage'],
 					'href' => $scripturl . '?action=faq;sa=manage',
-					'show' => allowedTo('faqperedit'),
+					'show' => allowedTo('faq_edit'),
 					'sub_buttons' => array(
 						'faq_add' => array(
 							'title' => $txt['faqmod_add_send'],
