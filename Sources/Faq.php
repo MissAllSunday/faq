@@ -63,7 +63,7 @@ function faq_dispatch()
 		}
 
 		/* Load both language and template files */
-		loadLanguage('faq');
+		loadLanguage('Faq');
 		loadtemplate('faq', 'admin');
 
 		/* DUH! winning! */

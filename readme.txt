@@ -21,22 +21,28 @@ some features:
 -Categories, you can add as many categories as you want.
 -Permission to Edit/Add/Delete FAQs and categories.
 -Pagination, to easily navigate through the FAQs if you have too many of them.
--3 ways to sort your FAQs, by title, by ID or by last update.
+-3 ways to sort your FAQs, by title, by ID or by category.
 -Select the position for the FAQ button within your Main Menu.
 -You can use JavaScript to hide the body/answer to save some space, to show the body/answer, just click on the title.
 -Permission to "see" the FAQ page.
 -You can use BBC code on your FAQs, this mod uses the SMF editor which make it easy to add/edit your FAQs.
 
 
-This mod uses the SMF hooks, which means non of your files are edited during the installation.
+This mod uses hooks, which means non of your files are edited during the installation.
 
 [b]for SMF 2.0.x only[/b]
 
 [size=12pt][color=purple]Laguage[/color][/size]
--English/utf8
+-English
 
 
 [size=12pt][color=purple]Change Log[/color][/size]
+
+- 2.0
+	Cleaner code.
+	Search feature.
+	Add more links to manage faqs and cats.
+	Separate permissions for adding, editing, deleting and searching.
 
 -1.2
 	Fixed a bug with the categories been reset when editing a faq.

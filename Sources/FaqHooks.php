@@ -40,7 +40,7 @@ function faq_admin_areas(&$areas)
 	global $txt;
 
 	if (!isset($txt['faqmod_title_main']))
-		loadLanguage('faq');
+		loadLanguage('Faq');
 
 	$areas['config']['areas']['modsettings']['subsections']['faq'] = array($txt['faqmod_title_main']);
 }
@@ -55,7 +55,7 @@ function faq_menu(&$menu_buttons)
 	global $scripturl, $modSettings, $txt, $context;
 
 	if (!isset($txt['faqmod_title_main']))
-		loadLanguage('faq');
+		loadLanguage('Faq');
 
 	$insert = !empty($modSettings['faqmod_menu_position']) ? $modSettings['faqmod_menu_position'] : 'home';
 	$counter = 0;
