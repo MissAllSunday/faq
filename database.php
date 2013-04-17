@@ -44,27 +44,6 @@
 
 	if (empty($context['uninstalling']))
 	{
-
-	// Gotta rename the cat column
-	$query = $smcFunc['db_query']('', '
-		SELECT id FROM {db_prefix}faq',
-		array()
-	);
-
-	if ($smcFunc['db_num_rows']($query) == 1)
-		$smcFunc['db_change_column'](
-			'{db_prefix}faq', 
-			'category_id', 
-			array(
-				'name' => 'cat_id',
-				'type' => 'int',
-				'size' => 5,
-				'null' => false
-			), 
-			'error' => 'fatal',
-			'parameters' => array(),
-		);
-
 		$tables[] = array(
 			'table_name' => 'faq',
 			'columns' => array(
@@ -150,8 +129,34 @@
 			if (in_array($real_prefix . $table['table_name'], $current_tables))
 			{
 				foreach ($table['columns'] as $column)
-					if ($column['type'] != 'last_time')
-						$smcFunc['db_add_column']($db_prefix . $table['table_name'], $column);
+				{
+					if ($column['name'] == 'category_id')
+						$smcFunc['db_change_column'](
+							'{db_prefix}faq',
+							'category_id',
+							array(
+								'name' => 'cat_id',
+								'type' => 'int',
+								'size' => 5,
+								'null' => false,
+							),
+							'fatal',
+							 array()
+						);
+
+					if ($column['name'] != 'log')
+						$smcFunc['db_add_column'](
+							'{db_prefix}faq',
+							array(
+								'name' => 'log',
+								'type' => 'text',
+								'size' => '',
+								'default' => '',
+							),
+							'ignore',
+							'fatal'
+						);
+				}
 
 				foreach ($table['indexes'] as $index)
 					$smcFunc['db_add_index']($db_prefix . $table['table_name'], $index, array(), 'ignore');
@@ -166,17 +171,15 @@
 			'method' => 'ignore',
 			'table_name' => '{db_prefix}faq_categories',
 			'columns' => array(
-				'category_name' => 'string',
 				'category_id' => 'int',
-				'category_last_user' => 'int'
+				'category_name' => 'string',
 			),
 			'data' => array(
-				'Default',
 				1,
-				1
+				'Default'
 			),
 			'keys' => array(
-				'id_category'
+				'category_id'
 			)
 		);
 

@@ -46,7 +46,7 @@ class Faq
 		),
 		'cat' => array(
 			'table' => 'faq_categories',
-			'columns' => array('category_id', 'category_log', 'category_name',),
+			'columns' => array('category_id', 'category_name',),
 		),
 	);
 
