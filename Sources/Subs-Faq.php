@@ -267,9 +267,6 @@ class Faq
 		$total = $this->getCount();
 		$maxIndex = !empty($modSettings['faqmod_num_faqs']) ? $modSettings['faqmod_num_faqs'] : 20;
 
-		/* Safety first! */
-		$sortArray = array('title', 'artist', 'latest');
-
 		$result = $smcFunc['db_query']('', '' . ($this->queryConstruct) . '
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
