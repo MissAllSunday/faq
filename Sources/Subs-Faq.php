@@ -42,7 +42,7 @@ class Faq
 	protected $_table = array(
 		'faq' => array(
 			'table' => 'faq',
-			'columns' => array('id', 'cat_id', 'log', 'title', 'body', 'last_time',),
+			'columns' => array('id', 'cat_id', 'log', 'title', 'body',),
 		),
 		'cat' => array(
 			'table' => 'faq_categories',

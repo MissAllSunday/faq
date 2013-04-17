@@ -44,6 +44,27 @@
 
 	if (empty($context['uninstalling']))
 	{
+
+	// Gotta rename the cat column
+	$query = $smcFunc['db_query']('', '
+		SELECT id FROM {db_prefix}faq',
+		array()
+	);
+
+	if ($smcFunc['db_num_rows']($query) == 1)
+		$smcFunc['db_change_column'](
+			'{db_prefix}faq', 
+			'category_id', 
+			array(
+				'name' => 'cat_id',
+				'type' => 'int',
+				'size' => 5,
+				'null' => false
+			), 
+			'error' => 'fatal',
+			'parameters' => array(),
+		);
+
 		$tables[] = array(
 			'table_name' => 'faq',
 			'columns' => array(
