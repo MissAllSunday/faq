@@ -58,13 +58,13 @@ function faq_dispatch()
 
 		if (empty($faqObject))
 		{
-			require_once($sourcedir .'/Subs-faq.php');
+			require_once($sourcedir .'/Subs-Faq.php');
 			$faqObject = new Faq();
 		}
 
 		/* Load both language and template files */
 		loadLanguage('Faq');
-		loadtemplate('faq', 'admin');
+		loadtemplate('Faq', 'admin');
 
 		/* DUH! winning! */
 		if (!isset($_GET['sa']) && !empty($modSettings['faqmod_care']))
