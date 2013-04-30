@@ -37,7 +37,7 @@ if (!defined('SMF'))
 
 function faq_dispatch()
 {
-	global $txt, $sourcedir, $modSettings, $context;
+	global $txt, $sourcedir, $modSettings, $context, $scripturl;
 	static $faqObject;
 
 		/* Safety first, hardcode the actions */
@@ -65,6 +65,11 @@ function faq_dispatch()
 		/* Load both language and template files */
 		loadLanguage('Faq');
 		loadtemplate('Faq', 'admin');
+
+		$context['linktree'][] = array(
+			'url' => $scripturl .'?action=faq',
+			'name' => $txt['faqmod_title_main'],
+		);
 
 		/* DUH! winning! */
 		if (!isset($_GET['sa']) && !empty($modSettings['faqmod_care']))
