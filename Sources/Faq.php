@@ -132,10 +132,6 @@ function faq_add($faqObject)
 
 	$context['sub_template'] = 'faq_add';
 	$context['page_title'] = $txt['faqmod_adding'];
-	$context['linktree'][] = array(
-		'url' => $scripturl. '?action='. faq::$name .';sa=add',
-		'name' => $context['page_title'],
-	);
 
 	/* Get the cats */
 	$context['faq']['cats'] = $faqObject->getCats();
