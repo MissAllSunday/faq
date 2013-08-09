@@ -4,7 +4,7 @@ This software is licensed under [MPL 1.1 license](http://www.mozilla.org/MPL/MPL
 
 ######What is a FAQ mod:
 
-Is a modification for SMf which allows you to create a simple FAQ (Frecuently Asked Questions) page
+Is a modification for SMF which allows you to create a simple FAQ (Frecuently Asked Questions) page
 
 ######Requirements:
 

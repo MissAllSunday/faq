@@ -47,13 +47,15 @@ function faq_dispatch()
 			'add2',
 			'delete',
 			'edit',
-			'editCat',
 			'categories',
 			'search',
 			'single',
 			'success',
 			'manage',
 			'manageCat',
+			'addCat'
+			'editCat',
+			'deleteCat',
 		);
 
 		if (empty($faqObject))
