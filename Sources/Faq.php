@@ -53,7 +53,7 @@ function faq_dispatch()
 			'success',
 			'manage',
 			'manageCat',
-			'addCat'
+			'addCat',
 			'editCat',
 			'deleteCat',
 		);
