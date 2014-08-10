@@ -11,73 +11,76 @@
 if (!defined('SMF'))
 	die('No direct access');
 
-function faq_dispatch()
+class Faq extends Suki\Ohara
 {
-	global $txt, $sourcedir, $modSettings, $context, $scripturl;
-	static $faqObject;
 
-		/* Safety first, hardcode the actions */
-		$subActions = array(
-			'add',
-			'addCat',
-			'add2',
-			'delete',
-			'edit',
-			'categories',
-			'search',
-			'single',
-			'success',
-			'manage',
-			'manageCat',
-			'addCat',
-			'editCat',
-			'deleteCat',
-		);
+	function call()
+	{
+		global $txt, $sourcedir, $modSettings, $context, $scripturl;
+		static $faqObject;
 
-		if (empty($faqObject))
-		{
-			require_once($sourcedir .'/Subs-Faq.php');
-			$faqObject = new Faq();
+			/* Safety first, hardcode the actions */
+			$subActions = array(
+				'add',
+				'addCat',
+				'add2',
+				'delete',
+				'edit',
+				'categories',
+				'search',
+				'single',
+				'success',
+				'manage',
+				'manageCat',
+				'addCat',
+				'editCat',
+				'deleteCat',
+			);
+
+			if (empty($faqObject))
+			{
+				require_once($sourcedir .'/Subs-Faq.php');
+				$faqObject = new Faq();
+			}
+
+			/* Load both language and template files */
+			loadLanguage('Faq');
+			loadtemplate('Faq', 'admin');
+
+			$context['linktree'][] = array(
+				'url' => $scripturl .'?action=faq',
+				'name' => $txt['faqmod_title_main'],
+			);
+
+			/* DUH! winning! */
+			if (!isset($_GET['sa']) && !empty($modSettings['faqmod_care']))
+				$context['insert_after_template'] .= '<div class="smalltext" style="text-align:center;">'. faq_care() .'</div>';
+
+			/* Does the user want to use javascript to show/hide the FAQs? */
+			if(!empty($modSettings['faqmod_use_javascript']) && $context['current_action'] == 'faq')
+				$context['html_headers'] .= '
+		<script language="JavaScript"  type="text/javascript">
+		<!--
+		function toggleDiv(divid){
+			if(document.getElementById(divid).style.display == \'none\'){
+				document.getElementById(divid).style.display = \'block\';
+			}
+			else{
+				document.getElementById(divid).style.display = \'none\';
+			}
 		}
+		//-->
+		</script>';
 
-		/* Load both language and template files */
-		loadLanguage('Faq');
-		loadtemplate('Faq', 'admin');
+			/* It is faster to use $var() than use call_user_func_array */
+			if (isset($_GET['sa']))
+				$func = $faqObject->clean($_GET['sa']);
 
-		$context['linktree'][] = array(
-			'url' => $scripturl .'?action=faq',
-			'name' => $txt['faqmod_title_main'],
-		);
+			$call = 'faq_' .(!empty($func) && in_array($func, array_values($subActions)) ?  $func : 'main');
 
-		/* DUH! winning! */
-		if (!isset($_GET['sa']) && !empty($modSettings['faqmod_care']))
-			$context['insert_after_template'] .= '<div class="smalltext" style="text-align:center;">'. faq_care() .'</div>';
-
-		/* Does the user want to use javascript to show/hide the FAQs? */
-		if(!empty($modSettings['faqmod_use_javascript']) && $context['current_action'] == 'faq')
-			$context['html_headers'] .= '
-	<script language="JavaScript"  type="text/javascript">
-	<!--
-	function toggleDiv(divid){
-		if(document.getElementById(divid).style.display == \'none\'){
-			document.getElementById(divid).style.display = \'block\';
-		}
-		else{
-			document.getElementById(divid).style.display = \'none\';
-		}
+			// Call the appropiate function
+			$call($faqObject);
 	}
-	//-->
-	</script>';
-
-		/* It is faster to use $var() than use call_user_func_array */
-		if (isset($_GET['sa']))
-			$func = $faqObject->clean($_GET['sa']);
-
-		$call = 'faq_' .(!empty($func) && in_array($func, array_values($subActions)) ?  $func : 'main');
-
-		// Call the appropiate function
-		$call($faqObject);
-}
 
 function faq_main($faqObject)
 {
@@ -565,4 +568,5 @@ function faq_single($faqObject)
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
+}
 }
