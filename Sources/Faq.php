@@ -68,13 +68,14 @@ class Faq extends Suki\Ohara
 			else
 				$call = 'main';
 
-			$call = 'faq_' .(!empty($func) && in_array($func, array_values($subActions)) ?  $func : 'main');
+			// Lazy way to tell the template which action has been called.
+			$context['faq']['action'] = $call;
 
 			// Call the appropriate function.
 			$this->$call();
 	}
 
-function faq_main($faqObject)
+function main()
 {
 	global $context, $scripturl, $txt, $user_info, $modSettings;
 
@@ -89,28 +90,19 @@ function faq_main($faqObject)
 		'name' => $context['page_title'],
 	);
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-
-	/* Get all */
-	$context['faq']['all'] = $faqObject->getAll();
+	// Get all of them.
+	$context['faq']['all'] = $this->getAll();
 }
 
-function faq_add($faqObject)
+function add()
 {
-	global $context, $scripturl, $txt, $sourcedir;
-
-	/* Check permissions */
-	$faqObject->permissions('add', true);
+	global $context, $scripturl, $sourcedir;
 
 	$context['sub_template'] = 'faq_add';
-	$context['page_title'] = $txt['faqmod_adding'];
+	$context['page_title'] = $this->text('adding');
 
 	/* Get the cats */
-	$context['faq']['cats'] = $faqObject->getCats();
-
-	/* Tell the template we are adding, not editing */
-	$context['faq']['edit'] = false;
+	$context['faq']['cats'] = $this->getCats();
 
 	/* We need make sure we have this. */
 	require_once($sourcedir . '/Subs-Editor.php');
@@ -127,27 +119,23 @@ function faq_add($faqObject)
 
 	/* ... and store the ID again for use in the form */
 	$context['post_box_name'] = $editorOptions['id'];
-
-	/* Pass the object to the template, don't know when is gonna be needed */
-	$context['faq']['object'] = $faqObject;
 }
 
-function faq_add2($faqObject)
+function save()
 {
 	global $context, $scripturl, $sourcedir, $txt, $smcFunc;
 
 	checkSession('post', '', true);
 
-	/* Check permissions */
-	$faqObject->permissions(isset($_REQUEST['edit']) ? 'edit' : 'add', true);
+	// Permissions here..
 
-	/* Want to see your masterpiece before others? */
-	if (isset($_REQUEST['preview']))
+	// Previewing?
+	if ($this->data('preview'))
 	{
-		/* Set everything up to be displayed. */
-		$context['preview_title'] = $faqObject->clean($_REQUEST['title']);
-		$context['preview_message'] = parse_bbc($faqObject->clean($_REQUEST['body'], true));
-		$context['preview_cat'] = $faqObject->clean($_REQUEST['category_id']);
+		// Set everything up to be displayed.
+		$context['preview_title'] = $this->data('title');
+		$context['preview_message'] = parse_bbc($this->data('body'), true);
+		$context['preview_cat'] = $this->data('category_id');
 
 		/* We Censor for your protection... */
 		censorText($context['preview_title']);
@@ -225,7 +213,7 @@ function faq_add2($faqObject)
 	/* Lastly, adding, make sure it gets executed on adding only */
 	elseif (!isset($_REQUEST['edit']) || !isset($_REQUEST['preview']))
 	{
-		/* Create the data, log would be populated later */
+		// Create the data, log would be populated later.
 		$data = array(
 			'cat_id' => $faqObject->clean($_REQUEST['category_id']),
 			'log' => $faqObject->createLog(),
