@@ -13,11 +13,14 @@ if (!defined('SMF'))
 
 class Faq extends Suki\Ohara
 {
-
-	function call()
+	public function __construct()
 	{
-		global $txt, $sourcedir, $modSettings, $context, $scripturl;
-		static $faqObject;
+		$this->setRegistry();
+	}
+
+	public function call()
+	{
+		global $context, $scripturl;
 
 			/* Safety first, hardcode the actions */
 			$subActions = array(
@@ -37,49 +40,38 @@ class Faq extends Suki\Ohara
 				'deleteCat',
 			);
 
-			if (empty($faqObject))
-			{
-				require_once($sourcedir .'/Subs-Faq.php');
-				$faqObject = new Faq();
-			}
-
 			/* Load both language and template files */
-			loadLanguage('Faq');
-			loadtemplate('Faq', 'admin');
+			loadLanguage($this->name);
+			loadtemplate($this->name);
 
 			$context['linktree'][] = array(
 				'url' => $scripturl .'?action=faq',
-				'name' => $txt['faqmod_title_main'],
+				'name' => $this->text('title'),
 			);
 
-			/* DUH! winning! */
-			if (!isset($_GET['sa']) && !empty($modSettings['faqmod_care']))
-				$context['insert_after_template'] .= '<div class="smalltext" style="text-align:center;">'. faq_care() .'</div>';
-
 			/* Does the user want to use javascript to show/hide the FAQs? */
-			if(!empty($modSettings['faqmod_use_javascript']) && $context['current_action'] == 'faq')
-				$context['html_headers'] .= '
-		<script language="JavaScript"  type="text/javascript">
-		<!--
+			if($this->enable('JavaScript']))
+				addInlineJavascript('
 		function toggleDiv(divid){
-			if(document.getElementById(divid).style.display == \'none\'){
+			if(document.getElementById(divid).style.display == \'none\') {
 				document.getElementById(divid).style.display = \'block\';
 			}
-			else{
+			else {
 				document.getElementById(divid).style.display = \'none\';
 			}
-		}
-		//-->
-		</script>';
+		}', true);
 
 			/* It is faster to use $var() than use call_user_func_array */
-			if (isset($_GET['sa']))
-				$func = $faqObject->clean($_GET['sa']);
+			if ($this->data('sa'))
+				$call = in_array($this->data('sa'), $subActions) ? $this->data('sa') : 'main';
+
+			else
+				$call = 'main';
 
 			$call = 'faq_' .(!empty($func) && in_array($func, array_values($subActions)) ?  $func : 'main');
 
-			// Call the appropiate function
-			$call($faqObject);
+			// Call the appropriate function.
+			$this->$call();
 	}
 
 function faq_main($faqObject)
