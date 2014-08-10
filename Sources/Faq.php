@@ -26,13 +26,12 @@ class Faq extends Suki\Ohara
 			$subActions = array(
 				'add',
 				'addCat',
-				'add2',
+				'save',
 				'delete',
 				'edit',
 				'categories',
 				'search',
 				'single',
-				'success',
 				'manage',
 				'manageCat',
 				'addCat',
@@ -61,7 +60,7 @@ class Faq extends Suki\Ohara
 			}
 		}', true);
 
-			/* It is faster to use $var() than use call_user_func_array */
+			// Get the subaction.
 			if ($this->data('sa'))
 				$call = in_array($this->data('sa'), $subActions) ? $this->data('sa') : 'main';
 
@@ -71,24 +70,24 @@ class Faq extends Suki\Ohara
 			// Lazy way to tell the template which action has been called.
 			$context['faq']['action'] = $call;
 
+			// "Save" doesn't need a template.
+			if ($call != 'save')
+				$context['sub_template'] = 'faq_'. $call;
+
+			$context['canonical_url'] = $scripturl . '?action=faq' . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
+			$context['page_title'] = $this->text('title_'. $call);
+			$context['linktree'][] = array(
+				'url' => $context['canonical_url'],
+				'name' => $context['page_title'],
+			);
+
 			// Call the appropriate function.
 			$this->$call();
 	}
 
 function main()
 {
-	global $context, $scripturl, $txt, $user_info, $modSettings;
-
-	/* Are you allowed to see this page? */
-	$faqObject->permissions('view', true);
-
-	$context['sub_template'] = 'faq_main';
-	$context['canonical_url'] = $scripturl . '?action=faq';
-	$context['page_title'] = $txt['faqmod_title_main'];
-	$context['linktree'][] = array(
-		'url' => $scripturl. '?action=faq',
-		'name' => $context['page_title'],
-	);
+	global $context;
 
 	// Get all of them.
 	$context['faq']['all'] = $this->getAll();
@@ -97,9 +96,6 @@ function main()
 function add()
 {
 	global $context, $scripturl, $sourcedir;
-
-	$context['sub_template'] = 'faq_add';
-	$context['page_title'] = $this->text('adding');
 
 	/* Get the cats */
 	$context['faq']['cats'] = $this->getCats();
@@ -144,14 +140,8 @@ function save()
 		/* Set a descriptive title. */
 		$context['page_title'] = $txt['preview'] .' - ' . $context['preview_title'];
 
-		/* Build the link tree... */
-		$context['linktree'][] = array(
-			'url' => $scripturl . '?action='. faq::$name .';sa=add',
-			'name' => $context['page_title'],
-		);
-
 		/* Get the cats */
-		$context['faq']['cats'] = $faqObject->getCats();
+		$context['faq']['cats'] = $this->getCats();
 
 		/* We need to make sure we have this. */
 		require_once($sourcedir . '/Subs-Editor.php');
@@ -159,54 +149,43 @@ function save()
 		/* Create it... */
 		$editorOptions = array(
 			'id' => 'body',
-			'value' => isset($_REQUEST['body']) ? str_replace(array('  '), array('&nbsp; '), $smcFunc['htmlspecialchars']($_REQUEST['body'])) : '',
+			'value' => $this->data('body') ? $this->data('body') : '', // @check.
 			'width' => '90%',
 		);
 
 		/* Magic! */
 		create_control_richedit($editorOptions);
 
-		/* Are we comming from editing? */
-		if (isset($_REQUEST['edit']))
-			$_REQUEST['previewEdit'] = $faqObject->clean($_GET['fid']);
-
 		/* ... and store the ID again for use in the form */
 		$context['post_box_name'] = $editorOptions['id'];
 		$context['sub_template'] = 'faq_add';
-
-		/* Pass the object to the template */
-		$context['faq']['object'] = $faqObject;
 	}
 
 	/* Editing */
-	elseif (isset($_REQUEST['edit']))
+	if ($this->data('preview'))
 	{
-		if (!isset($_GET['fid']) || empty($_GET['fid']))
-			redirectexit('action=faq');
-
-		$lid = $faqObject->clean($_GET['fid']);
-
-		if (empty($lid))
-			fatal_lang_error('faqmod_no_valid_id', false);
+		// Gotta have something to work with.
+		if (!$this->data('fid'))
+			fatal_lang_error('Faq_noValidId', false);
 
 		/* Make sure it does exists... */
-		$current = $faqObject->getBy(false, 'faq', 'id', $lid, 1);
+		$current = $faqObject->getFaqByID($this->data('fid'));
 
 		/* Tell the user this entry doesn't exists anymore */
 		if (empty($current))
-			fatal_lang_error('faqmod_no_valid_id', false);
+			fatal_lang_error('Faq_noValidId', false);
 
 		/* Let us continue... */
 		$editData = array(
-			'cat_id' => $faqObject->clean($_REQUEST['category_id']),
-			'log' => $faqObject->createLog(),
-			'title' => $faqObject->clean($_REQUEST['title']),
+			'cat_id' => $this->data('category_id'),
+			'log' => $this->createLog(),
+			'title' => $this->data('title'),
 			'body' => $faqObject->clean($_REQUEST['body'], true),
 			'id' => $lid
 		);
 
-		/* Finally, store the data and tell the user */
-		$faqObject->edit($editData);
+		// Perform query here.
+		// Set session stuff for notifications.
 		redirectexit('action=faq;sa=success;pin=edit');
 	}
 
@@ -244,7 +223,7 @@ function faq_edit($faqObject)
 		$table = $faqObject->clean($_GET['table']);
 
 		/* Get the cats */
-		$context['faq']['cats'] = $faqObject->getCats();
+		$context['faq']['cats'] = $this->getCats();
 
 		/* Are we editing a category?, a FAQ? */
 		switch($table)
@@ -446,7 +425,7 @@ function faq_manageCat($faqObject)
 	);
 
 	/* Get all possible cats */
-	$context['faq']['cats']['all'] = $faqObject->getCats();
+	$context['faq']['cats']['all'] = $this->getCats();
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
