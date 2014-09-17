@@ -11,7 +11,7 @@
 if (!defined('SMF'))
 	die('No direct access');
 
-class Faq extends Suki\Ohara
+class FaqTools extends Suki\Ohara
 {
 	public function __construct()
 	{
@@ -205,7 +205,7 @@ function save()
 	}
 }
 
-function faq_edit($faqObject)
+function edit($faqObject)
 {
 	global $context, $scripturl, $modSettings, $sourcedir, $txt;
 
@@ -294,7 +294,7 @@ function faq_edit($faqObject)
 	}
 }
 
-function faq_addCat($faqObject)
+function addCat($faqObject)
 {
 	global $context, $txt;
 
@@ -312,7 +312,7 @@ function faq_addCat($faqObject)
 	}
 }
 
-function faq_editCat($faqObject)
+function editCat($faqObject)
 {
 	global $context, $txt;
 
@@ -338,7 +338,7 @@ function faq_editCat($faqObject)
 	}
 }
 
-function faq_delete($faqObject)
+function delete($faqObject)
 {
 	global $context, $txt;
 
@@ -357,7 +357,7 @@ function faq_delete($faqObject)
 	}
 }
 
-function faq_success($faqObject)
+function success($faqObject)
 {
 	global $context, $scripturl, $smcFunc, $txt;
 
@@ -387,7 +387,7 @@ function faq_success($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function faq_manage($faqObject)
+function manage($faqObject)
 {
 	global $context, $txt, $scripturl;
 
@@ -396,7 +396,7 @@ function faq_manage($faqObject)
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_manage';
-	$context['page_title'] = $txt['faqmod_manage'];
+	$context['page_title'] = $this->text('manageFaqs');
 	$context['linktree'][] = array(
 		'url' => $scripturl. '?action='. faq::$name .';sa=manage',
 		'name' => $context['page_title'],
@@ -409,7 +409,7 @@ function faq_manage($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function faq_manageCat($faqObject)
+function manageCat($faqObject)
 {
 	global $context, $txt, $scripturl;
 
@@ -431,7 +431,7 @@ function faq_manageCat($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function faq_categories($faqObject)
+function categories($faqObject)
 {
 	global $context, $txt, $scripturl;
 
@@ -459,7 +459,7 @@ function faq_categories($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function faq_search($faqObject)
+function search($faqObject)
 {
 	global $context, $txt, $scripturl, $modSettings;
 
@@ -490,7 +490,7 @@ function faq_search($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function faq_single($faqObject)
+function single($faqObject)
 {
 	global $context, $scripturl, $txt, $user_info;
 

@@ -90,20 +90,20 @@ function settings(&$return_config = false)
 
 	$config_vars = array(
 		array('desc', 'faqmod_desc'),
-		array('check', $this->name .'_enable', 'subtext' => $txt['faqmod_settings_enable_sub']),
-		array('int', $this->name .'_num_faqs', 'size' => 3, 'subtext' => $txt['faqmod_num_faqs_sub']),
-		array('check', 'faqmod_show_catlist', 'subtext' => $txt['faqmod_show_catlist_sub']),
-		array('int', 'faqmod_show_latest', 'size' => 3, 'subtext' => $txt['faqmod_show_latest_sub']),
-		array( 'select', 'faqmod_sort_method',
+		array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub')),
+		array('int', $this->name .'_num_faqs', 'size' => 3, 'subtext' => $this->text('enable_sub')),
+		array('check', $this->name .'_show_catlist', 'subtext' => $this->text('show_catlist_sub')),
+		array('int', $this->name .'_show_latest', 'size' => 3, 'subtext' => $this->text('show_latest_sub')),
+		array( 'select', $this->name .'_sort_method',
 			array(
 				'id' => $txt['faqmod_id'],
 				'title' => $txt['faqmod_title'],
 				'cat_id' => $txt['faqmod_byCat'],
 				'body' => $txt['faqmod_body'],
 			),
-			'subtext' => $txt['faqmod_sort_method_sub']
+			'subtext' => $this->text('sort_method_sub')
 		),
-		array( 'select', 'faqmod_menu_position',
+		array( 'select', $this->name .'_menu_position',
 			array(
 				'home' => $txt['home'],
 				'help' => $txt['help'],
@@ -111,10 +111,10 @@ function settings(&$return_config = false)
 				'login' => $txt['login'],
 				'register' => $txt['register']
 			),
-			'subtext' => $txt['faqmod_menu_position_sub']
+			'subtext' => $this->text('menu_position_sub')
 		),
-		array('check', 'faqmod_use_javascript', 'subtext' => $txt['faqmod_use_javascript_sub']),
-		array('check', 'faqmod_care', 'subtext' => $txt['faqmod_care_sub']),
+		array('check', $this->name .'_use_javascript', 'subtext' => $this->text('use_javascript_sub')),
+		array('check', $this->name .'_care', 'subtext' => $this->text('care_sub')),
 	);
 
 	if ($return_config)
