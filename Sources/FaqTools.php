@@ -18,105 +18,6 @@ class FaqTools extends Suki\Ohara
 		$this->setRegistry();
 	}
 
-	public function call()
-	{
-		global $context, $scripturl;
-
-			/* Safety first, hardcode the actions */
-			$subActions = array(
-				'add',
-				'addCat',
-				'save',
-				'delete',
-				'edit',
-				'categories',
-				'search',
-				'single',
-				'manage',
-				'manageCat',
-				'addCat',
-				'editCat',
-				'deleteCat',
-			);
-
-			/* Load both language and template files */
-			loadLanguage($this->name);
-			loadtemplate($this->name);
-
-			$context['linktree'][] = array(
-				'url' => $scripturl .'?action=faq',
-				'name' => $this->text('title'),
-			);
-
-			/* Does the user want to use javascript to show/hide the FAQs? */
-			if($this->enable('JavaScript']))
-				addInlineJavascript('
-		function toggleDiv(divid){
-			if(document.getElementById(divid).style.display == \'none\') {
-				document.getElementById(divid).style.display = \'block\';
-			}
-			else {
-				document.getElementById(divid).style.display = \'none\';
-			}
-		}', true);
-
-			// Get the subaction.
-			if ($this->data('sa'))
-				$call = in_array($this->data('sa'), $subActions) ? $this->data('sa') : 'main';
-
-			else
-				$call = 'main';
-
-			// Lazy way to tell the template which action has been called.
-			$context['faq']['action'] = $call;
-
-			// "Save" doesn't need a template.
-			if ($call != 'save')
-				$context['sub_template'] = 'faq_'. $call;
-
-			$context['canonical_url'] = $scripturl . '?action=faq' . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
-			$context['page_title'] = $this->text('title_'. $call);
-			$context['linktree'][] = array(
-				'url' => $context['canonical_url'],
-				'name' => $context['page_title'],
-			);
-
-			// Call the appropriate function.
-			$this->$call();
-	}
-
-function main()
-{
-	global $context;
-
-	// Get all of them.
-	$context['faq']['all'] = $this->getAll();
-}
-
-function add()
-{
-	global $context, $scripturl, $sourcedir;
-
-	/* Get the cats */
-	$context['faq']['cats'] = $this->getCats();
-
-	/* We need make sure we have this. */
-	require_once($sourcedir . '/Subs-Editor.php');
-
-	/* Create it... */
-	$editorOptions = array(
-		'id' => 'body',
-		'value' => '',
-		'width' => '90%',
-	);
-
-	/* Magic! */
-	create_control_richedit($editorOptions);
-
-	/* ... and store the ID again for use in the form */
-	$context['post_box_name'] = $editorOptions['id'];
-}
-
 function save()
 {
 	global $context, $scripturl, $sourcedir, $txt, $smcFunc;
@@ -165,11 +66,11 @@ function save()
 	if ($this->data('preview'))
 	{
 		// Gotta have something to work with.
-		if (!$this->data('fid'))
+		if (!$this->_faq)
 			fatal_lang_error('Faq_noValidId', false);
 
 		/* Make sure it does exists... */
-		$current = $faqObject->getFaqByID($this->data('fid'));
+		$current = $faqObject->getFaqByID($this->_faq);
 
 		/* Tell the user this entry doesn't exists anymore */
 		if (empty($current))
