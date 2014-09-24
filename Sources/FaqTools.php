@@ -23,7 +23,7 @@ function edit($faqObject)
 {
 	global $context, $scripturl, $modSettings, $sourcedir, $txt;
 
-	$faqObject->permissions('edit', true);
+	$this->permissions('edit', true);
 
 	if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']) || empty($_GET['table']))
 		redirectexit('action=faq');
@@ -33,8 +33,8 @@ function edit($faqObject)
 		/* Pass the object to the template */
 		$context['faq']['object'] = $faqObject;
 
-		$lid = $faqObject->clean($_GET['fid']);
-		$table = $faqObject->clean($_GET['table']);
+		$lid = $this->clean($_GET['fid']);
+		$table = $this->clean($_GET['table']);
 
 		/* Get the cats */
 		$context['faq']['cats'] = $this->getCats();
@@ -71,7 +71,7 @@ function edit($faqObject)
 					fatal_lang_error('faqmod_no_valid_id', false);
 
 				/* Get the FAQ in question, tell the method this is "manage" */
-				$temp = $faqObject->getBy('manage', 'faq', 'id', $lid, 1);
+				$temp = $this->getBy('manage', 'faq', 'id', $lid, 1);
 
 				if (empty($temp))
 					fatal_lang_error('faqmod_no_valid_id', false);
@@ -112,7 +112,7 @@ function addCat($faqObject)
 {
 	global $context, $txt;
 
-	$faqObject->permissions('add', true);
+	$this->permissions('add', true);
 
 	/* Gotta have something to work with */
 	if (!isset($_POST['title']) || empty($_POST['title']))
@@ -120,8 +120,8 @@ function addCat($faqObject)
 
 	else
 	{
-		$title = $faqObject->clean($_POST['title']);
-		$faqObject->addCat(array('category_name' => $title));
+		$title = $this->clean($_POST['title']);
+		$this->addCat(array('category_name' => $title));
 		redirectexit('action=faq;sa=success;pin=addCat');
 	}
 }
@@ -130,7 +130,7 @@ function editCat($faqObject)
 {
 	global $context, $txt;
 
-	$faqObject->permissions('edit', true);
+	$this->permissions('edit', true);
 
 	/* Gotta have something to work with */
 	if (!isset($_POST['title']) || empty($_POST['title']))
@@ -138,8 +138,8 @@ function editCat($faqObject)
 
 	else
 	{
-		$title = $faqObject->clean($_POST['title']);
-		$id = $faqObject->clean($_POST['catID']);
+		$title = $this->clean($_POST['title']);
+		$id = $this->clean($_POST['catID']);
 
 		$editData = array(
 			'id' => $id,
@@ -147,7 +147,7 @@ function editCat($faqObject)
 		);
 
 		/* Finally, store the data and tell the user */
-		$faqObject->editCat($editData);
+		$this->editCat($editData);
 		redirectexit('action=faq;sa=success;pin=editCat');
 	}
 }
@@ -156,7 +156,7 @@ function delete($faqObject)
 {
 	global $context, $txt;
 
-	$faqObject->permissions('delete', true);
+	$this->permissions('delete', true);
 
 	/* Gotta have an ID to work with */
 	if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']))
@@ -164,9 +164,9 @@ function delete($faqObject)
 
 	else
 	{
-		$lid = (int) $faqObject->clean($_GET['fid']);
-		$table = $faqObject->clean($_GET['table']);
-		$faqObject->delete($lid, $table);
+		$lid = (int) $this->clean($_GET['fid']);
+		$table = $this->clean($_GET['table']);
+		$this->delete($lid, $table);
 		redirectexit('action=faq;sa=success;pin=deleteCat');
 	}
 }
@@ -179,7 +179,7 @@ function success($faqObject)
 	if (!isset($_GET['pin']) || empty($_GET['pin']))
 		redirectexit('action=faq');
 
-	$context['faq']['pin'] = $faqObject->clean($_GET['pin']);
+	$context['faq']['pin'] = $this->clean($_GET['pin']);
 
 	/* Build the link tree.... */
 	$context['linktree'][] = array(
@@ -206,7 +206,7 @@ function manage($faqObject)
 	global $context, $txt, $scripturl;
 
 	/* Are you allowed to see this page? */
-	$faqObject->permissions(array('edit', 'delete'), true);
+	$this->permissions(array('edit', 'delete'), true);
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_manage';
@@ -217,7 +217,7 @@ function manage($faqObject)
 	);
 
 	/* Get all FAQs, show pagination if needed */
-	$context['faq']['all'] = $faqObject->getAll('manage');
+	$context['faq']['all'] = $this->getAll('manage');
 
 	/* Pass the object to the template */
 	$context['faq']['object'] = $faqObject;
@@ -228,7 +228,7 @@ function manageCat($faqObject)
 	global $context, $txt, $scripturl;
 
 	/* Are you allowed to see this page? */
-	$faqObject->permissions(array('edit', 'delete'), true);
+	$this->permissions(array('edit', 'delete'), true);
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_manageCat';
@@ -250,15 +250,15 @@ function categories($faqObject)
 	global $context, $txt, $scripturl;
 
 	/* Are you allowed to see this page? */
-	$faqObject->permissions('view', true);
+	$this->permissions('view', true);
 
 	if (!isset($_GET['fid']) || empty($_GET['fid']))
 		redirectexit('action=faq');
 
-	$lid = $faqObject->clean($_GET['fid']);
+	$lid = $this->clean($_GET['fid']);
 
 	/* Get all FAQs within certain category */
-	$context['faq']['all'] = $faqObject->getBy(false, 'faq', 'cat_id', $lid, false);
+	$context['faq']['all'] = $this->getBy(false, 'faq', 'cat_id', $lid, false);
 
 	/* The usual stuff */
 	$context['sub_template'] = 'faq_main';
@@ -278,14 +278,14 @@ function search($faqObject)
 	global $context, $txt, $scripturl, $modSettings;
 
 	/* Are you allowed to see this page? */
-	$faqObject->permissions(array('view', 'search'), true);
+	$this->permissions(array('view', 'search'), true);
 
 	/* We need a value to serch and a column */
 	if (!isset($_REQUEST['l_search_value']) || empty($_REQUEST['l_search_value']) || !isset($_REQUEST['l_column']) || empty($_REQUEST['l_column']))
 		fatal_lang_error('faqmod_no_valid_id', false);
 
-	$value = urlencode($faqObject->clean($_REQUEST['l_search_value']));
-	$column = $faqObject->clean($_REQUEST['l_column']);
+	$value = urlencode($this->clean($_REQUEST['l_search_value']));
+	$column = $this->clean($_REQUEST['l_column']);
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_list';
@@ -295,7 +295,7 @@ function search($faqObject)
 		'name' => $context['page_title'],
 	);
 
-	$context['faq']['all'] = $faqObject->getBy(false, 'faq', $column, '%'. $value .'%', false, true);
+	$context['faq']['all'] = $this->getBy(false, 'faq', $column, '%'. $value .'%', false, true);
 
 	if (empty($context['faq']['all']))
 		fatal_lang_error('faqmod_no_search_results', false);
@@ -313,16 +313,16 @@ function single($faqObject)
 		fatal_lang_error('faqmod_no_valid_id', false);
 
 	/* Are you allowed to see this page? */
-	$faqObject->permissions('view', true);
+	$this->permissions('view', true);
 
 	/* Get a valid ID */
-	$id = $faqObject->clean($_GET['fid']);
+	$id = $this->clean($_GET['fid']);
 
 	if (empty($id))
 		fatal_lang_error('faqmod_no_valid_id', false);
 
 	/* All the single ladies! */
-	$temp = $faqObject->getBy(false, 'faq', 'id', $id, 1, false);
+	$temp = $this->getBy(false, 'faq', 'id', $id, 1, false);
 
 	if (is_array($temp) && !empty($temp[$id]))
 		$context['faq']['single'] = $temp[$id];

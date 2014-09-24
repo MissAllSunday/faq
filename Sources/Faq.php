@@ -176,7 +176,7 @@ class Faq extends FaqTools
 				fatal_lang_error('Faq_noValid', false);
 
 			/* Make sure it does exists... */
-			$current = $faqObject->getFaqByID($this->_faq);
+			$current = $this->getFaqByID($this->_faq);
 
 			/* Tell the user this entry doesn't exists anymore */
 			if (empty($current))
@@ -187,7 +187,7 @@ class Faq extends FaqTools
 				'cat_id' => $this->data('category_id'),
 				'log' => $this->createLog(),
 				'title' => $this->data('title'),
-				'body' => $faqObject->clean($_REQUEST['body'], true),
+				'body' => $this->clean($_REQUEST['body'], true),
 				'id' => $lid
 			);
 
@@ -201,14 +201,33 @@ class Faq extends FaqTools
 		{
 			// Create the data, log would be populated later.
 			$data = array(
-				'cat_id' => $faqObject->clean($_REQUEST['category_id']),
-				'log' => $faqObject->createLog(),
-				'title' => $faqObject->clean($_REQUEST['title']),
-				'body' => $faqObject->clean($_REQUEST['body'], true),
+				'cat_id' => $this->clean($_REQUEST['category_id']),
+				'log' => $this->createLog(),
+				'title' => $this->clean($_REQUEST['title']),
+				'body' => $this->clean($_REQUEST['body'], true),
 			);
 
-			$faqObject->add($data);
+			$this->add($data);
 			redirectexit('action=faq;sa=success;pin=add');
+		}
+	}
+
+	function delete($faqObject)
+	{
+		global $context, $txt;
+
+		$this->permissions('delete', true);
+
+		/* Gotta have an ID to work with */
+		if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']))
+			redirectexit('action=faq');
+
+		else
+		{
+			$lid = (int) $this->clean($_GET['fid']);
+			$table = $this->clean($_GET['table']);
+			$this->delete($lid, $table);
+			redirectexit('action=faq;sa=success;pin=deleteCat');
 		}
 	}
 }
