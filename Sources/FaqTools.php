@@ -26,13 +26,7 @@ function edit($faqObject)
 {
 	global $context, $scripturl, $modSettings, $sourcedir, $txt;
 
-	$this->permissions('edit', true);
 
-	if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']) || empty($_GET['table']))
-		redirectexit('action=faq');
-
-	else
-	{
 		/* Pass the object to the template */
 		$context['faq']['object'] = $faqObject;
 
@@ -108,7 +102,6 @@ function edit($faqObject)
 				fatal_lang_error('faqmod_no_valid_id', false);
 			break;
 		}
-	}
 }
 
 function addCat($faqObject)
