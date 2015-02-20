@@ -38,7 +38,7 @@ class FaqTools extends Suki\Ohara
 		LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
 	}
 
-	public function save($data)
+	public function create($data)
 	{
 		global $smcFunc;
 
@@ -58,7 +58,7 @@ class FaqTools extends Suki\Ohara
 		return $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['faq']['table']) . '', 'id');
 	}
 
-	public function saveCat($data)
+	public function createCat($data)
 	{
 		global $smcFunc;
 
@@ -136,12 +136,12 @@ class FaqTools extends Suki\Ohara
 				$return[$row['id']] = array(
 					'id' => $row['id'],
 					'title' => $row['title'],
-					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 					'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 					'cat' => array(
 						'id' => $row['category_id'],
 						'name' => $row['category_name'],
-						'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+						'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 					),
 					'log' => ($row['log']),
 				);
@@ -157,7 +157,7 @@ class FaqTools extends Suki\Ohara
 
 	public function getSingle($id)
 	{
-		global $smcFunc, $this->scriptUrl, $txt;
+		global $smcFunc, $txt;
 
 		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			WHERE id = ({int:id})
@@ -168,24 +168,12 @@ class FaqTools extends Suki\Ohara
 			)
 		);
 
-		while ($row = $smcFunc['db_fetch_assoc']($result))
-			$return[$row['id']] = array(
-				'id' => $row['id'],
-				'title' => $row['title'],
-				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-
-				'cat' => array(
-					'id' => $row['category_id'],
-					'name' => $row['category_name'],
-					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
-				),
-				'log' => ($row['log']),
-			);
+		$row = $smcFunc['db_fetch_assoc']($result)
+		$return = $this->returnData($row);
 
 		$smcFunc['db_free_result']($result);
 
-		/* Done? */
+		// Done?
 		return !empty($return) ? $return : false;
 	}
 
@@ -219,13 +207,13 @@ class FaqTools extends Suki\Ohara
 			$return[$row['id']] = array(
 				'id' => $row['id'],
 				'title' => $row['title'],
-				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
-					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
 				'log' => ($row['log']),
 			);
@@ -258,13 +246,13 @@ class FaqTools extends Suki\Ohara
 			$return[$row['id']] = array(
 				'id' => $row['id'],
 				'title' => $row['title'],
-				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
 				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 
 				'cat' => array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
-					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
 				),
 				'log' => ($row['log']),
 			);
@@ -446,10 +434,10 @@ class FaqTools extends Suki\Ohara
 
 		/* Let's check if you have what it takes... */
 		if ($edit == true)
-			$return .= '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;fid='. $this->clean($id) .';table='. $table .'">'. $txt['faqmod_edit_edit'] .'</a>';
+			$return .= '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $this->clean($id) .';table='. $table .'">'. $txt['faqmod_edit_edit'] .'</a>';
 
 		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;fid='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\''. $txt['faqmod_you_sure'] .'\')">'. $txt['faqmod_delete'] .'</a>';
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\''. $txt['faqmod_you_sure'] .'\')">'. $txt['faqmod_delete'] .'</a>';
 
 		/* Send the string */
 		return !empty($return) ? $return : false;
@@ -461,5 +449,24 @@ class FaqTools extends Suki\Ohara
 
 		/* Define the width, at least one block must be enabled */
 		return 'style="width:'. (!empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 79 : 99) .'%"';
+	}
+
+	protected function returnData($row)
+	{
+		if (empty($row))
+			return array();
+
+		return array(
+			'id' => $row['id'],
+			'title' => $row['title'],
+			'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $row['id'] .'">'. $row['title'] .'</a>',
+			'body' => $row['body'],
+			'cat' => array(
+				'id' => $row['category_id'],
+				'name' => $row['category_name'],
+				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $row['category_id'] .'">'. $row['category_name'] .'</a>'
+			),
+			'log' => ($row['log']),
+		);
 	}
 }

@@ -34,7 +34,7 @@ class Faq extends FaqTools
 
 	function actions(&$actions)
 	{
-		$actions['faq'] = array('Faq.php', 'Faq::call#');
+		$actions['Faq'] = array('Faq.php', 'Faq::call#');
 	}
 
 	public function call()
@@ -119,7 +119,7 @@ class Faq extends FaqTools
 			checkSession('request', 'faq');
 
 			// Set everything up to be displayed.
-			$context['current'] = $this->data('faq');
+			$context['current'] = $this->data('current');
 
 			// We Censor for your protection...
 			censorText($context['current']['title']);
@@ -159,26 +159,30 @@ class Faq extends FaqTools
 
 	function save()
 	{
-		global $context, $this->scriptUrl, $this->sourceDir, $txt, $smcFunc;
+		global $context, $txt, $smcFunc;
 
-		// Permissions here..
+		checkSession('request', 'faq');
 
+		require_once($this->sourceDir.'/Subs-Post.php');
 
+		// Set everything up to be displayed.
+		$current = $this->data('current');
 
-		/* Lastly, adding, make sure it gets executed on adding only */
-		elseif (!isset($_REQUEST['edit']) || !isset($_REQUEST['preview']))
-		{
-			// Create the data, log would be populated later.
-			$data = array(
-				'cat_id' => $this->data($_REQUEST['category_id']),
-				'log' => $this->createLog(),
-				'title' => $this->data($_REQUEST['title']),
-				'body' => $this->data($_REQUEST['body'], true),
-			);
+		// Gotta make sure we do have something...
+		if(empty($current))
+			fatal_lang_error($this->name .'_noValidId', false);
 
-			$this->create($data);
-			redirectexit('action=faq;sa=success;pin=add');
-		}
+		$data = array(
+			'cat_id' => $current['cat_id'],
+			'log' => $this->createLog(),
+			'title' => $current['title'],
+			'body' => preparsecode($current['message']);,
+		);
+
+		// Finally store it.
+		$id = $this->create($data);
+
+		// Some kind of message here.
 	}
 
 	function delete()
