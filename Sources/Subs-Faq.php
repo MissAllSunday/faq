@@ -26,7 +26,7 @@ class Faq
 		),
 	);
 
-	public static $name = 'faq';
+	public static $name = __CLASS__;
 
 	public function __construct()
 	{

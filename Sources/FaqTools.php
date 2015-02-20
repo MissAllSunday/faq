@@ -13,6 +13,9 @@ if (!defined('SMF'))
 
 class FaqTools extends Suki\Ohara
 {
+	// Fool the system!
+	public $name = 'Faq';
+
 	public function __construct()
 	{
 		$this->setRegistry();
@@ -33,8 +36,8 @@ function edit($faqObject)
 		/* Pass the object to the template */
 		$context['faq']['object'] = $faqObject;
 
-		$lid = $this->clean($_GET['fid']);
-		$table = $this->clean($_GET['table']);
+		$lid = $this->data($_GET['fid']);
+		$table = $this->data($_GET['table']);
 
 		/* Get the cats */
 		$context['faq']['cats'] = $this->getCats();
@@ -120,7 +123,7 @@ function addCat($faqObject)
 
 	else
 	{
-		$title = $this->clean($_POST['title']);
+		$title = $this->data($_POST['title']);
 		$this->addCat(array('category_name' => $title));
 		redirectexit('action=faq;sa=success;pin=addCat');
 	}
@@ -138,8 +141,8 @@ function editCat($faqObject)
 
 	else
 	{
-		$title = $this->clean($_POST['title']);
-		$id = $this->clean($_POST['catID']);
+		$title = $this->data($_POST['title']);
+		$id = $this->data($_POST['catID']);
 
 		$editData = array(
 			'id' => $id,
@@ -164,8 +167,8 @@ function delete($faqObject)
 
 	else
 	{
-		$lid = (int) $this->clean($_GET['fid']);
-		$table = $this->clean($_GET['table']);
+		$lid = (int) $this->data($_GET['fid']);
+		$table = $this->data($_GET['table']);
 		$this->delete($lid, $table);
 		redirectexit('action=faq;sa=success;pin=deleteCat');
 	}
@@ -179,7 +182,7 @@ function success($faqObject)
 	if (!isset($_GET['pin']) || empty($_GET['pin']))
 		redirectexit('action=faq');
 
-	$context['faq']['pin'] = $this->clean($_GET['pin']);
+	$context['faq']['pin'] = $this->data($_GET['pin']);
 
 	/* Build the link tree.... */
 	$context['linktree'][] = array(
@@ -255,7 +258,7 @@ function categories($faqObject)
 	if (!isset($_GET['fid']) || empty($_GET['fid']))
 		redirectexit('action=faq');
 
-	$lid = $this->clean($_GET['fid']);
+	$lid = $this->data($_GET['fid']);
 
 	/* Get all FAQs within certain category */
 	$context['faq']['all'] = $this->getBy(false, 'faq', 'cat_id', $lid, false);
@@ -284,8 +287,8 @@ function search($faqObject)
 	if (!isset($_REQUEST['l_search_value']) || empty($_REQUEST['l_search_value']) || !isset($_REQUEST['l_column']) || empty($_REQUEST['l_column']))
 		fatal_lang_error('faqmod_no_valid_id', false);
 
-	$value = urlencode($this->clean($_REQUEST['l_search_value']));
-	$column = $this->clean($_REQUEST['l_column']);
+	$value = urlencode($this->data($_REQUEST['l_search_value']));
+	$column = $this->data($_REQUEST['l_column']);
 
 	/* Page stuff */
 	$context['sub_template'] = 'faq_list';
@@ -316,7 +319,7 @@ function single($faqObject)
 	$this->permissions('view', true);
 
 	/* Get a valid ID */
-	$id = $this->clean($_GET['fid']);
+	$id = $this->data($_GET['fid']);
 
 	if (empty($id))
 		fatal_lang_error('faqmod_no_valid_id', false);

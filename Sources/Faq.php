@@ -13,6 +13,23 @@ if (!defined('SMF'))
 
 class Faq extends FaqTools
 {
+	public $name = __CLASS__;
+	public $subActions = array(
+		'add',
+		'addCat',
+		'save',
+		'delete',
+		'edit',
+		'categories',
+		'search',
+		'single',
+		'manage',
+		'manageCat',
+		'addCat',
+		'editCat',
+		'deleteCat',
+	);
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -28,22 +45,6 @@ class Faq extends FaqTools
 	{
 		global $context, $scripturl;
 
-			/* Safety first, hardcode the actions */
-			$subActions = array(
-				'add',
-				'addCat',
-				'save',
-				'delete',
-				'edit',
-				'categories',
-				'search',
-				'single',
-				'manage',
-				'manageCat',
-				'addCat',
-				'editCat',
-				'deleteCat',
-			);
 
 			/* Load both language and template files */
 			loadLanguage($this->name);
@@ -55,20 +56,8 @@ class Faq extends FaqTools
 				'name' => $this->text('title'),
 			);
 
-			/* Does the user want to use javascript to show/hide the FAQs? */
-			if($this->enable('JavaScript']))
-				addInlineJavascript('
-		function toggleDiv(divid){
-			if(document.getElementById(divid).style.display == \'none\') {
-				document.getElementById(divid).style.display = \'block\';
-			}
-			else {
-				document.getElementById(divid).style.display = \'none\';
-			}
-		}', true);
-
 			// Get the subaction.
-			$call = $this->data('sa') && in_array($this->data('sa'), $subActions) ? $this->data('sa') : 'main';
+			$call = $this->data('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
 
 			// "Save" doesn't need a template.
 			if ($call != 'save')
@@ -85,8 +74,20 @@ class Faq extends FaqTools
 			$context['faq']['action'] = $call;
 			$this->_call = $call;
 
-			// We kinda need a FAQ Iid for pretty much everything...
+			// We kinda need a FAQ ID for pretty much everything even if there isn't one!
 			$this->_faq = $this->data('faq') ? $this->data('faq') : 0;
+
+			// Does the user want to use javascript to show/hide the FAQs?
+			if($this->enable('JavaScript']))
+				addInlineJavascript('
+		function toggleDiv(divid){
+			if(document.getElementById(divid).style.display == \'none\') {
+				document.getElementById(divid).style.display = \'block\';
+			}
+			else {
+				document.getElementById(divid).style.display = \'none\';
+			}
+		}', true);
 
 			// Call the appropriate function.
 			$this->$call();
@@ -106,6 +107,8 @@ class Faq extends FaqTools
 
 		/* Get the cats */
 		$context['faq']['cats'] = $this->getCats();
+
+		// Past some error here...
 
 		/* We need make sure we have this. */
 		require_once($sourcedir . '/Subs-Editor.php');
@@ -140,7 +143,7 @@ class Faq extends FaqTools
 			$context['preview_message'] = parse_bbc($this->data('body'), true);
 			$context['preview_cat'] = $this->data('category_id');
 
-			/* We Censor for your protection... */
+			// We Censor for your protection...
 			censorText($context['preview_title']);
 			censorText($context['preview_message']);
 
@@ -187,7 +190,7 @@ class Faq extends FaqTools
 				'cat_id' => $this->data('category_id'),
 				'log' => $this->createLog(),
 				'title' => $this->data('title'),
-				'body' => $this->clean($_REQUEST['body'], true),
+				'body' => $this->data($_REQUEST['body'], true),
 				'id' => $lid
 			);
 
@@ -201,13 +204,13 @@ class Faq extends FaqTools
 		{
 			// Create the data, log would be populated later.
 			$data = array(
-				'cat_id' => $this->clean($_REQUEST['category_id']),
+				'cat_id' => $this->data($_REQUEST['category_id']),
 				'log' => $this->createLog(),
-				'title' => $this->clean($_REQUEST['title']),
-				'body' => $this->clean($_REQUEST['body'], true),
+				'title' => $this->data($_REQUEST['title']),
+				'body' => $this->data($_REQUEST['body'], true),
 			);
 
-			$this->add($data);
+			$this->create($data);
 			redirectexit('action=faq;sa=success;pin=add');
 		}
 	}
@@ -224,8 +227,8 @@ class Faq extends FaqTools
 
 		else
 		{
-			$lid = (int) $this->clean($_GET['fid']);
-			$table = $this->clean($_GET['table']);
+			$lid = (int) $this->data($_GET['fid']);
+			$table = $this->data($_GET['table']);
 			$this->delete($lid, $table);
 			redirectexit('action=faq;sa=success;pin=deleteCat');
 		}

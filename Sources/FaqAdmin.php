@@ -13,6 +13,9 @@ if (!defined('SMF'))
 
 class FaqAdmin extends FaqTools
 {
+	// Fool the system!
+	public $name = 'Faq';
+
 	public function __construct()
 	{
 		parent::__construct();
