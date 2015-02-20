@@ -22,7 +22,7 @@ class FaqTools extends Suki\Ohara
 	}
 
 
-function edit($faqObject)
+function edit()
 {
 	global $context, $scripturl, $modSettings, $sourcedir, $txt;
 
@@ -104,7 +104,7 @@ function edit($faqObject)
 		}
 }
 
-function addCat($faqObject)
+function addCat()
 {
 	global $context, $txt;
 
@@ -122,7 +122,7 @@ function addCat($faqObject)
 	}
 }
 
-function editCat($faqObject)
+function editCat()
 {
 	global $context, $txt;
 
@@ -148,7 +148,7 @@ function editCat($faqObject)
 	}
 }
 
-function delete($faqObject)
+function delete()
 {
 	global $context, $txt;
 
@@ -167,7 +167,7 @@ function delete($faqObject)
 	}
 }
 
-function success($faqObject)
+function success()
 {
 	global $context, $scripturl, $smcFunc, $txt;
 
@@ -197,7 +197,7 @@ function success($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function manage($faqObject)
+function manage()
 {
 	global $context, $txt, $scripturl;
 
@@ -219,7 +219,7 @@ function manage($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function manageCat($faqObject)
+function manageCat()
 {
 	global $context, $txt, $scripturl;
 
@@ -241,7 +241,7 @@ function manageCat($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function categories($faqObject)
+function categories()
 {
 	global $context, $txt, $scripturl;
 
@@ -269,7 +269,7 @@ function categories($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function search($faqObject)
+function search()
 {
 	global $context, $txt, $scripturl, $modSettings;
 
@@ -300,7 +300,7 @@ function search($faqObject)
 	$context['faq']['object'] = $faqObject;
 }
 
-function single($faqObject)
+function single()
 {
 	global $context, $scripturl, $txt, $user_info;
 

@@ -215,7 +215,7 @@ class Faq extends FaqTools
 		}
 	}
 
-	function delete($faqObject)
+	function delete()
 	{
 		global $context, $txt;
 
