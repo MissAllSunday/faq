@@ -94,30 +94,17 @@ class FaqAdmin extends FaqTools
 
 	function permissions(&$permissionGroups, &$permissionList)
 	{
+		$perm = array('view', 'delete', 'add', 'edit', 'search');
+
 		$permissionGroups['membergroup']['simple'] = array('faq_per_simple');
 		$permissionGroups['membergroup']['classic'] = array('faq_per_classic');
 
-		$permissionList['membergroup']['faq_view'] = array(
-			false,
-			'faq_per_classic',
-			'faq_per_simple');
-
-		$permissionList['membergroup']['faq_delete'] = array(
-			false,
-			'faq_per_classic',
-			'faq_per_simple');
-		$permissionList['membergroup']['faq_add'] = array(
-			false,
-			'faq_per_classic',
-			'faq_per_simple');
-		$permissionList['membergroup']['faq_edit'] = array(
-			false,
-			'faq_per_classic',
-			'faq_per_simple');
-		$permissionList['membergroup']['faq_search'] = array(
-			false,
-			'faq_per_classic',
-			'faq_per_simple');
+		foreach ($perm as $p)
+			$permissionList['membergroup']['faq_'. $p] = array(
+				false,
+				'faq_per_classic',
+				'faq_per_simple'
+			);
 	}
 
 
