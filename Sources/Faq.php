@@ -17,16 +17,13 @@ class Faq extends FaqTools
 	public $subActions = array(
 		'add',
 		'addCat',
-		'save',
 		'delete',
-		'edit',
 		'categories',
 		'search',
 		'single',
 		'manage',
 		'manageCat',
 		'addCat',
-		'editCat',
 		'deleteCat',
 	);
 
@@ -40,57 +37,60 @@ class Faq extends FaqTools
 		$actions['faq'] = array('Faq.php', 'Faq::call#');
 	}
 
-
 	public function call()
 	{
-		global $context, $scripturl;
+		global $context;
 
+		// Load both language and template files.
+		loadLanguage($this->name);
+		loadtemplate($this->name);
 
-			/* Load both language and template files */
-			loadLanguage($this->name);
-			loadtemplate($this->name);
+		// The basic linktree, each subaction needs to add their own.
+		$context['linktree'][] = array(
+			'url' => $this->scriptUrl .'?action=faq',
+			'name' => $this->text('title'),
+		);
 
-			// The basic linktree, each subaction needs to add their own.
-			$context['linktree'][] = array(
-				'url' => $scripturl .'?action=faq',
-				'name' => $this->text('title'),
-			);
+		// Get the subaction.
+		$call = $this->data('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
 
-			// Get the subaction.
-			$call = $this->data('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
+		// Get the right template
+		$context['sub_template'] = 'faq_'. $call;
 
-			// "Save" doesn't need a template.
-			if ($call != 'save')
-				$context['sub_template'] = 'faq_'. $call;
+		// Add the subaction specific data.
+		$context['canonical_url'] = $this->scriptUrl . '?action=faq' . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
 
-			$context['canonical_url'] = $scripturl . '?action=faq' . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
+		// "main" doesn't need this.
+		if (!empty($call) && $call != 'main')
+		{
 			$context['page_title'] = $this->text('title_'. $call);
 			$context['linktree'][] = array(
 				'url' => $context['canonical_url'],
 				'name' => $context['page_title'],
 			);
+		}
 
-			// Lazy way to tell the template which action has been called.
-			$context['faq']['action'] = $call;
-			$this->_call = $call;
+		// Lazy way to tell the template which action has been called.
+		$context['faq']['action'] = $call;
+		$this->_call = $call;
 
-			// We kinda need a FAQ ID for pretty much everything even if there isn't one!
-			$this->_faq = $this->data('faq') ? $this->data('faq') : 0;
+		// We kinda need a FAQ ID for pretty much everything even if there isn't one!
+		$this->_faq = $this->data('faq') ? $this->data('faq') : 0;
 
-			// Does the user want to use javascript to show/hide the FAQs?
-			if($this->enable('JavaScript']))
-				addInlineJavascript('
-		function toggleDiv(divid){
-			if(document.getElementById(divid).style.display == \'none\') {
-				document.getElementById(divid).style.display = \'block\';
-			}
-			else {
-				document.getElementById(divid).style.display = \'none\';
-			}
-		}', true);
+		// Does the user want to use javascript to show/hide the FAQs?
+		if($this->enable('JavaScript']))
+			addInlineJavascript('
+	function toggleDiv(divid){
+		if(document.getElementById(divid).style.display == \'none\') {
+			document.getElementById(divid).style.display = \'block\';
+		}
+		else {
+			document.getElementById(divid).style.display = \'none\';
+		}
+	}', true);
 
-			// Call the appropriate function.
-			$this->$call();
+		// Call the appropriate method.
+		$this->$call();
 	}
 
 	function main()
@@ -103,101 +103,67 @@ class Faq extends FaqTools
 
 	function add()
 	{
-		global $context, $scripturl, $sourcedir;
+		global $context;
 
-		/* Get the cats */
+		// Get the cats.
 		$context['faq']['cats'] = $this->getCats();
 
-		// Past some error here...
+		// A default var for previewing.
+		$context['current'] = array();
 
-		/* We need make sure we have this. */
-		require_once($sourcedir . '/Subs-Editor.php');
+		// Want to see your masterpiece?
+		if ($this->data('preview'))
+		{
+			global $txt;
 
-		/* Create it... */
+			checkSession('request', 'faq');
+
+			// Set everything up to be displayed.
+			$context['current'] = $this->data('faq');
+
+			// We Censor for your protection...
+			censorText($context['current']['title']);
+			censorText($context['current']['message']);
+
+			// Set a descriptive title.
+			$context['page_title'] = $txt['preview'] .' - ' . $context['current']['title'];
+		}
+
+		// Editing? Assuming there is a faq id...
+		if ($this->_faq)
+		{
+			// Make sure it does exists...
+			$context['current'] = $this->getSingle($this->_faq);
+
+			// Tell the user this entry doesn't exists anymore...
+			if (empty($context['current']))
+				fatal_lang_error($this->name .'_noValidId', false);
+		}
+
+		// Lastly, create our editor instance.
+		require_once($this->sourceDir . '/Subs-Editor.php');
+
+		// Create the editor.
 		$editorOptions = array(
-			'id' => 'body',
-			'value' => '',
+			'id' => 'message',
+			'value' => !empty($context['current']['message'] ? $context['current']['message'] : ''),
 			'width' => '90%',
 		);
 
-		/* Magic! */
+		// Magic!
 		create_control_richedit($editorOptions);
 
-		/* ... and store the ID again for use in the form */
+		// ... and store the ID again for use in the form.
 		$context['post_box_name'] = $editorOptions['id'];
 	}
 
 	function save()
 	{
-		global $context, $scripturl, $sourcedir, $txt, $smcFunc;
-
-		checkSession('post', '', true);
+		global $context, $this->scriptUrl, $this->sourceDir, $txt, $smcFunc;
 
 		// Permissions here..
 
-		// Previewing?
-		if ($this->data('preview'))
-		{
-			// Set everything up to be displayed.
-			$context['preview_title'] = $this->data('title');
-			$context['preview_message'] = parse_bbc($this->data('body'), true);
-			$context['preview_cat'] = $this->data('category_id');
 
-			// We Censor for your protection...
-			censorText($context['preview_title']);
-			censorText($context['preview_message']);
-
-			/* Set a descriptive title. */
-			$context['page_title'] = $txt['preview'] .' - ' . $context['preview_title'];
-
-			/* Get the cats */
-			$context['faq']['cats'] = $this->getCats();
-
-			/* We need to make sure we have this. */
-			require_once($sourcedir . '/Subs-Editor.php');
-
-			/* Create it... */
-			$editorOptions = array(
-				'id' => 'body',
-				'value' => $this->data('body') ? $this->data('body') : '', // @check.
-				'width' => '90%',
-			);
-
-			/* Magic! */
-			create_control_richedit($editorOptions);
-
-			/* ... and store the ID again for use in the form */
-			$context['post_box_name'] = $editorOptions['id'];
-			$context['sub_template'] = 'faq_add';
-		}
-
-		/* Editing */
-		if ($this->data('preview'))
-		{
-			// Gotta have something to work with.
-			if (!$this->_faq)
-				fatal_lang_error('Faq_noValid', false);
-
-			/* Make sure it does exists... */
-			$current = $this->getFaqByID($this->_faq);
-
-			/* Tell the user this entry doesn't exists anymore */
-			if (empty($current))
-				fatal_lang_error('Faq_noValidId', false);
-
-			/* Let us continue... */
-			$editData = array(
-				'cat_id' => $this->data('category_id'),
-				'log' => $this->createLog(),
-				'title' => $this->data('title'),
-				'body' => $this->data($_REQUEST['body'], true),
-				'id' => $lid
-			);
-
-			// Perform query here.
-			// Set session stuff for notifications.
-			redirectexit('action=faq;sa=success;pin=edit');
-		}
 
 		/* Lastly, adding, make sure it gets executed on adding only */
 		elseif (!isset($_REQUEST['edit']) || !isset($_REQUEST['preview']))

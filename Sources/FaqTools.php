@@ -16,326 +16,450 @@ class FaqTools extends Suki\Ohara
 	// Fool the system!
 	public $name = 'Faq';
 
+	protected $_queryConstruct = '';
+	protected $_table = array(
+		'faq' => array(
+			'table' => 'faq',
+			'columns' => array('id', 'cat_id', 'log', 'title', 'body',),
+		),
+		'cat' => array(
+			'table' => 'faq_categories',
+			'columns' => array('category_id', 'category_name',),
+		),
+	);
+
 	public function __construct()
 	{
 		$this->setRegistry();
+
+		// Query construct, this is used on all queries
+		$this->_queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
+	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
+		LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
 	}
 
-
-function edit()
-{
-	global $context, $scripturl, $modSettings, $sourcedir, $txt;
-
-
-		/* Pass the object to the template */
-		$context['faq']['object'] = $faqObject;
-
-		$lid = $this->data($_GET['fid']);
-		$table = $this->data($_GET['table']);
-
-		/* Get the cats */
-		$context['faq']['cats'] = $this->getCats();
-
-		/* Are we editing a category?, a FAQ? */
-		switch($table)
-		{
-			/* Cats are easier to handle... */
-			case 'cat':
-
-				/* Set all the usual stuff */
-				$context['faq']['cat']['edit'] = $context['faq']['cats'][$lid];
-				$context['sub_template'] = 'faq_addCat';
-				$context['page_title'] = $txt['faqmod_editing_cat'] .' - '. $context['faq']['cats'][$lid]['name'];
-				$context['linktree'][] = array(
-					'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
-					'name' => $context['page_title'],
-				);
-
-			break;
-
-			/* Handle FAqs */
-			case 'faq':
-
-				/* Trickery, don't ask! */
-				if (isset($_REQUEST['body']) && !empty($_REQUEST['body_mode']))
-				{
-					$_REQUEST['body'] = html_to_bbc($_REQUEST['body']);
-					$_REQUEST['body'] = un_htmlspecialchars($_REQUEST['body']);
-					$_POST['body'] = $_REQUEST['body'];
-				}
-
-				if (empty($lid))
-					fatal_lang_error('faqmod_no_valid_id', false);
-
-				/* Get the FAQ in question, tell the method this is "manage" */
-				$temp = $this->getBy('manage', 'faq', 'id', $lid, 1);
-
-				if (empty($temp))
-					fatal_lang_error('faqmod_no_valid_id', false);
-
-				/* Set all the usual stuff */
-				$context['faq']['edit'] = $temp[$lid];
-				$context['sub_template'] = 'faq_add';
-				$context['page_title'] = $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'];
-				$context['linktree'][] = array(
-					'url' => $scripturl. '?action='. faq::$name .';sa=edit;fid='. $lid,
-					'name' => $context['page_title'],
-				);
-
-				require_once($sourcedir .'/Subs-Editor.php');
-				/* Needed for the WYSIWYG editor, we all love the WYSIWYG editor... */
-				$modSettings['disable_wysiwyg'] = !empty($modSettings['disable_wysiwyg']) || empty($modSettings['enableBBC']);
-
-				$editorOptions = array(
-					'id' => 'body',
-					'value' => un_htmlspecialchars(html_to_bbc($context['faq']['edit']['body'])),
-					'width' => '90%',
-				);
-
-				create_control_richedit($editorOptions);
-				$context['post_box_name'] = $editorOptions['id'];
-
-			break;
-
-			/* Show a nice error message to those unwilling to play nice */
-			default;
-				fatal_lang_error('faqmod_no_valid_id', false);
-			break;
-		}
-}
-
-function addCat()
-{
-	global $context, $txt;
-
-	$this->permissions('add', true);
-
-	/* Gotta have something to work with */
-	if (!isset($_POST['title']) || empty($_POST['title']))
-		redirectexit('action=faq');
-
-	else
+	public function save($data)
 	{
-		$title = $this->data($_POST['title']);
-		$this->addCat(array('category_name' => $title));
-		redirectexit('action=faq;sa=success;pin=addCat');
-	}
-}
+		global $smcFunc;
 
-function editCat()
-{
-	global $context, $txt;
+		// Clear the cache.
+		cache_put_data($this->name .'_latest', '', 60);
 
-	$this->permissions('edit', true);
-
-	/* Gotta have something to work with */
-	if (!isset($_POST['title']) || empty($_POST['title']))
-		redirectexit('action=faq');
-
-	else
-	{
-		$title = $this->data($_POST['title']);
-		$id = $this->data($_POST['catID']);
-
-		$editData = array(
-			'id' => $id,
-			'category_name' => $title,
+		$smcFunc['db_insert']('',
+			'{db_prefix}'. ($this->_table['faq']['table']),
+			array(
+				'cat_id' => 'int', 'log' => 'string-65534', 'title' => 'string-255', 'body' => 'string-65534',
+			),
+			$data,
+			array('id')
 		);
 
-		/* Finally, store the data and tell the user */
-		$this->editCat($editData);
-		redirectexit('action=faq;sa=success;pin=editCat');
+		// Return the ID.
+		return $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['faq']['table']) . '', 'id');
 	}
-}
 
-function delete()
-{
-	global $context, $txt;
-
-	$this->permissions('delete', true);
-
-	/* Gotta have an ID to work with */
-	if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']))
-		redirectexit('action=faq');
-
-	else
+	public function saveCat($data)
 	{
-		$lid = (int) $this->data($_GET['fid']);
-		$table = $this->data($_GET['table']);
-		$this->delete($lid, $table);
-		redirectexit('action=faq;sa=success;pin=deleteCat');
+		global $smcFunc;
+
+		// Clear the cache.
+		cache_put_data($this->name .'_cats', '', 60);
+
+		$smcFunc['db_insert']('',
+			'{db_prefix}' . ($this->_table['cat']['table']) . '',
+			array(
+				'category_name' => 'string-255',
+			),
+			$data,
+			array('category_id')
+		);
+
+		// Return the ID.
+		return $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['cat']['table']), 'id');
 	}
-}
 
-function success()
-{
-	global $context, $scripturl, $smcFunc, $txt;
+	public function update($data)
+	{
+		global $smcFunc;
 
-	/* No direct access please */
-	if (!isset($_GET['pin']) || empty($_GET['pin']))
-		redirectexit('action=faq');
+		if (empty($data))
+			return false;
 
-	$context['faq']['pin'] = $this->data($_GET['pin']);
+		/* Does the cache has this entry? */
+		if (($gotIt = cache_get_data($this->name .'_latest', 120)) != null)
+			if (!empty($gotIt[$data['id']]))
+				cache_put_data($this->name .'_latest', '', 60);
 
-	/* Build the link tree.... */
-	$context['linktree'][] = array(
-		'url' => $scripturl . '?action='. faq::$name .';sa=success',
-		'name' => $txt['faqmod_success_message_title'],
-	);
+		$smcFunc['db_query']('', '
+			UPDATE {db_prefix}' . ($this->_table['faq']['table']) . '
+			SET cat_id = {int:cat_id}, log = {string:log}, title = {string:title}, body = {string:body}
+			WHERE id = {int:id}',
+			$data
+		);
+	}
 
-	$context['sub_template'] = 'faq_success';
-	$context['faq']['message'] = $txt['faqmod_success_message_'. $context['faq']['pin']];
+	public function updateCat($data)
+	{
+		global $smcFunc;
 
-	/* Do not waste my time boy */
-	if (!isset($context['faq']['message']))
-		redirectexit('action=faq');
+		if (empty($data))
+			return false;
 
-	/* Set a descriptive title. */
-	$context['page_title'] = $txt['faqmod_success_title'];
+		// Clear the cache.
+		cache_put_data($this->name .'_cats', '', 60);
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
+		$smcFunc['db_query']('', '
+			UPDATE {db_prefix}' . ($this->_table['cat']['table']) . '
+			SET category_name = {string:category_name}
+			WHERE category_id = {int:id}',
+			$data
+		);
+	}
 
-function manage()
-{
-	global $context, $txt, $scripturl;
+	public function getLatest($limit = 10)
+	{
+		global $smcFunc, $this->scriptUrl, $txt;
 
-	/* Are you allowed to see this page? */
-	$this->permissions(array('edit', 'delete'), true);
+		/* Use the cache when possible */
+		if (($return = cache_get_data($this->name .'_latest', 120)) == null)
+		{
+			$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+				ORDER BY {raw:sort}
+				LIMIT {int:limit}',
+				array(
+					'sort' => 'id DESC',
+					'limit' => $limit
+				)
+			);
 
-	/* Page stuff */
-	$context['sub_template'] = 'faq_manage';
-	$context['page_title'] = $this->text('manageFaqs');
-	$context['linktree'][] = array(
-		'url' => $scripturl. '?action='. faq::$name .';sa=manage',
-		'name' => $context['page_title'],
-	);
+			while ($row = $smcFunc['db_fetch_assoc']($result))
+				$return[$row['id']] = array(
+					'id' => $row['id'],
+					'title' => $row['title'],
+					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+					'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
+					'cat' => array(
+						'id' => $row['category_id'],
+						'name' => $row['category_name'],
+						'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+					),
+					'log' => ($row['log']),
+				);
 
-	/* Get all FAQs, show pagination if needed */
-	$context['faq']['all'] = $this->getAll('manage');
+			$smcFunc['db_free_result']($result);
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
+			cache_put_data($this->name .'_latest', $return, 120);
+		}
 
-function manageCat()
-{
-	global $context, $txt, $scripturl;
+		/* Done? */
+		return !empty($return) ? $return : false;
+	}
 
-	/* Are you allowed to see this page? */
-	$this->permissions(array('edit', 'delete'), true);
+	public function getSingle($id)
+	{
+		global $smcFunc, $this->scriptUrl, $txt;
 
-	/* Page stuff */
-	$context['sub_template'] = 'faq_manageCat';
-	$context['page_title'] = $txt['faqmod_manage_category'] ;
-	$context['linktree'][] = array(
-		'url' => $scripturl. '?action='. faq::$name .';sa=manage',
-		'name' => $context['page_title'],
-	);
+		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+			WHERE id = ({int:id})
+			LIMIT {int:limit}',
+			array(
+				'id' => (int) $id,
+				'limit' => 1
+			)
+		);
 
-	/* Get all possible cats */
-	$context['faq']['cats']['all'] = $this->getCats();
+		while ($row = $smcFunc['db_fetch_assoc']($result))
+			$return[$row['id']] = array(
+				'id' => $row['id'],
+				'title' => $row['title'],
+				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
+				'cat' => array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+				),
+				'log' => ($row['log']),
+			);
 
-function categories()
-{
-	global $context, $txt, $scripturl;
+		$smcFunc['db_free_result']($result);
 
-	/* Are you allowed to see this page? */
-	$this->permissions('view', true);
+		/* Done? */
+		return !empty($return) ? $return : false;
+	}
 
-	if (!isset($_GET['fid']) || empty($_GET['fid']))
-		redirectexit('action=faq');
+	public function getBy($page = '', $table, $column, $value, $limit = false, $like = false, $sort = 'title ASC')
+	{
+		global $smcFunc, $this->scriptUrl, $txt;
 
-	$lid = $this->data($_GET['fid']);
+		if (!empty($like) && $like == true)
+			$likeString = !empty($like) && $like == true ? 'LIKE' : '=';
 
-	/* Get all FAQs within certain category */
-	$context['faq']['all'] = $this->getBy(false, 'faq', 'cat_id', $lid, false);
+		/* We actually need some stuff to work on... */
+		if (empty($table) || empty($column) || !in_array($column, $this->_table[$table]['columns']) || empty($value))
+			return false;
 
-	/* The usual stuff */
-	$context['sub_template'] = 'faq_main';
-	$context['canonical_url'] = $scripturl . '?action=faq;sa=categories';
-	$context['page_title'] = $txt['faqmod_categories_list'];
-	$context['linktree'][] = array(
-		'url' => $scripturl . '?action=faq;sa=categories',
-		'name' => $context['page_title'],
-	);
+		$return = array();
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
+		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+			WHERE '. $column .' '. (is_numeric($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
+			ORDER BY {raw:sort}
+			'. (!empty($limit) ? '
+			LIMIT {int:limit}' : '') .'',
+			array(
+				'sort' => $sort,
+				'value' => $value,
+				'column' => $column,
+				'limit' => !empty($limit) ? $limit : 0,
+			)
+		);
 
-function search()
-{
-	global $context, $txt, $scripturl, $modSettings;
+		while ($row = $smcFunc['db_fetch_assoc']($result))
+			$return[$row['id']] = array(
+				'id' => $row['id'],
+				'title' => $row['title'],
+				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 
-	/* Are you allowed to see this page? */
-	$this->permissions(array('view', 'search'), true);
+				'cat' => array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+				),
+				'log' => ($row['log']),
+			);
 
-	/* We need a value to serch and a column */
-	if (!isset($_REQUEST['l_search_value']) || empty($_REQUEST['l_search_value']) || !isset($_REQUEST['l_column']) || empty($_REQUEST['l_column']))
-		fatal_lang_error('faqmod_no_valid_id', false);
+		$smcFunc['db_free_result']($result);
 
-	$value = urlencode($this->data($_REQUEST['l_search_value']));
-	$column = $this->data($_REQUEST['l_column']);
+		/* Done? */
+		return !empty($return) ? $return : false;
+	}
 
-	/* Page stuff */
-	$context['sub_template'] = 'faq_list';
-	$context['page_title'] = $txt['faqmod_searc_results'] .' - '. $value;
-	$context['linktree'][] = array(
-		'url' => $scripturl. '?action='. faq::$name .';sa=search',
-		'name' => $context['page_title'],
-	);
+	public function getAll($page = '')
+	{
+		global $smcFunc, $this->scriptUrl, $txt, $modSettings, $context;
 
-	$context['faq']['all'] = $this->getBy(false, 'faq', $column, '%'. $value .'%', false, true);
+		$total = $this->getCount();
+		$maxIndex = !empty($modSettings['faqmod_num_faqs']) ? $modSettings['faqmod_num_faqs'] : 20;
+		$sort = !empty($modSettings['faqmod_sort_method']) ? $modSettings['faqmod_sort_method'] : 20;
 
-	if (empty($context['faq']['all']))
-		fatal_lang_error('faqmod_no_search_results', false);
+		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+			ORDER BY {raw:sort} ASC
+			LIMIT {int:start}, {int:maxindex}',
+			array(
+				'start' => $_REQUEST['start'],
+				'maxindex' => $maxIndex,
+				'sort' => $sort
+			)
+		);
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
+		while ($row = $smcFunc['db_fetch_assoc']($result))
+			$return[$row['id']] = array(
+				'id' => $row['id'],
+				'title' => $row['title'],
+				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;fid='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
+				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
 
-function single()
-{
-	global $context, $scripturl, $txt, $user_info;
+				'cat' => array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;fid='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
+				),
+				'log' => ($row['log']),
+			);
 
-	/* Forget it... */
-	if (!isset($_GET['fid']) || empty($_GET['fid']))
-		fatal_lang_error('faqmod_no_valid_id', false);
+		$smcFunc['db_free_result']($result);
 
-	/* Are you allowed to see this page? */
-	$this->permissions('view', true);
+		/* Build the pagination */
+		$context['page_index'] = constructPageIndex($this->scriptUrl . '?action='. $this->name . (!empty($page) ? ';sa='. $page .'' : ''), $_REQUEST['start'], $total, $maxIndex, false);
 
-	/* Get a valid ID */
-	$id = $this->data($_GET['fid']);
+		/* Done? */
+		return !empty($return) ? $return : false;
+	}
 
-	if (empty($id))
-		fatal_lang_error('faqmod_no_valid_id', false);
+	protected function getCount($table = 'faq')
+	{
+		global $smcFunc;
 
-	/* All the single ladies! */
-	$temp = $this->getBy(false, 'faq', 'id', $id, 1, false);
+		$result = $smcFunc['db_query']('', '
+			SELECT id
+			FROM {db_prefix}' . ($this->_table[$table]['table']),
+			array()
+		);
 
-	if (is_array($temp) && !empty($temp[$id]))
-		$context['faq']['single'] = $temp[$id];
+		return $smcFunc['db_num_rows']($result);
+	}
 
-	else
-		fatal_lang_error('faqmod_no_valid_id', false);
+	public function delete($id, $table)
+	{
+		global $smcFunc;
 
-	/* Set all we need */
-	$context['sub_template'] = 'faq_single';
-	$context['canonical_url'] = $scripturl . '?action=faq;sa=single;fid=' . $id;
-	$context['page_title'] = $context['faq']['single']['title'];
-	$context['linktree'][] = array(
-		'url' => $context['canonical_url'],
-		'name' => $context['page_title'],
-	);
+		/* Do not waste my time... */
+		if (empty($id) || empty($table))
+			return false;
 
-	/* Pass the object to the template */
-	$context['faq']['object'] = $faqObject;
-}
+		/* Does the cache has this entry? */
+		if ($table == $this->name && ($gotIt = cache_get_data($this->name .'_latest', 120)) != null)
+			if (!empty($gotIt[$id]))
+				cache_put_data($this->name .'_latest', '', 60);
+
+		elseif ($table == 'cat')
+			cache_put_data($this->name .'_cats', '', 60);
+
+		$smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
+			WHERE '. ($table == $this->name ? 'id' : 'category_id') .' = {int:id}',
+			array(
+				'id' => (int) $id,
+			)
+		);
+	}
+
+	public function getCats()
+	{
+		global $smcFunc;
+
+		/* Use the cache when possible */
+		if (($return = cache_get_data($this->name .'_cats', 120)) == null)
+		{
+			$result = $smcFunc['db_query']('', '
+				SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
+				FROM {db_prefix}' . ($this->_table['cat']['table']) .'',
+				array()
+			);
+
+			while ($row = $smcFunc['db_fetch_assoc']($result))
+				$return[$row['category_id']] = array(
+					'id' => $row['category_id'],
+					'name' => $row['category_name'],
+				);
+
+			$smcFunc['db_free_result']($result);
+
+			cache_put_data($this->name .'_cats', $return, 120);
+		}
+
+		return $return;
+	}
+
+	public function clean($string, $body = false)
+	{
+		global $smcFunc, $this->sourceDir;
+
+		$string = $smcFunc['htmlspecialchars']($smcFunc['htmltrim']($string, ENT_QUOTES, ENT_QUOTES));
+
+		if ($body)
+		{
+			require_once($this->sourceDir.'/Subs-Post.php');
+			preparsecode($string);
+		}
+
+		return $string;
+	}
+
+	public function permissions($type, $fatal_error = false)
+	{
+		global $modSettings;
+
+		$type = is_array($type) ? array_unique($type) : array($type);
+		$allowed = array();
+
+		if (empty($type))
+			return false;
+
+		/* The mod must be enable */
+		if (empty($modSettings['faqmod_settings_enable']))
+			fatal_lang_error('faq_error_enable', false);
+
+		/* Collect the permissions */
+		foreach ($type as $t)
+			$allowed[] = (allowedTo('faq_'. $t) == true ? 1 : 0);
+
+		/* You need at least 1 permission to be true */
+		if ($fatal_error == true && !in_array(1, $allowed))
+			isAllowedTo('faq_'. $t);
+
+		elseif ($fatal_error == false && !in_array(1, $allowed))
+			return false;
+
+		elseif ($fatal_error == false && in_array(1, $allowed))
+			return true;
+	}
+
+	public function createLog($log = array())
+	{
+		global $user_info;
+
+		/* If log is empty, it means we are adding */
+		if (!$log)
+			$log[] = array(
+				'user' => $user_info['id'],
+				'time' => time(),
+			);
+
+		/* Handle editing */
+		elseif (!empty($log))
+		{
+			/* Gotta unserialize to work with it */
+			$log = unserialize($log);
+
+			/* If this user already modified this, just udate the time */
+			if (!empty($log)&& is_array($log))
+			{
+				foreach ($log as $l)
+					if ($l['user'] == $user_info['id'])
+					{
+						/* Add the new time */
+						$log[$l]['time'] = time();
+						break;
+						return serialize($log);
+					}
+
+				/* New user huh? */
+				$log[] = array(
+					'user' => $user_info['id'],
+					'time' => time(),
+				);
+			}
+		}
+
+		/* Either way, return it */
+		return serialize($log);
+	}
+
+	/* Creates simple links to edit/delete based on the users permissions */
+	public function crud($id, $table = 'faq')
+	{
+		global $this->scriptUrl, $txt;
+
+		/* By default lets send nothing! */
+		$return = '';
+
+		/* We need an ID... */
+		if (empty($id))
+			return $return;
+
+		/* Set the pertinent permissions */
+		$edit = $this->permissions('edit');
+		$delete = $this->permissions('delete');
+
+		/* Let's check if you have what it takes... */
+		if ($edit == true)
+			$return .= '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;fid='. $this->clean($id) .';table='. $table .'">'. $txt['faqmod_edit_edit'] .'</a>';
+
+		if ($delete == true)
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;fid='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\''. $txt['faqmod_you_sure'] .'\')">'. $txt['faqmod_delete'] .'</a>';
+
+		/* Send the string */
+		return !empty($return) ? $return : false;
+	}
+
+	public function getBlockWidth()
+	{
+		global $modSettings;
+
+		/* Define the width, at least one block must be enabled */
+		return 'style="width:'. (!empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 79 : 99) .'%"';
+	}
 }
