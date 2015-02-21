@@ -346,35 +346,6 @@ class FaqTools extends Suki\Ohara
 		return $string;
 	}
 
-	public function permissions($type, $fatal_error = false)
-	{
-		global $modSettings;
-
-		$type = is_array($type) ? array_unique($type) : array($type);
-		$allowed = array();
-
-		if (empty($type))
-			return false;
-
-		/* The mod must be enable */
-		if (empty($modSettings['faqmod_settings_enable']))
-			fatal_lang_error('faq_error_enable', false);
-
-		/* Collect the permissions */
-		foreach ($type as $t)
-			$allowed[] = (allowedTo('faq_'. $t) == true ? 1 : 0);
-
-		/* You need at least 1 permission to be true */
-		if ($fatal_error == true && !in_array(1, $allowed))
-			isAllowedTo('faq_'. $t);
-
-		elseif ($fatal_error == false && !in_array(1, $allowed))
-			return false;
-
-		elseif ($fatal_error == false && in_array(1, $allowed))
-			return true;
-	}
-
 	public function createLog($log = array())
 	{
 		global $user_info;
@@ -414,41 +385,6 @@ class FaqTools extends Suki\Ohara
 
 		/* Either way, return it */
 		return serialize($log);
-	}
-
-	/* Creates simple links to edit/delete based on the users permissions */
-	public function crud($id, $table = 'faq')
-	{
-		global $this->scriptUrl, $txt;
-
-		/* By default lets send nothing! */
-		$return = '';
-
-		/* We need an ID... */
-		if (empty($id))
-			return $return;
-
-		/* Set the pertinent permissions */
-		$edit = $this->permissions('edit');
-		$delete = $this->permissions('delete');
-
-		/* Let's check if you have what it takes... */
-		if ($edit == true)
-			$return .= '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $this->clean($id) .';table='. $table .'">'. $txt['Faq_edit_edit'] .'</a>';
-
-		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\''. $txt['Faq_you_sure'] .'\')">'. $txt['Faq_delete'] .'</a>';
-
-		/* Send the string */
-		return !empty($return) ? $return : false;
-	}
-
-	public function getBlockWidth()
-	{
-		global $modSettings;
-
-		/* Define the width, at least one block must be enabled */
-		return 'style="width:'. (!empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 79 : 99) .'%"';
 	}
 
 	protected function returnData($row)
