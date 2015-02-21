@@ -41,24 +41,28 @@ class Faq extends FaqTools
 	{
 		global $context;
 
+		// The mod needs to be enable.
+		if (!$this->setting('enable'))
+			redirectexit();
+
 		// Load both language and template files.
 		loadLanguage($this->name);
 		loadtemplate($this->name);
 
 		// The basic linktree, each subaction needs to add their own.
 		$context['linktree'][] = array(
-			'url' => $this->scriptUrl .'?action=faq',
+			'url' => $this->scriptUrl .'?action='. $this->name,
 			'name' => $this->text('title'),
 		);
 
 		// Get the subaction.
-		$call = $this->data('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
+		$call = $this->_call = $this->data('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
 
 		// Get the right template
 		$context['sub_template'] = 'faq_'. $call;
 
 		// Add the subaction specific data.
-		$context['canonical_url'] = $this->scriptUrl . '?action=faq' . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
+		$context['canonical_url'] = $this->scriptUrl . '?action='. $this->name .'' . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
 
 		// "main" doesn't need this.
 		if (!empty($call) && $call != 'main')
@@ -72,7 +76,6 @@ class Faq extends FaqTools
 
 		// Lazy way to tell the template which action has been called.
 		$context['faq']['action'] = $call;
-		$this->_call = $call;
 
 		// We kinda need a FAQ ID for pretty much everything even if there isn't one!
 		$this->_faq = $this->data('faq') ? $this->data('faq') : 0;
@@ -93,7 +96,7 @@ class Faq extends FaqTools
 		$this->$call();
 	}
 
-	function main()
+	protected function main()
 	{
 		global $context;
 
@@ -101,7 +104,7 @@ class Faq extends FaqTools
 		$context['faq']['all'] = $this->getAll();
 	}
 
-	function add()
+	protected function add()
 	{
 		global $context;
 
@@ -157,7 +160,7 @@ class Faq extends FaqTools
 		$context['post_box_name'] = $editorOptions['id'];
 	}
 
-	function save()
+	protected function save()
 	{
 		global $context, $txt, $smcFunc;
 
@@ -185,7 +188,7 @@ class Faq extends FaqTools
 		// Some kind of message here.
 	}
 
-	function delete()
+	protected function delete()
 	{
 		global $context, $txt;
 
@@ -193,14 +196,28 @@ class Faq extends FaqTools
 
 		/* Gotta have an ID to work with */
 		if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']))
-			redirectexit('action=faq');
+			redirectexit('action='. $this->name .'');
 
 		else
 		{
 			$lid = (int) $this->data($_GET['fid']);
 			$table = $this->data($_GET['table']);
 			$this->delete($lid, $table);
-			redirectexit('action=faq;sa=success;pin=deleteCat');
+			redirectexit('action='. $this->name .';sa=success;pin=deleteCat');
 		}
+	}
+
+	protected function single()
+	{
+		// There's gotta be an ID
+		if (!$this->_faq)
+			fatal_lang_error($this->name .'_noValidId', false);
+
+		// Make sure it does exists...
+		$context['current'] = $this->getSingle($this->_faq);
+
+		// Tell the user this entry doesn't exists anymore...
+		if (empty($context['current']))
+			fatal_lang_error($this->name .'_noValidId', false);
 	}
 }

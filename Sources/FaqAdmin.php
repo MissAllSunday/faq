@@ -123,24 +123,24 @@ class FaqAdmin extends FaqTools
 			array_slice($menu_buttons, 0, $counter),
 			array('faq' => array(
 				'title' => $this->text('title'),
-				'href' => $this->scriptUrl . '?action=faq',
+				'href' => $this->scriptUrl . '?action='. $this->name,
 				'show' => $this->enable('enable') && allowedTo('faq_view') ? true : false,
 				'sub_buttons' => array(
 					'faq_admin' => array(
 						'title' => $this->text('manageFaqs'),
-						'href' => $this->scriptUrl . '?action=faq;sa=manage',
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manage',
 						'show' => allowedTo('faq_edit'),
 						'sub_buttons' => array(
 							'faq_add' => array(
 								'title' => $this->text('addNew'),
-								'href' => $this->scriptUrl . '?action=faq;sa=add',
+								'href' => $this->scriptUrl . '?action='. $this->name .';sa=add',
 								'show' => allowedTo('faq_add'),
 							),
 						),
 					),
 					'faq_category' => array(
 						'title' => $this->text('manageCategories'),
-						'href' => $this->scriptUrl . '?action=faq;sa=manageCat',
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manageCat',
 						'show' => allowedTo(array('faq_delete', 'faq_add', 'faq_edit')),
 						'sub_buttons' => array(),
 					),
