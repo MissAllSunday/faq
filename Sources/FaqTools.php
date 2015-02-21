@@ -40,32 +40,31 @@ class FaqTools extends Suki\Ohara
 
 	public function create($data)
 	{
-		global $smcFunc;
-
 		// Clear the cache.
 		cache_put_data($this->name .'_latest', '', 60);
 
-		$smcFunc['db_insert']('',
+		$this->smcFunc['db_insert']('',
 			'{db_prefix}'. ($this->_table['faq']['table']),
 			array(
-				'cat_id' => 'int', 'log' => 'string-65534', 'title' => 'string-255', 'body' => 'string-65534',
+				'cat_id' => 'int', 'log' => 'string', 'title' => 'string', 'body' => 'string',
 			),
 			$data,
 			array('id')
 		);
 
 		// Return the ID.
-		return $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['faq']['table']) . '', 'id');
+		return $this->smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['faq']['table']) . '', 'id');
 	}
 
 	public function createCat($data)
 	{
-		global $smcFunc;
+		if (empty($data))
+			return false;
 
 		// Clear the cache.
 		cache_put_data($this->name .'_cats', '', 60);
 
-		$smcFunc['db_insert']('',
+		$this->smcFunc['db_insert']('',
 			'{db_prefix}' . ($this->_table['cat']['table']) . '',
 			array(
 				'category_name' => 'string-255',
@@ -75,22 +74,20 @@ class FaqTools extends Suki\Ohara
 		);
 
 		// Return the ID.
-		return $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['cat']['table']), 'id');
+		return $this->smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['cat']['table']), 'id');
 	}
 
 	public function update($data)
 	{
-		global $smcFunc;
-
 		if (empty($data))
 			return false;
 
-		/* Does the cache has this entry? */
+		// Does the cache has this entry?.
 		if (($gotIt = cache_get_data($this->name .'_latest', 120)) != null)
 			if (!empty($gotIt[$data['id']]))
 				cache_put_data($this->name .'_latest', '', 60);
 
-		$smcFunc['db_query']('', '
+		$this->smcFunc['db_query']('', '
 			UPDATE {db_prefix}' . ($this->_table['faq']['table']) . '
 			SET cat_id = {int:cat_id}, log = {string:log}, title = {string:title}, body = {string:body}
 			WHERE id = {int:id}',
@@ -100,15 +97,13 @@ class FaqTools extends Suki\Ohara
 
 	public function updateCat($data)
 	{
-		global $smcFunc;
-
 		if (empty($data))
 			return false;
 
 		// Clear the cache.
 		cache_put_data($this->name .'_cats', '', 60);
 
-		$smcFunc['db_query']('', '
+		$this->smcFunc['db_query']('', '
 			UPDATE {db_prefix}' . ($this->_table['cat']['table']) . '
 			SET category_name = {string:category_name}
 			WHERE category_id = {int:id}',
@@ -118,12 +113,10 @@ class FaqTools extends Suki\Ohara
 
 	public function getLatest($limit = 10)
 	{
-		global $smcFunc, $this->scriptUrl, $txt;
-
-		/* Use the cache when possible */
+		// Use the cache when possible.
 		if (($return = cache_get_data($this->name .'_latest', 120)) == null)
 		{
-			$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+			$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 				ORDER BY {raw:sort}
 				LIMIT {int:limit}',
 				array(
@@ -132,34 +125,21 @@ class FaqTools extends Suki\Ohara
 				)
 			);
 
-			while ($row = $smcFunc['db_fetch_assoc']($result))
-				$return[$row['id']] = array(
-					'id' => $row['id'],
-					'title' => $row['title'],
-					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-					'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
-					'cat' => array(
-						'id' => $row['category_id'],
-						'name' => $row['category_name'],
-						'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
-					),
-					'log' => ($row['log']),
-				);
+			while ($row = $this->smcFunc['db_fetch_assoc']($result))
+				$return[$row['id']] = $this->returnData($row);
 
-			$smcFunc['db_free_result']($result);
+			$this->smcFunc['db_free_result']($result);
 
 			cache_put_data($this->name .'_latest', $return, 120);
 		}
 
-		/* Done? */
+		// Done!
 		return !empty($return) ? $return : false;
 	}
 
 	public function getSingle($id)
 	{
-		global $smcFunc, $txt;
-
-		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+		$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			WHERE id = ({int:id})
 			LIMIT {int:limit}',
 			array(
@@ -168,10 +148,10 @@ class FaqTools extends Suki\Ohara
 			)
 		);
 
-		$row = $smcFunc['db_fetch_assoc']($result)
+		$row = $this->smcFunc['db_fetch_assoc']($result)
 		$return = $this->returnData($row);
 
-		$smcFunc['db_free_result']($result);
+		$this->smcFunc['db_free_result']($result);
 
 		// Done?
 		return !empty($return) ? $return : false;
@@ -179,18 +159,16 @@ class FaqTools extends Suki\Ohara
 
 	public function getBy($page = '', $table, $column, $value, $limit = false, $like = false, $sort = 'title ASC')
 	{
-		global $smcFunc, $this->scriptUrl, $txt;
-
-		if (!empty($like) && $like == true)
+		if ($like)
 			$likeString = !empty($like) && $like == true ? 'LIKE' : '=';
 
-		/* We actually need some stuff to work on... */
+		// We actually need some stuff to work on...
 		if (empty($table) || empty($column) || !in_array($column, $this->_table[$table]['columns']) || empty($value))
 			return false;
 
 		$return = array();
 
-		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+		$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			WHERE '. $column .' '. (is_numeric($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
 			ORDER BY {raw:sort}
 			'. (!empty($limit) ? '
@@ -203,99 +181,68 @@ class FaqTools extends Suki\Ohara
 			)
 		);
 
-		while ($row = $smcFunc['db_fetch_assoc']($result))
-			$return[$row['id']] = array(
-				'id' => $row['id'],
-				'title' => $row['title'],
-				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
+		while ($row = $this->smcFunc['db_fetch_assoc']($result))
+			$return[$row['id']] = $this->returnData($row);
 
-				'cat' => array(
-					'id' => $row['category_id'],
-					'name' => $row['category_name'],
-					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
-				),
-				'log' => ($row['log']),
-			);
+		$this->smcFunc['db_free_result']($result);
 
-		$smcFunc['db_free_result']($result);
-
-		/* Done? */
+		// Done!
 		return !empty($return) ? $return : false;
 	}
 
 	public function getAll($page = '')
 	{
-		global $smcFunc, $this->scriptUrl, $txt, $modSettings, $context;
+		global $context;
 
 		$total = $this->getCount();
-		$maxIndex = !empty($modSettings['faqmod_num_faqs']) ? $modSettings['faqmod_num_faqs'] : 20;
-		$sort = !empty($modSettings['faqmod_sort_method']) ? $modSettings['faqmod_sort_method'] : 20;
+		$maxIndex = $this->enable('num_faqs') ? $this->setting('num_faqs') : 20;
+		$sort = $this->enable('sort_method') ? $this->setting('sort_method') : 20;
 
-		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+		$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
 			array(
-				'start' => $_REQUEST['start'],
+				'start' => $this->data('start'),
 				'maxindex' => $maxIndex,
 				'sort' => $sort
 			)
 		);
 
-		while ($row = $smcFunc['db_fetch_assoc']($result))
-			$return[$row['id']] = array(
-				'id' => $row['id'],
-				'title' => $row['title'],
-				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $this->clean($row['id']) .'">'. $row['title'] .'</a>',
-				'body' => !empty($page) && $page == 'manage' ? $row['body'] : parse_bbc($row['body']),
+		while ($row = $this->smcFunc['db_fetch_assoc']($result))
+			$return[$row['id']] = $this->returnData($row);
 
-				'cat' => array(
-					'id' => $row['category_id'],
-					'name' => $row['category_name'],
-					'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $this->clean($row['category_id']) .'">'. $row['category_name'] .'</a>'
-				),
-				'log' => ($row['log']),
-			);
-
-		$smcFunc['db_free_result']($result);
+		$this->smcFunc['db_free_result']($result);
 
 		/* Build the pagination */
-		$context['page_index'] = constructPageIndex($this->scriptUrl . '?action='. $this->name . (!empty($page) ? ';sa='. $page .'' : ''), $_REQUEST['start'], $total, $maxIndex, false);
+		$context['page_index'] = constructPageIndex($this->scriptUrl . '?action='. $this->name . (!empty($page) ? ';sa='. $page .'' : ''), $this->data('start'), $total, $maxIndex, false);
 
-		/* Done? */
+		// Done!
 		return !empty($return) ? $return : false;
 	}
 
 	protected function getCount($table = 'faq')
 	{
-		global $smcFunc;
-
-		$result = $smcFunc['db_query']('', '
+		$result = $this->smcFunc['db_query']('', '
 			SELECT id
 			FROM {db_prefix}' . ($this->_table[$table]['table']),
 			array()
 		);
 
-		return $smcFunc['db_num_rows']($result);
+		return $this->smcFunc['db_num_rows']($result);
 	}
 
-	public function delete($id, $table)
+	public function delete($id)
 	{
-		global $smcFunc;
-
-		/* Do not waste my time... */
-		if (empty($id) || empty($table))
+		// Do not waste my time...
+		if (empty($id))
 			return false;
 
-		/* Does the cache has this entry? */
-		if ($table == $this->name && ($gotIt = cache_get_data($this->name .'_latest', 120)) != null)
+		// Does the cache had this entry?
+		if (($gotIt = cache_get_data($this->name .'_latest', 120)) != null)
 			if (!empty($gotIt[$id]))
 				cache_put_data($this->name .'_latest', '', 60);
 
-		elseif ($table == 'cat')
-			cache_put_data($this->name .'_cats', '', 60);
-
-		$smcFunc['db_query']('', '
+		$this->smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
 			WHERE '. ($table == $this->name ? 'id' : 'category_id') .' = {int:id}',
 			array(
@@ -306,24 +253,22 @@ class FaqTools extends Suki\Ohara
 
 	public function getCats()
 	{
-		global $smcFunc;
-
-		/* Use the cache when possible */
+		// Use the cache when possible.
 		if (($return = cache_get_data($this->name .'_cats', 120)) == null)
 		{
-			$result = $smcFunc['db_query']('', '
+			$result = $this->smcFunc['db_query']('', '
 				SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
 				FROM {db_prefix}' . ($this->_table['cat']['table']) .'',
 				array()
 			);
 
-			while ($row = $smcFunc['db_fetch_assoc']($result))
+			while ($row = $this->smcFunc['db_fetch_assoc']($result))
 				$return[$row['category_id']] = array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
 				);
 
-			$smcFunc['db_free_result']($result);
+			$this->smcFunc['db_free_result']($result);
 
 			cache_put_data($this->name .'_cats', $return, 120);
 		}
@@ -331,39 +276,24 @@ class FaqTools extends Suki\Ohara
 		return $return;
 	}
 
-	public function clean($string, $body = false)
-	{
-		global $smcFunc, $this->sourceDir;
-
-		$string = $smcFunc['htmlspecialchars']($smcFunc['htmltrim']($string, ENT_QUOTES, ENT_QUOTES));
-
-		if ($body)
-		{
-			require_once($this->sourceDir.'/Subs-Post.php');
-			preparsecode($string);
-		}
-
-		return $string;
-	}
-
 	public function createLog($log = array())
 	{
 		global $user_info;
 
-		/* If log is empty, it means we are adding */
+		// If log is empty, it means we are adding.
 		if (!$log)
 			$log[] = array(
 				'user' => $user_info['id'],
 				'time' => time(),
 			);
 
-		/* Handle editing */
+		// Handle editing.
 		elseif (!empty($log))
 		{
-			/* Gotta unserialize to work with it */
+			// Gotta unserialize to work with it.
 			$log = unserialize($log);
 
-			/* If this user already modified this, just udate the time */
+			// If this user already modified this, just update the time.
 			if (!empty($log)&& is_array($log))
 			{
 				foreach ($log as $l)
@@ -375,7 +305,7 @@ class FaqTools extends Suki\Ohara
 						return serialize($log);
 					}
 
-				/* New user huh? */
+				// New user huh?.
 				$log[] = array(
 					'user' => $user_info['id'],
 					'time' => time(),
@@ -383,7 +313,7 @@ class FaqTools extends Suki\Ohara
 			}
 		}
 
-		/* Either way, return it */
+		// Either way, return it.
 		return serialize($log);
 	}
 

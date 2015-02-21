@@ -227,19 +227,16 @@ class Faq extends FaqTools
 	{
 		global $context, $txt;
 
-		$this->permissions('delete', true);
+		if (!$this->_faq)
+			fatal_lang_error($this->name .'_noValidId', false);
 
-		/* Gotta have an ID to work with */
-		if (!isset($_GET['fid']) || empty($_GET['fid']) || !isset($_GET['table']))
-			redirectexit('action='. $this->name .'');
+		// Need permission?
+		isAllowedTo('faq_delete');
 
-		else
-		{
-			$lid = (int) $this->data($_GET['fid']);
-			$table = $this->data($_GET['table']);
-			$this->delete($lid, $table);
-			redirectexit('action='. $this->name .';sa=success;pin=deleteCat');
-		}
+		// Delete the entry.
+		$this->delete($this->_faq);
+
+		// Set some kind of response here.
 	}
 
 	protected function single()
