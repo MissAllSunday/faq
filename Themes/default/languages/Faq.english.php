@@ -58,7 +58,7 @@ $txt['Faq_manage_desc'] = 'From here you can manage your FAQs, you can edit/dele
 -Title: the name for the faq.<br />
 -Category: The category where this faq is hosted.<br />
 -Log: A link to a separate page with info a bout the FAQ, shows who has edited the FAQ and the last time they did it.<br />';
-$txt['Faq_manage_category'] = 'Manage Categories';
+$txt['Faq_manage_categories'] = 'Manage Categories';
 $txt['Faq_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want.<br />';
 $txt['Faq_admin_panel'] = 'FAQ mod admin panel';
 $txt['Faq_admin_panel_desc'] = 'This is the main admin panel for the FAQ mod, in here you can easily add/edit/delete FAQs as well as setup the configuration.';

@@ -209,7 +209,7 @@ class FaqTools extends Suki\Ohara
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
 			array(
-				'start' => $this->data('start'),
+				'start' => $this->validate('start') ? (int) $this->data('start') : 0,
 				'maxindex' => $maxIndex,
 				'sort' => $sort
 			)
@@ -238,26 +238,6 @@ class FaqTools extends Suki\Ohara
 		return $this->smcFunc['db_num_rows']($result);
 	}
 
-	public function erase($id)
-	{
-		// Do not waste my time...
-		if (empty($id))
-			return false;
-
-		// Does the cache had this entry?
-		if (($gotIt = cache_get_data($this->name .'_latest', 120)) != null)
-			if (!empty($gotIt[$id]))
-				cache_put_data($this->name .'_latest', '', 60);
-
-		$this->smcFunc['db_query']('', '
-			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
-			WHERE '. ($table == $this->name ? 'id' : 'category_id') .' = {int:id}',
-			array(
-				'id' => (int) $id,
-			)
-		);
-	}
-
 	public function getCats()
 	{
 		// Use the cache when possible.
@@ -281,6 +261,26 @@ class FaqTools extends Suki\Ohara
 		}
 
 		return $return;
+	}
+
+	public function erase($id)
+	{
+		// Do not waste my time...
+		if (empty($id))
+			return false;
+
+		// Does the cache had this entry?
+		if (($gotIt = cache_get_data($this->name .'_latest', 120)) != null)
+			if (!empty($gotIt[$id]))
+				cache_put_data($this->name .'_latest', '', 60);
+
+		$this->smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
+			WHERE '. ($table == $this->name ? 'id' : 'category_id') .' = {int:id}',
+			array(
+				'id' => (int) $id,
+			)
+		);
 	}
 
 	public function createLog($log = array())

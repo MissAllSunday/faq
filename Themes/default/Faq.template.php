@@ -15,29 +15,24 @@ function template_faq_main()
 
 	faq_header();
 
-	/* Sidebar */
-	faq_sideBar();
-
-	/* The main div */
-	echo '
-	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
-
 	/* Show a nice message if no FAQs are avaliable */
 	if (empty($context['faq']['all']))
 			echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['Faq_no_faq'] ,'</span>
-			</h3>
-		</div>
-		<div class="information">
+		<div class="windowbg">
 			', $txt['Faq_no_faq'] ,'
 		</div>';
 
-	/* There are some, lets show em all */
+	// There are some, lets show em all.
 	else
-		foreach($context['faq']['all'] as $faq)
-			echo '
+	{
+		// Sidebar.
+		faq_sideBar();
+
+		// The main div.
+		echo '
+	<div class="floatright nopadding">';
+			foreach($context['faq']['all'] as $faq)
+				echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="floatleft">', $faq['link'] ,'</span>
@@ -54,27 +49,28 @@ function template_faq_main()
 		</div>
 		<br />';
 
-	echo '
+		echo '
 	</div>';
 
-	echo '
+		echo '
 	<div class="clear" id="confirm_buttons"><p />';
 
-	/* Pagination */
-	if (!empty($context['page_index']))
-		echo $context['page_index'];
+		// Pagination.
+		if (!empty($context['page_index']))
+			echo $context['page_index'];
 
-	/* Button for adding a new entry */
-	if ($context['faq']['object']->permissions('add') == true)
-		echo '
+		// Button for adding a new entry.
+		if (allowedTo('faq_add'))
+			echo '
 		<div>
-			<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
+			<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
 				<input type="submit" name="send" class="input_text" value="', $txt['Faq_add_send'] ,'" />
 			</form>
 		</div>';
 
-	echo '
+		echo '
 	</div>';
+	}
 }
 
 function template_faq_add()
@@ -88,7 +84,7 @@ function template_faq_add()
 
 	/* The main div */
 	echo '
-	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+	<div class="floatright nopadding">';
 
 	// Show the preview
 	if (isset($context['preview_message']))
@@ -106,7 +102,7 @@ function template_faq_add()
 		<br />';
 
 		echo '
-		<form action="', $scripturl, '?action='. faq::$name .';sa=add2;', (!empty($context['faq']['edit']) || isset($_REQUEST['previewEdit']) ? 'fid='.  (!empty($context['faq']['edit']['id']) ? $context['faq']['edit']['id'] : $_REQUEST['previewEdit']) .';edit' : ''),'" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
+		<form action="', $scripturl, '?action=Faq;sa=add2;', (!empty($context['faq']['edit']) || isset($_REQUEST['previewEdit']) ? 'fid='.  (!empty($context['faq']['edit']['id']) ? $context['faq']['edit']['id'] : $_REQUEST['previewEdit']) .';edit' : ''),'" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					',(!empty($context['faq']['edit']) ?  $txt['Faq_editing'] .' - '. $context['faq']['edit']['title'] : $txt['Faq_adding']),'
@@ -151,7 +147,7 @@ function template_faq_add()
 
 			else
 				echo '
-							<div class="faqmod_warning">
+							<div class="Faq_warning">
 								',$txt['Faq_no_cat_admin'],'
 							</div>';
 
@@ -198,7 +194,7 @@ function template_faq_success()
 
 	/* The main div */
 	echo '
-	<div class="floatright" ', $context['faq']['object']->getBlockWidth() ,'>';
+	<div class="floatright">';
 
 	/* No direct access */
 	if (!empty($context['faq']['pin']))
@@ -278,7 +274,7 @@ function template_faq_manage()
 
 	/* The main div */
 	echo '
-	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+	<div class="floatright nopadding">';
 
 
 	echo '<div class="cat_bar">
@@ -347,7 +343,7 @@ function template_faq_manage()
 	if ($context['faq']['object']->permissions('add') == true)
 		echo '
 			<div id="confirm_buttons">
-				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
+				<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
 					<input type="submit" name="send" class="sbtn" value="', $txt['Faq_add_send'] ,'" />
 				</form>
 			</div>';
@@ -372,7 +368,7 @@ function template_faq_addCat()
 
 	/* The main div */
 	echo '
-	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+	<div class="floatright nopadding">';
 
 	/* A nice form for adding a new cat */
 	echo '
@@ -381,7 +377,7 @@ function template_faq_addCat()
 		</span>
 		<div class="roundframe rfix">
 			<div class="innerframe">
-				<form action="', $scripturl, '?action='. faq::$name .';sa=editCat" method="post" target="_self">
+				<form action="', $scripturl, '?action=Faq;sa=editCat" method="post" target="_self">
 					<dl id="post_header">
 						<dt>
 							<span id="caption_subject">', $txt['Faq_editcat_send'] ,'</span>
@@ -414,7 +410,7 @@ function template_faq_manageCat()
 
 	/* The main div */
 	echo '
-	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+	<div class="floatright nopadding">';
 
 	echo '
 		<div class="cat_bar">
@@ -463,7 +459,7 @@ function template_faq_manageCat()
 			</span>
 			<div class="roundframe rfix">
 				<div class="innerframe">
-					<form action="', $scripturl, '?action='. faq::$name .';sa=addCat" method="post" target="_self">
+					<form action="', $scripturl, '?action=Faq;sa=addCat" method="post" target="_self">
 						<dl id="post_header">
 							<dt>
 								<span id="caption_subject">', $txt['Faq_addcat_send'] ,'</span>
@@ -495,7 +491,7 @@ function template_faq_list()
 
 	/* The main div */
 	echo '
-	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+	<div class="floatright nopadding">';
 
 	/* No direct access */
 	if (empty($context['faq']['all']) || !is_array($context['faq']['all']))
@@ -526,7 +522,7 @@ function template_faq_list()
 		foreach($context['faq']['all'] as $all)
 			echo '
 						<li>
-							', $all['link'] ,'  ', $context['faq']['object']->crud($all['id']) ,'
+							', $all['link'] ,'
 						</li>';
 
 		echo '
@@ -551,23 +547,22 @@ function faq_header()
 {
 	global $txt, $scripturl, $context, $settings, $modSettings;
 
-	/* Create a link for managing faq */
-	if ($context['faq']['object']->permissions(array('edit', 'delete')))
-			$memberlist_buttons = array(
-			'manage' => array('text' => 'faqmod_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manage', 'active'=> false),
-			'manageCat' => array('text' => 'faqmod_manage_category', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action='. faq::$name .';sa=manageCat', 'active'=> false),
-		);
+	// Create a link for managing faq.
+	$memberlist_buttons = array(
+		'manage' => array('text' => 'Faq_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manage', 'active'=> false),
+		'manageCat' => array('text' => 'Faq_manage_categories', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manageCat', 'active'=> false),
+	);
 
 	echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="floatleft">', $txt['Faq_main'] ,'</span>';
 
-	if (true == $context['faq']['object']->permissions('search'))
+	if (allowedTo('faq_search'))
 		echo '
 				<object id="quick_search">
-					<form action="', $scripturl, '?action='. faq::$name .';sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
-						<img src="', $settings['images_url'] , '/filter.gif" alt="" />
+					<form action="', $scripturl, '?action=Faq;sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
+						<span class="generic_icons filter centericon"></span>
 						<input type="text" name="l_search_value" value="', $txt['search'] , '" onclick="if (this.value == \'', $txt['search'] , '\') this.value = \'\';" class="input_text" />
 						<select name="l_column">
 							<option value="body" selected="selected">', $txt['Faq_body'] ,'</option>
@@ -581,7 +576,7 @@ function faq_header()
 			</h3>
 		</div>
 		<div class="pagesection">
-			', $context['faq']['object']->permissions(array('edit', 'delete')) == true ? template_button_strip($memberlist_buttons, 'right') : '', '
+			', allowedTo(array('faq_edit', 'faq_delete', 'faq_add')) ? template_button_strip($memberlist_buttons, 'right') : '', '
 		</div>';
 }
 
@@ -590,13 +585,13 @@ function faq_sideBar()
 	global $context, $scripturl, $txt, $modSettings;
 
 	/* Define the width, at least one block must be enabled */
-	$blockWidth = !empty($modSettings['faqmod_show_latest']) || !empty($modSettings['faqmod_show_catlist']) ? 20 : 0;
+	$blockWidth = !empty($modSettings['Faq_show_latest']) || !empty($modSettings['Faq_show_catlist']) ? 20 : 0;
 
 	echo '
 	<div class="floatleft nopadding" style="width:', $blockWidth ,'%;">';
 
 	/* Show a nice category list */
-	if (!empty($modSettings['faqmod_show_catlist']))
+	if (!empty($modSettings['Faq_show_catlist']))
 	{
 		echo '
 		<div class="cat_bar">
@@ -625,7 +620,7 @@ function faq_sideBar()
 	}
 
 	/* Latest FAQs, calling a model method from the view? naughty, naughty me! */
-	if (!empty($modSettings['faqmod_show_latest']))
+	if (!empty($modSettings['Faq_show_latest']))
 	{
 		echo '
 		<div class="cat_bar">
@@ -639,7 +634,7 @@ function faq_sideBar()
 			<div class="content">
 				<ul class="reset">';
 
-		foreach($context['faq']['object']->getLatest($modSettings['faqmod_show_latest']) as $all)
+		foreach($context['faq']['object']->getLatest($modSettings['Faq_show_latest']) as $all)
 			echo '
 					<li>
 						', $all['link'] ,'

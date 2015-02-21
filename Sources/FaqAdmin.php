@@ -45,7 +45,7 @@ class FaqAdmin extends FaqTools
 		$config_vars = array(
 			array('desc', $this->name .'_desc'),
 			array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub')),
-			array('int', $this->name .'_num_faqs', 'size' => 3, 'subtext' => $this->text('enable_sub')),
+			array('int', $this->name .'_num_faqs', 'size' => 3, 'subtext' => $this->text('num_faqs_sub')),
 			array('check', $this->name .'_show_catlist', 'subtext' => $this->text('show_catlist_sub')),
 			array('int', $this->name .'_show_latest', 'size' => 3, 'subtext' => $this->text('show_latest_sub')),
 			array( 'select', $this->name .'_sort_method',
@@ -74,8 +74,8 @@ class FaqAdmin extends FaqTools
 		if ($return_config)
 			return $config_vars;
 
-		$context['post_url'] = $this->scriptUrl . '?action=admin;area=modsettings;save;sa=faq';
-		$context['settings_title'] = $this->text('title');
+		$context['post_url'] = $this->scriptUrl . '?action=admin;area=modsettings;sa=faq;save';
+		$context['settings_title'] = $this->text('admin');
 
 		if (empty($config_vars))
 		{
@@ -85,7 +85,7 @@ class FaqAdmin extends FaqTools
 			return prepareDBSettingContext($config_vars);
 		}
 
-		if ($this->data('save'))
+		if ($this->validate('save'))
 		{
 			checkSession();
 			$save_vars = $config_vars;
@@ -126,30 +126,30 @@ class FaqAdmin extends FaqTools
 		$menu_buttons = array_merge(
 			array_slice($menu_buttons, 0, $counter),
 			array('faq' => array(
-				'title' => $this->text('title'),
+				'title' => $this->text('main'),
 				'href' => $this->scriptUrl . '?action='. $this->name,
 				'show' => $this->enable('enable') && allowedTo('faq_view') ? true : false,
 				'sub_buttons' => array(
 					'faq_admin' => array(
-						'title' => $this->text('manageFaqs'),
+						'title' => $this->text('manage'),
 						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manage',
 						'show' => allowedTo('faq_edit'),
 						'sub_buttons' => array(
 							'faq_add' => array(
-								'title' => $this->text('addNew'),
+								'title' => $this->text('add_send'),
 								'href' => $this->scriptUrl . '?action='. $this->name .';sa=add',
 								'show' => allowedTo('faq_add'),
 							),
 						),
 					),
 					'faq_category' => array(
-						'title' => $this->text('manageCategories'),
+						'title' => $this->text('manage_categories'),
 						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manageCat',
 						'show' => allowedTo(array('faq_delete', 'faq_add', 'faq_edit')),
 						'sub_buttons' => array(),
 					),
 					'faq_admin_settings' => array(
-						'title' => $this->text('titleAdmin'),
+						'title' => $this->text('admin'),
 						'href' => $this->scriptUrl . '?action=admin;area=modsettings;sa=faq',
 						'show' => allowedTo('admin_forum'),
 						'sub_buttons' => array(),
