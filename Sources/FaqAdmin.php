@@ -11,6 +11,10 @@
 if (!defined('SMF'))
 	die('No direct access');
 
+// Require our libs.
+require_once ($sourcedir .'/Suki/Ohara.php');
+require_once ($sourcedir .'/FaqTools.php');
+
 class FaqAdmin extends FaqTools
 {
 	// Fool the system!
@@ -63,7 +67,7 @@ class FaqAdmin extends FaqTools
 				),
 				'subtext' => $this->text('menu_position_sub')
 			),
-			array('check', $this->name .'_use_javascript', 'subtext' => $this->text('use_javascript_sub')),
+			array('check', $this->name .'_use_js', 'subtext' => $this->text('use_j_sub')),
 			array('check', $this->name .'_care', 'subtext' => $this->text('care_sub')),
 		);
 

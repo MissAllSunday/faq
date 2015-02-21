@@ -11,6 +11,10 @@
 if (!defined('SMF'))
 	die('No direct access');
 
+// Require our libs.
+require_once ($sourcedir .'/Suki/Ohara.php');
+require_once ($sourcedir .'/FaqTools.php');
+
 class Faq extends FaqTools
 {
 	public $name = __CLASS__;
@@ -81,7 +85,7 @@ class Faq extends FaqTools
 		$this->_faq = $this->data('faq') ? $this->data('faq') : 0;
 
 		// Does the user want to use javascript to show/hide the FAQs?
-		if($this->enable('JavaScript']))
+		if($this->enable('use_js'))
 			addInlineJavascript('
 	function toggleDiv(divid){
 		if(document.getElementById(divid).style.display == \'none\') {
@@ -214,7 +218,7 @@ class Faq extends FaqTools
 			'cat_id' => $current['cat_id'],
 			'log' => $this->createLog(),
 			'title' => $current['title'],
-			'body' => preparsecode($current['body']);,
+			'body' => preparsecode($current['body']),
 		);
 
 		// Finally store it.
