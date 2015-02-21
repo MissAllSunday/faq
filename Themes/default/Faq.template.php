@@ -13,10 +13,6 @@ function template_faq_main()
 {
 	global $txt, $context, $scripturl, $modSettings;
 
-	/* Some nice vars for the JavaScript trickery */
-	$faqmod_javascript = !empty($modSettings['faqmod_use_javascript']) ? 'onmousedown="toggleDiv(\'content_%d\');"' : '';
-	$faqmod_display = !empty($modSettings['faqmod_use_javascript']) ? 'style="display:none;"' : '';
-
 	faq_header();
 
 	/* Sidebar */
@@ -34,12 +30,8 @@ function template_faq_main()
 				<span class="ie6_header floatleft">', $txt['faqmod_no_faq'] ,'</span>
 			</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
-			<div class="content">
+		<div class="information">
 			', $txt['faqmod_no_faq'] ,'
-			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	/* There are some, lets show em all */
@@ -48,16 +40,17 @@ function template_faq_main()
 			echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft"><a href="', (!empty($modSettings['faqmod_use_javascript']) ? 'javascript:void(0)' : $scripturl .'?action='. faq::$name .';sa=single;fid='. $faq['id']) ,'" ', sprintf($faqmod_javascript, $faq['id']) ,'>'. $faq['title'] .'</a></span>
-				<span class="floatright">', $context['faq']['object']->crud($faq['id']) ,'</span>
+				<span class="floatleft">', $faq['link'] ,'</span>
+				<span class="floatright">
+					', $faq['crud']['edit'] ,'
+					', $faq['crud']['delete'] ,'
+				</span>
 			</h3>
 		</div>
 		<div class="windowbg">
-			<span class="topslice"><span></span></span>
-			<div class="content" id="content_', $faq['id'] ,'" ',$faqmod_display,'>
+			<div class="content" id="content_', $faq['id'] ,'">
 			', $faq['body'] ,'
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<br />';
 
@@ -219,7 +212,7 @@ function template_faq_success()
 		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
 			<div class="content">
-				', $context['faq']['message'] ,'<p />
+				', $context['faq']['body'] ,'<p />
 				', $txt['faqmod_success_message_generic'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
@@ -232,43 +225,41 @@ function template_faq_success()
 
 function template_faq_single()
 {
-	global $txt, $context, $scripturl, $modSettings;
+	global $context;
 
 	faq_header();
 
-	/* Sidebar */
+	// Sidebar.
 	faq_sideBar();
 
-	/* The main div */
+	// The main div.
 	echo '
-	<div class="floatright nopadding" ', $context['faq']['object']->getBlockWidth() ,'>';
+	<div class="floatright nopadding" ', $context['faq']['width'] ,'>';
 
-	/* No direct access */
+	// No direct access.
 	if (empty($context['faq']['single']) || !is_array($context['faq']['single']))
 		echo '
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">
-				', $txt['faqmod_no_valid_id'] ,'
-			</div>
-			<span class="botslice"><span></span></span>
+		<div class="information">
+			', $txt['faqmod_no_valid_id'] ,'
 		</div>';
 
 	else
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $context['faq']['single']['link'] ,'</span>
-				<span class="floatright">', $context['faq']['object']->crud($context['faq']['single']['id']) ,'</span>
+				<span class="floatleft">', $context['faq']['single']['link'] ,'</span>
+				<span class="floatright">
+					', $context['faq']['single']['crud']['edit'] ,'
+					', $context['faq']['single']['crud']['delete'] ,'
+				</span>
+				<span class="clear" />
 			</h3>
 		</div>
 
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
+		<div class="windowbg">
 			<div class="content">
 				', $context['faq']['single']['body'] ,'
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	echo '

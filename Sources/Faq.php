@@ -100,6 +100,9 @@ class Faq extends FaqTools
 	{
 		global $context;
 
+		// Need permission?
+		isAllowedTo('faq_view');
+
 		// Get all of them.
 		$context['faq']['all'] = $this->getAll();
 	}
@@ -107,6 +110,9 @@ class Faq extends FaqTools
 	protected function add()
 	{
 		global $context;
+
+		// Need permission?
+		isAllowedTo('faq_add');
 
 		// Get the cats.
 		$context['faq']['cats'] = $this->getCats();
@@ -116,40 +122,15 @@ class Faq extends FaqTools
 
 		// Want to see your masterpiece?
 		if ($this->data('preview'))
-		{
-			global $txt;
-
-			checkSession('request', 'faq');
-
-			// Set everything up to be displayed.
-			$context['current'] = $this->data('current');
-
-			// We Censor for your protection...
-			censorText($context['current']['title']);
-			censorText($context['current']['message']);
-
-			// Set a descriptive title.
-			$context['page_title'] = $txt['preview'] .' - ' . $context['current']['title'];
-		}
-
-		// Editing? Assuming there is a faq id...
-		if ($this->_faq)
-		{
-			// Make sure it does exists...
-			$context['current'] = $this->getSingle($this->_faq);
-
-			// Tell the user this entry doesn't exists anymore...
-			if (empty($context['current']))
-				fatal_lang_error($this->name .'_noValidId', false);
-		}
+			$this->preview();
 
 		// Lastly, create our editor instance.
 		require_once($this->sourceDir . '/Subs-Editor.php');
 
 		// Create the editor.
 		$editorOptions = array(
-			'id' => 'message',
-			'value' => !empty($context['current']['message'] ? $context['current']['message'] : ''),
+			'id' => 'body',
+			'value' => !empty($context['current']['body'] ? $context['current']['body'] : ''),
 			'width' => '90%',
 		);
 
@@ -158,6 +139,60 @@ class Faq extends FaqTools
 
 		// ... and store the ID again for use in the form.
 		$context['post_box_name'] = $editorOptions['id'];
+	}
+
+	protected function edit()
+	{
+		// Editing? Assuming there is a faq id...
+		if (!$this->_faq)
+			fatal_lang_error($this->name .'_noValidId', false);
+
+		// Need permission?
+		isAllowedTo('faq_edit');
+
+		// Make sure it does exists...
+		$context['current'] = $this->getSingle($this->_faq);
+
+		// Tell the user this entry doesn't exists anymore...
+		if (empty($context['current']))
+			fatal_lang_error($this->name .'_noValidId', false);
+
+		// Want to see your masterpiece?
+		if ($this->data('preview'))
+			$this->preview();
+
+		// Lastly, create our editor instance.
+		require_once($this->sourceDir . '/Subs-Editor.php');
+
+		// Create the editor.
+		$editorOptions = array(
+			'id' => 'body',
+			'value' => !empty($context['current']['body'] ? $context['current']['body'] : ''),
+			'width' => '90%',
+		);
+
+		// Magic!
+		create_control_richedit($editorOptions);
+
+		// ... and store the ID again for use in the form.
+		$context['post_box_name'] = $editorOptions['id'];
+	}
+
+	protected function preview()
+	{
+		global $txt, $context;
+
+		checkSession('request', 'faq');
+
+		// Set everything up to be displayed.
+		$context['current'] = $this->data('current');
+
+		// We Censor for your protection...
+		censorText($context['current']['title']);
+		censorText($context['current']['body']);
+
+		// Set a descriptive title.
+		$context['page_title'] = $txt['preview'] .' - ' . $context['current']['title'];
 	}
 
 	protected function save()
@@ -179,7 +214,7 @@ class Faq extends FaqTools
 			'cat_id' => $current['cat_id'],
 			'log' => $this->createLog(),
 			'title' => $current['title'],
-			'body' => preparsecode($current['message']);,
+			'body' => preparsecode($current['body']);,
 		);
 
 		// Finally store it.
@@ -214,7 +249,7 @@ class Faq extends FaqTools
 			fatal_lang_error($this->name .'_noValidId', false);
 
 		// Make sure it does exists...
-		$context['current'] = $this->getSingle($this->_faq);
+		$context['faq']['single'] = $this->getSingle($this->_faq);
 
 		// Tell the user this entry doesn't exists anymore...
 		if (empty($context['current']))

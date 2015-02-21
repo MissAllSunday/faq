@@ -453,20 +453,29 @@ class FaqTools extends Suki\Ohara
 
 	protected function returnData($row)
 	{
+		static $permissions = array(
+			'edit' => allowedTo('faq_edit'),
+			'delete' => allowedTo('faq_delete'),
+		);
+
 		if (empty($row))
 			return array();
 
 		return array(
 			'id' => $row['id'],
 			'title' => $row['title'],
-			'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $row['id'] .'">'. $row['title'] .'</a>',
-			'body' => $row['body'],
+			'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=single;faq='. $row['id'] .'" '. ($this->enable('use_js') ? 'class="faq_show" data-faq="'. $row['id'] .'"' : '') .'>'. $row['title'] .'</a>',
+			'body' => parse_bbc($row['body']),
 			'cat' => array(
 				'id' => $row['category_id'],
 				'name' => $row['category_name'],
 				'link' => '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=categories;faq='. $row['category_id'] .'">'. $row['category_name'] .'</a>'
 			),
 			'log' => ($row['log']),
+			'crud' => array(
+				'edit' => ($permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
+				'delete' => (($permissions['edit'] == true ? ' | ': '') . ($permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' ; ''),
+			),
 		);
 	}
 }
