@@ -62,7 +62,7 @@ class Faq extends FaqTools
 		$context['sub_template'] = 'faq_'. $call;
 
 		// Add the subaction specific data.
-		$context['canonical_url'] = $this->scriptUrl . '?action='. $this->name .'' . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
+		$context['canonical_url'] = $this->scriptUrl . '?action='. $this->name . (!empty($call) && $call != 'main' ? ';sa='. $call : '');
 
 		// "main" doesn't need this.
 		if (!empty($call) && $call != 'main')

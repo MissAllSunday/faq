@@ -561,7 +561,7 @@ function faq_header()
 	echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="floatleft">', $txt['Faq_title_main'] ,'</span>';
+				<span class="floatleft">', $txt['Faq_main'] ,'</span>';
 
 	if (true == $context['faq']['object']->permissions('search'))
 		echo '
