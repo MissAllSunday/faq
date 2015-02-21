@@ -45,10 +45,10 @@ $txt['Faq_latest'] = 'Latest FAQs';
 
 // Settings strings
 $txt['Faq_desc'] = 'This page gathers all possible settings for the FAQ mod';
-$txt['Faq_settings_enable'] = 'Enable the FAQ mod';
-$txt['Faq_settings_enable_sub'] = 'This is the master setting, needs to be enable for the mod to work properly.';
-$txt['Faq_settings_search'] = 'Enable searching on FAQs';
-$txt['Faq_settings_search_sub'] = 'This setting needs to be enable to be able to perform searches, users still need to have the proper permission to be able to search.';
+$txt['Faq_enable'] = 'Enable the FAQ mod';
+$txt['Faq_enable_sub'] = 'This is the master setting, needs to be enable for the mod to work properly.';
+$txt['Faq_search'] = 'Enable searching on FAQs';
+$txt['Faq_search_sub'] = 'This setting needs to be enable to be able to perform searches, users still need to have the proper permission to be able to search.';
 $txt['Faq_basic_settings'] = 'Basic Settings';
 $txt['Faq_edit_page'] = 'Edit the FAQs';
 $txt['Faq_manage'] = 'Manage the FAQs';

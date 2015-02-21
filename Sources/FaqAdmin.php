@@ -39,7 +39,7 @@ class FaqAdmin extends FaqTools
 		global $context, $this->scriptUrl, $txt;
 
 		$config_vars = array(
-			array('desc', 'faqmod_desc'),
+			array('desc', $this->name .'_desc'),
 			array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub')),
 			array('int', $this->name .'_num_faqs', 'size' => 3, 'subtext' => $this->text('enable_sub')),
 			array('check', $this->name .'_show_catlist', 'subtext' => $this->text('show_catlist_sub')),

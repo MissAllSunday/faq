@@ -16,11 +16,11 @@
 
 	// Everybody likes hooks, especially the ones who adds an extra file everywhere!!
 	$hooks = array(
-		'integrate_menu_buttons' => '$sources/FaqAdmin.php|Faq::menu#',
-		'integrate_actions' => '$sources/Faq.php|Faq::actions#',
-		'integrate_load_permissions' => '$sources/FaqAdmin.php|Faq::permissions#',
-		'integrate_admin_areas' => '$sources/FaqAdmin.php|Faq::adminAreas#',
-		'integrate_modify_modifications' => '$sources/FaqAdmin.php|Faq::modifications#',
+		'integrate_menu_buttons' => '$sourcedir/FaqAdmin.php|Faq::menu#',
+		'integrate_actions' => '$sourcedir/Faq.php|Faq::actions#',
+		'integrate_load_permissions' => '$sourcedir/FaqAdmin.php|Faq::permissions#',
+		'integrate_admin_areas' => '$sourcedir/FaqAdmin.php|Faq::adminAreas#',
+		'integrate_modify_modifications' => '$sourcedir/FaqAdmin.php|Faq::modifications#',
 	);
 
 	foreach ($hooks as $hook => $function)
