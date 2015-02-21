@@ -27,6 +27,7 @@ class FaqTools extends Suki\Ohara
 			'columns' => array('category_id', 'category_name',),
 		),
 	);
+	protected static $_permissions = array();
 
 	public function __construct()
 	{
@@ -36,6 +37,12 @@ class FaqTools extends Suki\Ohara
 		$this->_queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
 	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 		LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
+
+		if (!isset(self::$_permissions))
+			self::$_permissions = array(
+				'edit' => allowedTo('faq_edit'),
+				'delete' => allowedTo('faq_delete'),
+			);
 	}
 
 	public function create($data)
@@ -148,7 +155,7 @@ class FaqTools extends Suki\Ohara
 			)
 		);
 
-		$row = $this->smcFunc['db_fetch_assoc']($result)
+		$row = $this->smcFunc['db_fetch_assoc']($result);
 		$return = $this->returnData($row);
 
 		$this->smcFunc['db_free_result']($result);
@@ -231,7 +238,7 @@ class FaqTools extends Suki\Ohara
 		return $this->smcFunc['db_num_rows']($result);
 	}
 
-	public function delete($id)
+	public function erase($id)
 	{
 		// Do not waste my time...
 		if (empty($id))
@@ -319,11 +326,6 @@ class FaqTools extends Suki\Ohara
 
 	protected function returnData($row)
 	{
-		static $permissions = array(
-			'edit' => allowedTo('faq_edit'),
-			'delete' => allowedTo('faq_delete'),
-		);
-
 		if (empty($row))
 			return array();
 
@@ -339,8 +341,8 @@ class FaqTools extends Suki\Ohara
 			),
 			'log' => ($row['log']),
 			'crud' => array(
-				'edit' => ($permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
-				'delete' => (($permissions['edit'] == true ? ' | ': '') . ($permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' ; ''),
+				'edit' => (self::$_permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
+				'delete' => ((self::$_permissions['edit'] == true ? ' | ': '') . (self::$_permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' : '')),
 			),
 		);
 	}

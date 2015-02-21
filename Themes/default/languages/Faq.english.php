@@ -11,7 +11,7 @@
 global $scripturl, $txt;
 
 $txt['Faq_main'] = 'FAQ';
-$txt['faq_title_admin'] = 'FAQ mod admin settings';
+$txt['Faq_admin'] = 'FAQ mod admin settings';
 $txt['Faq_edit'] = 'Edit';
 $txt['Faq_editing'] = 'Editing';
 $txt['Faq_send'] = 'Send';

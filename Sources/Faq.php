@@ -238,7 +238,7 @@ class Faq extends FaqTools
 		isAllowedTo('faq_delete');
 
 		// Delete the entry.
-		$this->delete($this->_faq);
+		$this->erase($this->_faq);
 
 		// Set some kind of response here.
 	}

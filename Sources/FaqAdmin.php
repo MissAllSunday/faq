@@ -25,22 +25,22 @@ class FaqAdmin extends FaqTools
 		parent::__construct();
 	}
 
-	function admin(&$areas)
+	function adminAreas(&$areas)
 	{
-		$areas['config']['areas']['modsettings']['subsections']['faq'] = array($this->text('title'));
+		$areas['config']['areas']['modsettings']['subsections']['faq'] = array($this->text('admin'));
 	}
 
 	function modifications(&$sub_actions)
 	{
 		global $context;
 
-		$sub_actions['faq'] = 'modify_faq_post_settings';
+		$sub_actions['faq'] = 'FaqAdmin::settings#';
 		$context[$context['admin_menu_name']]['tab_data']['tabs']['faq'] = array();
 	}
 
 	function settings(&$return_config = false)
 	{
-		global $context, $this->scriptUrl, $txt;
+		global $context, $txt;
 
 		$config_vars = array(
 			array('desc', $this->name .'_desc'),
@@ -85,7 +85,7 @@ class FaqAdmin extends FaqTools
 			return prepareDBSettingContext($config_vars);
 		}
 
-		if (isset($_GET['save']))
+		if ($this->data('save'))
 		{
 			checkSession();
 			$save_vars = $config_vars;
@@ -114,7 +114,7 @@ class FaqAdmin extends FaqTools
 
 	function menu(&$menu_buttons)
 	{
-		global $this->scriptUrl, $modSettings, $txt, $context;
+		global $txt, $context;
 
 		$insert = $this->enable('menuPosition') ? $this->setting('menuPosition') : 'home';
 		$counter = 0;
