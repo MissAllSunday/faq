@@ -434,10 +434,10 @@ class FaqTools extends Suki\Ohara
 
 		/* Let's check if you have what it takes... */
 		if ($edit == true)
-			$return .= '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $this->clean($id) .';table='. $table .'">'. $txt['faqmod_edit_edit'] .'</a>';
+			$return .= '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $this->clean($id) .';table='. $table .'">'. $txt['Faq_edit_edit'] .'</a>';
 
 		if ($delete == true)
-			$return .= ($edit == true ? ' | ': '') .'<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\''. $txt['faqmod_you_sure'] .'\')">'. $txt['faqmod_delete'] .'</a>';
+			$return .= ($edit == true ? ' | ': '') .'<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $this->clean($id) .';table='. $table .'" onclick="return confirm(\''. $txt['Faq_you_sure'] .'\')">'. $txt['Faq_delete'] .'</a>';
 
 		/* Send the string */
 		return !empty($return) ? $return : false;

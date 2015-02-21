@@ -27,11 +27,11 @@ function template_faq_main()
 			echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['faqmod_no_faq'] ,'</span>
+				<span class="ie6_header floatleft">', $txt['Faq_no_faq'] ,'</span>
 			</h3>
 		</div>
 		<div class="information">
-			', $txt['faqmod_no_faq'] ,'
+			', $txt['Faq_no_faq'] ,'
 		</div>';
 
 	/* There are some, lets show em all */
@@ -69,7 +69,7 @@ function template_faq_main()
 		echo '
 		<div>
 			<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
-				<input type="submit" name="send" class="input_text" value="', $txt['faqmod_add_send'] ,'" />
+				<input type="submit" name="send" class="input_text" value="', $txt['Faq_add_send'] ,'" />
 			</form>
 		</div>';
 
@@ -109,7 +109,7 @@ function template_faq_add()
 		<form action="', $scripturl, '?action='. faq::$name .';sa=add2;', (!empty($context['faq']['edit']) || isset($_REQUEST['previewEdit']) ? 'fid='.  (!empty($context['faq']['edit']['id']) ? $context['faq']['edit']['id'] : $_REQUEST['previewEdit']) .';edit' : ''),'" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);" >
 			<div class="cat_bar">
 				<h3 class="catbg">
-					',(!empty($context['faq']['edit']) ?  $txt['faqmod_editing'] .' - '. $context['faq']['edit']['title'] : $txt['faqmod_adding']),'
+					',(!empty($context['faq']['edit']) ?  $txt['Faq_editing'] .' - '. $context['faq']['edit']['title'] : $txt['Faq_adding']),'
 				</h3>
 			</div>
 			<span class="clear upperframe">
@@ -122,7 +122,7 @@ function template_faq_add()
 			/* Title */
 			echo '
 						<dt>
-							<span id="caption_subject">', $txt['faqmod_title_edit'] ,'</span>
+							<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
 						</dt>
 						<dd>
 							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
@@ -131,7 +131,7 @@ function template_faq_add()
 			/* Category select field */
 			echo'
 						<dt>
-							<span id="caption_subject">', $txt['faqmod_edit_category'] ,':</span>
+							<span id="caption_subject">', $txt['Faq_edit_category'] ,':</span>
 						</dt>
 						<dd>';
 
@@ -152,7 +152,7 @@ function template_faq_add()
 			else
 				echo '
 							<div class="faqmod_warning">
-								',$txt['faqmod_no_cat_admin'],'
+								',$txt['Faq_no_cat_admin'],'
 							</div>';
 
 			echo'
@@ -172,7 +172,7 @@ function template_faq_add()
 			echo '
 						<div id="confirm_buttons">
 							<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-							<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) || !empty($_REQUEST['previewEdit']) ? $txt['faqmod_edit_send'] : $txt['faqmod_create_send']),'" />
+							<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) || !empty($_REQUEST['previewEdit']) ? $txt['Faq_edit_send'] : $txt['Faq_create_send']),'" />
 							<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
 						</div>
 					</div>
@@ -205,7 +205,7 @@ function template_faq_success()
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['faqmod_success_message_title'] ,'</span>
+				<span class="ie6_header floatleft">', $txt['Faq_success_message_title'] ,'</span>
 			</h3>
 		</div>
 
@@ -213,7 +213,7 @@ function template_faq_success()
 			<span class="topslice"><span></span></span>
 			<div class="content">
 				', $context['faq']['body'] ,'<p />
-				', $txt['faqmod_success_message_generic'] ,'
+				', $txt['Faq_success_message_generic'] ,'
 			</div>
 			<span class="botslice"><span></span></span>
 		</div>';
@@ -240,7 +240,7 @@ function template_faq_single()
 	if (empty($context['faq']['single']) || !is_array($context['faq']['single']))
 		echo '
 		<div class="information">
-			', $txt['faqmod_no_valid_id'] ,'
+			', $txt['Faq_no_valid_id'] ,'
 		</div>';
 
 	else
@@ -282,10 +282,10 @@ function template_faq_manage()
 
 
 	echo '<div class="cat_bar">
-			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
+			<h3 class="catbg">', $txt['Faq_manage'] ,'</h3>
 		</div>
 		<div class="windowbg description">
-			', $txt['faqmod_manage_desc']  ,'
+			', $txt['Faq_manage_desc']  ,'
 		</div>';
 
 	/* There are no faq to show */
@@ -297,7 +297,7 @@ function template_faq_manage()
 			<div class="roundframe rfix">
 				<div class="innerframe">
 					<div class="content">
-						', $txt['faqmod_no_faq'] ,'
+						', $txt['Faq_no_faq'] ,'
 					</div>
 				</div>
 			</div>
@@ -311,10 +311,10 @@ function template_faq_manage()
 			<table class="table_grid" cellspacing="0" width="100%">
 				<thead>
 					<tr class="catbg">
-						<th scope="col" class="first_th">', $txt['faqmod_edit_id']  ,'</th>
-						<th scope="col">', $txt['faqmod_edit_title'] ,'</th>
-						<th scope="col">', $txt['faqmod_edit_category']  ,'</th>
-						<th scope="col" class="last_th">', $txt['faqmod_edit/delete'] ,'</th>
+						<th scope="col" class="first_th">', $txt['Faq_edit_id']  ,'</th>
+						<th scope="col">', $txt['Faq_edit_title'] ,'</th>
+						<th scope="col">', $txt['Faq_edit_category']  ,'</th>
+						<th scope="col" class="last_th">', $txt['Faq_edit/delete'] ,'</th>
 					</tr>
 				</thead>
 			<tbody>';
@@ -348,7 +348,7 @@ function template_faq_manage()
 		echo '
 			<div id="confirm_buttons">
 				<form action="', $scripturl, '?action='. faq::$name .';sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="sbtn" value="', $txt['faqmod_add_send'] ,'" />
+					<input type="submit" name="send" class="sbtn" value="', $txt['Faq_add_send'] ,'" />
 				</form>
 			</div>';
 
@@ -384,11 +384,11 @@ function template_faq_addCat()
 				<form action="', $scripturl, '?action='. faq::$name .';sa=editCat" method="post" target="_self">
 					<dl id="post_header">
 						<dt>
-							<span id="caption_subject">', $txt['faqmod_editcat_send'] ,'</span>
+							<span id="caption_subject">', $txt['Faq_editcat_send'] ,'</span>
 						</dt>
 						<dd>
 							<input type="hidden" id="catID" name="catID" value="', $context['faq']['cat']['edit']['id'] ,'" />
-							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', $context['faq']['cat']['edit']['name'] ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['faqmod_editcat_send'] ,'" />
+							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', $context['faq']['cat']['edit']['name'] ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_editcat_send'] ,'" />
 						</dd>
 					</dl>
 				</form>
@@ -418,19 +418,19 @@ function template_faq_manageCat()
 
 	echo '
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['faqmod_manage'] ,'</h3>
+			<h3 class="catbg">', $txt['Faq_manage'] ,'</h3>
 		</div>
 		<div class="windowbg description">
-			', $txt['faqmod_manage_category_desc'] ,'
+			', $txt['Faq_manage_category_desc'] ,'
 		</div>';
 
 		echo '
 			<table class="table_grid" cellspacing="0" width="100%">
 				<thead>
 					<tr class="catbg">
-						<th scope="col" class="first_th">', $txt['faqmod_edit_id']  ,'</th>
-						<th scope="col">', $txt['faqmod_edit_name']  ,'</th>
-						<th scope="col" class="last_th">', $txt['faqmod_edit/delete'] ,'</th>
+						<th scope="col" class="first_th">', $txt['Faq_edit_id']  ,'</th>
+						<th scope="col">', $txt['Faq_edit_name']  ,'</th>
+						<th scope="col" class="last_th">', $txt['Faq_edit/delete'] ,'</th>
 					</tr>
 				</thead>
 			<tbody>';
@@ -466,10 +466,10 @@ function template_faq_manageCat()
 					<form action="', $scripturl, '?action='. faq::$name .';sa=addCat" method="post" target="_self">
 						<dl id="post_header">
 							<dt>
-								<span id="caption_subject">', $txt['faqmod_addcat_send'] ,'</span>
+								<span id="caption_subject">', $txt['Faq_addcat_send'] ,'</span>
 							</dt>
 							<dd>
-								<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['faqmod_createCat_send'] ,'" />
+								<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_createCat_send'] ,'" />
 							</dd>
 						</dl>
 					</form>
@@ -561,7 +561,7 @@ function faq_header()
 	echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="floatleft">', $txt['faqmod_title_main'] ,'</span>';
+				<span class="floatleft">', $txt['Faq_title_main'] ,'</span>';
 
 	if (true == $context['faq']['object']->permissions('search'))
 		echo '
@@ -570,8 +570,8 @@ function faq_header()
 						<img src="', $settings['images_url'] , '/filter.gif" alt="" />
 						<input type="text" name="l_search_value" value="', $txt['search'] , '" onclick="if (this.value == \'', $txt['search'] , '\') this.value = \'\';" class="input_text" />
 						<select name="l_column">
-							<option value="body" selected="selected">', $txt['faqmod_body'] ,'</option>
-							<option value="title">', $txt['faqmod_title'] ,'</option>
+							<option value="body" selected="selected">', $txt['Faq_body'] ,'</option>
+							<option value="title">', $txt['Faq_title'] ,'</option>
 						</select>
 						<input type="submit" name="search_go" id="search_go" value="', $txt['search'] , '" class="button_submit" />
 					</form>
@@ -601,7 +601,7 @@ function faq_sideBar()
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['faqmod_sidebar_faq_cats'] ,'</span>
+				<span class="ie6_header floatleft">', $txt['Faq_sidebar_faq_cats'] ,'</span>
 			</h3>
 		</div>
 
@@ -630,7 +630,7 @@ function faq_sideBar()
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['faqmod_latest'] ,'</span>
+				<span class="ie6_header floatleft">', $txt['Faq_latest'] ,'</span>
 			</h3>
 		</div>
 

@@ -46,10 +46,10 @@ class FaqAdmin extends FaqTools
 			array('int', $this->name .'_show_latest', 'size' => 3, 'subtext' => $this->text('show_latest_sub')),
 			array( 'select', $this->name .'_sort_method',
 				array(
-					'id' => $txt['faqmod_id'],
-					'title' => $txt['faqmod_title'],
-					'cat_id' => $txt['faqmod_byCat'],
-					'body' => $txt['faqmod_body'],
+					'id' => $txt['Faq_id'],
+					'title' => $txt['Faq_title'],
+					'cat_id' => $txt['Faq_byCat'],
+					'body' => $txt['Faq_body'],
 				),
 				'subtext' => $this->text('sort_method_sub')
 			),
