@@ -77,6 +77,8 @@ function template_faq_add()
 {
 	global $context, $scripturl, $txt;
 
+	faq_header();
+
 	// Sidebar.
 	faq_sideBar();
 
@@ -99,33 +101,33 @@ function template_faq_add()
 		<form action="', $scripturl, '?action=Faq;sa=add;save" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);">
 			<div class="cat_bar">
 				<h3 class="catbg">
-					',(!empty($context['faq']['edit']) ?  $txt['Faq_editing'] .' - '. $context['faq']['edit']['title'] : $txt['Faq_adding']),'
+					something here
 				</h3>
 			</div>
 			<div class="information">
 				<dl id="post_header">';
 
-			/* Title */
+			// Title.
 			echo '
 					<dt>
 						<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
 					</dt>
 					<dd>
-						<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
 					</dd>';
 
-			/* Category select field */
+			// Category select field.
 			echo'
 					<dt>
 						<span id="caption_subject">', $txt['Faq_edit_category'] ,':</span>
 					</dt>
 					<dd>';
 
-			/* Show the category select field */
+			// Show the category select field.
 			if (!empty($context['faq']['cats']))
 			{
 				echo '
-						<select name="category_id">';
+						<select name="current[cat_id]">';
 
 				foreach($context['faq']['cats'] as $cats)
 					echo '
@@ -155,42 +157,6 @@ function template_faq_add()
 				</div>
 			</div>
 		</form>';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
-}
-
-function template_faq_success()
-{
-	global $txt, $context, $scripturl, $modSettings;
-
-	faq_header();
-
-	/* Sidebar */
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="floatright">';
-
-	/* No direct access */
-	if (!empty($context['faq']['pin']))
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['Faq_success_message_title'] ,'</span>
-			</h3>
-		</div>
-
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">
-				', $context['faq']['body'] ,'<p />
-				', $txt['Faq_success_message_generic'] ,'
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>';
 
 	echo '
 	</div>
@@ -530,6 +496,14 @@ function faq_header()
 		'manage' => array('text' => 'Faq_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manage', 'active'=> false),
 		'manageCat' => array('text' => 'Faq_manage_categories', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manageCat', 'active'=> false),
 	);
+
+	// Any message to display?
+	if (!empty($context['faq']['update']))
+		foreach ($context['faq']['update'] as $key => $message)
+			echo
+		'<div class="', $key ,'box">
+			', $message ,'
+		</div>';
 
 	echo '
 		<div class="pagesection">

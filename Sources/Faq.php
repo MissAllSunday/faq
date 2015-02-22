@@ -53,6 +53,9 @@ class Faq extends FaqTools
 		loadLanguage($this->name);
 		loadtemplate($this->name);
 
+		// Is there any messages? Dunno if there is an error or info message...
+		$context['faq']['update'] = $this->getAllUpdates();
+
 		// The basic linktree, each subaction needs to add their own.
 		$context['linktree'][] = array(
 			'url' => $this->scriptUrl .'?action='. $this->name,
@@ -82,7 +85,7 @@ class Faq extends FaqTools
 		$context['faq']['action'] = $call;
 
 		// We kinda need a FAQ ID for pretty much everything even if there isn't one!
-		$this->_faq = $this->data('faq') ? $this->data('faq') : 0;
+		$this->_faq = $this->validate('faq') ? $this->data('faq') : 0;
 
 		// Does the user want to use javascript to show/hide the FAQs?
 		if($this->enable('use_js'))
@@ -148,11 +151,15 @@ class Faq extends FaqTools
 		if ($this->validate('save'))
 		{
 			$data = $this->data('current');
+			$body = $this->data('body');
 			$isEmpty = array();
 
 			// You need to enter something!
 			if (empty($data))
 				redirectexit('action='. $this->name . ';sa='. $this->_call);
+
+			if (empty($body))
+				$isEmpty[] = 'body';
 
 			foreach ($data as $k => $v)
 				if (empty($v))
@@ -161,7 +168,7 @@ class Faq extends FaqTools
 			// Did you forgot something?
 			if (!empty($isEmpty))
 			{
-				$this->setMessage('error', str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields')));
+				$this->setUpdate('error', str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields')));
 				redirectexit('action='. $this->name . ';sa='. $this->_call);
 			}
 

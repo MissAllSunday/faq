@@ -95,8 +95,8 @@ $txt['Faq_categories_list'] = 'FAQs within category ';
 $txt['Faq_searc_results'] = 'Search results for ';
 
 // Error strings
-$txt['faq_error_emtpyFields'] = 'The following fields need to be enable: {fields}';
-$txt['faq_error_enable'] = 'The FAQ mod is not enable.';
+$txt['Faq_error_emtpyFields'] = 'The following fields cannot be left empty: {fields}';
+$txt['Faq_error_enable'] = 'The FAQ mod is not enable.';
 $txt['Faq_no_valid_id'] = 'This is not a valid action.';
 $txt['Faq_no_search_results'] = 'No results were found';
 $txt['Faq_search_disable'] = 'The search feature is disable';
