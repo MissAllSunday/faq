@@ -149,32 +149,7 @@ class Faq extends FaqTools
 
 		// Saving?
 		if ($this->validate('save'))
-		{
-			$data = $this->data('current');
-			$body = $this->data('body');
-			$isEmpty = array();
-
-			// You need to enter something!
-			if (empty($data))
-				redirectexit('action='. $this->name . ';sa='. $this->_call);
-
-			if (empty($body))
-				$isEmpty[] = 'body';
-
-			foreach ($data as $k => $v)
-				if (empty($v))
-					$isEmpty[] = $k;
-
-			// Did you forgot something?
-			if (!empty($isEmpty))
-			{
-				$this->setUpdate('error', str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields')));
-				redirectexit('action='. $this->name . ';sa='. $this->_call);
-			}
-
-			else
 				$this->save();
-		}
 	}
 
 	protected function edit()
@@ -218,7 +193,7 @@ class Faq extends FaqTools
 	{
 		global $txt, $context;
 
-		checkSession('request', 'faq');
+		checkSession('request', $this->name);
 
 		// Set everything up to be displayed.
 		$context['current'] = $this->data('current');
@@ -236,28 +211,47 @@ class Faq extends FaqTools
 	{
 		global $context, $txt, $smcFunc;
 
-		checkSession('request', 'faq');
+		checkSession('request', $this->name);
 
 		require_once($this->sourceDir.'/Subs-Post.php');
 
-		// Set everything up to be displayed.
-		$current = $this->data('current');
+		$data = $this->data('current');
+		$body = $this->data('body');
+		$isEmpty = array();
 
-		// Gotta make sure we do have something...
-		if(empty($current))
-			fatal_lang_error($this->name .'_noValidId', false);
+		// You need to enter something!
+		if (empty($data))
+			redirectexit('action='. $this->name . ';sa='. $this->_call);
 
+		if (empty($body))
+			$isEmpty[] = 'body';
+
+		foreach ($data as $k => $v)
+			if (empty($v))
+				$isEmpty[] = $k;
+
+		// Did you forgot something?
+		if (!empty($isEmpty))
+		{
+			$this->setUpdate('error', str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields')));
+			redirectexit('action='. $this->name . ';sa='. $this->_call);
+			return;
+		}
+
+		// Add some more things we need.
 		$data = array(
-			'cat_id' => $current['cat_id'],
 			'log' => $this->createLog(),
-			'title' => $current['title'],
-			'body' => preparsecode($current['body']),
+			'body' => preparsecode($data['body']),
 		);
 
 		// Finally store it.
 		$id = $this->create($data);
 
-		// Some kind of message here.
+		if (!empty($id))
+		{
+			$this->setUpdate('info', $this->text('success_'. $this->_call));
+			redirectexit('action='. $this->name);
+		}
 	}
 
 	protected function delete()

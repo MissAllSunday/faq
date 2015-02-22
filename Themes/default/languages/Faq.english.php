@@ -109,13 +109,13 @@ $txt['cannot_faq_search'] = 'I\'m sorry, you aren\'t allowed to search the FAQs'
 // Success
 $txt['Faq_success_title'] = 'successfully done';
 $txt['Faq_success_no_access'] = 'You can\'t access this page directly';
-$txt['Faq_success_message_title'] = 'Thank you';
-$txt['Faq_success_message_add'] = 'You have successfully added a new FAQ entry';
-$txt['Faq_success_message_addCat'] = 'You have successfully added a new category';
-$txt['Faq_success_message_edit'] = 'You have successfully edited this FAQ entry';
-$txt['Faq_success_message_editCat'] = 'You have successfully edited this category';
-$txt['Faq_success_message_delete'] = 'You have successfully deleted this entry';
-$txt['Faq_success_message_deleteCat'] = 'You have successfully deleted this category';
+$txt['Faq_success_title'] = 'Thank you';
+$txt['Faq_success_add'] = 'You have successfully added a new FAQ entry';
+$txt['Faq_success_addCat'] = 'You have successfully added a new category';
+$txt['Faq_success_edit'] = 'You have successfully edited this FAQ entry';
+$txt['Faq_success_editCat'] = 'You have successfully edited this category';
+$txt['Faq_success_delete'] = 'You have successfully deleted this entry';
+$txt['Faq_success_deleteCat'] = 'You have successfully deleted this category';
 
 // Template strings
 $txt['Faq_edit_title'] = 'Title';
