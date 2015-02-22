@@ -56,7 +56,7 @@ class Faq extends FaqTools
 		// The basic linktree, each subaction needs to add their own.
 		$context['linktree'][] = array(
 			'url' => $this->scriptUrl .'?action='. $this->name,
-			'name' => $this->text('title'),
+			'name' => $this->text('main'),
 		);
 
 		// Get the subaction.
@@ -71,7 +71,7 @@ class Faq extends FaqTools
 		// "main" doesn't need this.
 		if (!empty($call) && $call != 'main')
 		{
-			$context['page_title'] = $this->text('title_'. $call);
+			$context['page_title'] = $this->text('action_'. $call);
 			$context['linktree'][] = array(
 				'url' => $context['canonical_url'],
 				'name' => $context['page_title'],
@@ -134,7 +134,7 @@ class Faq extends FaqTools
 		// Create the editor.
 		$editorOptions = array(
 			'id' => 'body',
-			'value' => !empty($context['current']['body'] ? $context['current']['body'] : ''),
+			'value' => !empty($context['current']['body']) ? $context['current']['body'] : '',
 			'width' => '90%',
 		);
 
@@ -143,6 +143,31 @@ class Faq extends FaqTools
 
 		// ... and store the ID again for use in the form.
 		$context['post_box_name'] = $editorOptions['id'];
+
+		// Saving?
+		if ($this->validate('save'))
+		{
+			$data = $this->data('current');
+			$isEmpty = array();
+
+			// You need to enter something!
+			if (empty($data))
+				redirectexit('action='. $this->name . ';sa='. $this->_call);
+
+			foreach ($data as $k => $v)
+				if (empty($v))
+					$isEmpty[] = $k;
+
+			// Did you forgot something?
+			if (!empty($isEmpty))
+			{
+				$this->setMessage('error', str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields')));
+				redirectexit('action='. $this->name . ';sa='. $this->_call);
+			}
+
+			else
+				$this->save();
+		}
 	}
 
 	protected function edit()
@@ -190,10 +215,11 @@ class Faq extends FaqTools
 
 		// Set everything up to be displayed.
 		$context['current'] = $this->data('current');
+		$context['preview'] = $context['current'];
 
 		// We Censor for your protection...
-		censorText($context['current']['title']);
-		censorText($context['current']['body']);
+		censorText($context['preview']['title']);
+		censorText($context['preview']['body']);
 
 		// Set a descriptive title.
 		$context['page_title'] = $txt['preview'] .' - ' . $context['current']['title'];

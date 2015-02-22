@@ -18,7 +18,7 @@ function template_faq_main()
 	/* Show a nice message if no FAQs are avaliable */
 	if (empty($context['faq']['all']))
 			echo '
-		<div class="windowbg">
+		<div class="information">
 			', $txt['Faq_no_faq'] ,'
 		</div>';
 
@@ -77,105 +77,83 @@ function template_faq_add()
 {
 	global $context, $scripturl, $txt;
 
-	faq_header();
-
-	/* Sidebar */
+	// Sidebar.
 	faq_sideBar();
 
-	/* The main div */
+	// The main div.
 	echo '
 	<div class="floatright nopadding">';
 
 	// Show the preview
-	if (isset($context['preview_message']))
+	if (!empty($context['preview']))
 	echo '
 		<div class="cat_bar">
-			<h3 class="catbg">', $context['preview_title'], '</h3>
+			<h3 class="catbg">', $context['preview']['title'] ,'</h3>
 		</div>
-		<div class="windowbg">
-		<span class="topslice"><span></span></span>
-			<div class="content">
-				', $context['preview_message'], '
-			</div>
-		<span class="botslice"><span></span></span>
+		<div class="information">
+			', $context['preview']['body'] ,'
 		</div>
 		<br />';
 
 		echo '
-		<form action="', $scripturl, '?action=Faq;sa=add2;', (!empty($context['faq']['edit']) || isset($_REQUEST['previewEdit']) ? 'fid='.  (!empty($context['faq']['edit']['id']) ? $context['faq']['edit']['id'] : $_REQUEST['previewEdit']) .';edit' : ''),'" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);">
+		<form action="', $scripturl, '?action=Faq;sa=add;save" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					',(!empty($context['faq']['edit']) ?  $txt['Faq_editing'] .' - '. $context['faq']['edit']['title'] : $txt['Faq_adding']),'
 				</h3>
 			</div>
-			<span class="clear upperframe">
-				<span></span>
-			</span>
-			<div class="roundframe rfix">
-				<div class="innerframe">
-					<dl id="post_header">';
+			<div class="information">
+				<dl id="post_header">';
 
 			/* Title */
 			echo '
-						<dt>
-							<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
-						</dt>
-						<dd>
-							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
-						</dd>';
+					<dt>
+						<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
+					</dt>
+					<dd>
+						<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+					</dd>';
 
 			/* Category select field */
 			echo'
-						<dt>
-							<span id="caption_subject">', $txt['Faq_edit_category'] ,':</span>
-						</dt>
-						<dd>';
+					<dt>
+						<span id="caption_subject">', $txt['Faq_edit_category'] ,':</span>
+					</dt>
+					<dd>';
 
 			/* Show the category select field */
 			if (!empty($context['faq']['cats']))
 			{
 				echo '
-							<select name="category_id">';
+						<select name="category_id">';
 
 				foreach($context['faq']['cats'] as $cats)
 					echo '
-								<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['cat']['id']) && $cats['id'] == $context['faq']['edit']['cat']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
+							<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['cat']['id']) && $cats['id'] == $context['faq']['edit']['cat']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
 				echo '
-							</select>';
+						</select>';
 			}
 
 			else
 				echo '
-							<div class="Faq_warning">
-								',$txt['Faq_no_cat_admin'],'
-							</div>';
+						<div class="Faq_warning">
+							',$txt['Faq_no_cat_admin'],'
+						</div>';
 
 			echo'
-						</dd>
-					</dl>';
-
-			if ($context['show_bbc'])
-				echo '
-						<div id="bbcBox_message"></div>';
-
-			if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))
-				echo '
-						<div id="smileyBox_message"></div>';
+					</dd>
+				</dl>';
 
 			echo template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
 
 			echo '
-						<div id="confirm_buttons">
-							<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-							<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) || !empty($_REQUEST['previewEdit']) ? $txt['Faq_edit_send'] : $txt['Faq_create_send']),'" />
-							<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
-						</div>
-					</div>
+				<div id="confirm_buttons">
+					<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+					<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) || !empty($_REQUEST['previewEdit']) ? $txt['Faq_edit_send'] : $txt['Faq_create_send']),'" />
+					<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
 				</div>
-				<span class="lowerframe">
-					<span></span>
-				</span><br />
+			</div>
 		</form>';
 
 	echo '
@@ -192,7 +170,7 @@ function template_faq_success()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* The main div */
+	// The main div.
 	echo '
 	<div class="floatright">';
 
@@ -272,7 +250,7 @@ function template_faq_manage()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* The main div */
+	// The main div.
 	echo '
 	<div class="floatright nopadding">';
 
@@ -366,7 +344,7 @@ function template_faq_addCat()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* The main div */
+	// The main div.
 	echo '
 	<div class="floatright nopadding">';
 
@@ -408,7 +386,7 @@ function template_faq_manageCat()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* The main div */
+	// The main div.
 	echo '
 	<div class="floatright nopadding">';
 
@@ -489,7 +467,7 @@ function template_faq_list()
 	/* Sidebar */
 	faq_sideBar();
 
-	/* The main div */
+	// The main div.
 	echo '
 	<div class="floatright nopadding">';
 
@@ -554,6 +532,11 @@ function faq_header()
 	);
 
 	echo '
+		<div class="pagesection">
+			', allowedTo(array('faq_edit', 'faq_delete', 'faq_add')) ? template_button_strip($memberlist_buttons, 'right') : '', '
+		</div>';
+
+	echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="floatleft">', $txt['Faq_main'] ,'</span>';
@@ -574,9 +557,6 @@ function faq_header()
 
 	echo '
 			</h3>
-		</div>
-		<div class="pagesection">
-			', allowedTo(array('faq_edit', 'faq_delete', 'faq_add')) ? template_button_strip($memberlist_buttons, 'right') : '', '
 		</div>';
 }
 

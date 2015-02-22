@@ -16,13 +16,8 @@ $txt['Faq_edit'] = 'Edit';
 $txt['Faq_editing'] = 'Editing';
 $txt['Faq_send'] = 'Send';
 $txt['Faq_title_edit'] = 'Title:';
-$txt['Faq_no_category_name'] = 'Yo must provide a name for this category.';
-$txt['Faq_no_category'] = 'You must select a category.';
-$txt['Faq_no_title'] = 'You must provide a title.';
-$txt['Faq_no_body'] = 'You must provide a body.';
 $txt['Faq_last_edit'] = 'Last edit on: ';
 $txt['Faq_delete'] = 'Delete';
-$txt['Faq_delete_con'] = 'Do you really want to delete this: ';
 $txt['Faq_delete_send'] = 'Delete this';
 $txt['Faq_deleting'] = 'Deleting';
 $txt['Faq_add_send'] = 'Add a new FAQ';
@@ -31,7 +26,7 @@ $txt['Faq_createCat_send'] = 'Create Category';
 $txt['Faq_edit_send'] = 'Edit this FAQ';
 $txt['Faq_adding'] = 'Adding a new FAQ';
 $txt['Faq_no_faq'] = 'There are no FAQs to show.';
-$txt['Faq_no_cat_admin'] = 'You need to add a category before you can add a FAQ <br /> <a href="'.$scripturl.'?action=faq;sa=addcat">Add a category</a>';
+$txt['Faq_no_cat_admin'] = 'You need to add a category before you can add a FAQ';
 $txt['Faq_no_cat'] = 'There are not categories, you must add a category first before you can add FAQs.';
 $txt['Faq_adding_cat'] = 'Adding a new category.';
 $txt['Faq_editing_cat'] = 'Editing category';
@@ -40,8 +35,12 @@ $txt['Faq_editcat_send'] = 'Edit this category';
 $txt['Faq_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['Faq_na'] = 'N/A';
 $txt['Faq_sidebar_faq_cats'] = 'Category list';
-$txt['Faq_you_sure'] = 'Are you sure you want to delete?';
 $txt['Faq_latest'] = 'Latest FAQs';
+$txt['Faq_action_add'] = 'Add a new FAQ';
+$txt['Faq_action_edit'] = 'Edit this FAQ';
+$txt['Faq_action_manage'] = 'Manage the FAQs';
+$txt['Faq_action_manageCat'] = 'Manage the FAQ categories';
+$txt['Faq_action_'] = '';
 
 // Settings strings
 $txt['Faq_desc'] = 'This page gathers all possible settings for the FAQ mod';
@@ -96,6 +95,7 @@ $txt['Faq_categories_list'] = 'FAQs within category ';
 $txt['Faq_searc_results'] = 'Search results for ';
 
 // Error strings
+$txt['faq_error_emtpyFields'] = 'The following fields need to be enable: {fields}';
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
 $txt['Faq_no_valid_id'] = 'This is not a valid action.';
 $txt['Faq_no_search_results'] = 'No results were found';
@@ -110,7 +110,6 @@ $txt['cannot_faq_search'] = 'I\'m sorry, you aren\'t allowed to search the FAQs'
 $txt['Faq_success_title'] = 'successfully done';
 $txt['Faq_success_no_access'] = 'You can\'t access this page directly';
 $txt['Faq_success_message_title'] = 'Thank you';
-$txt['Faq_success_message_generic'] = '<a href="'. $scripturl .'?action=faq" >Go to the FAQ Index</a>';
 $txt['Faq_success_message_add'] = 'You have successfully added a new FAQ entry';
 $txt['Faq_success_message_addCat'] = 'You have successfully added a new category';
 $txt['Faq_success_message_edit'] = 'You have successfully edited this FAQ entry';
