@@ -63,7 +63,11 @@ class Faq extends FaqTools
 		);
 
 		// Get the subaction.
-		$call = $this->_call = $this->data('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
+		$call = $this->_call = $this->validate('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
+
+		// Check if the user can actually do whatever the user is trying to!
+		if (in_array($this->_call, $this->checkPerm))
+			isAllowedTo('faq_'. $this->_call);
 
 		// Get the right template
 		$context['sub_template'] = 'faq_'. $call;
@@ -99,7 +103,7 @@ class Faq extends FaqTools
 		}
 	}', true);
 
-		// Call the appropriate method.
+		// All good!
 		$this->$call();
 	}
 
@@ -118,9 +122,6 @@ class Faq extends FaqTools
 	{
 		global $context;
 
-		// Need permission?
-		isAllowedTo('faq_add');
-
 		// Get the cats.
 		$context['faq']['cats'] = $this->getCats();
 
@@ -128,7 +129,7 @@ class Faq extends FaqTools
 		$context['current'] = array();
 
 		// Want to see your masterpiece?
-		if ($this->data('preview'))
+		if ($this->validate('preview'))
 			$this->preview();
 
 		// Lastly, create our editor instance.
@@ -157,9 +158,6 @@ class Faq extends FaqTools
 		// Editing? Assuming there is a faq id...
 		if (!$this->_faq)
 			fatal_lang_error($this->name .'_noValidId', false);
-
-		// Need permission?
-		isAllowedTo('faq_edit');
 
 		// Make sure it does exists...
 		$context['current'] = $this->getSingle($this->_faq);
@@ -260,9 +258,6 @@ class Faq extends FaqTools
 
 		if (!$this->_faq)
 			fatal_lang_error($this->name .'_noValidId', false);
-
-		// Need permission?
-		isAllowedTo('faq_delete');
 
 		// Delete the entry.
 		$this->erase($this->_faq);
