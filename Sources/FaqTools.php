@@ -28,7 +28,7 @@ class FaqTools extends Suki\Ohara
 		),
 	);
 	protected static $_permissions = array();
-	protected $_checkPerm = array('view', 'delete', 'add', 'edit', 'search');
+	protected $_checkPerm = array('main', 'delete', 'add', 'edit', 'search');
 
 	public function __construct()
 	{

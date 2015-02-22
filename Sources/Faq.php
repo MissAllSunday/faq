@@ -91,7 +91,7 @@ class Faq extends FaqTools
 		// We kinda need a FAQ ID for pretty much everything even if there isn't one!
 		$this->_faq = $this->validate('faq') ? $this->data('faq') : 0;
 
-		// Does the user want to use javascript to show/hide the FAQs?
+		// Does the user want to use JavaScript to show/hide the FAQs?
 		if($this->enable('use_js'))
 			addInlineJavascript('
 	function toggleDiv(divid){
@@ -110,9 +110,6 @@ class Faq extends FaqTools
 	protected function main()
 	{
 		global $context;
-
-		// Need permission?
-		isAllowedTo('faq_view');
 
 		// Get all of them.
 		$context['faq']['all'] = $this->getAll();
