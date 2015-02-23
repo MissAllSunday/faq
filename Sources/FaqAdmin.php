@@ -101,7 +101,7 @@ class FaqAdmin extends FaqTools
 		$permissionGroups['membergroup']['simple'] = array('faq_per_simple');
 		$permissionGroups['membergroup']['classic'] = array('faq_per_classic');
 
-		foreach ($this->checkPerm as $p)
+		foreach ($this->_checkPerm as $p)
 			$permissionList['membergroup']['faq_'. $p] = array(
 				false,
 				'faq_per_classic',

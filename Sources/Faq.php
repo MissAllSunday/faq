@@ -63,10 +63,10 @@ class Faq extends FaqTools
 		);
 
 		// Get the subaction.
-		$call = $this->_call = $this->validate('sa') && in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
+		$call = $this->_call = $this->validate('sa') &&  isset($this->subActions[$this->data('sa')]) ? $this->data('sa') : 'main';
 
 		// Check if the user can actually do whatever the user is trying to!
-		if (in_array($this->_call, $this->checkPerm))
+		if (isset($this->_checkPerm[$this->_call]))
 			isAllowedTo('faq_'. $this->_call);
 
 		// Get the right template
@@ -164,7 +164,7 @@ class Faq extends FaqTools
 			fatal_lang_error($this->name .'_noValidId', false);
 
 		// Want to see your masterpiece?
-		if ($this->data('preview'))
+		if ($this->validate('preview'))
 			$this->preview();
 
 		// Lastly, create our editor instance.
@@ -188,23 +188,26 @@ class Faq extends FaqTools
 	{
 		global $txt, $context;
 
-		checkSession('request', $this->name);
+		checkSession('request');
 
 		// Set everything up to be displayed.
 		$context['current'] = $this->data('current');
+		$context['current']['body'] = $this->data('body');
 		$context['preview'] = $context['current'];
 
 		// We Censor for your protection...
 		censorText($context['preview']['title']);
-		censorText($context['preview']['body']);
+		censorText(parse_bbc($context['current']['body']));
 
 		// Set a descriptive title.
 		$context['page_title'] = $txt['preview'] .' - ' . $context['current']['title'];
+
+		var_dump($context);die;
 	}
 
 	protected function save()
 	{
-		global $context, $txt, $smcFunc;
+		global $context, $txt;
 
 		checkSession('request', $this->name);
 

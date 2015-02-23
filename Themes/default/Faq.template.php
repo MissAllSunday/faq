@@ -88,7 +88,7 @@ function template_faq_add()
 
 	// Show the preview
 	if (!empty($context['preview']))
-	echo '
+		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">', $context['preview']['title'] ,'</h3>
 		</div>
@@ -98,7 +98,7 @@ function template_faq_add()
 		<br />';
 
 		echo '
-		<form action="', $scripturl, '?action=Faq;sa=add;save" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'title\', \'body\']);">
+		<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					something here
@@ -113,7 +113,7 @@ function template_faq_add()
 						<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
 					</dt>
 					<dd>
-						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', isset($context['preview_title']) ? $context['preview_title'] : (!empty($context['faq']['edit']) ? $context['faq']['edit']['title'] : '') ,'" class="input_text" />
+						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', isset($context['current']['title']) ? $context['current']['title'] ,'" class="input_text" />
 					</dd>';
 
 			// Category select field.
@@ -131,7 +131,7 @@ function template_faq_add()
 
 				foreach($context['faq']['cats'] as $cats)
 					echo '
-							<option value="', $cats['id'] ,'" ', isset($context['preview_cat']) && $cats['id'] == $context['preview_cat'] ? 'selected="selected"' : (isset($context['faq']['edit']['cat']['id']) && $cats['id'] == $context['faq']['edit']['cat']['id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
+							<option value="', $cats['id'] ,'" ', (isset($context['current']['cat_id']) && $cats['id'] == $context['current']['cat_id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
 				echo '
 						</select>';
@@ -152,8 +152,8 @@ function template_faq_add()
 			echo '
 				<div id="confirm_buttons">
 					<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-					<input type="submit" name="send" class="sbtn" value="',(!empty($context['faq']['edit']) || !empty($_REQUEST['previewEdit']) ? $txt['Faq_edit_send'] : $txt['Faq_create_send']),'" />
-					<input type="submit" name="preview" class="sbtn" value="', $txt['preview'], '" />
+					<input type="submit" name="save" class="sbtn" value="', $txt['Faq_create_send'] ,'" />
+					<input type="submit" name="preview" class="sbtn" value="', $txt['preview'] ,'" />
 				</div>
 			</div>
 		</form>';
