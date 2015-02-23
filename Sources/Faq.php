@@ -126,6 +126,10 @@ class Faq extends FaqTools
 		if ($this->validate('preview'))
 			$this->preview();
 
+		// Saving?
+		if ($this->validate('save'))
+				$this->save();
+
 		// Lastly, create our editor instance.
 		require_once($this->sourceDir . '/Subs-Editor.php');
 
@@ -141,10 +145,6 @@ class Faq extends FaqTools
 
 		// ... and store the ID again for use in the form.
 		$context['post_box_name'] = $editorOptions['id'];
-
-		// Saving?
-		if ($this->validate('save'))
-				$this->save();
 	}
 
 	protected function edit()
@@ -222,7 +222,15 @@ class Faq extends FaqTools
 
 		// You need to enter something!
 		if (empty($data))
-			redirectexit('action='. $this->name . ';sa='. $this->_call);
+		{
+			// Set everything up to be displayed.
+			$context['current'] = $this->data('current');
+			preparsecode($context['current']['body'], true);
+
+			// Fool the system, again!
+			$context['faq']['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
+			return;
+		}
 
 		if (empty($body))
 			$isEmpty[] = 'body';
@@ -234,8 +242,12 @@ class Faq extends FaqTools
 		// Did you forgot something?
 		if (!empty($isEmpty))
 		{
-			$this->setUpdate('error', str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields')));
-			redirectexit('action='. $this->name . ';sa='. $this->_call);
+			// Set everything up to be displayed.
+			$context['current'] = $this->data('current');
+			preparsecode($context['current']['body'], true);
+
+			// Fool the system, again!
+			$context['faq']['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
 			return;
 		}
 
