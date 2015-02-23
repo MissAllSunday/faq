@@ -63,10 +63,10 @@ class Faq extends FaqTools
 		);
 
 		// Get the subaction.
-		$call = $this->_call = $this->validate('sa') &&  isset($this->subActions[$this->data('sa')]) ? $this->data('sa') : 'main';
+		$call = $this->_call = $this->validate('sa') &&  in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
 
 		// Check if the user can actually do whatever the user is trying to!
-		if (isset($this->_checkPerm[$this->_call]))
+		if (in_array($this->_call, $this->_checkPerm))
 			isAllowedTo('faq_'. $this->_call);
 
 		// Get the right template
@@ -121,9 +121,6 @@ class Faq extends FaqTools
 
 		// Get the cats.
 		$context['faq']['cats'] = $this->getCats();
-
-		// A default var for previewing.
-		$context['current'] = array();
 
 		// Want to see your masterpiece?
 		if ($this->validate('preview'))
@@ -190,6 +187,11 @@ class Faq extends FaqTools
 
 		checkSession('request');
 
+		// A default var for previewing.
+		$context['current'] = array();
+
+		require_once($this->sourceDir.'/Subs-Post.php');
+
 		// Set everything up to be displayed.
 		$context['current'] = $this->data('current');
 		$context['current']['body'] = $this->data('body');
@@ -197,12 +199,13 @@ class Faq extends FaqTools
 
 		// We Censor for your protection...
 		censorText($context['preview']['title']);
-		censorText(parse_bbc($context['current']['body']));
+		preparsecode($context['current']['body'], true);
+		preparsecode($context['preview']['body']);
+		$context['preview']['body'] = parse_bbc($context['preview']['body']);
+		censorText($context['preview']['body']);
 
 		// Set a descriptive title.
 		$context['page_title'] = $txt['preview'] .' - ' . $context['current']['title'];
-
-		var_dump($context);die;
 	}
 
 	protected function save()

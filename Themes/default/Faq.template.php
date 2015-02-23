@@ -98,10 +98,10 @@ function template_faq_add()
 		<br />';
 
 		echo '
-		<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);">
+		<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\',\'title\');">
 			<div class="cat_bar">
 				<h3 class="catbg">
-					something here
+					', $context['page_title'] ,'
 				</h3>
 			</div>
 			<div class="information">
@@ -113,7 +113,7 @@ function template_faq_add()
 						<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
 					</dt>
 					<dd>
-						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', isset($context['current']['title']) ? $context['current']['title'] ,'" class="input_text" />
+						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', (isset($context['current']['title']) ? $context['current']['title'] : '') ,'" class="input_text" id="title"/>
 					</dd>';
 
 			// Category select field.
