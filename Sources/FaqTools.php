@@ -54,7 +54,7 @@ class FaqTools extends Suki\Ohara
 		$this->smcFunc['db_insert']('',
 			'{db_prefix}'. ($this->_table['faq']['table']),
 			array(
-				'cat_id' => 'int', 'log' => 'string', 'title' => 'string', 'body' => 'string',
+				'title' => 'string', 'cat_id' => 'int', 'body' => 'string', 'log' => 'string',
 			),
 			$data,
 			array('id')

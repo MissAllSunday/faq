@@ -212,7 +212,7 @@ class Faq extends FaqTools
 	{
 		global $context, $txt;
 
-		checkSession('request', $this->name);
+		checkSession('request');
 
 		require_once($this->sourceDir.'/Subs-Post.php');
 
@@ -250,13 +250,11 @@ class Faq extends FaqTools
 		}
 
 		// Add some more things we need.
-		$data = array(
-			'log' => $this->createLog(),
-			'body' => preparsecode($data['body']),
-		);
+		$context['current']['log'] = $this->createLog();
+		preparsecode($context['current']['body']);
 
 		// Finally store it.
-		$id = $this->create($data);
+		$id = $this->create($context['current']);
 
 		if (!empty($id))
 		{
