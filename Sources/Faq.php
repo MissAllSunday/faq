@@ -216,31 +216,12 @@ class Faq extends FaqTools
 
 		require_once($this->sourceDir.'/Subs-Post.php');
 
-		$data = $this->data('current');
-		$body = $this->data('body');
+		$context['current'] = $this->data('current');
+		$context['current']['body'] = $this->data('body');
 		$isEmpty = array();
 
 		// You need to enter something!
-		if (empty($data))
-		{
-			// Set everything up to be displayed.
-			$context['current'] = $this->data('current');
-			preparsecode($context['current']['body'], true);
-
-			// Fool the system, again!
-			$context['faq']['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
-			return;
-		}
-
-		if (empty($body))
-			$isEmpty[] = 'body';
-
-		foreach ($data as $k => $v)
-			if (empty($v))
-				$isEmpty[] = $k;
-
-		// Did you forgot something?
-		if (!empty($isEmpty))
+		if (empty($context['current']))
 		{
 			// Set everything up to be displayed.
 			$context['current'] = $this->data('current');
@@ -248,6 +229,23 @@ class Faq extends FaqTools
 
 			// Fool the system, again!
 			$context['faq']['update']['error'] = $this->text('error_emtpyAll');
+			return;
+		}
+
+		if (empty($context['current']['body']))
+			$isEmpty[] = 'body';
+
+		foreach ($context['current'] as $k => $v)
+			if (empty($v))
+				$isEmpty[] = $k;
+
+		// Did you forgot something?
+		if (!empty($isEmpty))
+		{
+			preparsecode($context['current']['body'], true);
+
+			// Fool the system, again!
+			$context['faq']['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
 			return;
 		}
 
