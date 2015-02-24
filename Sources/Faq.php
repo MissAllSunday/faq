@@ -247,7 +247,7 @@ class Faq extends FaqTools
 			preparsecode($context['current']['body'], true);
 
 			// Fool the system, again!
-			$context['faq']['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
+			$context['faq']['update']['error'] = $this->text('error_emtpyAll');
 			return;
 		}
 
