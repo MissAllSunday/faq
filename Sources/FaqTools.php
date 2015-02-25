@@ -47,6 +47,8 @@ class FaqTools extends Suki\Ohara
 
 	public function create($data)
 	{
+		global $smcFunc;
+
 		// Clear the cache.
 		cache_put_data($this->name .'_latest', '', 60);
 
@@ -65,6 +67,8 @@ class FaqTools extends Suki\Ohara
 
 	public function createCat($data)
 	{
+		global $smcFunc;
+
 		if (empty($data))
 			return false;
 
@@ -86,6 +90,8 @@ class FaqTools extends Suki\Ohara
 
 	public function update($data)
 	{
+		global $smcFunc;
+
 		if (empty($data))
 			return false;
 
@@ -104,6 +110,8 @@ class FaqTools extends Suki\Ohara
 
 	public function updateCat($data)
 	{
+		global $smcFunc;
+
 		if (empty($data))
 			return false;
 
@@ -120,6 +128,8 @@ class FaqTools extends Suki\Ohara
 
 	public function getLatest($limit = 10)
 	{
+		global $smcFunc;
+
 		// Use the cache when possible.
 		if (($return = cache_get_data($this->name .'_latest', 120)) == null)
 		{
@@ -146,6 +156,8 @@ class FaqTools extends Suki\Ohara
 
 	public function getSingle($id)
 	{
+		global $smcFunc;
+
 		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			WHERE id = ({int:id})
 			LIMIT {int:limit}',
@@ -166,6 +178,8 @@ class FaqTools extends Suki\Ohara
 
 	public function getBy($page = '', $table, $column, $value, $limit = false, $like = false, $sort = 'title ASC')
 	{
+		global $smcFunc;
+
 		if ($like)
 			$likeString = !empty($like) && $like == true ? 'LIKE' : '=';
 
@@ -199,7 +213,7 @@ class FaqTools extends Suki\Ohara
 
 	public function getAll($page = '')
 	{
-		global $context;
+		global $context, $smcFunc;
 
 		$total = $this->getCount();
 		$maxIndex = $this->enable('num_faqs') ? $this->setting('num_faqs') : 20;
@@ -229,6 +243,8 @@ class FaqTools extends Suki\Ohara
 
 	protected function getCount($table = 'faq')
 	{
+		global $smcFunc;
+
 		$result = $smcFunc['db_query']('', '
 			SELECT id
 			FROM {db_prefix}' . ($this->_table[$table]['table']),
@@ -240,6 +256,8 @@ class FaqTools extends Suki\Ohara
 
 	public function getCats()
 	{
+		global $smcFunc;
+
 		// Use the cache when possible.
 		if (($return = cache_get_data($this->name .'_cats', 120)) == null)
 		{
@@ -265,6 +283,8 @@ class FaqTools extends Suki\Ohara
 
 	public function erase($id)
 	{
+		global $smcFunc;
+
 		// Do not waste my time...
 		if (empty($id))
 			return false;
@@ -285,7 +305,7 @@ class FaqTools extends Suki\Ohara
 
 	public function createLog($log = array())
 	{
-		global $user_info;
+		global $user_info, $smcFunc;
 
 		// If log is empty, it means we are adding.
 		if (!$log)
