@@ -1,0 +1,14 @@
+.main {
+	width: 100%;
+	display:table;
+}
+
+.leftSide
+{
+	display: table-cell;
+}
+
+.rightSide
+{
+	display: table-cell;
+}
