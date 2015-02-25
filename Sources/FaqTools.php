@@ -27,7 +27,7 @@ class FaqTools extends Suki\Ohara
 			'columns' => array('category_id', 'category_name',),
 		),
 	);
-	protected static $_permissions = array();
+	protected $_permissions = array();
 	protected $_checkPerm = array('main', 'delete', 'add', 'edit', 'search');
 
 	public function __construct()
@@ -35,12 +35,11 @@ class FaqTools extends Suki\Ohara
 		$this->setRegistry();
 
 		// Query construct, this is used on all queries
-		$this->_queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', '. implode(', c.', $this->_table['cat']['columns'])) .'
+		$this->_queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', c.'. implode(', c.', $this->_table['cat']['columns'])) .'
 	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 		LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
 
-		if (!isset(self::$_permissions))
-			self::$_permissions = array(
+			$this->_permissions = array(
 				'edit' => allowedTo('faq_edit'),
 				'delete' => allowedTo('faq_delete'),
 			);
@@ -342,8 +341,8 @@ class FaqTools extends Suki\Ohara
 			),
 			'log' => ($row['log']),
 			'crud' => array(
-				'edit' => (self::$_permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
-				'delete' => ((self::$_permissions['edit'] == true ? ' | ': '') . (self::$_permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' : '')),
+				'edit' => ($this->_permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
+				'delete' => (($this->_permissions['edit'] == true ? ' | ': '') . ($this->_permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' : '')),
 			),
 		);
 	}
