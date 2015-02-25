@@ -50,7 +50,7 @@ class FaqTools extends Suki\Ohara
 		// Clear the cache.
 		cache_put_data($this->name .'_latest', '', 60);
 
-		$this->smcFunc['db_insert']('',
+		$smcFunc['db_insert']('',
 			'{db_prefix}'. ($this->_table['faq']['table']),
 			array(
 				'title' => 'string', 'cat_id' => 'int', 'body' => 'string', 'log' => 'string',
@@ -60,7 +60,7 @@ class FaqTools extends Suki\Ohara
 		);
 
 		// Return the ID.
-		return $this->smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['faq']['table']) . '', 'id');
+		return $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['faq']['table']) . '', 'id');
 	}
 
 	public function createCat($data)
@@ -71,7 +71,7 @@ class FaqTools extends Suki\Ohara
 		// Clear the cache.
 		cache_put_data($this->name .'_cats', '', 60);
 
-		$this->smcFunc['db_insert']('',
+		$smcFunc['db_insert']('',
 			'{db_prefix}' . ($this->_table['cat']['table']) . '',
 			array(
 				'category_name' => 'string-255',
@@ -81,7 +81,7 @@ class FaqTools extends Suki\Ohara
 		);
 
 		// Return the ID.
-		return $this->smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['cat']['table']), 'id');
+		return $smcFunc['db_insert_id']('{db_prefix}' . ($this->_table['cat']['table']), 'id');
 	}
 
 	public function update($data)
@@ -94,7 +94,7 @@ class FaqTools extends Suki\Ohara
 			if (!empty($gotIt[$data['id']]))
 				cache_put_data($this->name .'_latest', '', 60);
 
-		$this->smcFunc['db_query']('', '
+		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}' . ($this->_table['faq']['table']) . '
 			SET cat_id = {int:cat_id}, log = {string:log}, title = {string:title}, body = {string:body}
 			WHERE id = {int:id}',
@@ -110,7 +110,7 @@ class FaqTools extends Suki\Ohara
 		// Clear the cache.
 		cache_put_data($this->name .'_cats', '', 60);
 
-		$this->smcFunc['db_query']('', '
+		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}' . ($this->_table['cat']['table']) . '
 			SET category_name = {string:category_name}
 			WHERE category_id = {int:id}',
@@ -123,7 +123,7 @@ class FaqTools extends Suki\Ohara
 		// Use the cache when possible.
 		if (($return = cache_get_data($this->name .'_latest', 120)) == null)
 		{
-			$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+			$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 				ORDER BY {raw:sort}
 				LIMIT {int:limit}',
 				array(
@@ -132,10 +132,10 @@ class FaqTools extends Suki\Ohara
 				)
 			);
 
-			while ($row = $this->smcFunc['db_fetch_assoc']($result))
+			while ($row = $smcFunc['db_fetch_assoc']($result))
 				$return[$row['id']] = $this->returnData($row);
 
-			$this->smcFunc['db_free_result']($result);
+			$smcFunc['db_free_result']($result);
 
 			cache_put_data($this->name .'_latest', $return, 120);
 		}
@@ -146,7 +146,7 @@ class FaqTools extends Suki\Ohara
 
 	public function getSingle($id)
 	{
-		$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			WHERE id = ({int:id})
 			LIMIT {int:limit}',
 			array(
@@ -155,10 +155,10 @@ class FaqTools extends Suki\Ohara
 			)
 		);
 
-		$row = $this->smcFunc['db_fetch_assoc']($result);
+		$row = $smcFunc['db_fetch_assoc']($result);
 		$return = $this->returnData($row);
 
-		$this->smcFunc['db_free_result']($result);
+		$smcFunc['db_free_result']($result);
 
 		// Done?
 		return !empty($return) ? $return : false;
@@ -175,7 +175,7 @@ class FaqTools extends Suki\Ohara
 
 		$return = array();
 
-		$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			WHERE '. $column .' '. (is_numeric($value) ? '= {int:value} ' : $likeString .' {string:value} ') .'
 			ORDER BY {raw:sort}
 			'. (!empty($limit) ? '
@@ -188,10 +188,10 @@ class FaqTools extends Suki\Ohara
 			)
 		);
 
-		while ($row = $this->smcFunc['db_fetch_assoc']($result))
+		while ($row = $smcFunc['db_fetch_assoc']($result))
 			$return[$row['id']] = $this->returnData($row);
 
-		$this->smcFunc['db_free_result']($result);
+		$smcFunc['db_free_result']($result);
 
 		// Done!
 		return !empty($return) ? $return : false;
@@ -205,7 +205,7 @@ class FaqTools extends Suki\Ohara
 		$maxIndex = $this->enable('num_faqs') ? $this->setting('num_faqs') : 20;
 		$sort = $this->enable('sort_method') ? $this->setting('sort_method') : 20;
 
-		$result = $this->smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
+		$result = $smcFunc['db_query']('', '' . ($this->_queryConstruct) . '
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
 			array(
@@ -215,10 +215,10 @@ class FaqTools extends Suki\Ohara
 			)
 		);
 
-		while ($row = $this->smcFunc['db_fetch_assoc']($result))
+		while ($row = $smcFunc['db_fetch_assoc']($result))
 			$return[$row['id']] = $this->returnData($row);
 
-		$this->smcFunc['db_free_result']($result);
+		$smcFunc['db_free_result']($result);
 
 		/* Build the pagination */
 		$context['page_index'] = constructPageIndex($this->scriptUrl . '?action='. $this->name . (!empty($page) ? ';sa='. $page .'' : ''), $this->data('start'), $total, $maxIndex, false);
@@ -229,13 +229,13 @@ class FaqTools extends Suki\Ohara
 
 	protected function getCount($table = 'faq')
 	{
-		$result = $this->smcFunc['db_query']('', '
+		$result = $smcFunc['db_query']('', '
 			SELECT id
 			FROM {db_prefix}' . ($this->_table[$table]['table']),
 			array()
 		);
 
-		return $this->smcFunc['db_num_rows']($result);
+		return $smcFunc['db_num_rows']($result);
 	}
 
 	public function getCats()
@@ -243,19 +243,19 @@ class FaqTools extends Suki\Ohara
 		// Use the cache when possible.
 		if (($return = cache_get_data($this->name .'_cats', 120)) == null)
 		{
-			$result = $this->smcFunc['db_query']('', '
+			$result = $smcFunc['db_query']('', '
 				SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
 				FROM {db_prefix}' . ($this->_table['cat']['table']) .'',
 				array()
 			);
 
-			while ($row = $this->smcFunc['db_fetch_assoc']($result))
+			while ($row = $smcFunc['db_fetch_assoc']($result))
 				$return[$row['category_id']] = array(
 					'id' => $row['category_id'],
 					'name' => $row['category_name'],
 				);
 
-			$this->smcFunc['db_free_result']($result);
+			$smcFunc['db_free_result']($result);
 
 			cache_put_data($this->name .'_cats', $return, 120);
 		}
@@ -274,7 +274,7 @@ class FaqTools extends Suki\Ohara
 			if (!empty($gotIt[$id]))
 				cache_put_data($this->name .'_latest', '', 60);
 
-		$this->smcFunc['db_query']('', '
+		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}' . ($this->_table[$table]['table']) .'
 			WHERE '. ($table == $this->name ? 'id' : 'category_id') .' = {int:id}',
 			array(
