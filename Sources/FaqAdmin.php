@@ -160,7 +160,7 @@ class FaqAdmin extends FaqTools
 
 	function care()
 	{
-		// Pay no attention to that girl behind the curtain...
+		// Pay no attention to the girl behind the curtain...
 		if ($this->enable('care'))
 			return '
 		<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">FAQ mod &copy; Suki</a>';

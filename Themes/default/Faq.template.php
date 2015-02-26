@@ -34,7 +34,7 @@ function template_faq_main()
 
 		// The main div.
 		echo '
-		<div class="floatright nopadding">';
+		<div class="rightSide">';
 			foreach($context['faq']['all'] as $faq)
 				echo '
 			<div class="cat_bar">
@@ -46,8 +46,8 @@ function template_faq_main()
 					</span>
 				</h3>
 			</div>
-			<div class="windowbg">
-				<div class="content" id="content_', $faq['id'] ,'">
+			<div class="information windowbg">
+				<div  id="faq_', $faq['id'] ,'">
 				', $faq['body'] ,'
 				</div>
 			</div>
@@ -218,92 +218,17 @@ function template_faq_manage()
 
 	faq_header();
 
-	/* Sidebar */
+	// Sidebar.
 	faq_sideBar();
 
 	// The main div.
 	echo '
-	<div class="floatright nopadding">';
+	<div class="rightSide">';
 
-
-	echo '<div class="cat_bar">
-			<h3 class="catbg">', $txt['Faq_manage'] ,'</h3>
-		</div>
-		<div class="windowbg description">
-			', $txt['Faq_manage_desc']  ,'
-		</div>';
-
-	/* There are no faq to show */
-	if (empty($context['faq']['all']))
-		echo '
-			<span class="clear upperframe">
-				<span></span>
-			</span>
-			<div class="roundframe rfix">
-				<div class="innerframe">
-					<div class="content">
-						', $txt['Faq_no_faq'] ,'
-					</div>
-				</div>
-			</div>
-			<span class="lowerframe">
-				<span></span>
-			</span><br />';
-
-	else
-	{
-		echo '
-			<table class="table_grid" cellspacing="0" width="100%">
-				<thead>
-					<tr class="catbg">
-						<th scope="col" class="first_th">', $txt['Faq_edit_id']  ,'</th>
-						<th scope="col">', $txt['Faq_edit_title'] ,'</th>
-						<th scope="col">', $txt['Faq_edit_category']  ,'</th>
-						<th scope="col" class="last_th">', $txt['Faq_edit/delete'] ,'</th>
-					</tr>
-				</thead>
-			<tbody>';
-
-		foreach($context['faq']['all'] as $all)
-		{
-			echo '
-				<tr class="windowbg" style="text-align: center">
-					<td>
-						', $all['id'] ,'
-					</td>
-					<td>
-						',$all['link'],'
-					</td>
-					<td>
-						', $all['cat']['link'] ,'
-					</td>
-					<td>
-						', $context['faq']['object']->crud($all['id']) ,'
-					</td>
-				</tr>';
-		}
-
-		echo '
-			</tbody>
-		</table><br />';
-	}
-
-	/* Button for adding a new entry */
-	if ($context['faq']['object']->permissions('add') == true)
-		echo '
-			<div id="confirm_buttons">
-				<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="sbtn" value="', $txt['Faq_add_send'] ,'" />
-				</form>
-			</div>';
-
-	/* Pagination */
-	if(!empty($context['page_index']))
-		echo '<div style="text-align:center;">', $context['page_index'] ,'</div>';
+	template_show_list('faq_manage');
 
 	echo '
-	</div>
-	<div class="clear"></div>';
+	</div>';
 }
 
 function template_faq_addCat()
@@ -312,7 +237,7 @@ function template_faq_addCat()
 
 	faq_header();
 
-	/* Sidebar */
+	// Sidebar.
 	faq_sideBar();
 
 	// The main div.
@@ -354,7 +279,7 @@ function template_faq_manageCat()
 
 	faq_header();
 
-	/* Sidebar */
+	// Sidebar.
 	faq_sideBar();
 
 	// The main div.
@@ -435,7 +360,7 @@ function template_faq_list()
 
 	faq_header();
 
-	/* Sidebar */
+	// Sidebar.
 	faq_sideBar();
 
 	// The main div.
