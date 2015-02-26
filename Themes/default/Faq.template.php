@@ -13,9 +13,13 @@ function template_faq_main()
 {
 	global $txt, $context, $scripturl, $modSettings;
 
+	// The master div.
+	echo '
+	<div class="mainContent">';
+
 	faq_header();
 
-	/* Show a nice message if no FAQs are avaliable */
+	// Show a nice message if no FAQs are available.
 	if (empty($context['faq']['all']))
 			echo '
 		<div class="information">
@@ -30,30 +34,30 @@ function template_faq_main()
 
 		// The main div.
 		echo '
-	<div class="floatright nopadding">';
+		<div class="floatright nopadding">';
 			foreach($context['faq']['all'] as $faq)
 				echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="floatleft">', $faq['link'] ,'</span>
-				<span class="floatright">
-					', $faq['crud']['edit'] ,'
-					', $faq['crud']['delete'] ,'
-				</span>
-			</h3>
-		</div>
-		<div class="windowbg">
-			<div class="content" id="content_', $faq['id'] ,'">
-			', $faq['body'] ,'
+			<div class="cat_bar">
+				<h3 class="catbg">
+					<span class="floatleft">', $faq['link'] ,'</span>
+					<span class="floatright">
+						', $faq['crud']['edit'] ,'
+						', $faq['crud']['delete'] ,'
+					</span>
+				</h3>
 			</div>
-		</div>
-		<br />';
+			<div class="windowbg">
+				<div class="content" id="content_', $faq['id'] ,'">
+				', $faq['body'] ,'
+				</div>
+			</div>
+			<br />';
 
 		echo '
-	</div>';
+		</div>';
 
 		echo '
-	<div class="clear" id="confirm_buttons"><p />';
+		<div class="clear">';
 
 		// Pagination.
 		if (!empty($context['page_index']))
@@ -62,13 +66,14 @@ function template_faq_main()
 		// Button for adding a new entry.
 		if (allowedTo('faq_add'))
 			echo '
-		<div>
-			<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
-				<input type="submit" name="send" class="input_text" value="', $txt['Faq_add_send'] ,'" />
-			</form>
-		</div>';
+			<div>
+				<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
+					<input type="submit" name="send" class="input_text" value="', $txt['Faq_add_send'] ,'" />
+				</form>
+			</div>';
 
 		echo '
+		</div>
 	</div>';
 	}
 }
@@ -538,28 +543,24 @@ function faq_sideBar()
 {
 	global $context, $scripturl, $txt, $modSettings;
 
-	/* Define the width, at least one block must be enabled */
-	$blockWidth = !empty($modSettings['Faq_show_latest']) || !empty($modSettings['Faq_show_catlist']) ? 20 : 0;
-
 	echo '
-	<div class="floatleft nopadding" style="width:', $blockWidth ,'%;">';
+	<div class="leftSide" >';
 
-	/* Show a nice category list */
+	// Show a nice category list.
 	if (!empty($modSettings['Faq_show_catlist']))
 	{
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['Faq_sidebar_faq_cats'] ,'</span>
+				', $txt['Faq_sidebar_faq_cats'] ,'
 			</h3>
 		</div>
 
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
+		<div class="information">
 			<div class="content">
 				<ul class="reset">';
 
-		foreach($context['faq']['object']->getCats() as $all)
+		foreach($context['faq']['cats'] as $all)
 			echo '
 					<li>
 						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
@@ -568,7 +569,6 @@ function faq_sideBar()
 		echo '
 				</ul>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<br />';
 	}
@@ -597,7 +597,6 @@ function faq_sideBar()
 		echo '
 				</ul>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<br />';
 	}

@@ -1,4 +1,4 @@
-.main {
+.mainContent {
 	width: 100%;
 	display:table;
 }
@@ -11,4 +11,5 @@
 .rightSide
 {
 	display: table-cell;
+	width: 100%;
 }

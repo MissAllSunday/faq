@@ -88,6 +88,9 @@ class Faq extends FaqTools
 		// Lazy way to tell the template which action has been called.
 		$context['faq']['action'] = $call;
 
+		// Get the cats.
+		$context['faq']['cats'] = $this->getCats();
+
 		// We kinda need a FAQ ID for pretty much everything even if there isn't one!
 		$this->_faq = $this->validate('faq') ? $this->data('faq') : 0;
 
@@ -118,9 +121,6 @@ class Faq extends FaqTools
 	protected function add()
 	{
 		global $context;
-
-		// Get the cats.
-		$context['faq']['cats'] = $this->getCats();
 
 		// Want to see your masterpiece?
 		if ($this->validate('preview'))
