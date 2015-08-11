@@ -6,12 +6,21 @@
 	<version>2.0</version>
 	<type>modification</type>
 
-	<install for="2.0 - 2.0.99">
+	<install for="2.1 Beta 1, 2.1 Beta 2, 2.1 - 2.1.99">
 		<readme parsebbc="true">readme.txt</readme>
-		<code>hooks.php</code>
+		<license type="inline" parsebbc="false">
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+		</license>
+		<hook function="Faq::runTimeHooks" hook="integrate_pre_load" file="$sourcedir/Faq.php" object="true"></hook>
+		<credits url="http://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Faq mod</credits>
 		<database>database.php</database>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
-		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
+		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
+		<require-file name="Sources/Faq.php" destination="$sourcedir">The file that handles everything</require-file>
+		<require-file name="Sources/FaqAdmin.php" destination="$sourcedir">Faq admin pages</require-file>
+		<require-file name="Sources/FaqTools.php" destination="$sourcedir">Tools and utilities</require-file>
 		<redirect url="?action=admin;area=modsettings;sa=faq"></redirect>
 	</install>
 
@@ -19,8 +28,8 @@
 		<code>remove.php</code>
 		<database>database.php</database>
 		<remove-file name="$sourcedir/Faq.php" />
-		<remove-file name="$sourcedir/Subs-Faq.php" />
-		<remove-file name="$sourcedir/FaqHooks.php" />
+		<remove-file name="$sourcedir/FaqAdmin.php" />
+		<remove-file name="$sourcedir/FaqTools.php" />
 		<remove-file name="$themedir/Faq.template.php" />
 		<remove-file name="$languagedir/Faq.english.php" />
 		<remove-file name="$languagedir/Faq.english-utf8.php" />
