@@ -301,9 +301,8 @@ class Faq extends FaqTools
 	{
 		global $context;
 
-		$context['faq']['all'] = $this->getAll($this->_call);
 		$start = $this->validate('start') ? $this->data('start') : 0;
-		$maxIndex = count($context['faq']['all']);
+		$maxIndex = $this->getCount();
 
 		// Quick fix.
 		$that = $this;
@@ -311,7 +310,7 @@ class Faq extends FaqTools
 		// Lets use SMF's createList...
 		$listOptions = array(
 			'id' => 'faq_manage',
-			'title' => $this->text('action_manage'),
+			'title' => $context['page_title'],
 			'base_href' => $this->scriptUrl . '?action='. $this->name .';sa='. $this->_call,
 			'items_per_page' => 10,
 			'get_count' => array(
@@ -406,5 +405,119 @@ class Faq extends FaqTools
 
 		require_once($this->sourceDir . '/Subs-List.php');
 		createList($listOptions);
+
+		unset($that);
+	}
+
+	protected function manageCat()
+	{
+		global $context;
+
+		$start = $this->validate('start') ? $this->data('start') : 0;
+		$maxIndex = $this->getCount('cat');
+
+		// Quick fix.
+		$that = $this;
+
+		// Lets use SMF's createList...
+		$listOptions = array(
+			'id' => 'faq_manageCat',
+			'title' => $this->text('action_manageCat'),
+			'base_href' => $this->scriptUrl . '?action='. $this->name .';sa='. $this->_call,
+			'items_per_page' => 10,
+			'get_count' => array(
+				'function' => function () use ($maxIndex)
+				{
+					return $maxIndex;
+				},
+			),
+			'get_items' => array(
+				'function' => function ($start, $maxIndex) use ($that)
+				{
+					global $smcFunc;
+
+					$return = array();
+					$result = $smcFunc['db_query']('', '
+						SELECT '. (implode(', ', $that->_table['cat']['columns'])) .'
+						FROM {db_prefix}' . ($that->_table['cat']['table']) .'
+						LIMIT {int:start}, {int:maxindex}
+						',
+						array()
+					);
+
+					while ($row = $smcFunc['db_fetch_assoc']($result))
+						$return[$row['category_id']] = array(
+							'id' => $row['category_id'],
+							'name' => $row['category_name'],
+						);
+
+					return $return;
+				},
+				'params' => array(
+					$start,
+					$maxIndex,
+				),
+			),
+			'no_items_label' => $this->text('no_cat'),
+			'columns' => array(
+				'id' => array(
+					'header' => array(
+						'value' => $this->text('edit_id'),
+					),
+					'data' => array(
+						'function' => function ($rowData)
+						{
+							return $rowData['id'];
+						},
+						'class' => 'centercol',
+					),
+				),
+				'name' => array(
+					'header' => array(
+						'value' => $this->text('edit_name'),
+					),
+					'data' => array(
+						'function' => function ($rowData)
+						{
+							return $rowData['name'];
+						},
+						'class' => 'centercol',
+					),
+				),
+				'edit' => array(
+					'header' => array(
+						'value' => $this->text('edit'),
+					),
+					'data' => array(
+						'function' => function ($rowData) use ($that)
+						{
+							return '<a href="'. $that->scriptUrl .'?action='. $that->name .';sa=editCat;cat='. $rowData['id'] .'">'. $row['title'] .'</a>';
+						},
+					),
+				),
+				'delete' => array(
+					'header' => array(
+						'value' => $this->text('delete'),
+					),
+					'data' => array(
+						'function' => function ($rowData)
+						{
+							return str_replace('| ', '', $rowData['crud']['delete']);
+						},
+					),
+				),
+			),
+			'additional_rows' => array(
+				array(
+					'position' => 'below_table_data',
+					'value' => '<a href="'. $this->scriptUrl . '?action='. $this->name .';sa=add">'. $this->text('add_send') .'</a>',
+				),
+			),
+		);
+
+		require_once($this->sourceDir . '/Subs-List.php');
+		createList($listOptions);
+
+		unset($that);
 	}
 }
