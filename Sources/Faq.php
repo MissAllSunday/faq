@@ -34,10 +34,6 @@ class Faq extends FaqTools
 	// Define the hooks we are going to use.
 	protected $_availableHooks = array(
 		'actions' => 'integrate_actions',
-		'menu' => 'integrate_menu_buttons',
-		'permissions' => 'integrate_load_permissions',
-		'adminAreas' => 'integrate_admin_areas',
-		'modifications' => 'integrate_modify_modifications',
 	);
 
 	public function __construct()

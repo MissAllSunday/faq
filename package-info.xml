@@ -14,6 +14,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		</license>
 		<hook function="Faq::runTimeHooks" hook="integrate_pre_load" file="$sourcedir/Faq.php" object="true"></hook>
+		<hook function="FaqAdmin::runTimeHooks" hook="integrate_admin_include" file="$sourcedir/FaqAdmin.php" object="true"></hook>
 		<credits url="http://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Faq mod</credits>
 		<database>database.php</database>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
