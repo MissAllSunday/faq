@@ -58,8 +58,11 @@ class Faq extends FaqTools
 		loadLanguage($this->name);
 		loadtemplate($this->name);
 
+		// Let us declare a fancy and quite useful multi-purpose context array.
+		$context[$this->name] = array();
+
 		// Is there any messages? Dunno if there is an error or info message...
-		$context['faq']['update'] = $this->getAllUpdates();
+		$context[$this->name]['update'] = $this->getAllUpdates();
 		$context['page_title'] = $this->text('main');
 
 		// The basic linktree, each subaction needs to add their own.
@@ -92,10 +95,10 @@ class Faq extends FaqTools
 		}
 
 		// Lazy way to tell the template which action has been called.
-		$context['faq']['action'] = $call;
+		$context[$this->name]['action'] = $call;
 
 		// Get the cats.
-		$context['faq']['cats'] = $this->getCats();
+		$context[$this->name]['cats'] = $this->getCats();
 
 		// We kinda need a FAQ ID for pretty much everything even if there isn't one!
 		$this->_faq = $this->validate('faq') ? $this->data('faq') : 0;
@@ -121,7 +124,7 @@ class Faq extends FaqTools
 		global $context;
 
 		// Get all of them.
-		$context['faq']['all'] = $this->getAll();
+		$context[$this->name]['all'] = $this->getAll();
 	}
 
 	protected function add()
@@ -157,7 +160,7 @@ class Faq extends FaqTools
 	{
 		// Editing? Assuming there is a faq id...
 		if (!$this->_faq)
-			fatal_lang_error($this->name .'_noValidId', false);
+			return fatal_lang_error($this->name .'_noValidId', false);
 
 		// Make sure it does exists...
 		$context['current'] = $this->getSingle($this->_faq);
@@ -238,7 +241,7 @@ class Faq extends FaqTools
 			preparsecode($context['current']['body'], true);
 
 			// Fool the system, again!
-			$context['faq']['update']['error'] = $this->text('error_emtpyAll');
+			$context[$this->name]['update']['error'] = $this->text('error_emtpyAll');
 			return;
 		}
 
@@ -255,7 +258,7 @@ class Faq extends FaqTools
 			preparsecode($context['current']['body'], true);
 
 			// Fool the system, again!
-			$context['faq']['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
+			$context[$this->name]['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
 			return;
 		}
 
@@ -295,7 +298,7 @@ class Faq extends FaqTools
 			fatal_lang_error($this->name .'_noValidId', false);
 
 		// Make sure it does exists...
-		$context['faq']['single'] = $this->getSingle($this->_faq);
+		$context[$this->name]['single'] = $this->getSingle($this->_faq);
 
 		// Tell the user this entry doesn't exists anymore...
 		if (empty($context['current']))
