@@ -19,7 +19,7 @@ class FaqAdmin extends FaqTools
 {
 	// Fool the system!
 	public $name = 'Faq';
-	
+
 	// Define the hooks we are going to use.
 	protected $_availableHooks = array(
 		'menu' => 'integrate_menu_buttons',
@@ -33,12 +33,12 @@ class FaqAdmin extends FaqTools
 		parent::__construct();
 	}
 
-	function adminAreas(&$areas)
+	function addAdminAreas(&$areas)
 	{
 		$areas['config']['areas']['modsettings']['subsections']['faq'] = array($this->text('admin'));
 	}
 
-	function modifications(&$sub_actions)
+	function addModifications(&$sub_actions)
 	{
 		global $context;
 
@@ -104,7 +104,7 @@ class FaqAdmin extends FaqTools
 		prepareDBSettingContext($config_vars);
 	}
 
-	function permissions(&$permissionGroups, &$permissionList)
+	function addPermissions(&$permissionGroups, &$permissionList)
 	{
 		$permissionGroups['membergroup']['simple'] = array('faq_per_simple');
 		$permissionGroups['membergroup']['classic'] = array('faq_per_classic');
@@ -117,8 +117,7 @@ class FaqAdmin extends FaqTools
 			);
 	}
 
-
-	function menu(&$menu_buttons)
+	function addMenu(&$menu_buttons)
 	{
 		global $txt, $context;
 
@@ -164,13 +163,5 @@ class FaqAdmin extends FaqTools
 			)),
 			array_slice($menu_buttons, $counter)
 		);
-	}
-
-	function care()
-	{
-		// Pay no attention to the girl behind the curtain...
-		if ($this->enable('care'))
-			return '
-		<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">FAQ mod &copy; Suki</a>';
 	}
 }

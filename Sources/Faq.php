@@ -41,7 +41,7 @@ class Faq extends FaqTools
 		parent::__construct();
 	}
 
-	function actions(&$actions)
+	function addActions(&$actions)
 	{
 		$actions['Faq'] = array('Faq.php', 'Faq::call#');
 	}
