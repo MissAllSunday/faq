@@ -39,10 +39,10 @@ class FaqTools extends Suki\Ohara
 	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 		LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
 
-			$this->_permissions = array(
-				'edit' => allowedTo('faq_edit'),
-				'delete' => allowedTo('faq_delete'),
-			);
+		$this->_permissions = array(
+			'edit' => allowedTo('faq_edit'),
+			'delete' => allowedTo('faq_delete'),
+		);
 	}
 
 	public function create($data)

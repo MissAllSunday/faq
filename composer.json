@@ -1,0 +1,6 @@
+{
+	"name": "suki/faq",
+	"require": {
+		"suki/ohara": "~1.0"
+	}
+}
