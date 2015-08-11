@@ -37,3 +37,18 @@ Thumbs.db
 *.lnk
 /nbproject/private/
 /nbproject/
+/.project
+
+# Test / Private files #
+########################
+/nbproject/private/
+/nbproject/
+.directory
+.idea/
+/test.php
+/vendor/
+/.git/
+
+# Ohara class files #
+########################
+/Sources/ohara/
