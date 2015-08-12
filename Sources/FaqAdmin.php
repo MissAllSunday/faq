@@ -12,7 +12,7 @@ if (!defined('SMF'))
 	die('No direct access');
 
 // Require our libs.
-require_once ($sourcedir .'/Suki/Ohara.php');
+require_once ($sourcedir .'/ohara/src/Suki/Ohara.php');
 require_once ($sourcedir .'/FaqTools.php');
 
 class FaqAdmin extends FaqTools

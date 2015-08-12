@@ -11,6 +11,8 @@
 if (!defined('SMF'))
 	die('No direct access');
 
+require_once ($sourcedir .'/ohara/src/Suki/Ohara.php');
+
 class FaqTools extends Suki\Ohara
 {
 	// Fool the system!
@@ -23,6 +25,30 @@ class FaqTools extends Suki\Ohara
 		'permissions' => 'integrate_load_permissions',
 		'adminAreas' => 'integrate_admin_areas',
 		'modifications' => 'integrate_modify_modifications',
+	);
+
+	// Hooks points out to different files and classes.
+	protected $_overwriteHooks = array(
+		'actions' => array(
+			'file' => 'Faq.php',
+			'func' => 'Faq::addActions',
+		),
+		'menu' => array(
+			'file' => 'FaqAdmin.php',
+			'func' => 'FaqAdmin::addMenu',
+		),
+		'permissions' => array(
+			'file' => 'FaqAdmin.php',
+			'func' => 'FaqAdmin::addPermissions',
+		),
+		'adminAreas' => array(
+			'file' => 'FaqAdmin.php',
+			'func' => 'FaqAdmin::addAdminAreas',
+		),
+		'modifications' => array(
+			'file' => 'FaqAdmin.php',
+			'func' => 'FaqAdmin::addModifications',
+		),
 	);
 
 	protected $_queryConstruct = '';
