@@ -31,11 +31,6 @@ class Faq extends FaqTools
 		'deleteCat',
 	);
 
-	// Define the hooks we are going to use.
-	protected $_availableHooks = array(
-		'actions' => 'integrate_actions',
-	);
-
 	public function __construct()
 	{
 		parent::__construct();
