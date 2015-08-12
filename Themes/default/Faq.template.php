@@ -145,7 +145,7 @@ function template_faq_add()
 			else
 				echo '
 						<div class="Faq_warning">
-							',$txt['Faq_no_cat_admin'],'
+							', $context['Faq']['no_cat_admin'] ,'
 						</div>';
 
 			echo'

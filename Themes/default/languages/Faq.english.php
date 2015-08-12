@@ -26,7 +26,7 @@ $txt['Faq_createCat_send'] = 'Create Category';
 $txt['Faq_edit_send'] = 'Edit this FAQ';
 $txt['Faq_adding'] = 'Adding a new FAQ';
 $txt['Faq_no_faq'] = 'There are no FAQs to show.';
-$txt['Faq_no_cat_admin'] = 'You need to add a category before you can add a FAQ';
+$txt['Faq_no_cat_admin'] = 'You need to <a href="{add_cat_href}">add a category</a> before you can add a FAQ';
 $txt['Faq_no_cat'] = 'There are not categories, you must add a category first before you can add FAQs.';
 $txt['Faq_adding_cat'] = 'Adding a new category.';
 $txt['Faq_editing_cat'] = 'Editing category';

@@ -95,6 +95,9 @@ class Faq extends FaqTools
 		// Get the cats.
 		$context[$this->name]['cats'] = $this->getCats();
 
+		// No cats? then tell the user to go to his/her  nearest animal shelter at once!
+		$context[$this->name]['no_cat_admin'] = empty($context[$this->name]['cats']) ? $this->parser($this->text('no_cat_admin'), array('add_cat_href' => $this->scriptUrl . '?action='. $this->name .';sa=manageCat')) : false;
+
 		// We kinda need a FAQ ID for pretty much everything even if there isn't one!
 		$this->_faq = $this->validate('faq') ? $this->data('faq') : 0;
 

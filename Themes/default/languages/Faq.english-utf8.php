@@ -31,7 +31,7 @@ $txt['faqmod_createCat_send'] = 'Create Category';
 $txt['faqmod_edit_send'] = 'Edit this FAQ';
 $txt['faqmod_adding'] = 'Adding a new FAQ';
 $txt['faqmod_no_faq'] = 'There are no FAQs to show.';
-$txt['faqmod_no_cat_admin'] = 'You need to add a category before you can add a FAQ <br /> <a href="'.$scripturl.'?action=faq;sa=addcat">Add a category</a>';
+$txt['Faq_no_cat_admin'] = 'You need to <a href="{add_cat_href}">add a category</a> before you can add a FAQ';
 $txt['faqmod_no_cat'] = 'There are not categories, you must add a category first before you can add FAQs.';
 $txt['faqmod_adding_cat'] = 'Adding a new category.';
 $txt['faqmod_editing_cat'] = 'Editing category';
