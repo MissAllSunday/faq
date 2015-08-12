@@ -376,6 +376,11 @@ class FaqTools extends Suki\Ohara
 
 	protected function returnData($row)
 	{
+		static $_permissions = array(
+			'edit' => allowedTo('faq_edit'),
+			'delete' => allowedTo('faq_delete'),
+		);
+
 		if (empty($row))
 			return array();
 
@@ -391,8 +396,8 @@ class FaqTools extends Suki\Ohara
 			),
 			'log' => ($row['log']),
 			'crud' => array(
-				'edit' => ($this->_permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
-				'delete' => (($this->_permissions['edit'] == true ? ' | ': '') . ($this->_permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' : '')),
+				'edit' => ($_permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
+				'delete' => (($_permissions['edit'] == true ? ' | ': '') . ($_permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' : '')),
 			),
 		);
 	}
