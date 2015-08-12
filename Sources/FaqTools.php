@@ -376,13 +376,15 @@ class FaqTools extends Suki\Ohara
 
 	protected function returnData($row)
 	{
-		static $_permissions = array(
-			'edit' => allowedTo('faq_edit'),
-			'delete' => allowedTo('faq_delete'),
-		);
+		static $_permissions = array();
 
 		if (empty($row))
 			return array();
+
+		$_permissions = array(
+			'edit' => allowedTo('faq_edit'),
+			'delete' => allowedTo('faq_delete'),
+		);
 
 		return array(
 			'id' => $row['id'],
