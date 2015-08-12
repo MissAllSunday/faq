@@ -276,7 +276,7 @@ class FaqTools extends Suki\Ohara
 		global $smcFunc;
 
 		$result = $smcFunc['db_query']('', '
-			SELECT id
+			SELECT ' . ($this->_table[$table]['columns'][0]) .'
 			FROM {db_prefix}' . ($this->_table[$table]['table']),
 			array()
 		);
