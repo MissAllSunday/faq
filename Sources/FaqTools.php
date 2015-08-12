@@ -62,7 +62,6 @@ class FaqTools extends Suki\Ohara
 			'columns' => array('category_id', 'category_name',),
 		),
 	);
-	protected $_permissions = array();
 	protected $_checkPerm = array('main', 'delete', 'add', 'edit', 'search');
 
 	public function __construct()
@@ -381,10 +380,9 @@ class FaqTools extends Suki\Ohara
 		if (empty($row))
 			return array();
 
-		$_permissions = array(
-			'edit' => allowedTo('faq_edit'),
-			'delete' => allowedTo('faq_delete'),
-		);
+		if (empty($_permissions))
+			foreach ($this->_checkPerm as $p)
+				$_permissions[$p] = allowedTo('faq_'. $p);
 
 		return array(
 			'id' => $row['id'],

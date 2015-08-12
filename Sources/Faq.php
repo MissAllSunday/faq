@@ -44,6 +44,11 @@ class Faq extends FaqTools
 	public function call()
 	{
 		global $context;
+		static $_permissions = array();
+
+		if (empty($_permissions))
+			foreach ($this->_checkPerm as $p)
+				$_permissions[$p] = allowedTo('faq_'. $p);
 
 		// The mod needs to be enable.
 		if (!$this->setting('enable'))
@@ -58,6 +63,7 @@ class Faq extends FaqTools
 
 		// Is there any messages? Dunno if there is an error or info message...
 		$context[$this->name]['update'] = $this->getAllUpdates();
+		$context[$this->name]['permissions'] = $_permissions;
 		$context['page_title'] = $this->text('main');
 
 		// The basic linktree, each subaction needs to add their own.
@@ -422,6 +428,10 @@ class Faq extends FaqTools
 		$start = $this->validate('start') ? $this->data('start') : 0;
 		$maxIndex = $this->getCount('cat');
 
+		// Gotta overwrite a few things.
+		$context['sub_template'] = 'show_list';
+		$context['default_list'] = 'faq_manageCat';
+
 		// Quick fix.
 		$that = $this;
 
@@ -446,9 +456,12 @@ class Faq extends FaqTools
 					$result = $smcFunc['db_query']('', '
 						SELECT '. (implode(', ', $that->_table['cat']['columns'])) .'
 						FROM {db_prefix}' . ($that->_table['cat']['table']) .'
-						LIMIT {int:start}, {int:maxindex}
+						LIMIT {int:start}, {int:maxIndex}
 						',
-						array()
+						array(
+							'start' => $start,
+							'maxIndex' => $maxIndex,
+						)
 					);
 
 					while ($row = $smcFunc['db_fetch_assoc']($result))
@@ -497,7 +510,7 @@ class Faq extends FaqTools
 					'data' => array(
 						'function' => function ($rowData) use ($that)
 						{
-							return '<a href="'. $that->scriptUrl .'?action='. $that->name .';sa=editCat;cat='. $rowData['id'] .'">'. $row['title'] .'</a>';
+							return '<a href="'. $that->scriptUrl .'?action='. $that->name .';sa=addCat;cat='. $rowData['id'] .'">'. $that->text('edit') .'</a>';
 						},
 					),
 				),
@@ -506,9 +519,9 @@ class Faq extends FaqTools
 						'value' => $this->text('delete'),
 					),
 					'data' => array(
-						'function' => function ($rowData)
+						'function' => function ($rowData) use ($that)
 						{
-							return str_replace('| ', '', $rowData['crud']['delete']);
+							return '<a href="'. $that->scriptUrl .'?action='. $that->name .';sa=deleteCat;cat='. $rowData['id'] .'">'. $that->text('delete') .'</a>';
 						},
 					),
 				),
