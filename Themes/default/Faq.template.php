@@ -20,7 +20,7 @@ function template_faq_main()
 	faq_header();
 
 	// Show a nice message if no FAQs are available.
-	if (empty($context['faq']['all']))
+	if (empty($context['Faq']['all']))
 			echo '
 		<div class="information">
 			', $txt['Faq_no_faq'] ,'
@@ -35,7 +35,7 @@ function template_faq_main()
 		// The main div.
 		echo '
 		<div class="rightSide">';
-			foreach($context['faq']['all'] as $faq)
+			foreach($context['Faq']['all'] as $faq)
 				echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
@@ -129,12 +129,12 @@ function template_faq_add()
 					<dd>';
 
 			// Show the category select field.
-			if (!empty($context['faq']['cats']))
+			if (!empty($context['Faq']['cats']))
 			{
 				echo '
 						<select name="current[cat_id]">';
 
-				foreach($context['faq']['cats'] as $cats)
+				foreach($context['Faq']['cats'] as $cats)
 					echo '
 							<option value="', $cats['id'] ,'" ', (isset($context['current']['cat_id']) && $cats['id'] == $context['current']['cat_id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
 
@@ -179,10 +179,10 @@ function template_faq_single()
 
 	// The main div.
 	echo '
-	<div class="floatright nopadding" ', $context['faq']['width'] ,'>';
+	<div class="floatright nopadding" ', $context['Faq']['width'] ,'>';
 
 	// No direct access.
-	if (empty($context['faq']['single']) || !is_array($context['faq']['single']))
+	if (empty($context['Faq']['single']) || !is_array($context['Faq']['single']))
 		echo '
 		<div class="information">
 			', $txt['Faq_no_valid_id'] ,'
@@ -192,10 +192,10 @@ function template_faq_single()
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="floatleft">', $context['faq']['single']['link'] ,'</span>
+				<span class="floatleft">', $context['Faq']['single']['link'] ,'</span>
 				<span class="floatright">
-					', $context['faq']['single']['crud']['edit'] ,'
-					', $context['faq']['single']['crud']['delete'] ,'
+					', $context['Faq']['single']['crud']['edit'] ,'
+					', $context['Faq']['single']['crud']['delete'] ,'
 				</span>
 				<span class="clear" />
 			</h3>
@@ -203,7 +203,7 @@ function template_faq_single()
 
 		<div class="windowbg">
 			<div class="content">
-				', $context['faq']['single']['body'] ,'
+				', $context['Faq']['single']['body'] ,'
 			</div>
 		</div>';
 
@@ -257,8 +257,8 @@ function template_faq_addCat()
 							<span id="caption_subject">', $txt['Faq_editcat_send'] ,'</span>
 						</dt>
 						<dd>
-							<input type="hidden" id="catID" name="catID" value="', $context['faq']['cat']['edit']['id'] ,'" />
-							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', $context['faq']['cat']['edit']['name'] ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_editcat_send'] ,'" />
+							<input type="hidden" id="catID" name="catID" value="', $context['Faq']['cat']['edit']['id'] ,'" />
+							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', $context['Faq']['cat']['edit']['name'] ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_editcat_send'] ,'" />
 						</dd>
 					</dl>
 				</form>
@@ -305,7 +305,7 @@ function template_faq_manageCat()
 				</thead>
 			<tbody>';
 
-		foreach($context['faq']['cats']['all'] as $all)
+		foreach($context['Faq']['cats']['all'] as $all)
 		{
 			echo '
 				<tr class="windowbg" style="text-align: center">
@@ -316,7 +316,7 @@ function template_faq_manageCat()
 						',$all['name'],'
 					</td>
 					<td>
-						', $context['faq']['object']->crud($all['id'], 'cat') ,'
+						', $context['Faq']['object']->crud($all['id'], 'cat') ,'
 					</td>
 				</tr>';
 		}
@@ -326,7 +326,7 @@ function template_faq_manageCat()
 		</table><br />';
 
 	/* A nice form for adding a new cat */
-	if ($context['faq']['object']->permissions('add') == true)
+	if ($context['Faq']['object']->permissions('add') == true)
 		echo '
 			<span class="clear upperframe">
 				<span></span>
@@ -368,7 +368,7 @@ function template_faq_list()
 	<div class="floatright nopadding">';
 
 	/* No direct access */
-	if (empty($context['faq']['all']) || !is_array($context['faq']['all']))
+	if (empty($context['Faq']['all']) || !is_array($context['Faq']['all']))
 		echo '
 		<div class="windowbg nopadding">
 			<span class="topslice"><span></span></span>
@@ -393,7 +393,7 @@ function template_faq_list()
 		echo '
 					<ul class="reset">';
 
-		foreach($context['faq']['all'] as $all)
+		foreach($context['Faq']['all'] as $all)
 			echo '
 						<li>
 							', $all['link'] ,'
@@ -428,8 +428,8 @@ function faq_header()
 	);
 
 	// Any message to display?
-	if (!empty($context['faq']['update']))
-		foreach ($context['faq']['update'] as $key => $message)
+	if (!empty($context['Faq']['update']))
+		foreach ($context['Faq']['update'] as $key => $message)
 			echo
 		'<div class="', $key ,'box">
 			', $message ,'
@@ -485,7 +485,7 @@ function faq_sideBar()
 			<div class="content">
 				<ul class="reset">';
 
-		foreach($context['faq']['cats'] as $all)
+		foreach($context['Faq']['cats'] as $all)
 			echo '
 					<li>
 						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
@@ -513,7 +513,7 @@ function faq_sideBar()
 			<div class="content">
 				<ul class="reset">';
 
-		foreach($context['faq']['object']->getLatest($modSettings['Faq_show_latest']) as $all)
+		foreach($context['Faq']['object']->getLatest($modSettings['Faq_show_latest']) as $all)
 			echo '
 					<li>
 						', $all['link'] ,'
