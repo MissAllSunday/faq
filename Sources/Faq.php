@@ -45,8 +45,6 @@ class Faq extends FaqTools
 		global $context;
 		static $_permissions = array();
 
-		checkSession('request');
-
 		if (empty($_permissions))
 			foreach ($this->_checkPerm as $p)
 				$_permissions[$p] = allowedTo('faq_'. $p);
@@ -54,6 +52,17 @@ class Faq extends FaqTools
 		// The mod needs to be enable.
 		if (!$this->setting('enable'))
 			redirectexit();
+
+		// Get the subaction.
+		$call = $this->_call = $this->validate('sa') &&  in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
+
+		// There are a few calls visible for guest.
+		if (!in_array($call, array('main', 'single')))
+			checkSession('request');
+
+		// Check if the user can actually do whatever the user is trying to!
+		if (in_array($this->_call, $this->_checkPerm))
+			isAllowedTo('faq_'. $this->_call);
 
 		// Load both language and template files.
 		loadLanguage($this->name);
@@ -72,13 +81,6 @@ class Faq extends FaqTools
 			'url' => $this->scriptUrl .'?action='. $this->name,
 			'name' => $context['page_title'],
 		);
-
-		// Get the subaction.
-		$call = $this->_call = $this->validate('sa') &&  in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
-
-		// Check if the user can actually do whatever the user is trying to!
-		if (in_array($this->_call, $this->_checkPerm))
-			isAllowedTo('faq_'. $this->_call);
 
 		// Get the right template.
 		$context['sub_template'] = 'faq_'. $call;

@@ -91,7 +91,7 @@ function template_faq_add()
 
 	// The main div.
 	echo '
-	<div class="floatright nopadding">';
+	<div class="">';
 
 	// Show the preview
 	if (!empty($context['preview']))

@@ -90,25 +90,25 @@ class FaqTools extends Suki\Ohara
 				'sub_buttons' => array(
 					'faq_admin' => array(
 						'title' => $this->text('manage'),
-						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manage',
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manage;' .$context['session_var'] .'='. $context['session_id'],
 						'show' => allowedTo('faq_edit'),
 						'sub_buttons' => array(
 							'faq_add' => array(
 								'title' => $this->text('add_send'),
-								'href' => $this->scriptUrl . '?action='. $this->name .';sa=add',
+								'href' => $this->scriptUrl . '?action='. $this->name .';sa=add;' .$context['session_var'] .'='. $context['session_id'],
 								'show' => allowedTo('faq_add'),
 							),
 						),
 					),
 					'faq_category' => array(
 						'title' => $this->text('manage_categories'),
-						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manageCat',
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manageCat;' .$context['session_var'] .'='. $context['session_id'],
 						'show' => allowedTo(array('faq_delete', 'faq_add', 'faq_edit')),
 						'sub_buttons' => array(),
 					),
 					'faq_admin_settings' => array(
 						'title' => $this->text('admin'),
-						'href' => $this->scriptUrl . '?action=admin;area=modsettings;sa=faq',
+						'href' => $this->scriptUrl . '?action=admin;area=modsettings;sa=faq;' .$context['session_var'] .'='. $context['session_id'],
 						'show' => allowedTo('admin_forum'),
 						'sub_buttons' => array(),
 					),
