@@ -254,12 +254,15 @@ class FaqTools extends Suki\Ohara
 		global $smcFunc;
 
 		$return = array();
-		$result = $smcFunc['db_query']('', '' . (implode(', ', $this->_table['cat']['columns'])) . '
-			WHERE '.($this->_table['cat']['columns'][0]).' = ({int:id})
+		$result = $smcFunc['db_query']('', '
+			SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
+			FROM {db_prefix}' . ($this->_table['cat']['table']) .'
+			WHERE {string:column} = {int:id}
 			LIMIT {int:limit}',
 			array(
 				'id' => (int) $id,
-				'limit' => 1
+				'limit' => 1,
+				'column' => $this->_table['cat']['columns'][0]
 			)
 		);
 
