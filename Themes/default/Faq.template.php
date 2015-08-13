@@ -235,11 +235,6 @@ function template_faq_addCat()
 {
 	global $context, $scripturl, $txt;
 
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
 	// The main div.
 	echo '
 	<div class="floatright nopadding">';
@@ -257,8 +252,8 @@ function template_faq_addCat()
 							<span id="caption_subject">', $txt['Faq_editcat_send'] ,'</span>
 						</dt>
 						<dd>
-							<input type="hidden" id="catID" name="catID" value="', $context['Faq']['cat']['edit']['id'] ,'" />
-							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', $context['Faq']['cat']['edit']['name'] ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_editcat_send'] ,'" />
+							<input type="hidden" id="catID" name="catID" value="', (!empty($context['currentCat']['id']) ? $context['currentCat']['id'] : '') ,'" />
+							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', (!empty($context['currentCat']['name']) ? $context['currentCat']['name'] : '') ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_editcat_send'] ,'" />
 						</dd>
 					</dl>
 				</form>

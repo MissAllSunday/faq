@@ -22,13 +22,12 @@ class Faq extends FaqTools
 		'add',
 		'addCat',
 		'delete',
+		'deleteCat',
+		'manage',
+		'manageCat',
 		'categories',
 		'search',
 		'single',
-		'manage',
-		'manageCat',
-		'addCat',
-		'deleteCat',
 	);
 
 	public function __construct()
@@ -435,7 +434,7 @@ class Faq extends FaqTools
 		// Quick fix.
 		$that = $this;
 
-		// Lets use SMF's createList...
+		// Lets use SMF's createList.
 		$listOptions = array(
 			'id' => 'faq_manageCat',
 			'title' => $this->text('action_manageCat'),
@@ -529,7 +528,7 @@ class Faq extends FaqTools
 			'additional_rows' => array(
 				array(
 					'position' => 'below_table_data',
-					'value' => '<a href="'. $this->scriptUrl . '?action='. $this->name .';sa=add">'. $this->text('add_send') .'</a>',
+					'value' => '<a href="'. $this->scriptUrl . '?action='. $this->name .';sa=addCat">'. $this->text('addcat_send') .'</a>',
 				),
 			),
 		);
@@ -538,5 +537,18 @@ class Faq extends FaqTools
 		createList($listOptions);
 
 		unset($that);
+	}
+
+	protected function addCat()
+	{
+		global $context;
+
+		// No cat means we are adding one.
+		$context['catID'] = $this->validate('cat') ? $this->data('cat') : 0;
+
+		// Fix the linktree, page title and all that stuff...
+
+		// So, editing huh? lets get the current cat data.
+		$context['currentCat'] = $this->getSingleCat($context['catID']);
 	}
 }

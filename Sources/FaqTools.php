@@ -205,6 +205,32 @@ class FaqTools extends Suki\Ohara
 		return !empty($return) ? $return : false;
 	}
 
+	public function getSingleCat($id)
+	{
+		global $smcFunc;
+
+		$return = array();
+		$result = $smcFunc['db_query']('', '' . (implode(', ', $this->_table['cat']['columns'])) . '
+			WHERE '.($this->_table['cat']['columns'][0]).' = ({int:id})
+			LIMIT {int:limit}',
+			array(
+				'id' => (int) $id,
+				'limit' => 1
+			)
+		);
+
+		while ($row = $smcFunc['db_fetch_assoc']($result))
+			$return[$row['category_id']] = array(
+				'id' => $row['category_id'],
+				'name' => $row['category_name'],
+			);
+
+		$smcFunc['db_free_result']($result);
+
+		// Done?
+		return !empty($return) ? $return : false;
+	}
+
 	public function getBy($page = '', $table, $column, $value, $limit = false, $like = false, $sort = 'title ASC')
 	{
 		global $smcFunc;
@@ -396,8 +422,8 @@ class FaqTools extends Suki\Ohara
 			),
 			'log' => ($row['log']),
 			'crud' => array(
-				'edit' => ($_permissions['edit'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit">'. $this->text('edit') .'</a>' : ''),
-				'delete' => (($_permissions['edit'] == true ? ' | ': '') . ($_permissions['delete'] ? '<a href="'. $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'] .';" class="you_sure">'. $this->text('delete') .'</a>' : '')),
+				'edit' => ($_permissions['edit'] ? $this->parser($this->text('edit'), array('href' => $this->scriptUrl .'?action='. $this->name .';sa=edit;faq='. $row['id'] .';edit')) : ''),
+				'delete' => (($_permissions['edit'] == true ? ' | ': '') . ($_permissions['delete'] ? $this->parser($this->text('delete'), array('href' => $this->scriptUrl .'?action='. $this->name .';sa=delete;faq='. $row['id'])) : '')),
 			),
 		);
 	}

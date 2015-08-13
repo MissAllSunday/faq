@@ -12,12 +12,12 @@ global $scripturl, $txt;
 
 $txt['Faq_main'] = 'FAQ';
 $txt['Faq_admin'] = 'FAQ mod admin settings';
-$txt['Faq_edit'] = 'Edit';
+$txt['Faq_edit'] = '<a href="{href}">Delete</a>';
 $txt['Faq_editing'] = 'Editing';
 $txt['Faq_send'] = 'Send';
 $txt['Faq_title_edit'] = 'Title';
 $txt['Faq_last_edit'] = 'Last edit on: ';
-$txt['Faq_delete'] = 'Delete';
+$txt['Faq_delete'] = '<a href="{href}" class="you_sure">Delete</a>';
 $txt['Faq_delete_send'] = 'Delete this';
 $txt['Faq_deleting'] = 'Deleting';
 $txt['Faq_add_send'] = 'Add a new FAQ';
