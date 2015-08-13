@@ -45,6 +45,8 @@ class Faq extends FaqTools
 		global $context;
 		static $_permissions = array();
 
+		checkSession('request');
+
 		if (empty($_permissions))
 			foreach ($this->_checkPerm as $p)
 				$_permissions[$p] = allowedTo('faq_'. $p);
@@ -148,7 +150,7 @@ class Faq extends FaqTools
 		// Create the editor.
 		$editorOptions = array(
 			'id' => 'body',
-			'value' => !empty($context['current']['body']) ? $context['current']['body'] : '',
+			'value' => !empty($context[$this->name]['current']['body']) ? $context[$this->name]['current']['body'] : '',
 			'width' => '90%',
 		);
 
@@ -166,10 +168,10 @@ class Faq extends FaqTools
 			return fatal_lang_error($this->name .'_noValidId', false);
 
 		// Make sure it does exists...
-		$context['current'] = $this->getSingle($this->_faq);
+		$context[$this->name]['current'] = $this->getSingle($this->_faq);
 
 		// Tell the user this entry doesn't exists anymore...
-		if (empty($context['current']))
+		if (empty($context[$this->name]['current']))
 			fatal_lang_error($this->name .'_noValidId', false);
 
 		// Want to see your masterpiece?
@@ -186,7 +188,7 @@ class Faq extends FaqTools
 		// Create the editor.
 		$editorOptions = array(
 			'id' => 'body',
-			'value' => !empty($context['current']['body']) ? $context['current']['body'] : '',
+			'value' => !empty($context[$this->name]['current']['body']) ? $context[$this->name]['current']['body'] : '',
 			'width' => '90%',
 		);
 
@@ -201,27 +203,25 @@ class Faq extends FaqTools
 	{
 		global $txt, $context;
 
-		checkSession('request');
-
 		// A default var for previewing.
-		$context['current'] = array();
+		$context[$this->name]['current'] = array();
 
 		require_once($this->sourceDir.'/Subs-Post.php');
 
 		// Set everything up to be displayed.
-		$context['current'] = $this->data('current');
-		$context['current']['body'] = $this->data('body');
-		$context['preview'] = $context['current'];
+		$context[$this->name]['current'] = $this->data('current');
+		$context[$this->name]['current']['body'] = $this->data('body');
+		$context['preview'] = $context[$this->name]['current'];
 
 		// We Censor for your protection...
 		censorText($context['preview']['title']);
-		preparsecode($context['current']['body'], true);
+		preparsecode($context[$this->name]['current']['body'], true);
 		preparsecode($context['preview']['body']);
 		$context['preview']['body'] = parse_bbc($context['preview']['body']);
 		censorText($context['preview']['body']);
 
 		// Set a descriptive title.
-		$context['page_title'] = $txt['preview'] .' - ' . $context['current']['title'];
+		$context['page_title'] = $txt['preview'] .' - ' . $context[$this->name]['current']['title'];
 	}
 
 	protected function save()
@@ -232,33 +232,33 @@ class Faq extends FaqTools
 
 		require_once($this->sourceDir.'/Subs-Post.php');
 
-		$context['current'] = $this->data('current');
-		$context['current']['body'] = $this->data('body');
+		$context[$this->name]['current'] = $this->data('current');
+		$context[$this->name]['current']['body'] = $this->data('body');
 		$isEmpty = array();
 
 		// You need to enter something!
-		if (empty($context['current']))
+		if (empty($context[$this->name]['current']))
 		{
 			// Set everything up to be displayed.
-			$context['current'] = $this->data('current');
-			preparsecode($context['current']['body'], true);
+			$context[$this->name]['current'] = $this->data('current');
+			preparsecode($context[$this->name]['current']['body'], true);
 
 			// Fool the system, again!
 			$context[$this->name]['update']['error'] = $this->text('error_emtpyAll');
 			return;
 		}
 
-		if (empty($context['current']['body']))
+		if (empty($context[$this->name]['current']['body']))
 			$isEmpty[] = 'body';
 
-		foreach ($context['current'] as $k => $v)
+		foreach ($context[$this->name]['current'] as $k => $v)
 			if (empty($v))
 				$isEmpty[] = $k;
 
 		// Did you forgot something?
 		if (!empty($isEmpty))
 		{
-			preparsecode($context['current']['body'], true);
+			preparsecode($context[$this->name]['current']['body'], true);
 
 			// Fool the system, again!
 			$context[$this->name]['update']['error'] = str_replace('{fields}', implode(', ', $isEmpty), $this->text('error_emtpyFields'));
@@ -266,11 +266,11 @@ class Faq extends FaqTools
 		}
 
 		// Add some more things we need.
-		$context['current']['log'] = $this->createLog();
-		preparsecode($context['current']['body']);
+		$context[$this->name]['current']['log'] = $this->createLog();
+		preparsecode($context[$this->name]['current']['body']);
 
 		// Finally store it.
-		$id = $this->create($context['current']);
+		$id = $this->create($context[$this->name]['current']);
 
 		if (!empty($id))
 		{
@@ -304,7 +304,7 @@ class Faq extends FaqTools
 		$context[$this->name]['single'] = $this->getSingle($this->_faq);
 
 		// Tell the user this entry doesn't exists anymore...
-		if (empty($context['current']))
+		if (empty($context[$this->name]['current']))
 			fatal_lang_error($this->name .'_noValidId', false);
 	}
 

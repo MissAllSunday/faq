@@ -33,10 +33,6 @@ class FaqTools extends Suki\Ohara
 			'file' => 'Faq.php',
 			'func' => 'Faq::addActions',
 		),
-		'menu' => array(
-			'file' => 'FaqAdmin.php',
-			'func' => 'FaqAdmin::addMenu',
-		),
 		'permissions' => array(
 			'file' => 'FaqAdmin.php',
 			'func' => 'FaqAdmin::addPermissions',
@@ -72,6 +68,54 @@ class FaqTools extends Suki\Ohara
 		$this->_queryConstruct = 'SELECT f.'. (implode(', f.', $this->_table['faq']['columns']) .', c.'. implode(', c.', $this->_table['cat']['columns'])) .'
 	FROM {db_prefix}' . ($this->_table['faq']['table']) . ' AS f
 		LEFT JOIN {db_prefix}' . ($this->_table['cat']['table']) . ' AS c ON (c.category_id = f.cat_id)';
+	}
+
+	function addMenu(&$menu_buttons)
+	{
+		global $txt, $context;
+
+		$insert = $this->enable('menuPosition') ? $this->setting('menuPosition') : 'home';
+		$counter = 0;
+
+		foreach ($menu_buttons as $area => $dummy)
+			if (++$counter && $area == $insert)
+				break;
+
+		$menu_buttons = array_merge(
+			array_slice($menu_buttons, 0, $counter),
+			array('faq' => array(
+				'title' => $this->text('main'),
+				'href' => $this->scriptUrl . '?action='. $this->name,
+				'show' => $this->enable('enable') && allowedTo('faq_view') ? true : false,
+				'sub_buttons' => array(
+					'faq_admin' => array(
+						'title' => $this->text('manage'),
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manage',
+						'show' => allowedTo('faq_edit'),
+						'sub_buttons' => array(
+							'faq_add' => array(
+								'title' => $this->text('add_send'),
+								'href' => $this->scriptUrl . '?action='. $this->name .';sa=add',
+								'show' => allowedTo('faq_add'),
+							),
+						),
+					),
+					'faq_category' => array(
+						'title' => $this->text('manage_categories'),
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=manageCat',
+						'show' => allowedTo(array('faq_delete', 'faq_add', 'faq_edit')),
+						'sub_buttons' => array(),
+					),
+					'faq_admin_settings' => array(
+						'title' => $this->text('admin'),
+						'href' => $this->scriptUrl . '?action=admin;area=modsettings;sa=faq',
+						'show' => allowedTo('admin_forum'),
+						'sub_buttons' => array(),
+					),
+				),
+			)),
+			array_slice($menu_buttons, $counter)
+		);
 	}
 
 	public function create($data)
