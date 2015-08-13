@@ -64,7 +64,7 @@ function template_faq_main()
 			echo $context['page_index'];
 
 		// Button for adding a new entry.
-		if (allowedTo('faq_add'))
+		if ($context['Faq']['permissions']['add'])
 			echo '
 			<div>
 				<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
@@ -73,9 +73,11 @@ function template_faq_main()
 			</div>';
 
 		echo '
-		</div>
-	</div>';
+		</div>';
 	}
+
+	echo '
+	</div>';
 }
 
 function template_faq_add()
