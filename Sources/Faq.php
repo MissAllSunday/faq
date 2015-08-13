@@ -409,7 +409,10 @@ class Faq extends FaqTools
 			'additional_rows' => array(
 				array(
 					'position' => 'below_table_data',
-					'value' => '<a href="'. $this->scriptUrl . '?action='. $this->name .';sa=add">'. $this->text('add_send') .'</a>',
+					'value' => $this->parser($this->text('crud'), array(
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=add',
+						'title' => $this->text('add_send'),
+					)),
 				),
 			),
 		);
@@ -509,7 +512,10 @@ class Faq extends FaqTools
 					'data' => array(
 						'function' => function ($rowData) use ($that)
 						{
-							return '<a href="'. $that->scriptUrl .'?action='. $that->name .';sa=addCat;cat='. $rowData['id'] .'">'. $that->text('edit') .'</a>';
+							return $that->parser($that->text('crud'), array(
+								'href' => $that->scriptUrl .'?action='. $that->name .';sa=addCat;cat='. $rowData['id'],
+								'title' => $that->text('edit'),
+							));
 						},
 					),
 				),
@@ -520,7 +526,9 @@ class Faq extends FaqTools
 					'data' => array(
 						'function' => function ($rowData) use ($that)
 						{
-							return '<a href="'. $that->scriptUrl .'?action='. $that->name .';sa=deleteCat;cat='. $rowData['id'] .'">'. $that->text('delete') .'</a>';
+							return $that->parser($that->text('delete'), array(
+								'href' => $that->scriptUrl .'?action='. $that->name .';sa=deleteCat;cat='. $rowData['id'],
+							));
 						},
 					),
 				),
@@ -528,7 +536,10 @@ class Faq extends FaqTools
 			'additional_rows' => array(
 				array(
 					'position' => 'below_table_data',
-					'value' => '<a href="'. $this->scriptUrl . '?action='. $this->name .';sa=addCat">'. $this->text('addcat_send') .'</a>',
+					'value' => $this->parser($this->text('crud'), array(
+						'href' => $this->scriptUrl . '?action='. $this->name .';sa=addCat',
+						'title' => $this->text('addcat_send')
+					)),
 				),
 			),
 		);

@@ -12,7 +12,8 @@ global $scripturl, $txt;
 
 $txt['Faq_main'] = 'FAQ';
 $txt['Faq_admin'] = 'FAQ mod admin settings';
-$txt['Faq_edit'] = '<a href="{href}">Delete</a>';
+$txt['Faq_edit'] = 'Edit';
+$txt['Faq_crud'] = '<a href="{href}">{title}</a>';
 $txt['Faq_editing'] = 'Editing';
 $txt['Faq_send'] = 'Send';
 $txt['Faq_title_edit'] = 'Title';
