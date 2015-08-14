@@ -239,7 +239,7 @@ function template_faq_addCat()
 
 	// The main div.
 	echo '
-	<div class="floatright nopadding">';
+	<div>';
 
 	/* A nice form for adding a new cat */
 	echo '
@@ -248,14 +248,13 @@ function template_faq_addCat()
 		</span>
 		<div class="roundframe rfix">
 			<div class="innerframe">
-				<form action="', $scripturl, '?action=Faq;sa=editCat" method="post" target="_self">
+				<form action="', $scripturl, '?action=Faq;sa=editCat'. (!empty($context['catID']) ? ';cat='. $context['catID'] : '') .'" method="post" target="_self">
 					<dl id="post_header">
 						<dt>
 							<span id="caption_subject">', $txt['Faq_editcat_send'] ,'</span>
 						</dt>
 						<dd>
-							<input type="hidden" id="catID" name="catID" value="', (!empty($context['currentCat']['id']) ? $context['currentCat']['id'] : '') ,'" />
-							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', (!empty($context['currentCat']['name']) ? $context['currentCat']['name'] : '') ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_editcat_send'] ,'" />
+							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', (!empty($context['currentCat']['name']) ? $context['currentCat']['name'] : '') ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_edit'] ,'" />
 						</dd>
 					</dl>
 				</form>

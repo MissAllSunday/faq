@@ -558,10 +558,12 @@ class Faq extends FaqTools
 
 		// No cat means we are adding one.
 		$context['catID'] = $this->validate('cat') ? $this->data('cat') : 0;
+		$context['currentCat'] = array();
 
 		// Fix the linktree, page title and all that stuff...
 
 		// So, editing huh? lets get the current cat data. All cats should be loaded already so lets check that first.
-		$context['currentCat'] = !empty($context[$this->name]['cats'][$context['catID']]) ? $context[$this->name]['cats'][$context['catID']] : $this->getSingleCat($context['catID']);
+		if (!empty($context['catID']))
+			$context['currentCat'] = !empty($context[$this->name]['cats'][$context['catID']]) ? $context[$this->name]['cats'][$context['catID']] : $this->getSingleCat($context['catID']);
 	}
 }
