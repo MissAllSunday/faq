@@ -291,7 +291,7 @@ class Faq extends FaqTools
 		$this->erase($this->_faq);
 
 		// Redirect them to whatever the page they were viewing.
-		$this->setUpdate('info', $this->text('success_'. $this->_call));
+		$this->setUpdate('info', $this->text('info_'. $this->_call));
 		redirectexit('action='. $this->name .';sa='. $this->_call);
 	}
 
