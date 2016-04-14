@@ -253,6 +253,11 @@ class FaqTools extends Suki\Ohara
 	{
 		global $smcFunc;
 
+		$id = (int) $id;
+
+		if (!is_int($id))
+			return false;
+
 		$return = array();
 		$result = $smcFunc['db_query']('', '
 			SELECT '. (implode(', ', $this->_table['cat']['columns'])) .'
@@ -260,7 +265,7 @@ class FaqTools extends Suki\Ohara
 			WHERE {string:column} = {int:id}
 			LIMIT {int:limit}',
 			array(
-				'id' => (int) $id,
+				'id' => $id,
 				'limit' => 1,
 				'column' => $this->_table['cat']['columns'][0]
 			)
@@ -336,7 +341,7 @@ class FaqTools extends Suki\Ohara
 
 		$smcFunc['db_free_result']($result);
 
-		/* Build the pagination */
+		// Build the pagination.
 		$context['page_index'] = constructPageIndex($this->scriptUrl . '?action='. $this->name . (!empty($page) ? ';sa='. $page .'' : ''), $this->data('start'), $total, $maxIndex, false);
 
 		// Done!
