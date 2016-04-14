@@ -182,7 +182,7 @@ class Faq extends FaqTools
 
 		// Saving?
 		if ($this->validate('save'))
-				$this->save();
+			$this->save();
 
 		// Lastly, create our editor instance.
 		require_once($this->sourceDir . '/Subs-Editor.php');
@@ -273,12 +273,11 @@ class Faq extends FaqTools
 
 		// Finally store it.
 		$id = $this->create($context[$this->name]['current']);
+		$note = (!empty($id) ? 'info' : 'error');
 
-		if (!empty($id))
-		{
-			$this->setUpdate('info', $this->text('success_'. $this->_call));
-			redirectexit('action='. $this->name .';sa='. $this->_call);
-		}
+		$this->setUpdate($note, $this->text($note . '_'. $this->_call));
+
+		return redirectexit('action='. $this->name .';sa='. $this->_call);
 	}
 
 	protected function delete()

@@ -107,6 +107,7 @@ $txt['cannot_faq_delete'] = 'I\'m sorry, you aren\'t allowed to delete any FAQs'
 $txt['cannot_faq_add'] = 'I\'m sorry, you aren\'t allowed to add new FAQs';
 $txt['cannot_faq_edit'] = 'I\'m sorry, you aren\'t allowed to edit any FAQs';
 $txt['cannot_faq_search'] = 'I\'m sorry, you aren\'t allowed to search the FAQs';
+$txt['Faq_error_add'] = 'There was a problem while creating the entry, please try again.';
 
 // Success
 $txt['Faq_success_title'] = 'successfully done';
