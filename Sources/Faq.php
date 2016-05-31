@@ -37,7 +37,7 @@ class Faq extends FaqTools
 
 	function addActions(&$actions)
 	{
-		$actions['Faq'] = array('Faq.php', 'Faq::call#');
+		$actions['Faq'] = array('Faq.php', array($this, 'call'));
 	}
 
 	public function call()

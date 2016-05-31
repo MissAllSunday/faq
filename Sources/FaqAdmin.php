@@ -34,7 +34,7 @@ class FaqAdmin extends FaqTools
 	{
 		global $context;
 
-		$sub_actions['faq'] = 'FaqAdmin::settings#';
+		$sub_actions['faq'] = array($this, 'settings');
 		$context[$context['admin_menu_name']]['tab_data']['tabs']['faq'] = array();
 	}
 
