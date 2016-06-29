@@ -330,7 +330,7 @@ class FaqTools extends Suki\Ohara
 			ORDER BY {raw:sort} ASC
 			LIMIT {int:start}, {int:maxindex}',
 			array(
-				'start' => $this->validate('start') ? (int) $this->data('start') : 0,
+				'start' => $this->validate('start') ? $this->data('start') : 0,
 				'maxindex' => $maxIndex,
 				'sort' => $sort
 			)

@@ -51,17 +51,19 @@ class Faq extends FaqTools
 
 		// The mod needs to be enable.
 		if (!$this->setting('enable'))
-			redirectexit();
+			return redirectexit();
+
+		$sa = $this->data('sa');
 
 		// Get the subaction.
-		$call = $this->_call = $this->validate('sa') &&  in_array($this->data('sa'), $this->subActions) ? $this->data('sa') : 'main';
+		$call = $this->_call = in_array($sa, $this->subActions) ? $sa : 'main';
 
 		// There are a few calls visible for guest.
 		if (!in_array($call, array('main', 'single')))
 			checkSession('request');
 
 		// Check if the user can actually do whatever the user is trying to!
-		if (in_array($this->_call, $this->_checkPerm))
+		if (in_array($call, $this->_checkPerm))
 			isAllowedTo('faq_'. $this->_call);
 
 		// Load both language and template files.
@@ -140,7 +142,7 @@ class Faq extends FaqTools
 
 		// Want to see your masterpiece?
 		if ($this->validate('preview'))
-			$this->preview();
+			return $this->preview();
 
 		// Saving?
 		if ($this->validate('save'))
