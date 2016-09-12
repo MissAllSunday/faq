@@ -142,7 +142,7 @@ class Faq extends FaqTools
 
 		// Want to see your masterpiece?
 		if ($this->validate('preview'))
-			return $this->preview();
+			$this->preview();
 
 		// Saving?
 		if ($this->validate('save'))
