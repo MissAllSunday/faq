@@ -3,8 +3,8 @@
 /**
  * @package FAQ mod
  * @version 2.0
- * @author Jessica González <suki@missallsunday.com>
- * @copyright Copyright (c) 2011, Jessica González
+ * @author Jessica Gonzï¿½lez <suki@missallsunday.com>
+ * @copyright Copyright (c) 2011, Jessica Gonzï¿½lez
  * @license http://www.mozilla.org/MPL/MPL-1.1.html
  */
 
@@ -24,7 +24,7 @@
  * The Original Code is http://missallsunday.com code.
  *
  * The Initial Developer of the Original Code is
- * Jessica González.
+ * Jessica Gonzï¿½lez.
  * Portions created by the Initial Developer are Copyright (C) 2011
  * the Initial Developer. All Rights Reserved.
  *
@@ -150,8 +150,6 @@
 							array(
 								'name' => 'log',
 								'type' => 'text',
-								'size' => '',
-								'default' => '',
 							),
 							'ignore',
 							'fatal'
