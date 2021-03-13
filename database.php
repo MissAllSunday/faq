@@ -36,7 +36,7 @@
 					'name' => 'log',
 					'type' => 'text',
 					'size' => '',
-					'default' => '',
+					'default' => null,
 				),
 				array(
 					'name' => 'title',
@@ -48,7 +48,7 @@
 					'name' => 'body',
 					'type' => 'text',
 					'size' => '',
-					'default' => '',
+					'default' => null,
 				),
 			),
 			'indexes' => array(
