@@ -95,7 +95,7 @@ function template_faq_add()
 
 	// Show the preview
 	if (isset($context['preview_message']))
-	echo '
+	    echo '
 		<div class="cat_bar">
 			<h3 class="catbg">', $context['preview_title'], '</h3>
 		</div>
@@ -162,7 +162,7 @@ function template_faq_add()
 						</dd>
 					</dl>';
 
-			if ($context['show_bbc'])
+			if (!empty($context['show_bbc']))
 				echo '
 						<div id="bbcBox_message"></div>';
 

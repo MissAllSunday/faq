@@ -10,7 +10,6 @@ if (!defined('SMF'))
 function faq_dispatch()
 {
 	global $txt, $sourcedir, $modSettings, $context, $scripturl;
-	static $faqObject;
 
 		/* Safety first, hardcode the actions */
 		$subActions = array(
@@ -30,11 +29,8 @@ function faq_dispatch()
 			'deleteCat',
 		);
 
-		if (empty($faqObject))
-		{
-			require_once($sourcedir .'/Subs-Faq.php');
-			$faqObject = new Faq();
-		}
+        require_once($sourcedir .'/Subs-Faq.php');
+        $faqObject = new Faq();
 
 		/* Load both language and template files */
 		loadLanguage('Faq');
@@ -71,7 +67,7 @@ function faq_dispatch()
 
 		$call = 'faq_' .(!empty($func) && in_array($func, array_values($subActions)) ?  $func : 'main');
 
-		// Call the appropiate function
+		// Call the appropriate function
 		$call($faqObject);
 }
 
