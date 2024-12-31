@@ -30,7 +30,7 @@ class FaqTools extends Suki\Ohara
 	// Hooks points out to different files and classes.
 	protected $_overwriteHooks = array(
 		'actions' => array(
-			'file' => 'Faq.php',
+			'file' => 'FaqController.php',
 			'func' => 'Faq::addActions',
 		),
 		'permissions' => array(

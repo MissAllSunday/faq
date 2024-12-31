@@ -1,34 +1,12 @@
 <?php
 
-/**
- * @package FAQ mod
- * @version 2.1
- * @author Jessica González <suki@missallsunday.com>
- * @copyright Copyright (c) 2014, Jessica González
- * @license https://www.mozilla.org/MPL/2.0/
- */
+declare(strict_types=1);
 
-if (!defined('SMF'))
-	die('No direct access');
+namespace Faq;
 
-// Require our libs.
-require_once ($sourcedir .'/ohara/src/Suki/Ohara.php');
-require_once ($sourcedir .'/FaqTools.php');
-
-class Faq extends FaqTools
+class Faq
 {
-	public $name = __CLASS__;
-	public $subActions = array(
-		'add',
-		'addCat',
-		'delete',
-		'deleteCat',
-		'manage',
-		'manageCat',
-		'categories',
-		'search',
-		'single',
-	);
+	public const NAME = __CLASS__;
 
 	public function __construct()
 	{
@@ -37,7 +15,7 @@ class Faq extends FaqTools
 
 	function addActions(&$actions)
 	{
-		$actions['Faq'] = array('Faq.php', array($this, 'call'));
+		$actions['Faq'] = array('FaqController.php', array($this, 'call'));
 	}
 
 	public function call()

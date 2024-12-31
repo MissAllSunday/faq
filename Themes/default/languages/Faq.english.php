@@ -23,7 +23,7 @@ $txt['Faq_delete_send'] = 'Delete this';
 $txt['Faq_deleting'] = 'Deleting';
 $txt['Faq_add_send'] = 'Add a new FAQ';
 $txt['Faq_create_send'] = 'Create the FAQ';
-$txt['Faq_createCat_send'] = 'Create Category';
+$txt['Faq_createCat_send'] = 'Create CategoryController';
 $txt['Faq_edit_send'] = 'Edit this FAQ';
 $txt['Faq_adding'] = 'Adding a new FAQ';
 $txt['Faq_no_faq'] = 'There are no FAQs to show.';
@@ -35,7 +35,7 @@ $txt['Faq_addcat_send'] = 'Add a new category';
 $txt['Faq_editcat_send'] = 'Edit this category';
 $txt['Faq_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['Faq_na'] = 'N/A';
-$txt['Faq_sidebar_faq_cats'] = 'Category list';
+$txt['Faq_sidebar_faq_cats'] = 'CategoryController list';
 $txt['Faq_latest'] = 'Latest FAQs';
 $txt['Faq_action_add'] = 'Add a new FAQ';
 $txt['Faq_action_edit'] = 'Edit this FAQ';
@@ -56,7 +56,7 @@ $txt['faq_list_view_all'] = 'View all';
 $txt['Faq_manage_desc'] = 'From here you can manage your FAQs, you can edit/delete/add as many as you want, here\'s some descriptions:<br />
 -ID:  its the numeric reference for the faqs, used to manage the faqs without to much problems.<br />
 -Title: the name for the faq.<br />
--Category: The category where this faq is hosted.<br />
+-CategoryController: The category where this faq is hosted.<br />
 -Log: A link to a separate page with info a bout the FAQ, shows who has edited the FAQ and the last time they did it.<br />';
 $txt['Faq_manage_categories'] = 'Manage Categories';
 $txt['Faq_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want.<br />';
@@ -73,7 +73,7 @@ $txt['Faq_date'] = 'By Last edit';
 $txt['Faq_id'] = 'By ID';
 $txt['Faq_title'] = 'By Title';
 $txt['Faq_body'] = 'By Body';
-$txt['Faq_byCat'] = 'By Category';
+$txt['Faq_byCat'] = 'By CategoryController';
 $txt['Faq_use_preview'] = 'Show a short version of the FAQ in the main page.';
 $txt['Faq_use_preview_sub'] = 'If enable, the main FAQ page will only show a fraction of the FAQS and the title will be converted to a link to a page that will display the entire FAQ.';
 $txt['Faq_how_many'] = 'How many characters would be displayed before the body gets cut off.';
@@ -128,7 +128,7 @@ $txt['Faq_edit_last_edit_by'] = 'By user';
 $txt['Faq_edit_edit'] = 'Edit';
 $txt['Faq_edit_delete'] = 'Delete';
 $txt['Faq_edit/delete'] = 'Edit | Delete';
-$txt['Faq_edit_category'] = 'Category';
+$txt['Faq_edit_category'] = 'CategoryController';
 $txt['Faq_edit_name'] = 'Name';
 $txt['Faq_show_categories'] = 'Categories';
 $txt['Faq_show_faqmod_list'] = 'FAQ list';

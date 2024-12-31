@@ -123,7 +123,7 @@ function template_faq_add()
 						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', (isset($context['current']['title']) ? $context['current']['title'] : '') ,'" class="input_text" id="title"/>
 					</dd>';
 
-			// Category select field.
+			// CategoryController select field.
 			echo'
 					<dt>
 						<span id="caption_subject">', $txt['Faq_edit_category'] ,':</span>
