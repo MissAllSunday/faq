@@ -8,14 +8,9 @@ class Faq
 {
 	public const NAME = __CLASS__;
 
-	public function __construct()
+	function autoload(&$classMap): void
 	{
-		parent::__construct();
-	}
-
-	function addActions(&$actions)
-	{
-		$actions['Faq'] = array('FaqController.php', array($this, 'call'));
+        $classMap['Faq\\'] = 'Faq/';
 	}
 
 	public function call()

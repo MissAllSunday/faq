@@ -6,28 +6,34 @@
 	<version>2.0</version>
 	<type>modification</type>
 
-	<install for="2.1 Beta 1, 2.1 Beta 2, 2.1 - 2.1.99">
-		<readme parsebbc="true">readme.txt</readme>
+	<install for="2.1 - 2.1.99">
+		<readme>readme.md</readme>
 		<license type="inline" parsebbc="false">
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at http://mozilla.org/MPL/2.0/.
+			This Source Code Form is subject to the terms of the Mozilla Public
+			License, v. 2.0. If a copy of the MPL was not distributed with this
+			file, You can obtain one at https://mozilla.org/MPL/2.0/.
 		</license>
+		<credits url="https://missallsunday.com" license="MPL" copyright="Michel Mendiola" licenseurl="https://www.mozilla.org/en-US/MPL/2.0/">
+			Faq mod
+		</credits>
+		<hook hook="integrate_autoload" function="CustomForm\Integration::autoload" file="$sourcedir/CustomForm/Integration.php" />
+		<hook hook="integrate_actions" function="Faq\Route::dispatch#"  />
+		<hook hook="integrate_admin_areas" function="Faq\FaqAdmin::AddArea#"  />
+
+
+
 		<hook function="Faq::runTimeHooks" hook="integrate_pre_load" file="$sourcedir/Faq.php" object="true"></hook>
 		<hook function="FaqAdmin::runTimeHooks" hook="integrate_admin_include" file="$sourcedir/FaqAdmin.php" object="true"></hook>
-		<credits url="http://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Faq mod</credits>
-		<database>database.php</database>
+		<credits url="https://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Faq mod</credits>
+		<database>install.php</database>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
-		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
-		<require-file name="Sources/Faq.php" destination="$sourcedir">The file that handles everything</require-file>
-		<require-file name="Sources/FaqAdmin.php" destination="$sourcedir">Faq admin pages</require-file>
-		<require-file name="Sources/FaqTools.php" destination="$sourcedir">Tools and utilities</require-file>
+		<require-dir name="Sources/Faq" destination="$sourcedir">Source files</require-dir>
 		<redirect url="?action=admin;area=modsettings;sa=faq"></redirect>
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
-		<code>remove.php</code>
-		<database>database.php</database>
+		<database>install.php</database>
+		<remove-dir name="$sourcedir/Faq" />
 		<remove-file name="$sourcedir/Faq.php" />
 		<remove-file name="$sourcedir/FaqAdmin.php" />
 		<remove-file name="$sourcedir/FaqTools.php" />

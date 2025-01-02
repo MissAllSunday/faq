@@ -17,6 +17,13 @@ class Utils
         return $txt[$fullKey] ?? '';
     }
 
+    public function smfText(string $textKey = ''): string
+    {
+        global $txt;
+
+        return $txt[$textKey] ?? '';
+    }
+
     public function setting(string $settingKey = '', $defaultValue = false)
     {
         global $modSettings;

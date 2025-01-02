@@ -33,7 +33,7 @@ class Request
         return $this->isRequestSet($key) ? $this->sanitize($_REQUEST[$key]) : null;
     }
 
-    public function isRequestSet(string $key): bool
+    public function isSet(string $key): bool
     {
         return isset($_REQUEST[$key]);
     }
