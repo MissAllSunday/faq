@@ -2,7 +2,7 @@
 
 namespace Faq\Controllers;
 
-class CategoryController extends Base
+class CategoryController extends BaseController
 {
     public const ACTION = __CLASS__;
     public const SUB_ACTIONS = [

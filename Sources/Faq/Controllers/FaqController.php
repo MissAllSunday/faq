@@ -6,7 +6,7 @@ use Faq\Faq as Faq;
 use Faq\Repositories\FaqRepository;
 use Faq\Request;
 
-class FaqController extends Base
+class FaqController extends BaseController
 {
     public const ACTION = __CLASS__;
     public const SUB_ACTIONS = [
@@ -27,18 +27,38 @@ class FaqController extends Base
 
     public function add(): void
     {
-        global $context;
-
         $id = $this->request->get('id');
 
         $this->setTemplateVars([
-            'entry' => $id ? $this->repository->getById($id) : [],
+            'entity' => $id ? $this->repository->getById($id) : [],
         ]);
 
         if ($this->request->isPost()) {
+            // validate
             $data = $this->request->get(Faq::NAME);
+
             $this->save($data, $id);
         }
+    }
+
+    public function manage(): void
+    {
+        $this->setTemplateVars([
+            'entities' => $this->repository->getAll(),
+        ]);
+    }
+
+    public function delete(): void
+    {
+        $result = 'error';
+        $id = $this->request->get('id');
+
+        if ($id) {
+            $this->repository->delete([$id]);
+            $result = 'success';
+        }
+
+        $this->redirect(sprintf(Faq::NAME . '_%s_' . 'delete', $result));
     }
 
     protected function save(array $data, int $id): void

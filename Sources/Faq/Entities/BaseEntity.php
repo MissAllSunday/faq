@@ -2,20 +2,30 @@
 
 namespace Faq\Entities;
 
-abstract class Base
+abstract class BaseEntity
 {
     public function __construct(array $entry = [])
     {
-        $this->setEntry($entry);
+        $this->setEntity($entry);
     }
 
-    public function setEntry(array $entry): void
+    public function setEntity(array $entry): void
     {
         foreach ($this->castValues($entry) as $key => $value) {
             $setCall = 'set' . $this->snakeToCamel($key);
             $this->{$setCall}($value);
         }
     }
+
+    public function toArray(): array
+    {
+        return \get_object_vars($this);
+    }
+
+    abstract public function getColumns(): array;
+    abstract public function getTableName(): string;
+    abstract public function getIndex(): int;
+
     protected function snakeToCamel($input): string
     {
         return \lcfirst(\str_replace('_', '', \ucwords($input, '_')));

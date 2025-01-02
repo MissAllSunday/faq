@@ -6,7 +6,7 @@ use Faq\Faq as Faq;
 use Faq\Request;
 use Faq\Utils;
 
-abstract class Base
+abstract class BaseController
 {
     protected ?Request $request;
     protected ?string $subAction = null;
@@ -24,7 +24,7 @@ abstract class Base
         $action = '?action=' . $this->getAction();
         $subAction = $this->subAction ?? (';sa=' . $this->subAction);
 
-        redirectexit($scripturl . '?action=' . $action . $subAction);
+        \redirectexit($scripturl . '?action=' . $action . $subAction);
     }
     public function setSubAction(string $subAction): void
     {
