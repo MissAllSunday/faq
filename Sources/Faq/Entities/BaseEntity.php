@@ -4,6 +4,7 @@ namespace Faq\Entities;
 
 abstract class BaseEntity
 {
+    protected CategoryEntity | FaqEntity $entity;
     public function __construct(array $entry = [])
     {
         $this->setEntity($entry);
@@ -24,7 +25,7 @@ abstract class BaseEntity
 
     abstract public function getColumns(): array;
     abstract public function getTableName(): string;
-    abstract public function getIndex(): int;
+    abstract public function getIndexName(): string;
 
     protected function snakeToCamel($input): string
     {

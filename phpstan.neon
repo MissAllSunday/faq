@@ -1,0 +1,17 @@
+parameters:
+    level: 5
+    paths:
+        - Sources
+    ignoreErrors:
+        - '#Function loadMemberContext not found.#'
+        - '#Function loadMemberData not found.#'
+        - '#Function getBoardTree not found.#'
+        - '#Function loadtemplate not found.#'
+        - '#Function loadLanguage not found.#'
+        - '#Function isAllowedTo not found.#'
+        - '#Function redirectexit not found.#'
+        - '#Function prepareDBSettingContext not found.#'
+        - '#Function saveDBSettings not found.#'
+        - '#Function checkSession not found.#'
+        - '#Function un_preparsecode not found.#'
+        - '#Function createPost not found.#'

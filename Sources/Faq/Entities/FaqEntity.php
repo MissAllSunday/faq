@@ -85,7 +85,7 @@ class FaqEntity extends BaseEntity
         return self::TABLE;
     }
 
-    public function getIndex(): int
+    public function getIndexName(): string
     {
         return self::ID;
     }
