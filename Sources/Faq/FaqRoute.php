@@ -6,20 +6,20 @@ use Faq\Controllers\CategoryController;
 use Faq\Controllers\FaqController;
 use Faq\Faq as Faq;
 
-class Route
+class FaqRoute
 {
-    protected ?Request $request = null;
+    protected ?FaqRequest $request = null;
     protected ?FaqController $faqController;
     protected ?CategoryController $categoryController;
 
     // No DI  :(
     public function __construct(
-        ?Request $request = null,
-        ?FaqController $faqController = null,
+        ?FaqRequest         $request = null,
+        ?FaqController      $faqController = null,
         ?CategoryController $categoryController = null
     )
     {
-        $this->request = $request ?? new Request();
+        $this->request = $request ?? new FaqRequest();
         $this->faqController = $faqController ?? new FaqController();
         $this->categoryController = $categoryController ?? new CategoryController();
     }
@@ -40,29 +40,29 @@ class Route
         $controller = $this->getController($action);
         $subAction = $this->request->get('sa');
 
-        if ($subAction && !$controller->isSubActionValid($subAction)) {
+        if (!$subAction || !$controller->isSubActionValid($subAction)) {
             return;
         }
 
         $this->loadRequiredFiles();
 
-        $controller->setContext($subAction);
+        $controller->setSubAction($subAction);
         $actions[$action] = [false, fn () => $controller->{$subAction}()];
     }
 
-    protected function getController(string $action): object
+    protected function getController(string $action): FaqController | CategoryController
     {
         return $action === Faq::NAME ? $this->faqController : $this->categoryController;
     }
 
     protected function isActionValid(string $action): bool
     {
-        return !empty($action) || in_array($action, self::ACTIONS, true);
+        return !empty($action) && in_array($action, self::ACTIONS, true);
     }
 
     protected function loadRequiredFiles(): void
     {
-        \loadLanguage(Faq::NAME);
-        \loadtemplate(Faq::NAME);
+        loadLanguage(Faq::NAME);
+        loadtemplate(Faq::NAME);
     }
 }

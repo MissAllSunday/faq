@@ -2,7 +2,7 @@
 
 namespace Faq;
 
-class Utils
+class FaqUtils
 {
     public function text(string $textKey = ''): string
     {

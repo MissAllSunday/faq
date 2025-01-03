@@ -3,17 +3,17 @@
 namespace Faq\Controllers;
 
 use Faq\Faq as Faq;
-use Faq\Request;
-use Faq\Utils;
+use Faq\FaqRequest;
+use Faq\FaqUtils;
 
 abstract class BaseController
 {
-    protected ?Request $request;
+    protected ?FaqRequest $request;
     protected ?string $subAction = null;
 
-    public function __construct(?Utils $utils = null)
+    public function __construct(?FaqUtils $utils = null)
     {
-        $this->request = $utils ?? new Request();
+        $this->request = $utils ?? new FaqRequest();
     }
 
     protected function redirect(string $message = ''): void
@@ -24,7 +24,7 @@ abstract class BaseController
         $action = '?action=' . $this->getAction();
         $subAction = $this->subAction ?? (';sa=' . $this->subAction);
 
-        \redirectexit($scripturl . '?action=' . $action . $subAction);
+        redirectexit($scripturl . '?action=' . $action . $subAction);
     }
     public function setSubAction(string $subAction): void
     {
@@ -44,7 +44,7 @@ abstract class BaseController
 
     public function isSubActionValid(string $subAction): bool
     {
-        return !empty($subAction) || in_array($subAction, $this->getSubActions(), true);
+        return !empty($subAction) && in_array($subAction, $this->getSubActions(), true);
     }
 
     protected function setTemplateVars(array $vars): void

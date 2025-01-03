@@ -15,14 +15,14 @@ class FaqAdmin
     public const PERMISSIONS = [
         'main', 'delete', 'add', 'edit', 'search'
     ];
-    public const URL = 'action=admin;area=' . Faq::NAME;
-    protected ?Utils $utils;
-    protected ?Request $request;
+    public const URL = 'action=admin;area=faq';
+    protected ?FaqUtils $utils;
+    protected ?FaqRequest $request;
 
-    public function __construct(?Utils $utils = null, ?Request $request = null)
+    public function __construct(?FaqUtils $utils = null, ?FaqRequest $request = null)
 	{
-        $this->utils = $utils ?? new Utils();
-        $this->request = $request ?? new Request();
+        $this->utils = $utils ?? new FaqUtils();
+        $this->request = $request ?? new FaqRequest();
 	}
 
 	public function addArea(&$areas): void
@@ -35,7 +35,7 @@ class FaqAdmin
             'icon' => 'posts',
             'subsections' => [
                 self::SETTINGS => [$this->utils->text('admin_settings')],
-                self::PERMISSIONS => [$this->utils->text('admin_permissions')],
+                self::PERMISSIONS_PAGE => [$this->utils->text('admin_permissions')],
             ],
         ];
     }
@@ -49,7 +49,7 @@ class FaqAdmin
             'description' => $this->utils->text('admin_panel_desc'),
             'tabs' => [
                 self::SETTINGS => [],
-                self::PERMISSIONS => []
+                self::PERMISSIONS_PAGE => []
             ],
         ];
 
@@ -92,12 +92,11 @@ class FaqAdmin
 
         ];
 
-        if ($this->request->isSet('save'))
-        {
+        if ($this->request->isSet('save')) {
             $this->saveConfig($configVars, $action);
         }
 
-        \prepareDBSettingContext($configVars);
+        prepareDBSettingContext($configVars);
     }
 
     public function permissions(string $action): void
@@ -131,11 +130,13 @@ class FaqAdmin
     {
         global $context, $scripturl;
 
-        $context['sub_action'] = $action;
-        $context['page_title'] = $this->utils->text('admin_' . $action);
-        $context['post_url'] = $scripturl . '?' . self::URL .';sa=' . $action . ';save';
-        $context['sub_template'] = 'show_settings';
-        $context['settings_title'] = $context['page_title'];
+        $this->utils->setContext([
+            'sub_action' => $action,
+            'page_title' => $this->utils->text('admin_' . $action),
+            'post_url' => $scripturl . '?' . self::URL .';sa=' . $action . ';save',
+            'sub_template' => 'show_settings',
+            'settings_title' =>  $this->utils->text('admin_' . $action),
+        ]);
     }
 
     protected function loadRequiredFiles(): void
@@ -150,8 +151,8 @@ class FaqAdmin
         require_once($sourcedir . '/ManageServer.php');
     }
 
-	function permissionsList(&$permissionGroups, &$permissionList)
-	{
+	public function permissionsList(&$permissionGroups, &$permissionList): void
+    {
         $templateName = strtolower(Faq::NAME) . '_%s';
         $classic = 'classic';
         $simple = 'simple';
@@ -159,11 +160,13 @@ class FaqAdmin
 		$permissionGroups['membergroup'][$simple] = [sprintf($templateName, $simple)];
 		$permissionGroups['membergroup'][$classic] = [sprintf($templateName, $classic)];
 
-		foreach (self::PERMISSIONS as $permissionName)
-			$permissionList['membergroup'][sprintf($templateName, $permissionName)] = [
-				false,
+		foreach (self::PERMISSIONS as $permissionName) {
+            $permissionList['membergroup'][sprintf($templateName, $permissionName)] = [
+                false,
                 sprintf($templateName, 'per_' . $classic),
                 sprintf($templateName, 'per_' . $simple),
             ];
+        }
+
 	}
 }

@@ -6,7 +6,7 @@ namespace Faq;
 
 class Faq
 {
-	public const NAME = __CLASS__;
+	public const NAME = 'Faq';
 
 	function autoload(&$classMap): void
 	{

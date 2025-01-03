@@ -3,12 +3,12 @@
 namespace Faq\Controllers;
 
 use Faq\Faq as Faq;
+use Faq\FaqRequest;
 use Faq\Repositories\FaqRepository;
-use Faq\Request;
 
 class FaqController extends BaseController
 {
-    public const ACTION = __CLASS__;
+    public const ACTION = 'faq';
     public const SUB_ACTIONS = [
         'add',
         'delete',
@@ -19,7 +19,7 @@ class FaqController extends BaseController
 
     protected ?FaqRepository $repository;
 
-    public function __construct(?Request $request = null, ?FaqRepository $repository = null)
+    public function __construct(?FaqRequest $request = null, ?FaqRepository $repository = null)
     {
         $this->repository = $repository ?? new FaqRepository();
         parent::__construct($request);

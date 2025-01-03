@@ -4,7 +4,7 @@ namespace Faq\Controllers;
 
 class CategoryController extends BaseController
 {
-    public const ACTION = __CLASS__;
+    public const ACTION = 'faqCategory';
     public const SUB_ACTIONS = [
         'add',
         'delete',

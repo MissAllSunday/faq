@@ -2,7 +2,7 @@
 
 namespace Faq;
 
-class Request
+class FaqRequest
 {
     public function sanitize($variable)
     {
@@ -30,7 +30,7 @@ class Request
 
     public function get(string $key)
     {
-        return $this->isRequestSet($key) ? $this->sanitize($_REQUEST[$key]) : null;
+        return $this->isSet($key) ? $this->sanitize($_REQUEST[$key]) : null;
     }
 
     public function isSet(string $key): bool
