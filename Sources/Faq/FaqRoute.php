@@ -62,7 +62,7 @@ class FaqRoute
 
     protected function loadRequiredFiles(): void
     {
-        loadLanguage(Faq::NAME);
-        loadtemplate(Faq::NAME);
+        loadLanguage(ucfirst(Faq::NAME));
+        loadtemplate(ucfirst(Faq::NAME));
     }
 }

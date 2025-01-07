@@ -6,12 +6,63 @@ namespace Faq;
 
 class Faq
 {
-	public const NAME = 'Faq';
+	public const NAME = 'faq';
+    public const URL = '%s?action='. self::NAME;
+    protected FaqUtils $utils;
 
-	function autoload(&$classMap): void
-	{
-        $classMap['Faq\\'] = 'Faq/';
-	}
+    public function __construct(?FaqUtils $utils = null)
+    {
+        $this->utils = $utils ?? new FaqUtils();
+    }
+
+    public function menu(array &$menu_buttons): void
+    {
+        global $scripturl, $context;
+
+        if (!$this->utils->setting(FaqAdmin::SETTINGS_ENABLE)) {
+            return;
+        }
+
+        $menuReference = $this->utils->setting(
+            FaqAdmin::SETTINGS_MENU_POSITION,
+            $this->utils->smfText('home'));
+        $counter = 0;
+
+        foreach (array_keys($menu_buttons) as $area) {
+            $counter++;
+            if ($area === $menuReference) {
+                break;
+            }
+        }
+
+        $menu_buttons = array_merge(
+            array_slice($menu_buttons, 0, $counter),
+            [Faq::NAME => [
+                'title' => $this->utils->text('title_main'),
+                'href' => sprintf(self::URL, $scripturl),
+                'show' => allowedTo(FaqAdmin::PERMISSION_VIEW),
+                'sub_buttons' => [
+                    'faq_add' => [
+                        'title' => $this->utils->text('add_send'),
+                        'href' => '#',
+                        'show' => allowedTo(FaqAdmin::PERMISSION_ADD),
+                    ],
+                    'faq_category' => [
+                        'title' => $this->utils->text('manage_categories'),
+                        'href' => $scripturl . $context['session_var'] .'='. $context['session_id'],
+                        'show' => allowedTo([FaqAdmin::PERMISSION_ADD, FaqAdmin::PERMISSION_DELETE]),
+                        'sub_buttons' => [],
+                    ],
+                    'faq_admin' => [
+                        'title' => $this->utils->text('admin_panel'),
+                        'href' => $scripturl . '?' . FaqAdmin::URL,
+                        'show' => allowedTo('admin_forum'),
+                    ],
+                ],
+            ]],
+            array_slice($menu_buttons, $counter)
+        );
+    }
 
 	public function call()
 	{

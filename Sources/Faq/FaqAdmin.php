@@ -6,16 +6,31 @@ namespace Faq;
 
 class FaqAdmin
 {
-    public const SETTINGS = 'settings';
+    public const SETTINGS_PAGE = 'settings';
     public const PERMISSIONS_PAGE = 'permissions';
     public const ACTIONS = [
-        self::SETTINGS,
+        self::SETTINGS_PAGE,
         self::PERMISSIONS_PAGE,
     ];
+    public const PERMISSION_VIEW = 'view';
+    public const PERMISSION_DELETE = 'delete';
+    public const PERMISSION_ADD = 'add';
+    public const PERMISSION_SEARCH = 'search';
     public const PERMISSIONS = [
-        'main', 'delete', 'add', 'edit', 'search'
+        self::PERMISSION_VIEW,
+        self::PERMISSION_DELETE,
+        self::PERMISSION_ADD,
+        self::PERMISSION_SEARCH,
     ];
-    public const URL = 'action=admin;area=faq';
+    public const SETTINGS_ENABLE = 'enable';
+    public const SETTINGS_PAGINATION = 'num_faqs';
+    public const SETTINGS_SHOW_CAT_LIST = 'show_catlist';
+    public const SETTINGS_SHOW_LATEST = 'show_latest';
+    public const SETTINGS_SORT_METHOD = 'sort_method';
+    public const SETTINGS_MENU_POSITION = 'menu_position';
+    public const SETTINGS_USE_JS = 'use_js';
+    public const SETTINGS_CARE = 'care';
+    public const URL = 'action=admin;area=' . Faq::NAME;
     protected ?FaqUtils $utils;
     protected ?FaqRequest $request;
 
@@ -29,12 +44,12 @@ class FaqAdmin
     {
         $this->loadRequiredFiles();
 
-        $areas['config']['areas'][strtolower(Faq::NAME)] = [
+        $areas['config']['areas'][Faq::NAME] = [
             'label' => $this->utils->text('admin_panel'),
             'function' => [$this, 'main'],
             'icon' => 'posts',
             'subsections' => [
-                self::SETTINGS => [$this->utils->text('admin_settings')],
+                self::SETTINGS_PAGE => [$this->utils->text('admin_settings')],
                 self::PERMISSIONS_PAGE => [$this->utils->text('admin_permissions')],
             ],
         ];
@@ -48,7 +63,7 @@ class FaqAdmin
             'title' => $this->utils->text('admin_panel'),
             'description' => $this->utils->text('admin_panel_desc'),
             'tabs' => [
-                self::SETTINGS => [],
+                self::SETTINGS_PAGE => [],
                 self::PERMISSIONS_PAGE => []
             ],
         ];
@@ -144,8 +159,7 @@ class FaqAdmin
         global $sourcedir;
 
         isAllowedTo('admin_forum');
-        loadLanguage(Faq::NAME);
-        loadtemplate(Faq::NAME);
+        loadLanguage(ucfirst(Faq::NAME));
 
         require_once($sourcedir . '/ManageSettings.php');
         require_once($sourcedir . '/ManageServer.php');
@@ -153,7 +167,7 @@ class FaqAdmin
 
 	public function permissionsList(&$permissionGroups, &$permissionList): void
     {
-        $templateName = strtolower(Faq::NAME) . '_%s';
+        $templateName = Faq::NAME . '_%s';
         $classic = 'classic';
         $simple = 'simple';
 

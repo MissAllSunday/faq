@@ -11,7 +11,7 @@ class FaqUtils
         $fullKey = Faq::NAME . '_' . $textKey;
 
         if (empty($txt[$fullKey])) {
-            loadLanguage(Faq::NAME);
+            loadLanguage(ucfirst(Faq::NAME));
         }
 
         return $txt[$fullKey] ?? '';
