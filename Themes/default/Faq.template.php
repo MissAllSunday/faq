@@ -1,5 +1,8 @@
 <?php
 
+use Faq\Entities\FaqEntity;
+use Faq\Faq;
+
 /**
  * @package FAQ mod
  * @version 2.1
@@ -9,7 +12,7 @@
  */
 
 
-function template_faq_main()
+function template_faq_index()
 {
 	global $txt, $context, $scripturl, $modSettings;
 
@@ -80,7 +83,61 @@ function template_faq_main()
 	</div>';
 }
 
-function template_faq_add()
+function template_faq_add(): void
+{
+    global $txt, $context;
+
+    $entity = $context[Faq::NAME]['entity'];
+
+    echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            ', $context['page_title'] ,'
+        </h3>
+    </div>
+
+    <div class="roundframe"> 
+    <form
+        action="#"
+        method="post" 
+        accept-charset="UTF-8" 
+        name="creator" 
+        id="creator"
+        enctype="multipart/form-data"
+        target="_self">
+        <dl class="settings">
+            <dt>
+                <span id="caption_subject">', $txt['faq_form_title'] ,'</span>
+            </dt>
+            <dd>
+                <input 
+                    type="text" 
+                    name="', FaqEntity::TITLE ,'" 
+                    size="55" 
+                    tabindex="1" 
+                    maxlength="255" 
+                    value="', $entity->getTitle() ,'" />
+            </dd>
+            <dt>
+                <span class="smalltext">', $txt['faq_form_category'] ,'</span>
+            </dt>
+            <dd>
+                ', showCategoryField($entity) ,'
+            </dd>
+        </dl>
+        
+        <div>
+            Rich editor goes here
+        </div>
+        
+        <input type="submit" name="save" value="', $txt['save'] ,'" class="button floatright">
+        <input type="submit" name="preview" class="button floatright" value="', $txt['preview'] ,'" />
+        <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+    </form>
+    </div>';
+}
+
+function template_faq_add2()
 {
 	global $context, $scripturl, $txt;
 
@@ -443,4 +500,33 @@ function faq_sideBar()
 
 	echo '
 	</div>';
+}
+
+function showCategoryField(FaqEntity $entity): string
+{
+    global $context, $txt;
+
+    if (empty($context[Faq::NAME]['categories'])) {
+        return '
+            <div class="Faq_warning">
+                '. $txt['faq_no_cat_admin'] .'
+            </div>';
+    }
+
+    $select = '
+        <select name="'. FaqEntity::CAT_ID .'">';
+
+    foreach($context[Faq::NAME]['categories'] as $category) {
+        $isSelected = $entity->getCatId() === $category->getId();
+
+        $select .= '
+            <option value="'. $category->id .'" '. ($isSelected ? 'selected="selected"' : '') .'>
+            '. $category->getName() .
+        '</option>';
+    }
+
+    $select .= '
+        </select>';
+
+    return $select;
 }

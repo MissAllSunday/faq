@@ -30,7 +30,7 @@ class FaqController extends BaseController
         $id = $this->request->get('id');
 
         $this->setTemplateVars([
-            'entity' => $id ? $this->repository->getById($id) : [],
+            'entity' => $id ? $this->repository->getById($id) : $this->repository->getEntity(),
         ]);
 
         if ($this->request->isPost()) {

@@ -83,6 +83,11 @@ abstract class BaseRepository
         return $this->db['db_insert_id']('{db_prefix}' . $this->entity->getTableName(), $this->entity->getIndexName());
     }
 
+    public function getEntity(): FaqEntity
+    {
+        return $this->entity;
+    }
+
 
     protected function buildSetUpdate(): string
     {

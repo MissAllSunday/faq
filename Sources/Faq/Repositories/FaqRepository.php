@@ -8,8 +8,24 @@ class FaqRepository extends BaseRepository
 {
     public function __construct(?FaqEntity $entity = null)
     {
-        $this->entity = $entity ?? new FaqEntity();
+        $this->entity = $entity ?? new FaqEntity(FaqEntity::DEFAULT_VALUES);
 
         parent::__construct();
+    }
+
+    public function getAll(): array
+    {
+        //TODO return formatted results, pagination
+        $this->db['db_query'](
+            '',
+            'SELECT {raw:columns}
+			FROM {db_prefix}{raw:from}',
+            [
+                'from' => FaqEntity::TABLE,
+                'columns' => implode(',', array_keys(FaqEntity::COLUMNS)),
+            ]
+        );
+
+        return [];
     }
 }

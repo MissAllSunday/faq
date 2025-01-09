@@ -11,9 +11,9 @@ abstract class BaseController
     protected ?FaqRequest $request;
     protected ?string $subAction = null;
 
-    public function __construct(?FaqUtils $utils = null)
+    public function __construct(?FaqRequest $request = null)
     {
-        $this->request = $utils ?? new FaqRequest();
+        $this->request = $request ?? new FaqRequest();
     }
 
     protected function redirect(string $message = ''): void
@@ -31,7 +31,6 @@ abstract class BaseController
         global $context, $scripturl, $txt;
 
         $this->subAction = $subAction;
-
 
         //  move somewhere else?
         $actionUrl = '?action=' . $this->getAction();

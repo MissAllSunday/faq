@@ -19,6 +19,14 @@ class FaqEntity extends BaseEntity
         self::BODY => 'string'
     ];
 
+    public const DEFAULT_VALUES = [
+        self::ID => '0',
+        self::CAT_ID => '0',
+        self::LOG => '',
+        self::TITLE => '',
+        self::BODY => ''
+    ];
+
     public int $id;
     public int $catId;
     public string $log;

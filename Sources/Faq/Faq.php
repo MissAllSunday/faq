@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Faq;
 
+use Faq\Controllers\CategoryController;
+use Faq\Controllers\FaqController;
+
 class Faq
 {
 	public const NAME = 'faq';
-    public const URL = '%s?action='. self::NAME;
     protected FaqUtils $utils;
 
     public function __construct(?FaqUtils $utils = null)
@@ -39,17 +41,17 @@ class Faq
             array_slice($menu_buttons, 0, $counter),
             [Faq::NAME => [
                 'title' => $this->utils->text('title_main'),
-                'href' => sprintf(self::URL, $scripturl),
+                'href' => $this->buildUrl(FaqController::ACTION),
                 'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW),
                 'sub_buttons' => [
                     'faq_add' => [
-                        'title' => $this->utils->text('add_send'),
-                        'href' => '#',
+                        'title' => $this->utils->text('add_title'),
+                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTIONS[1]),
                         'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD),
                     ],
                     'faq_category' => [
                         'title' => $this->utils->text('manage_categories'),
-                        'href' => $scripturl . $context['session_var'] .'='. $context['session_id'],
+                        'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTIONS[1]),
                         'show' => allowedTo([
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
@@ -57,13 +59,24 @@ class Faq
                     ],
                     'faq_admin' => [
                         'title' => $this->utils->text('admin_panel'),
-                        'href' => $scripturl . '?' . FaqAdmin::URL,
+                        'href' => $scripturl . '?action=admin;area=' . Faq::NAME,
                         'show' => allowedTo('admin_forum'),
                     ],
                 ],
             ]],
             array_slice($menu_buttons, $counter)
         );
+    }
+
+    protected function buildUrl(string $action, ?string $subAction = null): string
+    {
+        global $scripturl;
+
+        return strtr('{url}?action={action}{subAction}', [
+            '{url}' => $scripturl,
+            '{action}' => $action,
+            '{subAction}' => $subAction ? (';sa=' . $subAction) : '',
+        ]);
     }
 
 	public function call()

@@ -12,13 +12,23 @@ global $scripturl, $txt;
 
 // Actions
 $txt['faq_index_title'] = 'Frequently Asked Questions';
+$txt['faq_add_title'] = 'Add new question';
+
+// Categories
+$txt['faq_manage_categories'] = 'Manage Categories';
+
+
+//Add form
+$txt['faq_form_category'] = 'Category:';
+$txt['faq_form_title'] = 'Title:';
+
 
 $txt['faq_title_main'] = 'FAQ';
 $txt['faq_title_admin'] = 'FAQ mod admin settings';
 $txt['faq_edit'] = 'Edit';
 $txt['faq_editing'] = 'Editing';
 $txt['faq_send'] = 'Send';
-$txt['faq_title_edit'] = 'Title:';
+
 $txt['faq_no_category_name'] = 'Yo must provide a name for this category.';
 $txt['faq_no_category'] = 'You must select a category.';
 $txt['faq_no_title'] = 'You must provide a title.';
