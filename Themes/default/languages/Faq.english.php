@@ -10,6 +10,9 @@
 
 global $scripturl, $txt;
 
+// Actions
+$txt['faq_index_title'] = 'Frequently Asked Questions';
+
 $txt['faq_title_main'] = 'FAQ';
 $txt['faq_title_admin'] = 'FAQ mod admin settings';
 $txt['faq_edit'] = 'Edit';

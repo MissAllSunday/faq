@@ -10,9 +10,9 @@ class FaqController extends BaseController
 {
     public const ACTION = 'faq';
     public const SUB_ACTIONS = [
+        'index',
         'add',
         'delete',
-        'manage',
         'search',
         'single',
     ];
@@ -41,7 +41,7 @@ class FaqController extends BaseController
         }
     }
 
-    public function manage(): void
+    public function index(): void
     {
         $this->setTemplateVars([
             'entities' => $this->repository->getAll(),
@@ -78,5 +78,10 @@ class FaqController extends BaseController
     protected function getAction(): string
     {
         return self::ACTION;
+    }
+
+    public function getDefaultSubAction():string
+    {
+        return self::SUB_ACTIONS[0];
     }
 }

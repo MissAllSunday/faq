@@ -38,7 +38,7 @@ class FaqRoute
         }
 
         $controller = $this->getController($action);
-        $subAction = $this->request->get('sa');
+        $subAction = $this->request->get('sa') ?? $controller->getDefaultSubAction();
 
         if (!$subAction || !$controller->isSubActionValid($subAction)) {
             return;

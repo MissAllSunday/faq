@@ -38,7 +38,7 @@ abstract class BaseController
         $subActionUrl = $this->subAction ?? (';sa=' . $this->subAction);
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = Faq::NAME . '_' . $this->subAction;
-        $context['page_title'] = $txt[Faq::NAME . $this->subAction . '_title'];
+        $context['page_title'] = $txt[Faq::NAME . '_' . $this->subAction . '_title'];
         $context['post_url'] = $scripturl . '?action=' . $actionUrl . $subActionUrl . ';save';
     }
 
@@ -56,4 +56,5 @@ abstract class BaseController
 
     abstract protected function getSubActions() : array;
     abstract protected function getAction() : string;
+    abstract public function getDefaultSubAction():string;
 }
