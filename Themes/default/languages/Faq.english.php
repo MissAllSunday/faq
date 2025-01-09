@@ -60,9 +60,10 @@ $txt['faq_manage_desc'] = 'From here you can manage your FAQs, you can edit/dele
 -Log: A link to a separate page with info a bout the FAQ, shows who has edited the FAQ and the last time they did it.<br />';
 $txt['faq_manage_category'] = 'Manage Categories';
 $txt['faq_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want.<br />';
+$txt['faq_admin_settings'] = 'FAQ settings';
+$txt['faq_admin_permissions'] = 'FAQ permissions';
 $txt['faq_admin_panel'] = 'FAQ mod admin panel';
 $txt['faq_admin_panel_desc'] = 'This is the main admin panel for the FAQ mod, in here you can easily add/edit/delete FAQs as well as setup the configuration.';
-$txt['faq_php_version'] = '<br /><span style="color:red;font-size:25px">This mod needs php 5.2+ to work properly, you won\'t be able to use this mod</span>';
 $txt['faq_num_faqs'] = 'Number of FAQs to show on each page.';
 $txt['faq_num_faqs_sub'] = 'If you have a lot of FAQs you can set a number here to active the pagination, leave it in blank or at 0 if you do not want to have pagination, otherwise put a number, for example, if you have 10 FAQs and you set this at 5 then you will have two pages, 10/5 = 2.';
 $txt['faq_show_catlist_sub'] = 'It will show a list that contain all possible categories. It will list all regardless of it containing any FAQs or not.';
@@ -135,11 +136,10 @@ $txt['faq_edit_log'] = 'Log';
 // Permissions strings
 $txt['permissiongroup_simple_faq_per_simple'] = 'FAQ mod permissions';
 $txt['permissiongroup_faq_per_classic'] = 'FAQ mod permissions';
-$txt['permissionname_faq_search'] = 'Search the FAQs';
-$txt['permissionname_faq_edit'] = 'Edit the FAQs';
-$txt['permissionname_faq_view'] = 'View the FAQs';
-$txt['permissionname_faq_add'] = 'Add the FAQs';
-$txt['permissionname_faq_delete'] = 'Delete the FAQs';
+$txt['permissionname_faq_search'] = 'Search FAQs';
+$txt['permissionname_faq_view'] = 'View any FAQs';
+$txt['permissionname_faq_add'] = 'Add|Edit FAQs';
+$txt['permissionname_faq_delete'] = 'Delete any FAQs';
 
 // Who's online strings
 $txt['whoall_faq'] = 'Viewing the <a href="'. $scripturl. '?action=faq">FAQ page</a>.';

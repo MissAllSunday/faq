@@ -121,9 +121,9 @@ class FaqAdmin
         foreach (self::PERMISSIONS as $permission) {
             $configVars[] = [
                 'permissions',
-                Faq::NAME . $permission,
+                Faq::NAME . '_' . $permission,
                 0,
-                $this->utils->text($permission),
+                $this->utils->smfText('permissionname_'. Faq::NAME . '_' . $permission),
             ];
         }
 
@@ -143,7 +143,7 @@ class FaqAdmin
 
     protected function setContext(string $action): void
     {
-        global $context, $scripturl;
+        global $scripturl;
 
         $this->utils->setContext([
             'sub_action' => $action,

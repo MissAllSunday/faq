@@ -40,17 +40,19 @@ class Faq
             [Faq::NAME => [
                 'title' => $this->utils->text('title_main'),
                 'href' => sprintf(self::URL, $scripturl),
-                'show' => allowedTo(FaqAdmin::PERMISSION_VIEW),
+                'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW),
                 'sub_buttons' => [
                     'faq_add' => [
                         'title' => $this->utils->text('add_send'),
                         'href' => '#',
-                        'show' => allowedTo(FaqAdmin::PERMISSION_ADD),
+                        'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD),
                     ],
                     'faq_category' => [
                         'title' => $this->utils->text('manage_categories'),
                         'href' => $scripturl . $context['session_var'] .'='. $context['session_id'],
-                        'show' => allowedTo([FaqAdmin::PERMISSION_ADD, FaqAdmin::PERMISSION_DELETE]),
+                        'show' => allowedTo([
+                            Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
+                            Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
                         'sub_buttons' => [],
                     ],
                     'faq_admin' => [
