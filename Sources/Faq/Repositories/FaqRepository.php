@@ -15,8 +15,8 @@ class FaqRepository extends BaseRepository
 
     public function getAll(): array
     {
-        //TODO return formatted results, pagination
-        $this->db['db_query'](
+        //TODO pagination
+        return $this->prepareData($this->db['db_query'](
             '',
             'SELECT {raw:columns}
 			FROM {db_prefix}{raw:from}',
@@ -24,8 +24,6 @@ class FaqRepository extends BaseRepository
                 'from' => FaqEntity::TABLE,
                 'columns' => implode(',', array_keys(FaqEntity::COLUMNS)),
             ]
-        );
-
-        return [];
+        ));
     }
 }

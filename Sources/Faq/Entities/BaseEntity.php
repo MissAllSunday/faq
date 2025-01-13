@@ -10,12 +10,14 @@ abstract class BaseEntity
         $this->setEntity($entry);
     }
 
-    public function setEntity(array $entry): void
+    public function setEntity(array $entry): BaseEntity
     {
         foreach ($this->castValues($entry) as $key => $value) {
-            $setCall = 'set' . $this->snakeToCamel($key);
+            $setCall = 'set' . ucfirst($this->snakeToCamel($key));
             $this->{$setCall}($value);
         }
+
+        return $this;
     }
 
     public function toArray(): array
@@ -35,7 +37,7 @@ abstract class BaseEntity
     protected function castValues(array $data) : array
     {
         return array_map(function ($column) {
-            return ctype_digit($column) ? ((int) $column) : $column;
+            return is_numeric($column) ? ((int) $column) : $column;
         }, $data);
     }
 }

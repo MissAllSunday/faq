@@ -15,12 +15,15 @@ class FaqAdmin
     public const PERMISSION_VIEW = 'view';
     public const PERMISSION_DELETE = 'delete';
     public const PERMISSION_ADD = 'add';
+
+    public const PERMISSION_EDIT = 'edit';
     public const PERMISSION_SEARCH = 'search';
     public const PERMISSIONS = [
         self::PERMISSION_VIEW,
         self::PERMISSION_DELETE,
         self::PERMISSION_ADD,
         self::PERMISSION_SEARCH,
+        self::PERMISSION_EDIT,
     ];
     public const SETTINGS_ENABLE = 'enable';
     public const SETTINGS_PAGINATION = 'num_faqs';

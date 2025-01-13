@@ -2,85 +2,48 @@
 
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
-
-/**
- * @package FAQ mod
- * @version 2.1
- * @author Jessica González <suki@missallsunday.com>
- * @copyright Copyright (c) 2014, Jessica González
- * @license https://www.mozilla.org/MPL/2.0/
- */
-
+use Faq\FaqAdmin;
 
 function template_faq_index()
 {
 	global $txt, $context, $scripturl, $modSettings;
 
-	// The master div.
-	echo '
-	<div class="mainContent">';
+	$entities = $context[Faq::NAME]['entities'];
 
-	faq_header();
+	if (empty($entities)) {
+        echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            ', $context['page_title'] ,'
+        </h3>
+    </div>
+    <div class="information">
+        ', $txt['faq_no_faq'] ,'
+    </div>';
 
-	// Show a nice message if no FAQs are available.
-	if (empty($context['Faq']['all']))
-			echo '
-		<div class="information">
-			', $txt['Faq_no_faq'] ,'
-		</div>';
+        return;
+    }
 
-	// There are some, lets show em all.
-	else
-	{
-		// Sidebar.
-		faq_sideBar();
-
-		// The main div.
-		echo '
-		<div class="rightSide">';
-			foreach($context['Faq']['all'] as $faq)
-				echo '
+    foreach($entities as $entity)
+        echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="floatleft">', $faq['link'] ,'</span>
+					<span class="floatleft">', $entity->getTitle() ,'</span>
 					<span class="floatright">
-						', $faq['crud']['edit'] ,'
-						', $faq['crud']['delete'] ,'
+						', showActions() ,'
 					</span>
 				</h3>
 			</div>
 			<div class="information windowbg">
-				<div  id="faq_', $faq['id'] ,'">
-				', $faq['body'] ,'
+				<div  id="faq_', $entity->getId() ,'">
+				', $entity->getBody() ,'
 				</div>
 			</div>
 			<br />';
 
-		echo '
-		</div>';
-
-		echo '
-		<div class="clear">';
-
-		// Pagination.
-		if (!empty($context['page_index']))
-			echo $context['page_index'];
-
-		// Button for adding a new entry.
-		if ($context['Faq']['permissions']['add'])
-			echo '
-			<div>
-				<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="input_text" value="', $txt['Faq_add_send'] ,'" />
-				</form>
-			</div>';
-
-		echo '
-		</div>';
-	}
-
-	echo '
-	</div>';
+    // Pagination.
+    if (!empty($context['page_index']))
+        echo $context['page_index'];
 }
 
 function template_faq_add(): void
@@ -127,104 +90,14 @@ function template_faq_add(): void
         </dl>
         
         <div>
-            Rich editor goes here
+           ', template_control_richedit(FaqEntity::BODY, 'smileyBox_message', 'bbcBox_message') ,'
         </div>
-        
+        <br />
         <input type="submit" name="save" value="', $txt['save'] ,'" class="button floatright">
         <input type="submit" name="preview" class="button floatright" value="', $txt['preview'] ,'" />
         <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
     </form>
     </div>';
-}
-
-function template_faq_add2()
-{
-	global $context, $scripturl, $txt;
-
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="">';
-
-	// Show the preview
-	if (!empty($context['preview']))
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">', $context['preview']['title'] ,'</h3>
-		</div>
-		<div class="information">
-			', $context['preview']['body'] ,'
-		</div>
-		<br />';
-
-		echo '
-		<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\',\'title\');">
-			<div class="cat_bar">
-				<h3 class="catbg">
-					', $context['page_title'] ,'
-				</h3>
-			</div>
-			<div class="information">
-				<dl id="post_header">';
-
-			// Title.
-			echo '
-					<dt>
-						<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
-					</dt>
-					<dd>
-						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', (isset($context['current']['title']) ? $context['current']['title'] : '') ,'" class="input_text" id="title"/>
-					</dd>';
-
-			// CategoryController select field.
-			echo'
-					<dt>
-						<span id="caption_subject">', $txt['Faq_edit_category'] ,':</span>
-					</dt>
-					<dd>';
-
-			// Show the category select field.
-			if (!empty($context['Faq']['cats']))
-			{
-				echo '
-						<select name="current[cat_id]">';
-
-				foreach($context['Faq']['cats'] as $cats)
-					echo '
-							<option value="', $cats['id'] ,'" ', (isset($context['current']['cat_id']) && $cats['id'] == $context['current']['cat_id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
-
-				echo '
-						</select>';
-			}
-
-			else
-				echo '
-						<div class="Faq_warning">
-							', $context['Faq']['no_cat_admin'] ,'
-						</div>';
-
-			echo'
-					</dd>
-				</dl>';
-
-			echo template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
-
-			echo '
-				<div id="confirm_buttons">
-					<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-					<input type="submit" name="save" class="sbtn" value="', $txt['Faq_create_send'] ,'" />
-					<input type="submit" name="preview" class="sbtn" value="', $txt['preview'] ,'" />
-				</div>
-			</div>
-		</form>';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
 }
 
 function template_faq_single()
@@ -502,6 +375,18 @@ function faq_sideBar()
 	</div>';
 }
 
+function showActions(): string
+{
+    global $txt;
+
+    return implode('|', array_map(function($action) use ($txt) {
+        return allowedTo(Faq::NAME . '_' . $action) ? '<a href="'. $action .'">'. $txt['faq_' . $action] .'</a>' : '';
+    }, [
+        FaqAdmin::PERMISSION_DELETE,
+        FaqAdmin::PERMISSION_EDIT
+    ]));
+}
+
 function showCategoryField(FaqEntity $entity): string
 {
     global $context, $txt;
@@ -517,11 +402,11 @@ function showCategoryField(FaqEntity $entity): string
         <select name="'. FaqEntity::CAT_ID .'">';
 
     foreach($context[Faq::NAME]['categories'] as $category) {
-        $isSelected = $entity->getCatId() === $category->getId();
+        $isSelected = $entity->getCatId() === $category->getCategoryId();
 
         $select .= '
             <option value="'. $category->id .'" '. ($isSelected ? 'selected="selected"' : '') .'>
-            '. $category->getName() .
+            '. $category->getCategoryName() .
         '</option>';
     }
 

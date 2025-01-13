@@ -14,22 +14,22 @@ class CategoryEntity extends BaseEntity
     public int $id;
     public string $name = '';
 
-    public function getName(): string
+    public function getCategoryName(): string
     {
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setCategoryName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function getId(): int
+    public function getCategoryId(): int
     {
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setCategoryId(int $id): void
     {
         $this->id = $id;
     }

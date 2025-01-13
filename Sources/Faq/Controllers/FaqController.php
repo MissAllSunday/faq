@@ -2,8 +2,10 @@
 
 namespace Faq\Controllers;
 
+use Faq\Entities\FaqEntity;
 use Faq\Faq as Faq;
 use Faq\FaqRequest;
+use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
 
 class FaqController extends BaseController
@@ -18,19 +20,40 @@ class FaqController extends BaseController
     ];
 
     protected ?FaqRepository $repository;
+    protected CategoryRepository $categoryRepository;
 
-    public function __construct(?FaqRequest $request = null, ?FaqRepository $repository = null)
+    public function __construct(
+        ?FaqRequest $request = null,
+        ?FaqRepository $repository = null,
+        CategoryRepository $categoryRepository = null)
     {
         $this->repository = $repository ?? new FaqRepository();
+        $this->categoryRepository = $categoryRepository ?? new CategoryRepository();
+
         parent::__construct($request);
     }
 
     public function add(): void
     {
+        global $sourcedir;
+
+        // Needed for the WYSIWYG editor.
+        require_once($sourcedir . '/Subs-Editor.php');
+
         $id = $this->request->get('id');
+        $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
+
+        create_control_richedit([
+            'id' => FaqEntity::BODY,
+            'value' => $entity->getBody(),
+            'height' => '175px',
+            'width' => '100%',
+            'required' => true,
+        ]);
 
         $this->setTemplateVars([
-            'entity' => $id ? $this->repository->getById($id) : $this->repository->getEntity(),
+            'entity' => $entity,
+            'categories' => $this->categoryRepository->getAll(),
         ]);
 
         if ($this->request->isPost()) {

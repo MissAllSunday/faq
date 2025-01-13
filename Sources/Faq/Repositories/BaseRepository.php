@@ -60,7 +60,7 @@ abstract class BaseRepository
             ]
         );
 
-        return $this->prepareData($request);
+        return $this->prepareData($request)[$id];
     }
 
     public function delete(array $ids): bool
@@ -99,17 +99,27 @@ abstract class BaseRepository
         return rtrim($set, ',');
     }
 
-    protected function prepareData(object $request): ?object
+    protected function prepareData(object $request): array
     {
-        // This only works for a single entity but thats OK
+        $entities = [];
+
         while ($row = $this->fetchAssoc($request)) {
-            $this->entity->setEntity(array_map(function ($column) {
-                return ctype_digit($column) ? ((int) $column) : explode(',', $column);
+            $newEntity = $this->buildEntity();
+            $entities[$row[$this->entity->getIndexName()]] = $newEntity->setEntity(array_map(function ($column) {
+                return ctype_digit($column) ? ((int) $column) : $column;
             }, $row));
         }
         $this->freeResult($request);
 
-        return $this->entity;
+        return $entities;
+    }
+
+    protected function buildEntity(): FaqEntity | CategoryEntity
+    {
+        return match ($this->entity->getIndexName()) {
+            CategoryEntity::ID => new CategoryEntity(),
+            default => new FaqEntity(),
+        };
     }
 
     protected function fetchAssoc($result): ?array
