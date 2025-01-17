@@ -57,11 +57,25 @@ class FaqController extends BaseController
         ]);
 
         if ($this->request->isPost()) {
-            // validate
-            $data = $this->request->get(Faq::NAME);
+            $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
+
+            if ($this->request->isSet('preview')) {
+                $this->redirect($this->buildPreview($entity, $data));
+            }
+
+            if (!$this->validation->isValid($this->repository->getEntity(), $data)) {
+
+            }
 
             $this->save($data, $id);
         }
+    }
+
+    protected function buildPreview(FaqEntity $entity, array $data): string
+    {
+        $this->setTemplateVars([
+            'entity' => $entity->setEntity($data),
+        ]);
     }
 
     public function index(): void

@@ -64,8 +64,8 @@ function template_faq_add(): void
         action="#"
         method="post" 
         accept-charset="UTF-8" 
-        name="creator" 
-        id="creator"
+        name="'. Faq::NAME .'" 
+        id="'. Faq::NAME .'"
         enctype="multipart/form-data"
         target="_self">
         <dl class="settings">

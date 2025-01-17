@@ -33,6 +33,11 @@ class FaqRequest
         return $this->isSet($key) ? $this->sanitize($_REQUEST[$key]) : null;
     }
 
+    public function all()
+    {
+        return $this->sanitize($_REQUEST);
+    }
+
     public function isSet(string $key): bool
     {
         return isset($_REQUEST[$key]);

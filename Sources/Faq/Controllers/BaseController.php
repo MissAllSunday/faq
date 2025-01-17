@@ -4,16 +4,18 @@ namespace Faq\Controllers;
 
 use Faq\Faq as Faq;
 use Faq\FaqRequest;
-use Faq\FaqUtils;
+use Faq\Services\FaqValidation;
 
 abstract class BaseController
 {
     protected ?FaqRequest $request;
     protected ?string $subAction = null;
+    protected FaqValidation $validation;
 
-    public function __construct(?FaqRequest $request = null)
+    public function __construct(?FaqRequest $request = null, FaqValidation $validation = null)
     {
         $this->request = $request ?? new FaqRequest();
+        $this->validation = $validation ?? new FaqValidation();
     }
 
     protected function redirect(string $message = ''): void
