@@ -42,6 +42,11 @@ class FaqController extends BaseController
 
         $id = $this->request->get('id');
         $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
+        $templateVars = [
+            'entity' => $entity,
+            'categories' => $this->categoryRepository->getAll(),
+            'errors' => ''
+        ];
 
         create_control_richedit([
             'id' => FaqEntity::BODY,
@@ -51,20 +56,22 @@ class FaqController extends BaseController
             'required' => true,
         ]);
 
-        $this->setTemplateVars([
-            'entity' => $entity,
-            'categories' => $this->categoryRepository->getAll(),
-        ]);
+        $this->setTemplateVars($templateVars);
 
         if ($this->request->isPost()) {
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
 
+
             if ($this->request->isSet('preview')) {
-                $this->redirect($this->buildPreview($entity, $data));
+                // handle preview
             }
 
-            if (!$this->validation->isValid($this->repository->getEntity(), $data)) {
+            $errorMessage = $this->validation->isValid($this->repository->getEntity(), $data);
 
+            if ($errorMessage) {
+                $this->setTemplateVars(array_merge($templateVars, ['errors' => $errorMessage]));
+
+                return;
             }
 
             $this->save($data, $id);

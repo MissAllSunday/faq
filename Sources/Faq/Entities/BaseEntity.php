@@ -26,6 +26,8 @@ abstract class BaseEntity
     }
 
     abstract public function getColumns(): array;
+
+    abstract     public function getRequiredFields(): array;
     abstract public function getTableName(): string;
     abstract public function getIndexName(): string;
 

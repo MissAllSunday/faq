@@ -70,34 +70,34 @@ $tables[] = [
     'error' => 'fatal',
     'parameters' => [],
 ];
-$tables[] = array (
+$tables[] = [
     'table_name' => 'faq_categories',
-    'columns' => array(
-        array(
+    'columns' => [
+        [
             'name' => 'category_id',
             'type' => 'int',
             'size' => 11,
             'auto' => true,
-        ),
-        array(
+        ],
+        [
             'name' => 'category_name',
             'type' => 'varchar',
             'size' => 255,
             'default' => '',
-        ),
-    ),
-    'indexes' => array(
-        array(
+        ],
+    ],
+    'indexes' => [
+        [
             'type' => 'primary',
-            'columns' => array(
+            'columns' => [
                 'category_id'
-            ),
-        ),
-    ),
+            ],
+        ],
+    ],
     'if_exists' => 'ignore',
     'error' => 'fatal',
-    'parameters' => array(),
-);
+    'parameters' => [],
+];
 
 // Now the tables ... if they don't exist create them and if they do exist update them if required.
 $current_tables = $smcFunc['db_list_tables'](false, '%faq%');

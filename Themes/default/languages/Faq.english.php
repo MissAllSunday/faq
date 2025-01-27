@@ -22,6 +22,10 @@ $txt['faq_manage_categories'] = 'Manage Categories';
 $txt['faq_form_category'] = 'Category:';
 $txt['faq_form_title'] = 'Title:';
 
+// Validation errors
+$txt['faq_validation_required'] = 'The following fields are required:';
+$txt['faq_validation_type'] = 'Invalid type provided.';
+
 
 $txt['faq_title_main'] = 'FAQ';
 $txt['faq_title_admin'] = 'FAQ mod admin settings';
@@ -134,6 +138,7 @@ $txt['faq_success_message_deleteCat'] = 'You have successfully deleted this cate
 
 // Template strings
 $txt['faq_edit_title'] = 'Title';
+$txt['faq_edit_body'] = 'Body';
 $txt['faq_edit_id'] = 'ID';
 $txt['faq_edit_last_edit'] = 'Last Edit';
 $txt['faq_edit_last_edit_by'] = 'By user';

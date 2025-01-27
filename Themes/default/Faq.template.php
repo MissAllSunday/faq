@@ -50,7 +50,29 @@ function template_faq_add(): void
 {
     global $txt, $context;
 
-    $entity = $context[Faq::NAME]['entity'];
+    $localContext = $context[Faq::NAME];
+    $entity = $localContext['entity'];
+    $errors = $localContext['errors'];
+
+    if (!empty($errors)) {
+        echo '
+        <div class="errorbox" id="errors">
+		<dl>
+			<dt>
+				<strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
+			</dt>';
+
+        foreach (explode(',', $errors) as $errorKey) {
+            echo '
+			<dd class="error">
+				- <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
+			</dd>';
+        }
+
+        echo '
+		</dl>
+	</div>';
+    }
 
     echo '
     <div class="cat_bar">

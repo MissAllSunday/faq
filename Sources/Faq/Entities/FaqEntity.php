@@ -88,6 +88,15 @@ class FaqEntity extends BaseEntity
         return self::COLUMNS;
     }
 
+    public function getRequiredFields(): array
+    {
+        return [
+            self::TITLE,
+            self::BODY,
+            self::CAT_ID,
+        ];
+    }
+
     public function getTableName(): string
     {
         return self::TABLE;

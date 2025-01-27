@@ -1,6 +1,6 @@
 <?php
 
-function autoload(&$classMap): void
+function faqAutoload(&$classMap): void
 {
     $classMap['Faq\\'] = 'Faq/';
 }

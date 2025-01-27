@@ -4,6 +4,8 @@ namespace Faq\Services;
 
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
+use Faq\Faq;
+use Faq\TypeError;
 use Faq\ValidatorError;
 
 class FaqValidation
@@ -11,7 +13,7 @@ class FaqValidation
     protected FaqEntity|CategoryEntity $entity;
     protected array $dataToSave = [];
 
-    public function isValid(CategoryEntity | FaqEntity $entity, array $dataToSave): bool
+    public function isValid(CategoryEntity | FaqEntity $entity, array $dataToSave): string
     {
         $this->entity = $entity;
         $this->dataToSave = $dataToSave;
@@ -24,10 +26,12 @@ class FaqValidation
                 $callback($this->dataToSave[$valueName]);
             }
         } catch (ValidatorError $error) {
-            return false;
+            return $error->getMessage();
+        } catch (TypeError $error) {
+            fatal_lang_error(Faq::NAME . $error->getMessage(), false);
         }
 
-        return true;
+        return '';
     }
 
     /**
@@ -35,28 +39,30 @@ class FaqValidation
      */
     protected function areRequiredFieldsPresent(): void
     {
-        if (!empty(array_diff_key($this->entity->getColumns(), $this->dataToSave))) {
-            throw new ValidatorError();
+        $missingFields = array_diff($this->entity->getRequiredFields(), array_keys(array_filter($this->dataToSave)));
+
+        if (!empty($missingFields)) {
+            throw new ValidatorError(implode(', ', $missingFields));
         }
     }
 
     /**
-     * @throws ValidatorError
+     * @throws TypeError
      */
     protected function isIntExpected($intValue) : void
     {
         if(!is_int($intValue)) {
-            throw new ValidatorError();
+            throw new TypeError('validation_type');
         }
     }
 
     /**
-     * @throws ValidatorError
+     * @throws TypeError
      */
     protected function isStringExpected($stringValue) : void
     {
         if(!is_string($stringValue)) {
-            throw new ValidatorError();
+            throw new TypeError('validation_type');
         }
     }
 }

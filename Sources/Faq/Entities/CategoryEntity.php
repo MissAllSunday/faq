@@ -39,6 +39,13 @@ class CategoryEntity extends BaseEntity
         return self::COLUMNS;
     }
 
+    public function getRequiredFields(): array
+    {
+        return [
+            self::NAME,
+        ];
+    }
+
     public function getTableName(): string
     {
         return self::TABLE;
