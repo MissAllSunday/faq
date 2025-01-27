@@ -48,16 +48,6 @@ class FaqController extends BaseController
             'errors' => ''
         ];
 
-        create_control_richedit([
-            'id' => FaqEntity::BODY,
-            'value' => $entity->getBody(),
-            'height' => '175px',
-            'width' => '100%',
-            'required' => true,
-        ]);
-
-        $this->setTemplateVars($templateVars);
-
         if ($this->request->isPost()) {
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
 
@@ -69,13 +59,24 @@ class FaqController extends BaseController
             $errorMessage = $this->validation->isValid($this->repository->getEntity(), $data);
 
             if ($errorMessage) {
-                $this->setTemplateVars(array_merge($templateVars, ['errors' => $errorMessage]));
-
-                return;
+                $templateVars['errors'] = $errorMessage;
+                $entity->setEntity($data);
             }
 
-            $this->save($data, $id);
+            else {
+                $this->save($data, $id);
+            }
         }
+
+        create_control_richedit([
+            'id' => FaqEntity::BODY,
+            'value' => $entity->getBody(),
+            'height' => '175px',
+            'width' => '100%',
+            'required' => true,
+        ]);
+
+        $this->setTemplateVars($templateVars);
     }
 
     protected function buildPreview(FaqEntity $entity, array $data): string
