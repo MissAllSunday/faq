@@ -45,7 +45,8 @@ class FaqController extends BaseController
         $templateVars = [
             'entity' => $entity,
             'categories' => $this->categoryRepository->getAll(),
-            'errors' => ''
+            'errors' => '',
+            'preview' => [],
         ];
 
         if ($this->request->isPost()) {
@@ -53,17 +54,15 @@ class FaqController extends BaseController
 
 
             if ($this->request->isSet('preview')) {
-                // handle preview
+                $templateVars['preview'] = $this->buildPreview($data);
             }
 
+            $entity->setEntity($data);
             $errorMessage = $this->validation->isValid($this->repository->getEntity(), $data);
 
             if ($errorMessage) {
                 $templateVars['errors'] = $errorMessage;
-                $entity->setEntity($data);
-            }
-
-            else {
+            } else {
                 $this->save($data, $id);
             }
         }
@@ -71,7 +70,7 @@ class FaqController extends BaseController
         create_control_richedit([
             'id' => FaqEntity::BODY,
             'value' => $entity->getBody(),
-            'height' => '175px',
+            'height' => '185px',
             'width' => '100%',
             'required' => true,
         ]);
@@ -79,11 +78,20 @@ class FaqController extends BaseController
         $this->setTemplateVars($templateVars);
     }
 
-    protected function buildPreview(FaqEntity $entity, array $data): string
+    protected function buildPreview(array $data): array
     {
-        $this->setTemplateVars([
-            'entity' => $entity->setEntity($data),
-        ]);
+        global $sourcedir;
+
+        require_once($sourcedir.'/Subs-Post.php');
+
+        $data['title'] = $data['title'] ?? '';
+        $data['body'] = $data['body'] ?? '';
+
+        censorText($data['title']);
+        preparsecode($data['body'], true);
+        $data['body'] = parse_bbc($data['body']);
+
+        return $data;
     }
 
     public function index(): void

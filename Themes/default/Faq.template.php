@@ -50,28 +50,14 @@ function template_faq_add(): void
 {
     global $txt, $context;
 
-    $localContext = $context[Faq::NAME];
-    $entity = $localContext['entity'];
-    $errors = $localContext['errors'];
+    $entity = $context[Faq::NAME]['entity'];
 
-    if (!empty($errors)) {
-        echo '
-        <div class="errorbox" id="errors">
-		<dl>
-			<dt>
-				<strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
-			</dt>';
+    if (!empty($context[Faq::NAME]['errors'])) {
+        showErrors($context[Faq::NAME]['errors']);
+    }
 
-        foreach (explode(',', $errors) as $errorKey) {
-            echo '
-			<dd class="error">
-				- <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
-			</dd>';
-        }
-
-        echo '
-		</dl>
-	</div>';
+    if (!empty($context[Faq::NAME]['preview'])) {
+        showPreview($context[Faq::NAME]['preview']);
     }
 
     echo '
@@ -436,4 +422,44 @@ function showCategoryField(FaqEntity $entity): string
         </select>';
 
     return $select;
+}
+
+function showPreview(array $preview): void
+{
+    global $context, $txt;
+
+    echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            ', $txt['preview'] ,' - ', $preview['title'] ,'
+        </h3>
+    </div>
+
+    <div class="roundframe"> 
+        ', $preview['body'] ,'
+    </div>
+    <br />';
+}
+
+function showErrors(string $errors): void
+{
+    global $txt;
+
+    echo '
+        <div class="errorbox" id="errors">
+		<dl>
+			<dt>
+				<strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
+			</dt>';
+
+    foreach (explode(',', $errors) as $errorKey) {
+        echo '
+			<dd class="error">
+				- <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
+			</dd>';
+    }
+
+    echo '
+		</dl>
+	</div>';
 }

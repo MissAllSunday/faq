@@ -12,7 +12,7 @@ global $scripturl, $txt;
 
 // Actions
 $txt['faq_index_title'] = 'Frequently Asked Questions';
-$txt['faq_add_title'] = 'Add new question';
+$txt['faq_add_title'] = 'Add a new question';
 
 // Categories
 $txt['faq_manage_categories'] = 'Manage Categories';
