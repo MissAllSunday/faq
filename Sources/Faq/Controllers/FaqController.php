@@ -51,8 +51,7 @@ class FaqController extends BaseController
 
         if ($this->request->isPost()) {
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
-
-
+            
             if ($this->request->isSet('preview')) {
                 $templateVars['preview'] = $this->buildPreview($data);
             }
@@ -62,7 +61,9 @@ class FaqController extends BaseController
 
             if ($errorMessage) {
                 $templateVars['errors'] = $errorMessage;
-            } else {
+            }
+
+            if ($this->request->isSet('save') && empty($errorMessage)) {
                 $this->save($data, $id);
             }
         }
@@ -114,7 +115,7 @@ class FaqController extends BaseController
         $this->redirect(sprintf(Faq::NAME . '_%s_' . 'delete', $result));
     }
 
-    protected function save(array $data, int $id): void
+    protected function save(array $data, ?int $id = null): void
     {
         $call = $id ? 'update' : 'insert';
 

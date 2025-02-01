@@ -21,14 +21,15 @@ class FaqValidation
         try {
             $this->areRequiredFieldsPresent();
 
-            foreach ($this->entity->getColumns() as $valueName => $type) {
+            foreach ($this->dataToSave as $key => $value) {
+                $type = $this->entity->getColumns()[$key];
                 $callback = 'is' . ucfirst($type) . 'Expected';
-                $callback($this->dataToSave[$valueName]);
+                $this->{$callback}($value);
             }
         } catch (ValidatorError $error) {
             return $error->getMessage();
         } catch (TypeError $error) {
-            fatal_lang_error(Faq::NAME . $error->getMessage(), false);
+            fatal_lang_error(Faq::NAME .'_'. $error->getMessage(), false);
         }
 
         return '';
