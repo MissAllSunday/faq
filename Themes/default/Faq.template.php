@@ -6,7 +6,7 @@ use Faq\FaqAdmin;
 
 function template_faq_index()
 {
-	global $txt, $context, $scripturl, $modSettings;
+	global $txt, $context;
 
 	$entities = $context[Faq::NAME]['entities'];
 
@@ -30,7 +30,7 @@ function template_faq_index()
 				<h3 class="catbg">
 					<span class="floatleft">', $entity->getTitle() ,'</span>
 					<span class="floatright">
-						', showActions() ,'
+						', showActions($entity) ,'
 					</span>
 				</h3>
 			</div>
@@ -385,12 +385,18 @@ function faq_sideBar()
 	</div>';
 }
 
-function showActions(): string
+function showActions(FaqEntity $entity): string
 {
-    global $txt;
+    global $txt, $scripturl;
 
-    return implode('|', array_map(function($action) use ($txt) {
-        return allowedTo(Faq::NAME . '_' . $action) ? '<a href="'. $action .'">'. $txt['faq_' . $action] .'</a>' : '';
+    return implode(' | ', array_map(function($action) use ($txt, $entity, $scripturl) {
+        $subAction = $action === 'edit' ? 'add' :  $action;
+        $url = $scripturl . '?action=' . Faq::NAME . ';sa='. $subAction .';id='. $entity->getId();
+
+        return allowedTo(Faq::NAME . '_' . $action) ?
+            '<a href="'. $url .'">
+                '. $txt['faq_' . $action] .'</a>' :
+            '';
     }, [
         FaqAdmin::PERMISSION_DELETE,
         FaqAdmin::PERMISSION_EDIT
@@ -474,7 +480,11 @@ function showMessage(): void
 {
     global $txt;
 
-    $message = explode('|', ($_SESSION[Faq::NAME] ?? ''));
+    if (!isset($_SESSION[Faq::NAME])){
+        return;
+    }
+
+    $message = explode('|', $_SESSION[Faq::NAME]);
 
     echo '
     <div class="', $message[0] ,'box">

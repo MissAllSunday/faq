@@ -35,7 +35,7 @@ class FaqController extends BaseController
 
     public function add(): void
     {
-        global $sourcedir;
+        global $sourcedir, $txt;
 
         // Needed for the WYSIWYG editor.
         require_once($sourcedir . '/Subs-Editor.php');
@@ -65,7 +65,6 @@ class FaqController extends BaseController
 
             if ($this->request->isSet('save') && empty($errorMessage)) {
                 $data[FaqEntity::LOG] = $this->upsertLog($entity->getLog());
-
                 $this->save($data, $id);
             }
         }

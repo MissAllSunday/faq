@@ -55,9 +55,7 @@ class FaqEntity extends BaseEntity
 
     public function getLog(): array
     {
-        global $smcFunc;
-
-        return $smcFunc['json_decode']($this->log);
+        return json_decode($this->log, true) ?? [];
     }
 
     public function setLog(string $log): void

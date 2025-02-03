@@ -33,11 +33,13 @@ abstract class BaseController
         $this->subAction = $subAction;
 
         //  move somewhere else?
+        $id = $this->request->get('id');
+        $subAction = ($id && $this->subAction === 'add' ? 'update' : $this->subAction);
         $actionUrl = '?action=' . $this->getAction();
         $subActionUrl = $this->subAction ?? (';sa=' . $this->subAction);
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = Faq::NAME . '_' . $this->subAction;
-        $context['page_title'] = $txt[Faq::NAME . '_' . $this->subAction . '_title'];
+        $context['page_title'] = $txt[Faq::NAME . '_' . $subAction . '_title'];
         $context['post_url'] = $scripturl . '?action=' . $actionUrl . $subActionUrl . ';save';
     }
 

@@ -22,6 +22,8 @@ abstract class BaseRepository
         $indexName = $this->entity->getIndexName();
         $columns = $this->entity->getColumns();
         unset($columns[$indexName]);
+        ksort($columns);
+        ksort($entityData);
 
         $this->db['db_insert'](
             'insert',
@@ -43,9 +45,7 @@ abstract class BaseRepository
             'UPDATE {db_prefix}' . $this->getTable() . '
 			'. $this->buildSetUpdate() .'
 			WHERE '. $indexName .' = {int:'. $indexName .'}',
-            [
-                $indexName => $entityData[$indexName],
-            ]
+            $entityData
         );
     }
 
