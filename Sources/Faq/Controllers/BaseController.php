@@ -18,15 +18,13 @@ abstract class BaseController
         $this->validation = $validation ?? new FaqValidation();
     }
 
-    protected function redirect(string $message = ''): void
+    protected function redirect(string $type, string $message = ''): void
     {
-        global $scripturl;
-
-        $_SESSION[Faq::NAME] = $message;
+        $_SESSION[Faq::NAME] = $type . '|' . $message;
         $action = '?action=' . $this->getAction();
-        $subAction = $this->subAction ?? (';sa=' . $this->subAction);
+        $subAction = $this->subAction ? (';sa=' . $this->subAction) : '';
 
-        redirectexit($scripturl . '?action=' . $action . $subAction);
+        redirectexit($action . $subAction);
     }
     public function setSubAction(string $subAction): void
     {

@@ -64,6 +64,8 @@ class FaqController extends BaseController
             }
 
             if ($this->request->isSet('save') && empty($errorMessage)) {
+                $data[FaqEntity::LOG] = $this->upsertLog($entity->getLog());
+
                 $this->save($data, $id);
             }
         }
@@ -121,7 +123,16 @@ class FaqController extends BaseController
 
         $this->repository->{$call}($data, $id);
 
-        $this->redirect(Faq::NAME . '_success_'. $call);
+        $this->redirect('info', $call);
+    }
+
+    protected function upsertLog($logs = []) :string
+    {
+        global $user_info;
+
+        $logs[(int) $user_info] = time();
+
+        return json_encode($logs);
     }
 
     protected function getSubActions(): array

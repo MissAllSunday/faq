@@ -20,16 +20,18 @@ abstract class BaseRepository
     public function insert(array $entityData): FaqEntity | CategoryEntity
     {
         $indexName = $this->entity->getIndexName();
+        $columns = $this->entity->getColumns();
+        unset($columns[$indexName]);
 
         $this->db['db_insert'](
             'insert',
             '{db_prefix}' . $this->getTable(),
-            $this->getColumns(),
+            $columns,
             $entityData,
             [$indexName]
         );
 
-        return $this->getById($entityData[$indexName]);
+        return $this->getById($this->getInsertedId());
     }
 
     public function update(array $entityData): void

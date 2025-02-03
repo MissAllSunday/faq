@@ -52,6 +52,8 @@ function template_faq_add(): void
 
     $entity = $context[Faq::NAME]['entity'];
 
+    showMessage();
+
     if (!empty($context[Faq::NAME]['errors'])) {
         showErrors($context[Faq::NAME]['errors']);
     }
@@ -426,7 +428,11 @@ function showCategoryField(FaqEntity $entity): string
 
 function showPreview(array $preview): void
 {
-    global $context, $txt;
+    global $txt;
+
+    if (empty($preview['body'])) {
+        return;
+    }
 
     echo '
     <div class="cat_bar">
@@ -462,4 +468,18 @@ function showErrors(string $errors): void
     echo '
 		</dl>
 	</div>';
+}
+
+function showMessage(): void
+{
+    global $txt;
+
+    $message = explode('|', ($_SESSION[Faq::NAME] ?? ''));
+
+    echo '
+    <div class="', $message[0] ,'box">
+        ', $txt['faq_'. $message[0] .'_' . $message[1]] ,'    
+    </div>';
+
+    unset($_SESSION[Faq::NAME]);
 }

@@ -13,10 +13,10 @@ class FaqEntity extends BaseEntity
 
     public const COLUMNS = [
         self::ID => 'int',
-        self::CAT_ID => 'int',
-        self::LOG => 'string',
         self::TITLE => 'string',
-        self::BODY => 'string'
+        self::CAT_ID => 'int',
+        self::BODY => 'string',
+        self::LOG => 'string',
     ];
 
     public const DEFAULT_VALUES = [
@@ -53,9 +53,11 @@ class FaqEntity extends BaseEntity
         $this->id = $id;
     }
 
-    public function getLog(): string
+    public function getLog(): array
     {
-        return $this->log;
+        global $smcFunc;
+
+        return $smcFunc['json_decode']($this->log);
     }
 
     public function setLog(string $log): void
