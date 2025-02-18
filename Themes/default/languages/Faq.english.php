@@ -61,6 +61,9 @@ $txt['faq_sidebar_faq_cats'] = 'CategoryController list';
 $txt['faq_you_sure'] = 'Are you sure you want to delete?';
 $txt['faq_latest'] = 'Latest FAQs';
 
+// For the sake of completeness, lets add a title entry for deleting an entry...
+$txt['faq_delete_title'] = 'Deleting an entry...';
+
 // Settings strings
 $txt['faq_desc'] = 'This page gathers all possible settings for the FAQ mod';
 $txt['faq_settings_enable'] = 'Enable the FAQ mod';
@@ -124,6 +127,10 @@ $txt['cannot_faq_delete'] = 'I\'m sorry, you aren\'t allowed to delete any FAQs'
 $txt['cannot_faq_add'] = 'I\'m sorry, you aren\'t allowed to add new FAQs';
 $txt['cannot_faq_edit'] = 'I\'m sorry, you aren\'t allowed to edit any FAQs';
 $txt['cannot_faq_search'] = 'I\'m sorry, you aren\'t allowed to search the FAQs';
+$txt['faq_error_insert'] = 'There was an error creating the FAQ entry, please try again or contact your administrator';
+$txt['faq_error_update'] = 'There was an error updating the FAQ entry, please try again or contact your administrator';
+$txt['faq_error_delete'] = 'There was an error deleting the FAQ entry, please try again or contact your administrator';
+$txt['faq_error_generic'] = 'There was a problem, please try again or contact your administrator';
 
 // Success
 $txt['faq_success_title'] = 'successfully done';
@@ -134,7 +141,7 @@ $txt['faq_info_insert'] = 'You have successfully added a new FAQ entry';
 $txt['faq_info_update'] = 'You have successfully updated this FAQ entry';
 $txt['faq_success_message_addCat'] = 'You have successfully added a new category';
 $txt['faq_success_message_editCat'] = 'You have successfully edited this category';
-$txt['faq_success_message_delete'] = 'You have successfully deleted this entry';
+$txt['faq_info_delete'] = 'You have successfully deleted the entry';
 $txt['faq_success_message_deleteCat'] = 'You have successfully deleted this category';
 
 // Template strings

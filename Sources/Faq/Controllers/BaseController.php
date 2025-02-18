@@ -11,6 +11,10 @@ abstract class BaseController
     protected ?FaqRequest $request;
     protected ?string $subAction = null;
     protected FaqValidation $validation;
+    protected int $id;
+
+    const SUCCESS = 'info';
+    const ERROR = 'error';
 
     public function __construct(?FaqRequest $request = null, FaqValidation $validation = null)
     {
@@ -18,29 +22,28 @@ abstract class BaseController
         $this->validation = $validation ?? new FaqValidation();
     }
 
-    protected function redirect(string $type, string $message = ''): void
+    protected function redirect(string $type = self::ERROR, string $action = 'generic'): void
     {
-        $_SESSION[Faq::NAME] = $type . '|' . $message;
-        $action = '?action=' . $this->getAction();
-        $subAction = $this->subAction ? (';sa=' . $this->subAction) : '';
+        $_SESSION[Faq::NAME] = $type . '|' . $action;
 
-        redirectexit($action . $subAction);
+        redirectexit('?action=' . $this->getAction());
     }
     public function setSubAction(string $subAction): void
     {
         global $context, $scripturl, $txt;
 
+        $id = $this->request->get('id');
         $this->subAction = $subAction;
+        $this->id = $id ?? 0;
 
         //  move somewhere else?
-        $id = $this->request->get('id');
         $subAction = ($id && $this->subAction === 'add' ? 'update' : $this->subAction);
         $actionUrl = '?action=' . $this->getAction();
-        $subActionUrl = $this->subAction ?? (';sa=' . $this->subAction);
+        $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = Faq::NAME . '_' . $this->subAction;
         $context['page_title'] = $txt[Faq::NAME . '_' . $subAction . '_title'];
-        $context['post_url'] = $scripturl . '?action=' . $actionUrl . $subActionUrl . ';save';
+        $context['post_url'] = $scripturl . $actionUrl . $subActionUrl . ';save';
     }
 
     public function isSubActionValid(string $subAction): bool

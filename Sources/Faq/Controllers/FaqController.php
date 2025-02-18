@@ -105,15 +105,15 @@ class FaqController extends BaseController
 
     public function delete(): void
     {
-        $result = 'error';
+        $result = self::ERROR;
         $id = $this->request->get('id');
 
         if ($id) {
             $this->repository->delete([$id]);
-            $result = 'success';
+            $result = self::SUCCESS;
         }
 
-        $this->redirect(sprintf(Faq::NAME . '_%s_' . 'delete', $result));
+        $this->redirect($result, 'delete');
     }
 
     protected function save(array $data, ?int $id = null): void

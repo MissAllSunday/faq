@@ -8,6 +8,8 @@ function template_faq_index()
 {
 	global $txt, $context;
 
+    showMessage();
+
 	$entities = $context[Faq::NAME]['entities'];
 
 	if (empty($entities)) {
@@ -394,7 +396,7 @@ function showActions(FaqEntity $entity): string
         $url = $scripturl . '?action=' . Faq::NAME . ';sa='. $subAction .';id='. $entity->getId();
 
         return allowedTo(Faq::NAME . '_' . $action) ?
-            '<a href="'. $url .'">
+            '<a href="'. $url .'" class="you_sure">
                 '. $txt['faq_' . $action] .'</a>' :
             '';
     }, [
