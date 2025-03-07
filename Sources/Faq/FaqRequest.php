@@ -28,9 +28,9 @@ class FaqRequest
         return $var;
     }
 
-    public function get(string $key)
+    public function get(string $key, $default = null)
     {
-        return $this->isSet($key) ? $this->sanitize($_REQUEST[$key]) : null;
+        return $this->isSet($key) ? $this->sanitize($_REQUEST[$key]) : $default;
     }
 
     public function all()

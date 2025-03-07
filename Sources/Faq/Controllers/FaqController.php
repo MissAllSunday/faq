@@ -3,7 +3,6 @@
 namespace Faq\Controllers;
 
 use Faq\Entities\FaqEntity;
-use Faq\Faq as Faq;
 use Faq\FaqRequest;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;

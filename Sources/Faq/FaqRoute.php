@@ -44,9 +44,9 @@ class FaqRoute
             return;
         }
 
-        $this->loadRequiredFiles();
+        $this->loadRequiredFiles($action);
 
-        $controller->setSubAction($subAction);
+        $controller->setSubAction($action, $subAction);
         $actions[$action] = [false, fn () => $controller->{$subAction}()];
     }
 
@@ -60,9 +60,9 @@ class FaqRoute
         return !empty($action) && in_array($action, self::ACTIONS, true);
     }
 
-    protected function loadRequiredFiles(): void
+    protected function loadRequiredFiles(string $action): void
     {
         loadLanguage(ucfirst(Faq::NAME));
-        loadtemplate(ucfirst(Faq::NAME));
+        loadtemplate(ucfirst($action));
     }
 }

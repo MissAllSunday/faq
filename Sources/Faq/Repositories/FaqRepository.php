@@ -12,18 +12,4 @@ class FaqRepository extends BaseRepository
 
         parent::__construct();
     }
-
-    public function getAll(): array
-    {
-        //TODO pagination
-        return $this->prepareData($this->db['db_query'](
-            '',
-            'SELECT {raw:columns}
-			FROM {db_prefix}{raw:from}',
-            [
-                'from' => FaqEntity::TABLE,
-                'columns' => implode(',', array_keys(FaqEntity::COLUMNS)),
-            ]
-        ));
-    }
 }

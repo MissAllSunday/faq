@@ -2,7 +2,7 @@
 
 namespace Faq\Entities;
 
-class FaqEntity extends BaseEntity
+class FaqEntity extends BaseEntity implements EntityInterface
 {
     public const TABLE = 'faq';
     public const ID = 'id';
@@ -64,6 +64,12 @@ class FaqEntity extends BaseEntity
     }
 
     public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    // Due to poorly naming conventions in the past, this wrapper exists to try and normalize stuff
+    public function getName(): string
     {
         return $this->title;
     }

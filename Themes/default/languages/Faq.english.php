@@ -20,8 +20,9 @@ $txt['faq_manage_categories'] = 'Manage Categories';
 
 
 //Add form
-$txt['faq_form_category'] = 'Category:';
-$txt['faq_form_title'] = 'Title:';
+$txt['faq_form_category'] = 'Category';
+$txt['faq_form_title'] = 'Title';
+$txt['faq_form_category_name'] = 'Name';
 
 // Validation errors
 $txt['faq_validation_required'] = 'The following fields are required:';
@@ -60,9 +61,6 @@ $txt['faq_na'] = 'N/A';
 $txt['faq_sidebar_faq_cats'] = 'CategoryController list';
 $txt['faq_you_sure'] = 'Are you sure you want to delete?';
 $txt['faq_latest'] = 'Latest FAQs';
-
-// For the sake of completeness, lets add a title entry for deleting an entry...
-$txt['faq_delete_title'] = 'Deleting an entry...';
 
 // Settings strings
 $txt['faq_desc'] = 'This page gathers all possible settings for the FAQ mod';
@@ -145,19 +143,20 @@ $txt['faq_info_delete'] = 'You have successfully deleted the entry';
 $txt['faq_success_message_deleteCat'] = 'You have successfully deleted this category';
 
 // Template strings
-$txt['faq_edit_title'] = 'Title';
-$txt['faq_edit_body'] = 'Body';
-$txt['faq_edit_id'] = 'ID';
-$txt['faq_edit_last_edit'] = 'Last Edit';
-$txt['faq_edit_last_edit_by'] = 'By user';
-$txt['faq_edit_edit'] = 'Edit';
-$txt['faq_edit_delete'] = 'Delete';
-$txt['faq_edit/delete'] = 'Edit | Delete';
-$txt['faq_edit_category'] = 'CategoryController';
-$txt['faq_edit_name'] = 'Name';
+$txt['faq_title'] = 'Title';
+$txt['faq_body'] = 'Body';
+$txt['faq_id'] = 'ID';
+$txt['faq_last_edit'] = 'Last Edit';
+$txt['faq_last_edit_by'] = 'By user';
+$txt['faq_edit'] = 'Edit';
+$txt['faq_delete'] = 'Delete';
+$txt['faq_name'] = 'Name';
 $txt['faq_show_categories'] = 'Categories';
-$txt['faq_show_faqmod_list'] = 'FAQ list';
-$txt['faq_edit_log'] = 'Log'; 
+$txt['faq_show_list'] = 'FAQ list';
+$txt['faq_edit_log'] = 'Log';
+
+// For the sake of completeness, lets add a title entry for deleting an entry...
+$txt['faq_delete_title'] = 'Deleting an entry...';
 
 // Permissions strings
 $txt['permissiongroup_simple_faq_per_simple'] = 'FAQ mod permissions';

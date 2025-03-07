@@ -2,7 +2,7 @@
 
 namespace Faq\Entities;
 
-class CategoryEntity extends BaseEntity
+class CategoryEntity extends BaseEntity implements EntityInterface
 {
     public const TABLE = 'faq_categories';
     public const ID = 'category_id';
@@ -17,6 +17,16 @@ class CategoryEntity extends BaseEntity
     public function getCategoryName(): string
     {
         return $this->name;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function setCategoryName(string $name): void

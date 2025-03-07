@@ -3,9 +3,10 @@
 namespace Faq\Repositories;
 
 use Faq\Entities\CategoryEntity;
+use Faq\Entities\EntityInterface;
 use Faq\Entities\FaqEntity;
 
-abstract class BaseRepository
+abstract class BaseRepository implements RepositoryInterface
 {
     protected $db;
     protected FaqEntity | CategoryEntity $entity;
@@ -90,6 +91,34 @@ abstract class BaseRepository
         return $this->entity;
     }
 
+    public function count(): int
+    {
+        $result = $this->db['db_query']('', '
+		SELECT COUNT(*) AS count_total
+		FROM {db_prefix}' . $this->entity->getTableName(),
+            []
+        );
+        list ($countTotal) = $this->fetchRow($result);
+        $this->freeResult($result);
+
+        return $countTotal;
+    }
+
+    public function getAll(int $start = 0, $maxIndex = 10): array
+    {
+        //TODO pagination
+        return $this->prepareData($this->db['db_query'](
+            '',
+            'SELECT ' . (implode(',', $this->getColumns())) . '
+			FROM {db_prefix}{raw:from}
+			LIMIT {int:start}, {int:maxIndex}',
+            [
+                'from' => $this->getTable(),
+                'start' => $start,
+                'maxIndex' => $maxIndex
+            ]
+        ));
+    }
 
     protected function buildSetUpdate(): string
     {
@@ -101,6 +130,7 @@ abstract class BaseRepository
         return rtrim($set, ',');
     }
 
+    /* @return array[EntityInterface] */
     protected function prepareData(object $request): array
     {
         $entities = [];

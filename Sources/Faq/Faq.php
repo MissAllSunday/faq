@@ -51,7 +51,7 @@ class Faq
                     ],
                     'faq_category' => [
                         'title' => $this->utils->text('manage_categories'),
-                        'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTIONS[1]),
+                        'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTIONS[0]),
                         'show' => allowedTo([
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),

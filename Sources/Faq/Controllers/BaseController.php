@@ -28,7 +28,7 @@ abstract class BaseController
 
         redirectexit('?action=' . $this->getAction());
     }
-    public function setSubAction(string $subAction): void
+    public function setSubAction(string $action, string $subAction): void
     {
         global $context, $scripturl, $txt;
 
@@ -41,7 +41,7 @@ abstract class BaseController
         $actionUrl = '?action=' . $this->getAction();
         $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
         $context['sub_action'] = $this->subAction;
-        $context['sub_template'] = Faq::NAME . '_' . $this->subAction;
+        $context['sub_template'] = $action . '_' . $this->subAction;
         $context['page_title'] = $txt[Faq::NAME . '_' . $subAction . '_title'];
         $context['post_url'] = $scripturl . $actionUrl . $subActionUrl . ';save';
     }
