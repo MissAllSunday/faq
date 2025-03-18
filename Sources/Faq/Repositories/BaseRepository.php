@@ -172,7 +172,7 @@ abstract class BaseRepository implements RepositoryInterface
         return array_keys($this->entity->getColumns());
     }
 
-    protected function getTable(): string
+    public function getTable(): string
     {
         return $this->entity->getTableName();
     }

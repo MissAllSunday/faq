@@ -24,13 +24,29 @@ class FaqList
 
     public function build(): void
     {
+        global $scripturl;
+
         $maxIndex = $this->repository->count();
         $start = $this->start;
+        $anchor = '<a href="{href}">{title}</a>';
+
+        switch ($this->repository->getTable()) {
+            case 'faq_categories':
+                $sendText = $this->utils->text('addcat_send');
+                $action = 'faqCategory';
+                $add = 'addcat_send';
+                break;
+            default:
+                $sendText = $this->utils->text('add_send');
+                $action = 'faq';
+                $add = 'add_send';
+        }
 
         $listOptions = [
             'id' => self::ID,
-            'title' => 'replace by type title',
-            'base_href' => 'todo',
+
+            'title' => $this->utils->text('$add'),
+            'base_href' => $scripturl . '?action=' . $action .';sa=add',
             'items_per_page' => 10,
             'get_count' => [
                 'function' => fn() => $maxIndex,
@@ -65,9 +81,9 @@ class FaqList
                         'value' => $this->utils->text('edit'),
                     ],
                     'data' => [
-                        'function' => fn() => strtr('some text string for editing', [
-                            'href' => 'href by type',
-                            'title' => 'title/name bt type',
+                        'function' => fn() => strtr($anchor, [
+                            '{href}' => $scripturl . '?action=' . $action .';sa=edit',
+                            '{title}' => $this->utils->text('edit'),
                         ]),
                     ],
                 ],
@@ -76,11 +92,25 @@ class FaqList
                         'value' => $this->utils->text('delete'),
                     ],
                     'data' => [
-                        'function' => fn() => strtr('some text string for deleting', [
-                            'href' => 'href by type',
-                            'title' => 'title/name bt type',
+                        'function' => fn() => strtr($anchor, [
+                            '{href}' => $scripturl . '?action=' . $action .';sa=delete',
+                            '{title}' => $this->utils->text('delete'),
                         ]),
                     ],
+                ],
+            ],
+            'form' => array(
+                'href' => $scripturl . '?action=' . $action .';sa=add',
+            ),
+            'additional_rows' => [
+                [
+                    'position' => 'top_of_list',
+                    'value' => '
+                    <input type="submit" name="'  . $action .'" value="' . $this->utils->text($add) . '" class="button">',
+                ],
+                [
+                    'position' => 'bottom_of_list',
+                    'value' => '<input type="submit" name="' . $action . '" value="' . $this->utils->text($add) . '" class="button">',
                 ],
             ],
         ];
