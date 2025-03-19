@@ -37,16 +37,16 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->getById($this->getInsertedId());
     }
 
-    public function update(array $entityData): void
+    public function update(array $entityData, int $id): void
     {
         $indexName = $this->entity->getIndexName();
 
         $this->db['db_query'](
             '',
             'UPDATE {db_prefix}' . $this->getTable() . '
-			'. $this->buildSetUpdate() .'
-			WHERE '. $indexName .' = {int:'. $indexName .'}',
-            $entityData
+			'. $this->buildSetUpdate($entityData) .'
+			WHERE '. $indexName .' = {int:id}',
+            array_merge($entityData, ['id' => $id]),
         );
     }
 
@@ -57,7 +57,7 @@ abstract class BaseRepository implements RepositoryInterface
         $request = $this->db['db_query']('', '
 		SELECT ' . (implode(',', $this->getColumns())) . '
 		FROM {db_prefix}' . $this->getTable() . '
-		WHERE '. $indexName .' = {int:'. $indexName .'}',
+		WHERE '. $indexName .' = {int:id}',
             [
                 'id' => $id
             ]
@@ -86,7 +86,7 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->db['db_insert_id']('{db_prefix}' . $this->entity->getTableName(), $this->entity->getIndexName());
     }
 
-    public function getEntity(): FaqEntity
+    public function getEntity(): FaqEntity | CategoryEntity
     {
         return $this->entity;
     }
@@ -120,11 +120,12 @@ abstract class BaseRepository implements RepositoryInterface
         ));
     }
 
-    protected function buildSetUpdate(): string
+    protected function buildSetUpdate(array $entityData = []): string
     {
         $set = 'SET ';
-        foreach ($this->entity->getColumns() as $name => $type) {
-            $set .= ' ' . $name . ' = {' . $type . ':'. $name .'},';
+        $columns = $this->entity->getColumns();
+        foreach ($entityData as $name => $type) {
+            $set .= ' ' . $name . ' = {' . $columns[$name] . ':'. $name .'},';
         }
 
         return rtrim($set, ',');

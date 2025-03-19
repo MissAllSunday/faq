@@ -6,6 +6,7 @@ use Faq\Entities\FaqEntity;
 use Faq\FaqRequest;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
+use Faq\Repositories\RepositoryInterface;
 
 class FaqController extends BaseController
 {
@@ -18,18 +19,26 @@ class FaqController extends BaseController
         'single',
     ];
 
-    protected ?FaqRepository $repository;
-    protected CategoryRepository $categoryRepository;
+    protected RepositoryInterface $repository;
+    protected RepositoryInterface $categoryRepository;
 
     public function __construct(
         ?FaqRequest $request = null,
-        ?FaqRepository $repository = null,
-        CategoryRepository $categoryRepository = null)
+        ?RepositoryInterface $repository = null,
+        RepositoryInterface $categoryRepository = null)
     {
         $this->repository = $repository ?? new FaqRepository();
         $this->categoryRepository = $categoryRepository ?? new CategoryRepository();
 
         parent::__construct($request);
+    }
+
+    public function index(): void
+    {
+        $this->setTemplateVars([
+            'entities' => $this->repository->getAll(),
+            'message' => $this->showMessage()
+        ]);
     }
 
     public function add(): void
@@ -95,13 +104,6 @@ class FaqController extends BaseController
         return $data;
     }
 
-    public function index(): void
-    {
-        $this->setTemplateVars([
-            'entities' => $this->repository->getAll(),
-        ]);
-    }
-
     public function delete(): void
     {
         $result = self::ERROR;
@@ -113,15 +115,6 @@ class FaqController extends BaseController
         }
 
         $this->redirect($result, 'delete');
-    }
-
-    protected function save(array $data, ?int $id = null): void
-    {
-        $call = $id ? 'update' : 'insert';
-
-        $this->repository->{$call}($data, $id);
-
-        $this->redirect('info', $call);
     }
 
     protected function upsertLog($logs = []) :string

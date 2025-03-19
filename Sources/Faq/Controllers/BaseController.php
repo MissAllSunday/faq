@@ -4,6 +4,7 @@ namespace Faq\Controllers;
 
 use Faq\Faq as Faq;
 use Faq\FaqRequest;
+use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqValidation;
 
 abstract class BaseController
@@ -11,6 +12,7 @@ abstract class BaseController
     protected ?FaqRequest $request;
     protected ?string $subAction = null;
     protected FaqValidation $validation;
+    protected RepositoryInterface $repository;
     protected int $id;
 
     const SUCCESS = 'info';
@@ -22,17 +24,46 @@ abstract class BaseController
         $this->validation = $validation ?? new FaqValidation();
     }
 
-    protected function redirect(string $type = self::ERROR, string $action = 'generic'): void
+    protected function redirect(string $type = self::ERROR, string $subAction = 'generic'): void
     {
-        $_SESSION[Faq::NAME] = $type . '|' . $action;
+        $action = $this->getAction();
+        $_SESSION[Faq::NAME] = $type . '_' . $action . '_' . $subAction;
 
-        redirectexit('?action=' . $this->getAction());
+        redirectexit('?action=' . $action);
+    }
+
+    function showMessage(): string
+    {
+        global $txt;
+
+        if (!isset($_SESSION[Faq::NAME])) {
+            return '';
+        }
+
+        $message = explode('_', $_SESSION[Faq::NAME]);
+        $text = $txt[Faq::NAME . '_' . $_SESSION[Faq::NAME]];
+        unset($_SESSION[Faq::NAME]);
+
+        return '
+    <div class="'. $message[0] .'box">
+        '. $text .'    
+    </div>';
+    }
+
+    protected function save(array $data, ?int $id = null): void
+    {
+        $call = $id ? 'update' : 'insert';
+
+        $this->repository->{$call}($data, $id);
+
+        $this->redirect('info', $call);
     }
     public function setSubAction(string $action, string $subAction): void
     {
         global $context, $scripturl, $txt;
 
         $id = $this->request->get('id');
+        $txtKey = $action === Faq::NAME ? '' : (strtolower(str_replace(Faq::NAME, '', $action)) . '_');
         $this->subAction = $subAction;
         $this->id = $id ?? 0;
 
@@ -42,7 +73,7 @@ abstract class BaseController
         $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = $action . '_' . $this->subAction;
-        $context['page_title'] = $txt[Faq::NAME . '_' . $subAction . '_title'];
+        $context['page_title'] = $txt[Faq::NAME . '_' . $txtKey . $subAction . '_title'];
         $context['post_url'] = $scripturl . $actionUrl . $subActionUrl . ';save';
     }
 

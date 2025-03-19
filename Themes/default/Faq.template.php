@@ -54,7 +54,7 @@ function template_faq_add(): void
 
     $entity = $context[Faq::NAME]['entity'];
 
-    showMessage();
+    echo $context[Faq::NAME]['message'];
 
     if (!empty($context[Faq::NAME]['errors'])) {
         showErrors($context[Faq::NAME]['errors']);
@@ -440,22 +440,4 @@ function showErrors(string $errors): void
     echo '
 		</dl>
 	</div>';
-}
-
-function showMessage(): void
-{
-    global $txt;
-
-    if (!isset($_SESSION[Faq::NAME])){
-        return;
-    }
-
-    $message = explode('|', $_SESSION[Faq::NAME]);
-
-    echo '
-    <div class="', $message[0] ,'box">
-        ', $txt['faq_'. $message[0] .'_' . $message[1]] ,'    
-    </div>';
-
-    unset($_SESSION[Faq::NAME]);
 }

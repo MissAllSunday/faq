@@ -50,7 +50,7 @@ class Faq
                         'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD),
                     ],
                     'faq_category' => [
-                        'title' => $this->utils->text('manage_categories'),
+                        'title' => $this->utils->text('category_index_title'),
                         'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTIONS[0]),
                         'show' => allowedTo([
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,

@@ -22,7 +22,7 @@ class FaqList
         $this->utils = new FaqUtils();
     }
 
-    public function build(): void
+    public function build(string $message = ''): void
     {
         global $scripturl;
 
@@ -34,12 +34,12 @@ class FaqList
             case 'faq_categories':
                 $sendText = $this->utils->text('addcat_send');
                 $action = 'faqCategory';
-                $add = 'addcat_send';
+                $add = 'category_add_title';
                 break;
             default:
                 $sendText = $this->utils->text('add_send');
                 $action = 'faq';
-                $add = 'add_send';
+                $add = 'add_title';
         }
 
         $listOptions = [
@@ -81,8 +81,8 @@ class FaqList
                         'value' => $this->utils->text('edit'),
                     ],
                     'data' => [
-                        'function' => fn() => strtr($anchor, [
-                            '{href}' => $scripturl . '?action=' . $action .';sa=edit',
+                        'function' => fn($rowData) => strtr($anchor, [
+                            '{href}' => $scripturl . '?action=' . $action .';sa=add;id=' . $rowData->getId(),
                             '{title}' => $this->utils->text('edit'),
                         ]),
                     ],
@@ -99,18 +99,24 @@ class FaqList
                     ],
                 ],
             ],
-            'form' => array(
+            'form' => [
                 'href' => $scripturl . '?action=' . $action .';sa=add',
-            ),
+            ],
             'additional_rows' => [
                 [
                     'position' => 'top_of_list',
+                    'value' => $message,
+                ],
+                [
+                    'position' => 'top_of_list',
                     'value' => '
-                    <input type="submit" name="'  . $action .'" value="' . $this->utils->text($add) . '" class="button">',
+                    <a class="button" type="submit" href="'. $scripturl . '?action=' . $action .';sa=add">
+                        ' . $this->utils->text($add) . '</a>',
                 ],
                 [
                     'position' => 'bottom_of_list',
-                    'value' => '<input type="submit" name="' . $action . '" value="' . $this->utils->text($add) . '" class="button">',
+                    'value' => '<a class="button" type="submit" href="'. $scripturl . '?action=' . $action .';sa=add">
+                        ' . $this->utils->text($add) . '</a>',
                 ],
             ],
         ];

@@ -13,16 +13,18 @@ global $scripturl, $txt;
 // Actions
 $txt['faq_index_title'] = 'Frequently Asked Questions';
 $txt['faq_add_title'] = 'Add a new question';
+$txt['faq_category_add_title'] = 'Add a new category';
+$txt['faq_category_update_title'] = 'Edit category';
 $txt['faq_update_title'] = 'Edit question';
 
 // Categories
-$txt['faq_manage_categories'] = 'Manage Categories';
+$txt['faq_category_index_title'] = 'Manage Categories';
 
 
 //Add form
 $txt['faq_form_category'] = 'Category';
 $txt['faq_form_title'] = 'Title';
-$txt['faq_form_category_name'] = 'Name';
+$txt['faq_edit_category_name'] = 'Name';
 
 // Validation errors
 $txt['faq_validation_required'] = 'The following fields are required:';
@@ -54,7 +56,6 @@ $txt['faq_no_cat_admin'] = 'You need to <a href="{add_cat_href}">add a category<
 $txt['faq_no_cat'] = 'There are not categories, you must add a category first before you can add FAQs.';
 $txt['faq_adding_cat'] = 'Adding a new category.';
 $txt['faq_editing_cat'] = 'Editing category';
-$txt['faq_addcat_send'] = 'Add a new category';
 $txt['faq_editcat_send'] = 'Edit this category';
 $txt['faq_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['faq_na'] = 'N/A';
@@ -135,10 +136,10 @@ $txt['faq_success_title'] = 'successfully done';
 $txt['faq_success_no_access'] = 'You can\'t access this page directly';
 $txt['faq_success_message_title'] = 'Thank you';
 $txt['faq_success_message_generic'] = '<a href="'. $scripturl .'?action=faq" >Go to the FAQ Index</a>';
-$txt['faq_info_insert'] = 'You have successfully added a new FAQ entry';
+$txt['faq_info_faq_insert'] = 'You have successfully added a new FAQ entry';
 $txt['faq_info_update'] = 'You have successfully updated this FAQ entry';
-$txt['faq_success_message_addCat'] = 'You have successfully added a new category';
-$txt['faq_success_message_editCat'] = 'You have successfully edited this category';
+$txt['faq_info_faqCategory_insert'] = 'You have successfully added a new category';
+$txt['faq_info_faqCategory_update'] = 'You have successfully updated this category';
 $txt['faq_info_delete'] = 'You have successfully deleted the entry';
 $txt['faq_success_message_deleteCat'] = 'You have successfully deleted this category';
 
