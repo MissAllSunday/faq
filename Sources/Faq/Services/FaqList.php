@@ -2,6 +2,9 @@
 
 namespace Faq\Services;
 
+use Faq\Controllers\CategoryController;
+use Faq\Controllers\FaqController;
+use Faq\Entities\CategoryEntity;
 use Faq\Faq;
 use Faq\FaqUtils;
 use Faq\Repositories\RepositoryInterface;
@@ -90,7 +93,10 @@ class FaqList
                         'value' => $this->utils->text('delete'),
                     ],
                     'data' => [
-                        'function' => fn($rowData) => strtr($anchor, [
+                        'function' => fn($rowData) => ($action === CategoryController::ACTION &&
+                            $rowData->getId() === CategoryEntity::DEFAULT_CATEGORY_ID) ?
+                            $this->utils->text('delete') :
+                            strtr($anchor, [
                             '{href}' => $scripturl . '?action=' . $action .';sa=delete;id=' . $rowData->getId(),
                             '{title}' => $this->utils->text('delete'),
                         ]),

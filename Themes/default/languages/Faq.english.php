@@ -137,12 +137,13 @@ $txt['faq_success_no_access'] = 'You can\'t access this page directly';
 $txt['faq_success_message_title'] = 'Thank you';
 $txt['faq_success_message_generic'] = '<a href="'. $scripturl .'?action=faq" >Go to the FAQ Index</a>';
 $txt['faq_info_faq_insert'] = 'You have successfully added a new FAQ entry';
-$txt['faq_info_update'] = 'You have successfully updated this FAQ entry';
+$txt['faq_info_faq_update'] = 'You have successfully updated this FAQ entry';
 $txt['faq_info_faqCategory_insert'] = 'You have successfully added a new category';
 $txt['faq_info_faqCategory_update'] = 'You have successfully updated this category';
-$txt['faq_info_delete'] = 'You have successfully deleted the entry';
+$txt['faq_info_faq_delete'] = 'You have successfully deleted the entry';
 $txt['faq_info_faqCategory_delete'] = 'You have successfully deleted the category.';
 $txt['faq_error_faqCategory_delete'] = 'There was an error deleting the category entry';
+$txt['faq_error_faqCategory_delete_default'] = 'The default category cannot be deleted, try updating it instead.';
 
 // Template strings
 $txt['faq_title'] = 'Title';

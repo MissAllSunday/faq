@@ -50,6 +50,17 @@ abstract class BaseRepository implements RepositoryInterface
         );
     }
 
+    public function setDefaultCategoryId(int $categoryId): void
+    {
+        $this->db['db_query'](
+            '',
+            'UPDATE {db_prefix}' . FaqEntity::TABLE . '
+			SET '. FaqEntity::CAT_ID .' = {int:defaultId}
+			WHERE '. FaqEntity::CAT_ID .' = {int:id}',
+            ['defaultId' => CategoryEntity::DEFAULT_CATEGORY_ID, 'id' => $categoryId],
+        );
+    }
+
     public function getById(int $id): FaqEntity | CategoryEntity
     {
         $indexName = $this->entity->getIndexName();

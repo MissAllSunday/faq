@@ -86,7 +86,7 @@ abstract class BaseController
     {
         global $context;
 
-        $context[Faq::NAME] = $vars;
+        $context[Faq::NAME] = array_merge($vars, ['message' => $this->showMessage()]);
     }
 
     abstract protected function getSubActions() : array;

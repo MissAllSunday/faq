@@ -7,6 +7,8 @@ class CategoryEntity extends BaseEntity implements EntityInterface
     public const TABLE = 'faq_categories';
     public const ID = 'category_id';
     public const NAME = 'category_name';
+
+    public const DEFAULT_CATEGORY_ID = 1;
     public const COLUMNS = [
         self::ID => 'int',
         self::NAME => 'string',

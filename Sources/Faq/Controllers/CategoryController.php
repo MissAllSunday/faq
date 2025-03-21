@@ -3,6 +3,7 @@
 namespace Faq\Controllers;
 
 use Faq\Entities\CategoryEntity;
+use Faq\Entities\FaqEntity;
 use Faq\FaqRequest;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\RepositoryInterface;
@@ -17,7 +18,6 @@ class CategoryController extends BaseController
         'delete',
         'categories',
     ];
-    protected RepositoryInterface $repository;
 
     public function __construct(
         ?FaqRequest $request = null,
@@ -75,8 +75,17 @@ class CategoryController extends BaseController
         $result = self::ERROR;
         $id = $this->request->get('id');
 
+        // Can't delete the default one
+        if ($id === CategoryEntity::DEFAULT_CATEGORY_ID) {
+            $this->redirect($result, 'delete_default');
+        }
+
         if ($id) {
             $this->repository->delete([$id]);
+
+            // Update all FAQs with this category to a default one
+            $this->repository->setDefaultCategoryId($id);
+
             $result = self::SUCCESS;
         }
 

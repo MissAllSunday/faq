@@ -8,8 +8,6 @@ function template_faq_index()
 {
 	global $txt, $context;
 
-    showMessage();
-
 	$entities = $context[Faq::NAME]['entities'];
 
 	if (empty($entities)) {
@@ -25,6 +23,8 @@ function template_faq_index()
 
         return;
     }
+
+    echo $context[Faq::NAME]['message'];
 
     foreach($entities as $entity)
         echo '
