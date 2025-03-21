@@ -75,7 +75,7 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->db['db_query'](
             '','
             DELETE
-			FROM {db_prefix}' . FaqEntity::TABLE . '
+			FROM {db_prefix}' . $this->getTable() . '
 		    WHERE ' . $this->entity->getIndexName() . ' IN({array_int:ids})',
             ['ids' => $ids]
         );

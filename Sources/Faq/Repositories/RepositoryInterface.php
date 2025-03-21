@@ -16,4 +16,6 @@ interface RepositoryInterface
     public function getById(int $id): FaqEntity | CategoryEntity;
 
     public function getEntity(): FaqEntity | CategoryEntity;
+
+    public function delete(array $ids): bool;
 }

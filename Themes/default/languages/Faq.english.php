@@ -16,6 +16,7 @@ $txt['faq_add_title'] = 'Add a new question';
 $txt['faq_category_add_title'] = 'Add a new category';
 $txt['faq_category_update_title'] = 'Edit category';
 $txt['faq_update_title'] = 'Edit question';
+$txt['faq_category_delete_title'] = 'Delete category';
 
 // Categories
 $txt['faq_category_index_title'] = 'Manage Categories';
@@ -128,7 +129,6 @@ $txt['cannot_faq_edit'] = 'I\'m sorry, you aren\'t allowed to edit any FAQs';
 $txt['cannot_faq_search'] = 'I\'m sorry, you aren\'t allowed to search the FAQs';
 $txt['faq_error_insert'] = 'There was an error creating the FAQ entry, please try again or contact your administrator';
 $txt['faq_error_update'] = 'There was an error updating the FAQ entry, please try again or contact your administrator';
-$txt['faq_error_delete'] = 'There was an error deleting the FAQ entry, please try again or contact your administrator';
 $txt['faq_error_generic'] = 'There was a problem, please try again or contact your administrator';
 
 // Success
@@ -141,7 +141,8 @@ $txt['faq_info_update'] = 'You have successfully updated this FAQ entry';
 $txt['faq_info_faqCategory_insert'] = 'You have successfully added a new category';
 $txt['faq_info_faqCategory_update'] = 'You have successfully updated this category';
 $txt['faq_info_delete'] = 'You have successfully deleted the entry';
-$txt['faq_success_message_deleteCat'] = 'You have successfully deleted this category';
+$txt['faq_info_faqCategory_delete'] = 'You have successfully deleted the category.';
+$txt['faq_error_faqCategory_delete'] = 'There was an error deleting the category entry';
 
 // Template strings
 $txt['faq_title'] = 'Title';

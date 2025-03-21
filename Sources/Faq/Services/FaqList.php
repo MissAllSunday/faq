@@ -28,16 +28,14 @@ class FaqList
 
         $maxIndex = $this->repository->count();
         $start = $this->start;
-        $anchor = '<a href="{href}">{title}</a>';
+        $anchor = '<a href="{href}" class="you_sure">{title}</a>';
 
         switch ($this->repository->getTable()) {
             case 'faq_categories':
-                $sendText = $this->utils->text('addcat_send');
                 $action = 'faqCategory';
                 $add = 'category_add_title';
                 break;
             default:
-                $sendText = $this->utils->text('add_send');
                 $action = 'faq';
                 $add = 'add_title';
         }
@@ -46,7 +44,7 @@ class FaqList
             'id' => self::ID,
 
             'title' => $this->utils->text('$add'),
-            'base_href' => $scripturl . '?action=' . $action .';sa=add',
+            'base_href' => $scripturl . '?action=' . $action,
             'items_per_page' => 10,
             'get_count' => [
                 'function' => fn() => $maxIndex,
@@ -92,26 +90,17 @@ class FaqList
                         'value' => $this->utils->text('delete'),
                     ],
                     'data' => [
-                        'function' => fn() => strtr($anchor, [
-                            '{href}' => $scripturl . '?action=' . $action .';sa=delete',
+                        'function' => fn($rowData) => strtr($anchor, [
+                            '{href}' => $scripturl . '?action=' . $action .';sa=delete;id=' . $rowData->getId(),
                             '{title}' => $this->utils->text('delete'),
                         ]),
                     ],
                 ],
             ],
-            'form' => [
-                'href' => $scripturl . '?action=' . $action .';sa=add',
-            ],
             'additional_rows' => [
                 [
                     'position' => 'top_of_list',
                     'value' => $message,
-                ],
-                [
-                    'position' => 'top_of_list',
-                    'value' => '
-                    <a class="button" type="submit" href="'. $scripturl . '?action=' . $action .';sa=add">
-                        ' . $this->utils->text($add) . '</a>',
                 ],
                 [
                     'position' => 'bottom_of_list',

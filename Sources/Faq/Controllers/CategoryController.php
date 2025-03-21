@@ -70,6 +70,19 @@ class CategoryController extends BaseController
         $this->setTemplateVars($templateVars);
     }
 
+    public function delete(): void
+    {
+        $result = self::ERROR;
+        $id = $this->request->get('id');
+
+        if ($id) {
+            $this->repository->delete([$id]);
+            $result = self::SUCCESS;
+        }
+
+        $this->redirect($result, 'delete');
+    }
+
     protected function getSubActions(): array
     {
         return self::SUB_ACTIONS;
