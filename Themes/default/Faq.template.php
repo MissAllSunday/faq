@@ -24,7 +24,7 @@ function template_faq_index()
         return;
     }
 
-    echo $context[Faq::NAME]['message'];
+    showMessage();
 
     foreach($entities as $entity)
         echo '
@@ -54,7 +54,7 @@ function template_faq_add(): void
 
     $entity = $context[Faq::NAME]['entity'];
 
-    echo $context[Faq::NAME]['message'];
+    showMessage();
 
     if (!empty($context[Faq::NAME]['errors'])) {
         showErrors($context[Faq::NAME]['errors']);
@@ -285,12 +285,15 @@ function faq_header()
 		</div>';
 }
 
-function faq_sideBar()
+function showSideBar()
 {
 	global $context, $scripturl, $txt, $modSettings;
-
+    
 	echo '
-	<div class="leftSide" >';
+	<div style="
+	    float: left;
+	    width: 40%;
+	" >';
 
 	// Show a nice category list.
 	if (!empty($modSettings['Faq_show_catlist']))
@@ -440,4 +443,11 @@ function showErrors(string $errors): void
     echo '
 		</dl>
 	</div>';
+}
+
+function showMessage(): void
+{
+    global $context;
+
+    echo $context[Faq::NAME]['message'];
 }

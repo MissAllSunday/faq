@@ -72,24 +72,23 @@ class CategoryController extends BaseController
 
     public function delete(): void
     {
-        $result = self::ERROR;
         $id = $this->request->get('id');
+
+        if (!$id) {
+            $this->redirect();
+        }
 
         // Can't delete the default one
         if ($id === CategoryEntity::DEFAULT_CATEGORY_ID) {
-            $this->redirect($result, 'delete_default');
+            $this->redirect(self::ERROR, 'delete_default');
         }
 
-        if ($id) {
-            $this->repository->delete([$id]);
+        $this->repository->delete([$id]);
 
-            // Update all FAQs with this category to a default one
-            $this->repository->setDefaultCategoryId($id);
+        // Update all FAQs with this category to a default one
+        $this->repository->setDefaultCategoryId($id);
 
-            $result = self::SUCCESS;
-        }
-
-        $this->redirect($result, 'delete');
+        $this->redirect(self::SUCCESS, 'delete');
     }
 
     protected function getSubActions(): array
