@@ -4,6 +4,7 @@ namespace Faq;
 
 class FaqRequest
 {
+    protected const HISTORY_LENGTH = 2;
     public function sanitize($variable)
     {
         global $smcFunc;
@@ -47,4 +48,28 @@ class FaqRequest
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
+
+    public function history(?string $actionName = null): array
+    {
+        $key = Faq::NAME . '_history';
+
+        if (!isset($_SESSION[$key])) {
+            $_SESSION[$key] = [];
+        }
+
+        if ($actionName ) {
+            $toCompare = $actionName . '_'. $this->get('sa', '');
+
+            if (!isset($_SESSION[$key][1]) || ($_SESSION[$key][1] !== $toCompare)) {
+                $_SESSION[$key][]  = $toCompare;
+            }
+        }
+
+        if (count($_SESSION[$key]) > self::HISTORY_LENGTH) {
+            array_shift($_SESSION[$key]);
+        }
+
+        return $_SESSION[$key];
+    }
+
 }

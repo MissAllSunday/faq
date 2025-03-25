@@ -34,9 +34,8 @@ class CategoryController extends BaseController
 
         $context['sub_template'] = 'show_list';
         $context['default_list'] = 'faq_list';
-        $start = $this->request->get('start', 0);
 
-        $categoryList = new FaqList($this->repository, $start);
+        $categoryList = new FaqList($this->repository, $this->request->get('start', 0));
         $categoryList->build($this->showMessage());
     }
 

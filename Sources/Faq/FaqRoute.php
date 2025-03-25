@@ -45,7 +45,7 @@ class FaqRoute
         }
 
         $this->loadRequiredFiles($action);
-
+        $this->request->history($action);
         $controller->setSubAction($action, $subAction);
         $actions[$action] = [false, fn () => $controller->{$subAction}()];
     }

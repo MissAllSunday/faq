@@ -27,22 +27,25 @@ abstract class BaseController
     protected function redirect(string $type = self::ERROR, string $subAction = 'generic'): void
     {
         $action = $this->getAction();
-        $_SESSION[Faq::NAME] = $type . '_' . $action . '_' . $subAction;
+        $history = explode('_', $this->request->history()[0]);
+        $_SESSION[Faq::NAME . '_message'] = $type . '_' . $action . '_' . $subAction;
 
-        redirectexit('?action=' . $action);
+        redirectexit('action=' . $history[0] . ';sa=' . $history[1]);
     }
 
     function showMessage(): string
     {
         global $txt;
 
-        if (!isset($_SESSION[Faq::NAME])) {
+        $key = Faq::NAME . '_message';
+
+        if (!isset($_SESSION[$key])) {
             return '';
         }
 
-        $message = explode('_', $_SESSION[Faq::NAME]);
-        $text = $txt[Faq::NAME . '_' . $_SESSION[Faq::NAME]];
-        unset($_SESSION[Faq::NAME]);
+        $message = explode('_', $_SESSION[$key]);
+        $text = $txt[Faq::NAME . '_' . $_SESSION[$key]];
+        unset($_SESSION[$key]);
 
         return '
     <div class="'. $message[0] .'box">

@@ -57,6 +57,14 @@ class Faq
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
                         'sub_buttons' => [],
                     ],
+                    'faq_manage' => [
+                        'title' => $this->utils->text('manage_title'),
+                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTIONS[5]),
+                        'show' => allowedTo([
+                            Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
+                            Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
+                        'sub_buttons' => [],
+                    ],
                     'faq_admin' => [
                         'title' => $this->utils->text('admin_panel'),
                         'href' => $scripturl . '?action=admin;area=' . Faq::NAME,

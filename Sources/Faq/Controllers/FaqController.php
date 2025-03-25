@@ -7,6 +7,7 @@ use Faq\FaqRequest;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
 use Faq\Repositories\RepositoryInterface;
+use Faq\Services\FaqList;
 
 class FaqController extends BaseController
 {
@@ -17,6 +18,7 @@ class FaqController extends BaseController
         'delete',
         'search',
         'single',
+        'manage',
     ];
 
     protected RepositoryInterface $repository;
@@ -115,6 +117,17 @@ class FaqController extends BaseController
         }
 
         $this->redirect($result, 'delete');
+    }
+
+    public function manage(): void
+    {
+        global $context;
+
+        $context['sub_template'] = 'show_list';
+        $context['default_list'] = 'faq_list';
+
+        $faqList = new FaqList($this->repository, $this->request->get('start', 0));
+        $faqList->build($this->showMessage());
     }
 
     protected function upsertLog($logs = []) :string
