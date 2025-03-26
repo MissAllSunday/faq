@@ -60,7 +60,7 @@ $txt['faq_editing_cat'] = 'Editing category';
 $txt['faq_editcat_send'] = 'Edit this category';
 $txt['faq_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['faq_na'] = 'N/A';
-$txt['faq_sidebar_faq_cats'] = 'CategoryController list';
+$txt['faq_sidebar_faq_cats'] = 'Categories';
 $txt['faq_you_sure'] = 'Are you sure you want to delete?';
 $txt['faq_latest'] = 'Latest FAQs';
 

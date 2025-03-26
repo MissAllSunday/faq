@@ -12,11 +12,15 @@ use Faq\Services\FaqList;
 class CategoryController extends BaseController
 {
     public const ACTION = 'faqCategory';
+    public const SUB_ACTION_INDEX = 'index';
+    public const SUB_ACTION_ADD = 'add';
+    public const SUB_ACTION_DELETE = 'delete';
+    public const SUB_ACTION_CATEGORIES = 'categories';
     public const SUB_ACTIONS = [
-        'index',
-        'add',
-        'delete',
-        'categories',
+        self::SUB_ACTION_INDEX,
+        self::SUB_ACTION_ADD,
+        self::SUB_ACTION_DELETE,
+        self::SUB_ACTION_CATEGORIES,
     ];
 
     public function __construct(

@@ -1,5 +1,7 @@
 <?php
 
+use Faq\Controllers\CategoryController;
+use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
@@ -26,6 +28,14 @@ function template_faq_index()
 
     showMessage();
 
+    showSideBar();
+
+    echo '
+	<div style="
+	    float: left;
+	    width: 75%;
+	" >';
+
     foreach($entities as $entity)
         echo '
 			<div class="cat_bar">
@@ -46,6 +56,8 @@ function template_faq_index()
     // Pagination.
     if (!empty($context['page_index']))
         echo $context['page_index'];
+
+    echo '</div>';
 }
 
 function template_faq_add(): void
@@ -285,23 +297,23 @@ function faq_header()
 		</div>';
 }
 
-function showSideBar()
+function showSideBar(): void
 {
 	global $context, $scripturl, $txt, $modSettings;
     
 	echo '
 	<div style="
 	    float: left;
-	    width: 40%;
+	    width: 24%;
 	" >';
 
 	// Show a nice category list.
-	if (!empty($modSettings['Faq_show_catlist']))
+	if (!empty($modSettings['faq_show_catlist']))
 	{
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				', $txt['Faq_sidebar_faq_cats'] ,'
+				', $txt['faq_sidebar_faq_cats'] ,'
 			</h3>
 		</div>
 
@@ -309,11 +321,14 @@ function showSideBar()
 			<div class="content">
 				<ul class="reset">';
 
-		foreach($context['Faq']['cats'] as $all)
-			echo '
+        /* @var CategoryEntity $category */
+		foreach($context[Faq::NAME]['categories'] as $category) {
+            echo '
 					<li>
-						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
+						<a href="'. $scripturl .'?action=' . CategoryController::ACTION .
+                ';sa=' . CategoryController::SUB_ACTION_CATEGORIES . ';id='. $category->getId() .'">'. $category->getName() .'</a>
 					</li>';
+        }
 
 		echo '
 				</ul>
@@ -322,8 +337,7 @@ function showSideBar()
 		<br />';
 	}
 
-	/* Latest FAQs, calling a model method from the view? naughty, naughty me! */
-	if (!empty($modSettings['Faq_show_latest']))
+	if (!empty($modSettings['faq_show_latest']))
 	{
 		echo '
 		<div class="cat_bar">

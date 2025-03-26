@@ -32,6 +32,10 @@ class FaqController extends BaseController
         $this->repository = $repository ?? new FaqRepository();
         $this->categoryRepository = $categoryRepository ?? new CategoryRepository();
 
+        $this->setTemplateVars([
+            'categories' => $this->categoryRepository->getAll(),
+        ]);
+
         parent::__construct($request);
     }
 
@@ -39,7 +43,6 @@ class FaqController extends BaseController
     {
         $this->setTemplateVars([
             'entities' => $this->repository->getAll(),
-            'message' => $this->showMessage()
         ]);
     }
 
@@ -90,22 +93,6 @@ class FaqController extends BaseController
         $this->setTemplateVars($templateVars);
     }
 
-    protected function buildPreview(array $data): array
-    {
-        global $sourcedir;
-
-        require_once($sourcedir.'/Subs-Post.php');
-
-        $data['title'] = $data['title'] ?? '';
-        $data['body'] = $data['body'] ?? '';
-
-        censorText($data['title']);
-        preparsecode($data['body'], true);
-        $data['body'] = parse_bbc($data['body']);
-
-        return $data;
-    }
-
     public function delete(): void
     {
         $result = self::ERROR;
@@ -130,11 +117,27 @@ class FaqController extends BaseController
         $faqList->build($this->showMessage());
     }
 
+    protected function buildPreview(array $data): array
+    {
+        global $sourcedir;
+
+        require_once($sourcedir.'/Subs-Post.php');
+
+        $data['title'] = $data['title'] ?? '';
+        $data['body'] = $data['body'] ?? '';
+
+        censorText($data['title']);
+        preparsecode($data['body'], true);
+        $data['body'] = parse_bbc($data['body']);
+
+        return $data;
+    }
+
     protected function upsertLog($logs = []) :string
     {
         global $user_info;
 
-        $logs[(int) $user_info] = time();
+        $logs[(int) $user_info['id']] = time();
 
         return json_encode($logs);
     }
