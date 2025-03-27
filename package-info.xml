@@ -37,6 +37,7 @@
 		<database>install.php</database>
 		<remove-file name="$languagedir/Faq.english.php" />
 		<remove-file name="$themedir/Faq.template.php" />
+		<remove-file name="$themedir/css/faq.css" />
 		<remove-dir name="$sourcedir/Faq" />
 	</uninstall>
 </package-info>

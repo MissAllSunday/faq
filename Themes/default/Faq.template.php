@@ -12,6 +12,9 @@ function template_faq_index()
 
 	$entities = $context[Faq::NAME]['entities'];
 
+    echo '
+<div class="mainContent">';
+
 	if (empty($entities)) {
         echo '
     <div class="cat_bar">
@@ -31,10 +34,7 @@ function template_faq_index()
     showSideBar();
 
     echo '
-	<div style="
-	    float: left;
-	    width: 75%;
-	" >';
+	<div class="rightSide" >';
 
     foreach($entities as $entity)
         echo '
@@ -57,7 +57,8 @@ function template_faq_index()
     if (!empty($context['page_index']))
         echo $context['page_index'];
 
-    echo '</div>';
+    echo '</div>
+</div>';
 }
 
 function template_faq_add(): void
@@ -302,10 +303,7 @@ function showSideBar(): void
 	global $context, $scripturl, $txt, $modSettings;
     
 	echo '
-	<div style="
-	    float: left;
-	    width: 24%;
-	" >';
+	<div class="leftSide" >';
 
 	// Show a nice category list.
 	if (!empty($modSettings['faq_show_catlist']))

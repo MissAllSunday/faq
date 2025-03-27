@@ -79,6 +79,8 @@ abstract class BaseController
         $context['sub_template'] = $action . '_' . $this->subAction;
         $context['page_title'] = $txt[Faq::NAME . '_' . $txtKey . $subAction . '_title'];
         $context['post_url'] = $scripturl . $actionUrl . $subActionUrl . ';save';
+
+        loadCSSFile('faq.css', [], 'smf_faq');
     }
 
     public function isSubActionValid(string $subAction): bool
