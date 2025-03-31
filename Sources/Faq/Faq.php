@@ -46,12 +46,12 @@ class Faq
                 'sub_buttons' => [
                     'faq_add' => [
                         'title' => $this->utils->text('add_title'),
-                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTIONS[1]),
+                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTION_ADD),
                         'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD),
                     ],
                     'faq_category' => [
                         'title' => $this->utils->text('category_index_title'),
-                        'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTIONS[0]),
+                        'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTION_MANAGE),
                         'show' => allowedTo([
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
@@ -59,7 +59,7 @@ class Faq
                     ],
                     'faq_manage' => [
                         'title' => $this->utils->text('manage_title'),
-                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTIONS[5]),
+                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTION_MANAGE),
                         'show' => allowedTo([
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
@@ -96,7 +96,7 @@ class Faq
 			foreach ($this->_checkPerm as $p)
 				$_permissions[$p] = allowedTo('faq_'. $p);
 
-		// The mod needs to be enable.
+		// The mod needs to be enabled.
 		if (!$this->setting('enable'))
 			return redirectexit();
 

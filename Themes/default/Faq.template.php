@@ -1,6 +1,7 @@
 <?php
 
 use Faq\Controllers\CategoryController;
+use Faq\Controllers\FaqController;
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
@@ -15,7 +16,14 @@ function template_faq_index()
     echo '
 <div class="mainContent">';
 
-	if (empty($entities)) {
+    showMessage();
+
+    showSideBar();
+
+    echo '
+	<div class="rightSide" >';
+
+    if (empty($entities)) {
         echo '
     <div class="cat_bar">
         <h3 class="catbg">
@@ -25,19 +33,10 @@ function template_faq_index()
     <div class="information">
         ', $txt['faq_no_faq'] ,'
     </div>';
-
-        return;
     }
-
-    showMessage();
-
-    showSideBar();
-
-    echo '
-	<div class="rightSide" >';
-
-    foreach($entities as $entity)
-        echo '
+    else {
+        foreach($entities as $entity)
+            echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="floatleft">', $entity->getTitle() ,'</span>
@@ -53,9 +52,10 @@ function template_faq_index()
 			</div>
 			<br />';
 
-    // Pagination.
-    if (!empty($context['page_index']))
-        echo $context['page_index'];
+        // Pagination.
+        if (!empty($context['page_index']))
+            echo $context['page_index'];
+    }
 
     echo '</div>
 </div>';
@@ -323,8 +323,8 @@ function showSideBar(): void
 		foreach($context[Faq::NAME]['categories'] as $category) {
             echo '
 					<li>
-						<a href="'. $scripturl .'?action=' . CategoryController::ACTION .
-                ';sa=' . CategoryController::SUB_ACTION_CATEGORIES . ';id='. $category->getId() .'">'. $category->getName() .'</a>
+						<a href="'. $scripturl .'?action=' . FaqController::ACTION .
+                ';sa=' . FaqController::SUB_ACTION_CATEGORY . ';cid='. $category->getId() .'">'. $category->getName() .'</a>
 					</li>';
         }
 

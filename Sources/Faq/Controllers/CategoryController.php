@@ -4,6 +4,7 @@ namespace Faq\Controllers;
 
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
+use Faq\Faq;
 use Faq\FaqRequest;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\RepositoryInterface;
@@ -12,15 +13,13 @@ use Faq\Services\FaqList;
 class CategoryController extends BaseController
 {
     public const ACTION = 'faqCategory';
-    public const SUB_ACTION_INDEX = 'index';
+    public const SUB_ACTION_MANAGE = 'manage';
     public const SUB_ACTION_ADD = 'add';
     public const SUB_ACTION_DELETE = 'delete';
-    public const SUB_ACTION_CATEGORIES = 'categories';
     public const SUB_ACTIONS = [
-        self::SUB_ACTION_INDEX,
+        self::SUB_ACTION_MANAGE,
         self::SUB_ACTION_ADD,
         self::SUB_ACTION_DELETE,
-        self::SUB_ACTION_CATEGORIES,
     ];
 
     public function __construct(
@@ -32,7 +31,7 @@ class CategoryController extends BaseController
         parent::__construct($request);
     }
 
-    public function index(): void
+    public function manage(): void
     {
         global $context;
 
@@ -40,7 +39,7 @@ class CategoryController extends BaseController
         $context['default_list'] = 'faq_list';
 
         $categoryList = new FaqList($this->repository, $this->request->get('start', 0));
-        $categoryList->build($this->showMessage());
+        $categoryList->build($context[Faq::NAME]['message']);
     }
 
     public function add(): void

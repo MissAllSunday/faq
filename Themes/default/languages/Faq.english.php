@@ -13,6 +13,7 @@ global $scripturl, $txt;
 // Actions
 $txt['faq_index_title'] = 'Frequently Asked Questions';
 $txt['faq_add_title'] = 'Add a new question';
+$txt['faq_category_title'] = 'Faq Categories';
 $txt['faq_category_add_title'] = 'Add a new category';
 $txt['faq_category_update_title'] = 'Edit category';
 $txt['faq_update_title'] = 'Edit question';
@@ -26,6 +27,8 @@ $txt['faq_category_index_title'] = 'Manage Categories';
 $txt['faq_form_category'] = 'Category';
 $txt['faq_form_title'] = 'Title';
 $txt['faq_edit_category_name'] = 'Name';
+$txt['faq_edit_title'] = 'Title';
+$txt['faq_edit_body'] = 'Body';
 
 // Validation errors
 $txt['faq_validation_required'] = 'The following fields are required:';
@@ -95,7 +98,7 @@ $txt['faq_date'] = 'By Last edit';
 $txt['faq_id'] = 'By ID';
 $txt['faq_title'] = 'By Title';
 $txt['faq_body'] = 'By Body';
-$txt['faq_byCat'] = 'By CategoryController';
+$txt['faq_by_category'] = 'FAQs By {categoryName}';
 $txt['faq_use_preview'] = 'Show a short version of the FAQ in the main page.';
 $txt['faq_use_preview_sub'] = 'If enable, the main FAQ page will only show a fraction of the FAQS and the title will be converted to a link to a page that will display the entire FAQ.';
 $txt['faq_how_many'] = 'How many characters would be displayed before the body gets cut off.';
@@ -147,8 +150,6 @@ $txt['faq_error_faqCategory_delete_default'] = 'The default category cannot be d
 $txt['faq_error_faqCategory_generic'] = 'There was an problem with the category entry';
 
 // Template strings
-$txt['faq_title'] = 'Title';
-$txt['faq_body'] = 'Body';
 $txt['faq_id'] = 'ID';
 $txt['faq_last_edit'] = 'Last Edit';
 $txt['faq_last_edit_by'] = 'By user';

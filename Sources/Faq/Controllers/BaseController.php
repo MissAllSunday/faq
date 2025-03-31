@@ -4,6 +4,7 @@ namespace Faq\Controllers;
 
 use Faq\Faq as Faq;
 use Faq\FaqRequest;
+use Faq\FaqUtils;
 use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqValidation;
 
@@ -13,6 +14,7 @@ abstract class BaseController
     protected ?string $subAction = null;
     protected FaqValidation $validation;
     protected RepositoryInterface $repository;
+    protected FaqUtils $utils;
     protected int $id;
 
     const SUCCESS = 'info';
@@ -22,6 +24,7 @@ abstract class BaseController
     {
         $this->request = $request ?? new FaqRequest();
         $this->validation = $validation ?? new FaqValidation();
+        $this->utils = new FaqUtils();
     }
 
     protected function redirect(string $type = self::ERROR, string $subAction = 'generic'): void
@@ -36,8 +39,6 @@ abstract class BaseController
 
     function showMessage(): string
     {
-        global $txt;
-
         $key = Faq::NAME . '_message';
 
         if (!isset($_SESSION[$key])) {
@@ -45,7 +46,7 @@ abstract class BaseController
         }
 
         $message = explode('_', $_SESSION[$key]);
-        $text = $txt[Faq::NAME . '_' . $_SESSION[$key]];
+        $text = $this->utils->text($_SESSION[$key]);
         unset($_SESSION[$key]);
 
         return '
@@ -77,8 +78,17 @@ abstract class BaseController
         $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = $action . '_' . $this->subAction;
-        $context['page_title'] = $txt[Faq::NAME . '_' . $txtKey . $subAction . '_title'];
+        $context['page_title'] = $this->utils->text($txtKey . $subAction . '_title');
         $context['post_url'] = $scripturl . $actionUrl . $subActionUrl . ';save';
+        $context['linktree'][] = [
+            'url' => $scripturl . $actionUrl,
+            'name' => $this->utils->text('index_title')];
+
+        if ($this->subAction !== 'index') {
+            $context['linktree'][] = [
+                'url' => $scripturl . $actionUrl . $subActionUrl,
+                'name' => $txt[Faq::NAME . '_' . $txtKey . $subAction . '_title']];
+        }
 
         loadCSSFile('faq.css', [], 'smf_faq');
     }
@@ -88,7 +98,7 @@ abstract class BaseController
         return !empty($subAction) && in_array($subAction, $this->getSubActions(), true);
     }
 
-    protected function setTemplateVars(array $vars): void
+    protected function setTemplateVars(array $vars, array $smfContextVars = []): void
     {
         global $context;
 
@@ -97,6 +107,10 @@ abstract class BaseController
         }
 
         $context[Faq::NAME] = array_merge($context[Faq::NAME], ['message' => $this->showMessage()], $vars);
+
+        if (!empty($smfContextVars)) {
+            $context = array_merge($context, $smfContextVars);
+        }
     }
 
     abstract protected function getSubActions() : array;

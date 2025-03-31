@@ -3,7 +3,9 @@
 namespace Faq\Controllers;
 
 use Faq\Entities\FaqEntity;
+use Faq\Faq;
 use Faq\FaqRequest;
+use Faq\FaqUtils;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
 use Faq\Repositories\RepositoryInterface;
@@ -12,25 +14,36 @@ use Faq\Services\FaqList;
 class FaqController extends BaseController
 {
     public const ACTION = 'faq';
+
+    public const SUB_ACTION_INDEX = 'index';
+    public const SUB_ACTION_ADD = 'add';
+    public const SUB_ACTION_DELETE = 'delete';
+    public const SUB_ACTION_SEARCH = 'search';
+    public const SUB_ACTION_SINGLE = 'single';
+    public const SUB_ACTION_MANAGE = 'manage';
+    public const SUB_ACTION_CATEGORY = 'category';
     public const SUB_ACTIONS = [
-        'index',
-        'add',
-        'delete',
-        'search',
-        'single',
-        'manage',
+        self::SUB_ACTION_INDEX,
+       self::SUB_ACTION_ADD,
+       self::SUB_ACTION_DELETE,
+       self::SUB_ACTION_SEARCH,
+       self::SUB_ACTION_SINGLE,
+        self::SUB_ACTION_MANAGE,
+        self::SUB_ACTION_CATEGORY,
     ];
 
     protected RepositoryInterface $repository;
     protected RepositoryInterface $categoryRepository;
+    protected FaqUtils $utils;
 
     public function __construct(
         ?FaqRequest $request = null,
-        ?RepositoryInterface $repository = null,
-        RepositoryInterface $categoryRepository = null)
+        ?FaqRepository $repository = null,
+        CategoryRepository $categoryRepository = null)
     {
         $this->repository = $repository ?? new FaqRepository();
-        $this->categoryRepository = $categoryRepository ?? new CategoryRepository();
+        $this->categoryRepository  = $categoryRepository ?? new CategoryRepository();
+        $this->utils = new FaqUtils();
 
         $this->setTemplateVars([
             'categories' => $this->categoryRepository->getAll(),
@@ -114,7 +127,27 @@ class FaqController extends BaseController
         $context['default_list'] = 'faq_list';
 
         $faqList = new FaqList($this->repository, $this->request->get('start', 0));
-        $faqList->build($this->showMessage());
+        $faqList->build($context[Faq::NAME]['message']);
+    }
+
+    public function category(): void
+    {
+        $id = $this->request->get('cid');
+
+        if (!$id) {
+            $this->redirect('', 'index');
+        }
+
+        $category = $this->categoryRepository->getById($id);
+        $this->setTemplateVars([
+            'entities' => $this->repository->getByCatId($id),
+            'category' => $category,
+        ], [
+            'sub_template' => Faq::NAME . '_index',
+            'page_title' => strtr($this->utils->text('by_category'), [
+                '{categoryName}' => $category->getName(),
+            ]),
+        ]);
     }
 
     protected function buildPreview(array $data): array

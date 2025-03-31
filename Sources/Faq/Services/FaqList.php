@@ -47,7 +47,7 @@ class FaqList
             'id' => self::ID,
 
             'title' => $this->utils->text('$add'),
-            'base_href' => $scripturl . '?action=' . $action,
+            'base_href' => $scripturl . '?action=' . $action . ';sa=manage',
             'items_per_page' => 10,
             'get_count' => [
                 'function' => fn() => $maxIndex,

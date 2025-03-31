@@ -1,21 +1,25 @@
 .mainContent {
-	display: flex;
-	width: 100%;
+	display: block;
 }
 
 .leftSide
 {
-	flex: 1;
+	display: inline-block;
+	vertical-align: top;
+	width: 29%;
+
 }
 
 .rightSide
 {
-	margin-left: 5px;
+	display: inline-block; vertical-align: top;
+	width: 69%;
+	margin-left: 3px;
 }
 
 @media screen and (max-width: 720px){
-	.mainContent {
+	.leftSide, .rightSide {
 		display: inline-block;
-		width: 100%;
+		width: 99%;
 	}
 }
