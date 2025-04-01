@@ -98,6 +98,19 @@ abstract class BaseController
         return !empty($subAction) && in_array($subAction, $this->getSubActions(), true);
     }
 
+    protected function overrideLinkTree(string $name): void
+    {
+        global $context, $scripturl;
+
+        $id = $this->request->get('id');
+        $actionUrl = '?action=' . $this->getAction();
+        $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
+
+        $context['linktree'][array_key_last($context['linktree'])] = [
+            'url' => $scripturl . $actionUrl . $subActionUrl,
+            'name' => $name];
+    }
+
     protected function setTemplateVars(array $vars, array $smfContextVars = []): void
     {
         global $context;

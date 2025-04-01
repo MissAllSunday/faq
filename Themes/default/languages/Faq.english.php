@@ -76,6 +76,7 @@ $txt['faq_settings_search_sub'] = 'This setting needs to be enable to be able to
 $txt['faq_basic_settings'] = 'Basic Settings';
 $txt['faq_edit_page'] = 'Edit the FAQs';
 $txt['faq_manage_title'] = 'Manage FAQs';
+$txt['faq_single_title'] = 'Single FAQ';
 $txt['faq_list_view_all'] = 'View all';
 $txt['faq_manage_desc'] = 'From here you can manage your FAQs, you can edit/delete/add as many as you want, here\'s some descriptions:<br />
 -ID:  its the numeric reference for the faqs, used to manage the faqs without to much problems.<br />

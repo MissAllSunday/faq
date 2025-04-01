@@ -125,50 +125,6 @@ function template_faq_add(): void
     </div>';
 }
 
-function template_faq_single()
-{
-	global $context;
-
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="floatright nopadding" ', $context['Faq']['width'] ,'>';
-
-	// No direct access.
-	if (empty($context['Faq']['single']) || !is_array($context['Faq']['single']))
-		echo '
-		<div class="information">
-			', $txt['Faq_no_valid_id'] ,'
-		</div>';
-
-	else
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="floatleft">', $context['Faq']['single']['link'] ,'</span>
-				<span class="floatright">
-					', $context['Faq']['single']['crud']['edit'] ,'
-					', $context['Faq']['single']['crud']['delete'] ,'
-				</span>
-				<span class="clear" />
-			</h3>
-		</div>
-
-		<div class="windowbg">
-			<div class="content">
-				', $context['Faq']['single']['body'] ,'
-			</div>
-		</div>';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
-}
-
 function template_faq_manage()
 {
 	global $context, $txt, $scripturl;

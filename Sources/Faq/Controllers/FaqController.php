@@ -106,6 +106,26 @@ class FaqController extends BaseController
         $this->setTemplateVars($templateVars);
     }
 
+    public function single(): void
+    {
+        $id = $this->request->get('id');
+
+        if (!$id) {
+            $this->redirect('', 'index');
+        }
+
+        /** @var FaqEntity $entity */
+        $entity = $this->repository->getById($id);
+
+        $this->setTemplateVars([
+            'entities' => [$entity],
+        ], [
+            'sub_template' => Faq::NAME . '_index',
+            'page_title' => $entity->getName(),
+        ]);
+        $this->overrideLinkTree($entity->getName());
+    }
+
     public function delete(): void
     {
         $result = self::ERROR;
@@ -148,6 +168,9 @@ class FaqController extends BaseController
                 '{categoryName}' => $category->getName(),
             ]),
         ]);
+        $this->overrideLinkTree(strtr($this->utils->text('by_category'), [
+            '{categoryName}' => $category->getName(),
+        ]));
     }
 
     protected function buildPreview(array $data): array
