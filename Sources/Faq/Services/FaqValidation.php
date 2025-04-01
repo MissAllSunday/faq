@@ -25,11 +25,14 @@ class FaqValidation
                 $type = $this->entity->getColumns()[$key];
                 $callback = 'is' . ucfirst($type) . 'Expected';
                 $this->{$callback}($value);
+
             }
         } catch (ValidatorError $error) {
             return $error->getMessage();
         } catch (TypeError $error) {
             fatal_lang_error(Faq::NAME .'_'. $error->getMessage(), false);
+
+            return $error->getMessage();
         }
 
         return '';
