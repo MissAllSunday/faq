@@ -2,6 +2,8 @@
 
 namespace Faq;
 
+use Faq\Controllers\FaqController;
+
 class FaqRequest
 {
     protected const HISTORY_LENGTH = 2;
@@ -54,7 +56,7 @@ class FaqRequest
         $key = Faq::NAME . '_history';
 
         if (!isset($_SESSION[$key])) {
-            $_SESSION[$key] = [];
+            $_SESSION[$key][] = FaqController::ACTION . '_index';
         }
 
         if ($actionName ) {

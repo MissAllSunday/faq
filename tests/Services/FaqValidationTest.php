@@ -98,6 +98,9 @@ class FaqValidationTest extends TestCase
         $this->assertEquals('validation_type', $errorReturned);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testInvalidIntType(): void
     {
         $entity = $this->createMock(CategoryEntity::class);
@@ -115,6 +118,9 @@ class FaqValidationTest extends TestCase
         $this->assertEquals('validation_type', $errorReturned);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testEmptyDataValidation(): void
     {
         $entity = $this->createMock(FaqEntity::class);
@@ -128,6 +134,9 @@ class FaqValidationTest extends TestCase
         $this->assertEquals('title, body', $result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testNullValuesAreConsideredMissing(): void
     {
         $entity = $this->createMock(FaqEntity::class);

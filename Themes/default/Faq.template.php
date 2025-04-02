@@ -9,7 +9,7 @@ use Faq\FaqAdmin;
 
 function template_faq_index()
 {
-	global $txt, $context;
+	global $txt, $context, $scripturl;
 
 	$entities = $context[Faq::NAME]['entities'];
 
@@ -39,7 +39,10 @@ function template_faq_index()
             echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="floatleft">', $entity->getTitle() ,'</span>
+					<span class="floatleft">
+					    <a href="'. $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
+                ';id='. $entity->getId() .'">'. $entity->getName() .'</a>
+                    </span>
 					<span class="floatright">
 						', showActions($entity) ,'
 					</span>
