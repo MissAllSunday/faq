@@ -11,17 +11,20 @@ class FaqRoute
     protected ?FaqRequest $request = null;
     protected ?FaqController $faqController;
     protected ?CategoryController $categoryController;
+    protected ?FaqUtils $utils;
 
     // No DI  :(
     public function __construct(
         ?FaqRequest         $request = null,
         ?FaqController      $faqController = null,
-        ?CategoryController $categoryController = null
+        ?CategoryController $categoryController = null,
+        ?FaqUtils            $utils = null
     )
     {
         $this->request = $request ?? new FaqRequest();
         $this->faqController = $faqController ?? new FaqController();
         $this->categoryController = $categoryController ?? new CategoryController();
+        $this->utils = $utils ?? new FaqUtils();
     }
 
     public const ACTIONS = [
@@ -33,7 +36,7 @@ class FaqRoute
     {
         $action = $this->request->get('action');
 
-        if (!$this->isActionValid($action)) {
+        if (!$this->utils->setting(FaqAdmin::SETTINGS_ENABLE) || !$this->isActionValid($action)) {
             return;
         }
 
