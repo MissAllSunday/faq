@@ -44,11 +44,6 @@ class Faq
                 'href' => $this->buildUrl(FaqController::ACTION),
                 'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW),
                 'sub_buttons' => [
-                    'faq_add' => [
-                        'title' => $this->utils->text('add_title'),
-                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTION_ADD),
-                        'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD),
-                    ],
                     'faq_category' => [
                         'title' => $this->utils->text('category_index_title'),
                         'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTION_MANAGE),

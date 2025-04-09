@@ -420,6 +420,5 @@ function showMessage(): void
 {
     global $context;
 
-    var_dump($context[Faq::NAME]['message']);
     echo $context[Faq::NAME]['message'];
 }
