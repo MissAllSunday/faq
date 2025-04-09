@@ -4,7 +4,7 @@ namespace Faq;
 
 use Faq\Controllers\CategoryController;
 use Faq\Controllers\FaqController;
-use Faq\Faq as Faq;
+use Faq\Faq;
 
 class FaqRoute
 {

@@ -69,10 +69,8 @@ $txt['faq_latest'] = 'Latest FAQs';
 
 // Settings strings
 $txt['faq_desc'] = 'This page gathers all possible settings for the FAQ mod';
-$txt['faq_settings_enable'] = 'Enable the FAQ mod';
-$txt['faq_settings_enable_sub'] = 'This is the master setting, needs to be enable for the mod to work properly.';
-$txt['faq_settings_search'] = 'Enable searching on FAQs';
-$txt['faq_settings_search_sub'] = 'This setting needs to be enable to be able to perform searches, users still need to have the proper permission to be able to search.';
+$txt['faq_enable'] = 'Enable the FAQ mod';
+$txt['faq_enable_sub'] = 'This is the master setting, needs to be enable for the mod to work properly.';
 $txt['faq_basic_settings'] = 'Basic Settings';
 $txt['faq_edit_page'] = 'Edit the FAQs';
 $txt['faq_manage_title'] = 'Manage FAQs';
@@ -83,7 +81,7 @@ $txt['faq_manage_desc'] = 'From here you can manage your FAQs, you can edit/dele
 -Title: the name for the faq.<br />
 -CategoryController: The category where this faq is hosted.<br />
 -Log: A link to a separate page with info a bout the FAQ, shows who has edited the FAQ and the last time they did it.<br />';
-$txt['faq_manage_category'] = 'Manage Categories';
+$txt['faq_category_manage_title'] = 'Manage Categories';
 $txt['faq_manage_category_desc'] = 'From here you can manage your categories, you can edit/delete/add as many as you want.<br />';
 $txt['faq_admin_settings'] = 'FAQ settings';
 $txt['faq_admin_permissions'] = 'FAQ permissions';
@@ -110,16 +108,10 @@ $txt['faq_menu_position'] = 'Select the position for the FAQ button in the menu'
 $txt['faq_menu_position_sub'] = 'By default is next to home.';
 $txt['faq_care'] = 'Show the mod author\'s copyright at the bottom of the FAQ page?';
 $txt['faq_care_sub'] = 'If checked, the copyright will be displayed only in the FAQ page, at the bottom, this will help the mod author to provide more useful and free mods.';
-$txt['faq_use_javascript'] = 'Use Javascript to hide the body?';
-$txt['faq_use_javascript_sub'] = 'If enable, this mod will use javascript to hide the FAQ content, this is useful if you have multiple FAQs and want to save some space, to show the content just click on the FAQ title/question.';
-$txt['faq_search_engines'] = 'Do not let search engines index the Faq page';
-$txt['faq_search_engines_sub'] = 'If checked, this mod will place a metatag to discourage search engines from indexing the FAQ page.';
-$txt['faq_sidebar_side'] = 'Show the side bar at left?';
-$txt['faq_sidebar_side_sub'] = 'By default, the side bar is showed at right side, if you check this option it will appear at left side.';
-$txt['faq_sidebar_size'] = 'Size of the FAQs';
-$txt['faq_sidebar_size_sub'] = 'The width size in percentage % for the FAQs,  the larger the FAQs the smaller will be the side bar, for example, if you set up a width of 50%  then the side bar will have a width of 48%,  enter just the number.<br /> By default is 80 for the FAQs, 18 for the sidebar.';
+$txt['faq_use_js'] = 'Use Javascript to hide the body?';
+$txt['faq_use_js_sub'] = 'If enable, this mod will use javascript to hide the FAQ content, this is useful if you have multiple FAQs and want to save some space, to show the content just click on the FAQ title/question.';
 $txt['faq_categories_list'] = 'FAQs within category ';
-$txt['faq_searc_results'] = 'Search results for ';
+$txt['faq_search_results'] = 'Search results for ';
 
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';
@@ -167,10 +159,9 @@ $txt['faq_delete_title'] = 'Deleting an entry...';
 // Permissions strings
 $txt['permissiongroup_simple_faq_per_simple'] = 'FAQ mod permissions';
 $txt['permissiongroup_faq_per_classic'] = 'FAQ mod permissions';
-$txt['permissionname_faq_search'] = 'Search FAQs';
-$txt['permissionname_faq_view'] = 'View any FAQs';
-$txt['permissionname_faq_add'] = 'Add|Edit FAQs';
-$txt['permissionname_faq_delete'] = 'Delete any FAQs';
+$txt['permissionname_faq_view'] = 'View any FAQs / Categories';
+$txt['permissionname_faq_add'] = 'Add|Edit FAQs / Categories';
+$txt['permissionname_faq_delete'] = 'Delete any FAQs / Categories';
 
 // Who's online strings
 $txt['whoall_faq'] = 'Viewing the <a href="'. $scripturl. '?action=faq">FAQ page</a>.';

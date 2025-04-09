@@ -60,7 +60,14 @@ class FaqRequest
         }
 
         if ($actionName ) {
-            $toCompare = $actionName . '_'. $this->get('sa', '');
+            $toCompare = $actionName . '_'. $this->get('sa', 'index');
+
+            // Need to attach an ID?
+            $id = $this->get('id', null);
+
+            if ($id) {
+                $toCompare .= '_' . $id;
+            }
 
             if (!isset($_SESSION[$key][1]) || ($_SESSION[$key][1] !== $toCompare)) {
                 $_SESSION[$key][]  = $toCompare;

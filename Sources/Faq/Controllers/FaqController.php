@@ -152,7 +152,7 @@ class FaqController extends BaseController
 
     public function category(): void
     {
-        $id = $this->request->get('cid');
+        $id = $this->request->get('id');
 
         if (!$id) {
             $this->redirect('', 'index');

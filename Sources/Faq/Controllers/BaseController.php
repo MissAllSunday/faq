@@ -32,7 +32,8 @@ abstract class BaseController
         $action = $this->getAction();
         $history = explode('_', $this->request->history()[0]);
         $_SESSION[Faq::NAME . '_message'] = $type . '_' . $action . '_' . $subAction;
-        $sa = !empty($history[1]) ? ';sa=' . $history[1] : '';
+        $id = !empty($history[2]) ? ';id=' . $history[2] : '';
+        $sa = !empty($history[1]) ? (';sa=' . $history[1] . $id) : '';
 
         redirectexit('action=' . $history[0] . $sa);
     }

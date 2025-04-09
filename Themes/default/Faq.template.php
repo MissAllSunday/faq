@@ -283,7 +283,7 @@ function showSideBar(): void
             echo '
 					<li>
 						<a href="'. $scripturl .'?action=' . FaqController::ACTION .
-                ';sa=' . FaqController::SUB_ACTION_CATEGORY . ';cid='. $category->getId() .'">'. $category->getName() .'</a>
+                ';sa=' . FaqController::SUB_ACTION_CATEGORY . ';id='. $category->getId() .'">'. $category->getName() .'</a>
 					</li>';
         }
 
@@ -420,5 +420,6 @@ function showMessage(): void
 {
     global $context;
 
+    var_dump($context[Faq::NAME]['message']);
     echo $context[Faq::NAME]['message'];
 }

@@ -17,12 +17,10 @@ class FaqAdmin
     public const PERMISSION_ADD = 'add';
 
     public const PERMISSION_EDIT = 'edit';
-    public const PERMISSION_SEARCH = 'search';
     public const PERMISSIONS = [
         self::PERMISSION_VIEW,
         self::PERMISSION_DELETE,
         self::PERMISSION_ADD,
-        self::PERMISSION_SEARCH,
         self::PERMISSION_EDIT,
     ];
     public const SETTINGS_ENABLE = 'enable';
@@ -83,10 +81,10 @@ class FaqAdmin
     {
         $configVars = [
             ['check', Faq::NAME . '_enable','subtext' => $this->utils->text('enable_sub')],
-            ['int', Faq::NAME .'_num_faqs', 'size' => 3, 'subtext' => $this->utils->text('num_faqs_sub')],
-            ['check', Faq::NAME .'_show_catlist', 'subtext' => $this->utils->text('show_catlist_sub')],
-            ['int', Faq::NAME .'_show_latest', 'size' => 3, 'subtext' => $this->utils->text('show_latest_sub')],
-            ['select', Faq::NAME .'_sort_method',
+            ['int', Faq::NAME .'_'. self::SETTINGS_PAGINATION, 'size' => 3, 'subtext' => $this->utils->text('num_faqs_sub')],
+            ['check', Faq::NAME .'_'. self::SETTINGS_SHOW_CAT_LIST, 'subtext' => $this->utils->text('show_catlist_sub')],
+            ['int', Faq::NAME .'_'. self::SETTINGS_SHOW_LATEST, 'size' => 3, 'subtext' => $this->utils->text('show_latest_sub')],
+            ['select', Faq::NAME .'_'. self::SETTINGS_SORT_METHOD,
                 [
                     'id' => $this->utils->text('id'),
                     'title' => $this->utils->text('title'),
@@ -95,7 +93,7 @@ class FaqAdmin
                 ],
                 'subtext' => $this->utils->text('sort_method_sub')
             ],
-            ['select', Faq::NAME .'_menu_position',
+            ['select', Faq::NAME .'_'. self::SETTINGS_MENU_POSITION,
                 [
                     'home' => $this->utils->smfText('home'),
                     'help' => $this->utils->smfText('help'),
@@ -105,8 +103,8 @@ class FaqAdmin
                 ],
                 'subtext' => $this->utils->text('menu_position_sub')
             ],
-            ['check', Faq::NAME .'_use_js', 'subtext' => $this->utils->text('use_j_sub')],
-            ['check', Faq::NAME .'_care', 'subtext' => $this->utils->text('care_sub')],
+            ['check', Faq::NAME .'_'. self::SETTINGS_USE_JS, 'subtext' => $this->utils->text('use_js_sub')],
+            ['check', Faq::NAME .'_'. self::SETTINGS_CARE, 'subtext' => $this->utils->text('care_sub')],
 
         ];
 
