@@ -33,7 +33,7 @@ class FaqController extends BaseController
     ];
 
     protected RepositoryInterface $repository;
-    protected RepositoryInterface $categoryRepository;
+    protected CategoryRepository $categoryRepository;
     protected FaqUtils $utils;
 
     public function __construct(
@@ -57,6 +57,29 @@ class FaqController extends BaseController
         $this->setTemplateVars([
             'entities' => $this->repository->getAll(),
         ]);
+    }
+
+    public function search(): void
+    {
+        if (!$this->request->isPost()) {
+            $this->redirect('', 'index');
+        }
+
+        $searchValue = $this->request->get('search_value');
+
+        if (empty($searchValue)) {
+            $this->redirect(self::ERROR, 'index');
+        }
+
+        $title = strtr($this->utils->text('search_title'),
+            ['{searchValue}' => $searchValue]);
+        $this->setTemplateVars([
+            'entities' => $this->repository->searchBy($searchValue),
+        ], [
+            'sub_template' => Faq::NAME . '_index',
+            'page_title' => $title,
+        ]);
+        $this->overrideLinkTree($title);
     }
 
     public function add(): void

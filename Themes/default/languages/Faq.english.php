@@ -111,7 +111,7 @@ $txt['faq_care_sub'] = 'If checked, the copyright will be displayed only in the 
 $txt['faq_use_js'] = 'Use Javascript to hide the body?';
 $txt['faq_use_js_sub'] = 'If enable, this mod will use javascript to hide the FAQ content, this is useful if you have multiple FAQs and want to save some space, to show the content just click on the FAQ title/question.';
 $txt['faq_categories_list'] = 'FAQs within category ';
-$txt['faq_search_results'] = 'Search results for ';
+$txt['faq_search_title'] = 'Search results for {searchValue}';
 
 // Error strings
 $txt['faq_error_enable'] = 'The FAQ mod is not enable.';

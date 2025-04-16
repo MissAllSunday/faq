@@ -182,6 +182,5 @@ class FaqAdmin
                 sprintf($templateName, 'per_' . $simple),
             ];
         }
-
 	}
 }

@@ -28,4 +28,20 @@ class FaqRepository extends BaseRepository
 
         return $this->prepareData($request);
     }
+
+    /* @return array[EntityInterface] */
+    public function searchBy(string $searchValue): array
+    {
+        $request = $this->db['db_query']('', '
+		SELECT ' . (implode(',', $this->getColumns())) . '
+		FROM {db_prefix}' . $this->getTable() . '
+		WHERE '. FaqEntity::TITLE .' LIKE {string:searchValue}
+		    OR '. FaqEntity::BODY .' LIKE {string:searchValue}',
+            [
+                'searchValue' => '%'. $searchValue .'%'
+            ]
+        );
+
+        return $this->prepareData($request);
+    }
 }

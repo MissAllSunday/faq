@@ -70,8 +70,6 @@ function template_faq_add(): void
 
     $entity = $context[Faq::NAME]['entity'];
 
-    showMessage();
-
     if (!empty($context[Faq::NAME]['errors'])) {
         showErrors($context[Faq::NAME]['errors']);
     }
@@ -128,141 +126,44 @@ function template_faq_add(): void
     </div>';
 }
 
-function template_faq_manage()
-{
-	global $context, $txt, $scripturl;
-
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="rightSide">';
-
-	template_show_list('faq_manage');
-
-	echo '
-	</div>';
-}
-
-function template_faq_list()
-{
-	global $txt, $context, $scripturl, $modSettings;
-
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="floatright nopadding">';
-
-	/* No direct access */
-	if (empty($context['Faq']['all']) || !is_array($context['Faq']['all']))
-		echo '
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">
-				', $txt['lyrics_error_no_valid_action'] ,'
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>';
-
-	else
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $context['page_title'] ,'</span>
-			</h3>
-		</div>
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">';
-
-		/* List */
-		echo '
-					<ul class="reset">';
-
-		foreach($context['Faq']['all'] as $all)
-			echo '
-						<li>
-							', $all['link'] ,'
-						</li>';
-
-		echo '
-					</ul>';
-
-		echo '
-			</div>
-			<span class="botslice"><span></span></span>
-		</div><br />';
-
-	/* Pagination */
-	if(!empty($context['page_index']))
-		echo '
-		<div style="text-align:center;">', $context['page_index'] ,'</div>';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
-}
-
-function faq_header()
-{
-	global $txt, $scripturl, $context, $settings, $modSettings;
-
-	// Create a link for managing faq.
-	$memberlist_buttons = array(
-		'manage' => array('text' => 'Faq_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manage', 'active'=> false),
-		'manageCat' => array('text' => 'Faq_manage_categories', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manageCat', 'active'=> false),
-	);
-
-	// Any message to display?
-	if (!empty($context['Faq']['update']))
-		foreach ($context['Faq']['update'] as $key => $message)
-			echo
-		'<div class="', $key ,'box">
-			', $message ,'
-		</div>';
-
-	echo '
-		<div class="pagesection">
-			', allowedTo(array('faq_edit', 'faq_delete', 'faq_add')) ? template_button_strip($memberlist_buttons, 'right') : '', '
-		</div>';
-
-	echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="floatleft">', $txt['Faq_main'] ,'</span>';
-
-	if (allowedTo('faq_search'))
-		echo '
-				<object id="quick_search">
-					<form action="', $scripturl, '?action=Faq;sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
-						<span class="generic_icons filter centericon"></span>
-						<input type="text" name="l_search_value" value="', $txt['search'] , '" onclick="if (this.value == \'', $txt['search'] , '\') this.value = \'\';" class="input_text" />
-						<select name="l_column">
-							<option value="body" selected="selected">', $txt['Faq_body'] ,'</option>
-							<option value="title">', $txt['Faq_title'] ,'</option>
-						</select>
-						<input type="submit" name="search_go" id="search_go" value="', $txt['search'] , '" class="button_submit" />
-					</form>
-				</object>';
-
-	echo '
-			</h3>
-		</div>';
-}
-
 function showSideBar(): void
 {
 	global $context, $scripturl, $txt, $modSettings;
     
 	echo '
 	<div class="leftSide" >';
+
+    if (allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW)) {
+        echo '
+		<div class="cat_bar">
+			<h3 class="catbg">
+				<span class="ie6_header floatleft">', $txt['search'] ,'</span>
+			</h3>
+		</div>
+		<div class="information">
+			<div class="content">
+                <object id="quick_search">
+                    <form action="', $scripturl ,'?action=', FaqController::ACTION ,';sa=', FaqController::SUB_ACTION_SEARCH ,'" 
+                    method="post" accept-charset="UTF-8" class="admin_search">
+                        <span class="generic_icons filter centericon"></span>
+                        <input 
+                            type="text"
+                            name="search_value"
+                            value=""
+                            class="input_text"
+                            required
+                        />
+                        <input 
+                            type="submit" 
+                            name="search" 
+                            id="search"
+                            value="', $txt['search'] , '" 
+                            class="button_submit" />
+                    </form>
+                </object>
+            </div>
+        </div>';
+    }
 
 	// Show a nice category list.
 	if (!empty($modSettings['faq_show_catlist']))
@@ -299,7 +200,7 @@ function showSideBar(): void
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['Faq_latest'] ,'</span>
+				<span class="ie6_header floatleft">', $txt[Faq::NAME .'_latest'] ,'</span>
 			</h3>
 		</div>
 
