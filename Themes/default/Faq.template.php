@@ -231,12 +231,12 @@ function showActions(FaqEntity $entity): string
     global $txt, $scripturl;
 
     return implode(' | ', array_map(function($action) use ($txt, $entity, $scripturl) {
-        $subAction = $action === 'edit' ? 'add' :  $action;
-        $url = $scripturl . '?action=' . Faq::NAME . ';sa='. $subAction .';id='. $entity->getId();
+        $textKey = $action === 'add' ? 'edit' :  $action;
+        $url = $scripturl . '?action=' . Faq::NAME . ';sa='. $action .';id='. $entity->getId();
 
         return allowedTo(Faq::NAME . '_' . $action) ?
             '<a href="'. $url .'" class="you_sure">
-                '. $txt['faq_' . $action] .'</a>' :
+                '. $txt['faq_' . $textKey] .'</a>' :
             '';
     }, [
         FaqAdmin::PERMISSION_DELETE,
