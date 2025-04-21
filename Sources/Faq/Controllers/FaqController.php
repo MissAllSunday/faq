@@ -4,6 +4,7 @@ namespace Faq\Controllers;
 
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
+use Faq\FaqAdmin;
 use Faq\FaqRequest;
 use Faq\FaqUtils;
 use Faq\Repositories\CategoryRepository;
@@ -54,6 +55,8 @@ class FaqController extends BaseController
 
     public function index(): void
     {
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
+
         $this->setTemplateVars([
             'entities' => $this->repository->getAll(),
         ]);
@@ -64,6 +67,8 @@ class FaqController extends BaseController
         if (!$this->request->isPost()) {
             $this->redirect('', 'index');
         }
+
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
 
         $searchValue = $this->request->get('search_value');
 
@@ -88,6 +93,8 @@ class FaqController extends BaseController
 
         // Needed for the WYSIWYG editor.
         require_once($sourcedir . '/Subs-Editor.php');
+
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD);
 
         $id = $this->request->get('id');
         $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
@@ -137,6 +144,8 @@ class FaqController extends BaseController
             $this->redirect('', 'index');
         }
 
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
+
         /** @var FaqEntity $entity */
         $entity = $this->repository->getById($id);
 
@@ -154,6 +163,8 @@ class FaqController extends BaseController
         $result = self::ERROR;
         $id = $this->request->get('id');
 
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE);
+
         if ($id) {
             $this->repository->delete([$id]);
             $result = self::SUCCESS;
@@ -165,6 +176,8 @@ class FaqController extends BaseController
     public function manage(): void
     {
         global $context;
+
+        isAllowedTo([Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD, Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]);
 
         $context['sub_template'] = 'show_list';
         $context['default_list'] = 'faq_list';
@@ -180,6 +193,8 @@ class FaqController extends BaseController
         if (!$id) {
             $this->redirect('', 'index');
         }
+
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
 
         $category = $this->categoryRepository->getById($id);
         $this->setTemplateVars([

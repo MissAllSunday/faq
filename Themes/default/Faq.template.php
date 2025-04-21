@@ -240,7 +240,7 @@ function showActions(FaqEntity $entity): string
             '';
     }, [
         FaqAdmin::PERMISSION_DELETE,
-        FaqAdmin::PERMISSION_EDIT
+        FaqAdmin::PERMISSION_ADD
     ]));
 }
 

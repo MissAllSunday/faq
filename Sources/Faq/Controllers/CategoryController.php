@@ -5,6 +5,7 @@ namespace Faq\Controllers;
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
+use Faq\FaqAdmin;
 use Faq\FaqRequest;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\RepositoryInterface;
@@ -35,6 +36,8 @@ class CategoryController extends BaseController
     {
         global $context;
 
+        isAllowedTo([Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD, Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]);
+
         $context['sub_template'] = 'show_list';
         $context['default_list'] = 'faq_list';
 
@@ -44,9 +47,9 @@ class CategoryController extends BaseController
 
     public function add(): void
     {
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD);
 
         $id = $this->request->get('id');
-
         $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
         $templateVars = [
             'entity' => $entity,
@@ -79,6 +82,8 @@ class CategoryController extends BaseController
         if (!$id) {
             $this->redirect();
         }
+
+        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE);
 
         // Can't delete the default one
         if ($id === CategoryEntity::DEFAULT_CATEGORY_ID) {
