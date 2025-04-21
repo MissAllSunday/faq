@@ -33,7 +33,7 @@ abstract class BaseController
         $history = explode('_', $this->request->history()[0]);
         $_SESSION[Faq::NAME . '_message'] = $type . '_' . $action . '_' . $subAction;
         $id = !empty($history[2]) ? ';id=' . $history[2] : '';
-        $sa = !empty($history[1]) ? (';sa=' . $history[1] . $id) : '';
+        $sa = (!empty($history[1]) && $history[1] !== 'index') ? (';sa=' . $history[1] . $id) : '';
 
         redirectexit('action=' . $history[0] . $sa);
     }
@@ -120,7 +120,11 @@ abstract class BaseController
             $context[Faq::NAME] = [];
         }
 
-        $context[Faq::NAME] = array_merge($context[Faq::NAME], ['message' => $this->showMessage()], $vars);
+        if (empty($context[Faq::NAME]['message'])) {
+            $context[Faq::NAME]['message'] = $this->showMessage();
+        }
+
+        $context[Faq::NAME] = array_merge($context[Faq::NAME], $vars);
 
         if (!empty($smfContextVars)) {
             $context = array_merge($context, $smfContextVars);
