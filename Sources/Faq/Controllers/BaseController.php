@@ -80,7 +80,7 @@ abstract class BaseController
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = $action . '_' . $this->subAction;
         $context['page_title'] = $this->utils->text($txtKey . $subAction . '_title');
-        $context['post_url'] = $scripturl . $actionUrl . $subActionUrl . ';save';
+        $context['current_url'] = $scripturl . $actionUrl . $subActionUrl;
         $context['linktree'][] = [
             'url' => $scripturl . $actionUrl,
             'name' => $this->utils->text('index_title')];

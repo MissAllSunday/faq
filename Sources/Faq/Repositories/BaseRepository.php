@@ -5,17 +5,21 @@ namespace Faq\Repositories;
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\EntityInterface;
 use Faq\Entities\FaqEntity;
+use Faq\FaqAdmin;
+use Faq\FaqUtils;
 
 abstract class BaseRepository implements RepositoryInterface
 {
     protected $db;
     protected FaqEntity | CategoryEntity $entity;
+    protected FaqUtils $utils;
 
     public function __construct()
     {
         global $smcFunc;
 
         $this->db = $smcFunc;
+        $this->utils = new FaqUtils();
     }
 
     public function insert(array $entityData): FaqEntity | CategoryEntity
@@ -115,20 +119,37 @@ abstract class BaseRepository implements RepositoryInterface
         return $countTotal;
     }
 
-    public function getAll(int $start = 0, $maxIndex = 10): array
+    public function getAll(int $start = 0, string $paginationUrl = ''): array
     {
-        //TODO pagination
-        return $this->prepareData($this->db['db_query'](
-            '',
-            'SELECT ' . (implode(',', $this->getColumns())) . '
+        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION);
+        $total = $this->count();
+        $maxIndex = $limit ?: $total;
+
+        return [
+            'entities' => $this->prepareData($this->db['db_query'](
+                '',
+                'SELECT ' . (implode(',', $this->getColumns())) . '
 			FROM {db_prefix}{raw:from}
 			LIMIT {int:start}, {int:maxIndex}',
-            [
-                'from' => $this->getTable(),
-                'start' => $start,
-                'maxIndex' => $maxIndex
-            ]
-        ));
+                [
+                    'from' => $this->getTable(),
+                    'start' => $start,
+                    'maxIndex' => $maxIndex
+                ]
+            )),
+            'pagination' => !empty($paginationUrl) ?
+                $this->buildPagination($start, $total, $paginationUrl) : ''
+        ];
+    }
+
+    protected function buildPagination(int $start, int $maxIndex, string $paginationUrl): string
+    {
+       return constructPageIndex(
+            $paginationUrl,
+            $start,
+            $maxIndex,
+            $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION)
+        );
     }
 
     protected function buildSetUpdate(array $entityData = []): string

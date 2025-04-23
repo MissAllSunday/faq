@@ -6,6 +6,7 @@ use Faq\Controllers\CategoryController;
 use Faq\Controllers\FaqController;
 use Faq\Entities\CategoryEntity;
 use Faq\Faq;
+use Faq\FaqAdmin;
 use Faq\FaqUtils;
 use Faq\Repositories\RepositoryInterface;
 
@@ -48,12 +49,12 @@ class FaqList
 
             'title' => $this->utils->text('$add'),
             'base_href' => $scripturl . '?action=' . $action . ';sa=manage',
-            'items_per_page' => 10,
+            'items_per_page' => $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION),
             'get_count' => [
                 'function' => fn() => $maxIndex,
             ],
             'get_items' => [
-                'function' => fn($start, $maxIndex) => $this->repository->getAll($start, $maxIndex),
+                'function' => fn($start, $maxIndex) => $this->repository->getAll($start, $maxIndex)['entities'],
                 'params' => [
                     $start,
                     $maxIndex,

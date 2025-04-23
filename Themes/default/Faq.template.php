@@ -55,9 +55,7 @@ function template_faq_index()
 			</div>
 			<br />';
 
-        // Pagination.
-        if (!empty($context['page_index']))
-            echo $context['page_index'];
+        showPagination();
     }
 
     echo '</div>
@@ -322,4 +320,16 @@ function showMessage(): void
     global $context;
 
     echo $context[Faq::NAME]['message'];
+}
+
+function showPagination(): void
+{
+    global $context;
+
+    if (!empty($context[Faq::NAME]['pagination'])) {
+        echo '
+        <div class="pagesection">
+            <div class="pagelinks floatleft">', $context[Faq::NAME]['pagination'] ,'</div>
+        </div>';
+    }
 }

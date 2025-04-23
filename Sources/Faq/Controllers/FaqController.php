@@ -47,7 +47,7 @@ class FaqController extends BaseController
         $this->utils = new FaqUtils();
 
         $this->setTemplateVars([
-            'categories' => $this->categoryRepository->getAll(),
+            'categories' => $this->categoryRepository->getAll()['entities'],
         ]);
 
         parent::__construct($request);
@@ -55,11 +55,12 @@ class FaqController extends BaseController
 
     public function index(): void
     {
+        global $context;
+
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
 
-        $this->setTemplateVars([
-            'entities' => $this->repository->getAll(),
-        ]);
+        $start = $this->request->get('start', 0);
+        $this->setTemplateVars($this->repository->getAll($start, $context['current_url'], $start));
     }
 
     public function search(): void
@@ -109,7 +110,7 @@ class FaqController extends BaseController
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
             
             if ($this->request->isSet('preview')) {
-                $templateVars['preview'] = $this->buildPreview($data);
+                $templateVars['preview'] = $this->utils->parse($data);
             }
 
             $entity->setEntity($data);
@@ -209,22 +210,6 @@ class FaqController extends BaseController
         $this->overrideLinkTree(strtr($this->utils->text('by_category'), [
             '{categoryName}' => $category->getName(),
         ]));
-    }
-
-    protected function buildPreview(array $data): array
-    {
-        global $sourcedir;
-
-        require_once($sourcedir.'/Subs-Post.php');
-
-        $data['title'] = $data['title'] ?? '';
-        $data['body'] = $data['body'] ?? '';
-
-        censorText($data['title']);
-        preparsecode($data['body'], true);
-        $data['body'] = parse_bbc($data['body']);
-
-        return $data;
     }
 
     protected function upsertLog($logs = []) :string
