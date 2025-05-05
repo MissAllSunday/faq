@@ -112,7 +112,7 @@ class FaqController extends BaseController
         $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
         $templateVars = [
             'entity' => $entity,
-            'categories' => $this->categoryRepository->getAll(),
+            'categories' => $this->categoryRepository->getAll()['entities'],
             'errors' => '',
             'preview' => [],
         ];
