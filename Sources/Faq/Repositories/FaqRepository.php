@@ -21,7 +21,8 @@ class FaqRepository extends BaseRepository
         $queryString = '
 		SELECT ' . (implode(',', $this->getColumns())) . '
 		FROM {db_prefix}' . $this->getTable() . '
-		WHERE '. FaqEntity::CAT_ID .' = {int:id}';
+		WHERE '. FaqEntity::CAT_ID .' = {int:id}'
+            . $this->buildOrderBy();
         $params = [
             'id' => $id,
         ];
@@ -42,7 +43,8 @@ class FaqRepository extends BaseRepository
 		SELECT ' . (implode(',', $this->getColumns())) . '
 		FROM {db_prefix}' . $this->getTable() . '
 		WHERE '. FaqEntity::TITLE .' LIKE {string:searchValue}
-		    OR '. FaqEntity::BODY .' LIKE {string:searchValue}';
+		    OR '. FaqEntity::BODY .' LIKE {string:searchValue}'
+            . $this->buildOrderBy();
         $params = [
             'searchValue' => '%'. $searchValue .'%',
         ];

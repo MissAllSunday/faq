@@ -25,6 +25,7 @@ class FaqAdmin
     public const SETTINGS_SHOW_CAT_LIST = 'show_catlist';
     public const SETTINGS_SHOW_LATEST = 'show_latest';
     public const SETTINGS_SORT_METHOD = 'sort_method';
+    public const SETTINGS_SORT_ORDER = 'sort_order';
     public const SETTINGS_MENU_POSITION = 'menu_position';
     public const SETTINGS_USE_JS = 'use_js';
     public const SETTINGS_CARE = 'care';
@@ -85,10 +86,16 @@ class FaqAdmin
                 [
                     'id' => $this->utils->text('id'),
                     'title' => $this->utils->text('title'),
-                    'cat_id' => $this->utils->text('byCat'),
-                    'body' => $this->utils->text('body'),
+                    'cat_id' => $this->utils->text('category'),
                 ],
                 'subtext' => $this->utils->text('sort_method_sub')
+            ],
+            ['select', Faq::NAME .'_'. self::SETTINGS_SORT_ORDER,
+                [
+                    'ASC' => $this->utils->text('sort_order_asc'),
+                    'DESC' => $this->utils->text('sort_order_desc'),
+                ],
+                'subtext' => $this->utils->text('sort_order_sub')
             ],
             ['select', Faq::NAME .'_'. self::SETTINGS_MENU_POSITION,
                 [

@@ -13,6 +13,8 @@ abstract class BaseRepository implements RepositoryInterface
     protected $db;
     protected FaqEntity | CategoryEntity $entity;
     protected FaqUtils $utils;
+    protected string $sortMethod;
+    protected string $sortOrder;
 
     public function __construct()
     {
@@ -20,6 +22,8 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->db = $smcFunc;
         $this->utils = new FaqUtils();
+        $this->sortMethod = $this->utils->setting(FaqAdmin::SETTINGS_SORT_METHOD, 'id');
+        $this->sortOrder = $this->utils->setting(FaqAdmin::SETTINGS_SORT_ORDER, 'ASC');
     }
 
     public function insert(array $entityData): FaqEntity | CategoryEntity
@@ -72,7 +76,8 @@ abstract class BaseRepository implements RepositoryInterface
         $request = $this->db['db_query']('', '
 		SELECT ' . (implode(',', $this->getColumns())) . '
 		FROM {db_prefix}' . $this->getTable() . '
-		WHERE '. $indexName .' = {int:id}',
+		WHERE '. $indexName .' = {int:id}'
+            . $this->buildOrderBy(),
             [
                 'id' => $id
             ]
@@ -121,7 +126,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $queryStringCount = $queryString = '
             SELECT ' . (implode(',', $this->getColumns())) . '
-			FROM {db_prefix}' . $this->getTable();
+			FROM {db_prefix}' . $this->getTable()
+            . $this->buildOrderBy();
         $params = [];
 
         if ($needsPagination) {
@@ -172,6 +178,12 @@ abstract class BaseRepository implements RepositoryInterface
         }
 
         return rtrim($set, ',');
+    }
+
+    protected function buildOrderBy(): string
+    {
+        return '
+        ORDER BY ' . $this->sortMethod . ' ' . $this->sortOrder;
     }
 
     /* @return array[EntityInterface] */
