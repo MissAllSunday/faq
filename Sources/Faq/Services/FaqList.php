@@ -30,8 +30,8 @@ class FaqList
     {
         global $scripturl;
 
-        $maxIndex = $this->repository->count();
         $start = $this->start;
+        $data = $this->repository->getAll(true, $start);
         $anchor = '<a href="{href}" class="you_sure">{title}</a>';
 
         switch ($this->repository->getTable()) {
@@ -46,19 +46,14 @@ class FaqList
 
         $listOptions = [
             'id' => self::ID,
-
             'title' => $this->utils->text('$add'),
             'base_href' => $scripturl . '?action=' . $action . ';sa=manage',
-            'items_per_page' => $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION),
+            'items_per_page' => $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION, 0),
             'get_count' => [
-                'function' => fn() => $maxIndex,
+                'value' => $data['total'],
             ],
             'get_items' => [
-                'function' => fn($start, $maxIndex) => $this->repository->getAll($start, $maxIndex)['entities'],
-                'params' => [
-                    $start,
-                    $maxIndex,
-                ],
+                'value' => $data['entities'],
             ],
             'no_items_label' => $this->utils->text('no_search_results'),
             'columns' => [
@@ -127,11 +122,5 @@ class FaqList
         require_once($sourcedir . '/Subs-List.php');
 
 		createList($listOptions);
-    }
-
-    protected function getStringByType(string $textKey): string
-    {
-
-        return $this->utils->text($textKey);
     }
 }

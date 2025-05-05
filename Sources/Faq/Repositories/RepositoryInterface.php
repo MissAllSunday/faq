@@ -9,7 +9,9 @@ interface RepositoryInterface
 {
     public function count(): int;
 
-    public function getAll(int $start = 0, string $paginationUrl = ''): array;
+    public function getAll($needsPagination = true, int $start = 0): array;
+
+    public function buildPagination(int $start, string $paginationUrl): string;
 
     public function getTable(): string;
 

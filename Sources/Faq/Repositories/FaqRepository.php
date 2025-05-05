@@ -4,6 +4,7 @@ namespace Faq\Repositories;
 
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
+use Faq\FaqAdmin;
 
 class FaqRepository extends BaseRepository
 {
@@ -15,33 +16,44 @@ class FaqRepository extends BaseRepository
     }
 
     /* @return array[EntityInterface] */
-    public function getByCatId(int $id): array
+    public function getByCatId(int $id, int $start = 0): array
     {
-        $request = $this->db['db_query']('', '
+        $queryString = '
 		SELECT ' . (implode(',', $this->getColumns())) . '
 		FROM {db_prefix}' . $this->getTable() . '
-		WHERE '. FaqEntity::CAT_ID .' = {int:id}',
-            [
-                'id' => $id
-            ]
+		WHERE '. FaqEntity::CAT_ID .' = {int:id}';
+        $params = [
+            'id' => $id,
+        ];
+        $request = $this->db['db_query']('', $queryString . '
+		{raw:limitQuery}', array_merge($params, ['limitQuery' => $this->buildLimitQuery($start)])
         );
 
-        return $this->prepareData($request);
+        return [
+            'total' => $this->count($queryString, $params),
+            'entities' => $this->prepareData($request),
+        ];
     }
 
     /* @return array[EntityInterface] */
-    public function searchBy(string $searchValue): array
+    public function searchBy(string $searchValue, int $start = 0): array
     {
-        $request = $this->db['db_query']('', '
+        $queryString = '
 		SELECT ' . (implode(',', $this->getColumns())) . '
 		FROM {db_prefix}' . $this->getTable() . '
 		WHERE '. FaqEntity::TITLE .' LIKE {string:searchValue}
-		    OR '. FaqEntity::BODY .' LIKE {string:searchValue}',
-            [
-                'searchValue' => '%'. $searchValue .'%'
-            ]
+		    OR '. FaqEntity::BODY .' LIKE {string:searchValue}';
+        $params = [
+            'searchValue' => '%'. $searchValue .'%',
+        ];
+
+        $request = $this->db['db_query']('',$queryString . '{raw:limitQuery}',
+            array_merge($params, ['limitQuery' => $this->buildLimitQuery($start)])
         );
 
-        return $this->prepareData($request);
+        return [
+            'total' => $this->count($queryString, $params),
+            'entities' => $this->prepareData($request),
+        ];
     }
 }

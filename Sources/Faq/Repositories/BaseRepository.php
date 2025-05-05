@@ -106,50 +106,61 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->entity;
     }
 
-    public function count(): int
+    public function count(string $queryString = '', array $params = []): int
     {
-        $result = $this->db['db_query']('', '
-		SELECT COUNT(*) AS count_total
-		FROM {db_prefix}' . $this->entity->getTableName(),
-            []
+        $result = $this->db['db_query']('', $queryString,
+            $params
         );
-        list ($countTotal) = $this->fetchRow($result);
+        $countTotal = $this->numRows($result);
         $this->freeResult($result);
 
         return $countTotal;
     }
 
-    public function getAll(int $start = 0, string $paginationUrl = ''): array
+    public function getAll($needsPagination = true, int $start = 0): array
     {
-        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION);
-        $total = $this->count();
-        $maxIndex = $limit ?: $total;
+        $queryStringCount = $queryString = '
+            SELECT ' . (implode(',', $this->getColumns())) . '
+			FROM {db_prefix}' . $this->getTable();
+        $params = [];
+
+        if ($needsPagination) {
+            $queryString .= '
+			{raw:limitQuery}';
+            $params = array_merge($params, ['limitQuery' => $this->buildLimitQuery($start)]);
+        }
 
         return [
-            'entities' => $this->prepareData($this->db['db_query'](
-                '',
-                'SELECT ' . (implode(',', $this->getColumns())) . '
-			FROM {db_prefix}{raw:from}
-			LIMIT {int:start}, {int:maxIndex}',
-                [
-                    'from' => $this->getTable(),
-                    'start' => $start,
-                    'maxIndex' => $maxIndex
-                ]
-            )),
-            'pagination' => !empty($paginationUrl) ?
-                $this->buildPagination($start, $total, $paginationUrl) : ''
+            'total' => $needsPagination ? $this->count($queryStringCount) : 0,
+            'entities' => $this->prepareData($this->db['db_query']('', $queryString, $params)),
         ];
     }
 
-    protected function buildPagination(int $start, int $maxIndex, string $paginationUrl): string
+    public function buildPagination(int $start, string $paginationUrl, int $total = 0): string
     {
+        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION);
+
+        if (empty($limit) || !$total) {
+            return '';
+        }
+
        return constructPageIndex(
             $paginationUrl,
             $start,
-            $maxIndex,
-            $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION)
+            $total,
+            $limit
         );
+    }
+
+    protected function buildLimitQuery(int $start): string
+    {
+        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
+
+        return $limit ? strtr('LIMIT {start}, {limit}', [
+            '{start}' => $start,
+            '{limit}' => $limit
+        ]) : '';
+
     }
 
     protected function buildSetUpdate(array $entityData = []): string
@@ -195,6 +206,12 @@ abstract class BaseRepository implements RepositoryInterface
     {
         return $this->db['db_fetch_row']($result);
     }
+
+    protected function numRows($result): int
+    {
+        return $this->db['db_num_rows']($result);
+    }
+
     protected function freeResult($result): void
     {
         $this->db['db_free_result']($result);

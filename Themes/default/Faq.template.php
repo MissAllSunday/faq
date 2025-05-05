@@ -35,7 +35,8 @@ function template_faq_index()
     </div>';
     }
     else {
-        foreach($entities as $entity)
+        /* @var FaqEntity $entity */
+        foreach($entities as $id =>$entity)
             echo '
 			<div class="cat_bar">
 				<h3 class="catbg">

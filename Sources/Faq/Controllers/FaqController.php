@@ -25,10 +25,10 @@ class FaqController extends BaseController
     public const SUB_ACTION_CATEGORY = 'category';
     public const SUB_ACTIONS = [
         self::SUB_ACTION_INDEX,
-       self::SUB_ACTION_ADD,
-       self::SUB_ACTION_DELETE,
-       self::SUB_ACTION_SEARCH,
-       self::SUB_ACTION_SINGLE,
+        self::SUB_ACTION_ADD,
+        self::SUB_ACTION_DELETE,
+        self::SUB_ACTION_SEARCH,
+        self::SUB_ACTION_SINGLE,
         self::SUB_ACTION_MANAGE,
         self::SUB_ACTION_CATEGORY,
     ];
@@ -47,7 +47,7 @@ class FaqController extends BaseController
         $this->utils = new FaqUtils();
 
         $this->setTemplateVars([
-            'categories' => $this->categoryRepository->getAll()['entities'],
+            'categories' => $this->categoryRepository->getAll(false)['entities'],
         ]);
 
         parent::__construct($request);
@@ -60,11 +60,18 @@ class FaqController extends BaseController
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
 
         $start = $this->request->get('start', 0);
-        $this->setTemplateVars($this->repository->getAll($start, $context['current_url'], $start));
+        $data = $this->repository->getAll(true, $start);
+
+        $this->setTemplateVars([
+            'entities' => $data['entities'],
+            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
+        ]);
     }
 
     public function search(): void
     {
+        global $context;
+
         if (!$this->request->isPost()) {
             $this->redirect('', 'index');
         }
@@ -79,8 +86,12 @@ class FaqController extends BaseController
 
         $title = strtr($this->utils->text('search_title'),
             ['{searchValue}' => $searchValue]);
+        $start = $this->request->get('start', 0);
+        $data = $this->repository->searchBy($searchValue, $start);
+
         $this->setTemplateVars([
-            'entities' => $this->repository->searchBy($searchValue),
+            'entities' => $data['entities'],
+            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
         ], [
             'sub_template' => Faq::NAME . '_index',
             'page_title' => $title,
@@ -189,6 +200,8 @@ class FaqController extends BaseController
 
     public function category(): void
     {
+        global $context;
+
         $id = $this->request->get('id');
 
         if (!$id) {
@@ -198,8 +211,12 @@ class FaqController extends BaseController
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
 
         $category = $this->categoryRepository->getById($id);
+        $start = $this->request->get('start', 0);
+        $data = $this->repository->getByCatId($id, $start);
+
         $this->setTemplateVars([
-            'entities' => $this->repository->getByCatId($id),
+            'entities' => $data['entities'],
+            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
             'category' => $category,
         ], [
             'sub_template' => Faq::NAME . '_index',

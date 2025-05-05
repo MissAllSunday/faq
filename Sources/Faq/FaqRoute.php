@@ -32,6 +32,10 @@ class FaqRoute
         CategoryController::ACTION
     ];
 
+    public const PERMISSIONS_MAP = [
+        
+    ];
+
     public function dispatch(array &$actions): void
     {
         $action = $this->request->get('action');
