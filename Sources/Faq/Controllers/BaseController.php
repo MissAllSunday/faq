@@ -3,6 +3,7 @@
 namespace Faq\Controllers;
 
 use Faq\Faq as Faq;
+use Faq\FaqAdmin;
 use Faq\FaqRequest;
 use Faq\FaqUtils;
 use Faq\Repositories\RepositoryInterface;
@@ -92,6 +93,10 @@ abstract class BaseController
         }
 
         loadCSSFile('faq.css', [], 'smf_faq');
+
+        if ($this->utils->setting(FaqAdmin::SETTINGS_USE_JS)) {
+            loadJavascriptFile('faqToggle.js', ['defer' => true]);
+        }
     }
 
     public function isSubActionValid(string $subAction): bool

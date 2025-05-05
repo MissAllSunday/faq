@@ -9,7 +9,7 @@ use Faq\FaqAdmin;
 
 function template_faq_index()
 {
-	global $txt, $context, $scripturl;
+	global $txt, $context, $scripturl, $modSettings;
 
 	$entities = $context[Faq::NAME]['entities'];
 
@@ -19,6 +19,8 @@ function template_faq_index()
     showMessage();
 
     showSideBar();
+
+    $useJavaScript = $modSettings[Faq::NAME .'_'. FaqAdmin::SETTINGS_USE_JS];
 
     echo '
 	<div class="rightSide" >';
@@ -36,13 +38,18 @@ function template_faq_index()
     }
     else {
         /* @var FaqEntity $entity */
-        foreach($entities as $id =>$entity)
+        foreach($entities as $id =>$entity) {
+            $anchorHref = $useJavaScript ? '#faq_' . $entity->getId() :
+                $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
+                ';id='. $entity->getId();
+
             echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="floatleft">
-					    <a href="'. $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
-                ';id='. $entity->getId() .'">'. $entity->getName() .'</a>
+					    <a href="'. $anchorHref .'" class="faq_toggle_link" id="link_'. $entity->getId() .'">
+					        '. $entity->getName() .'
+                        </a>
                     </span>
 					<span class="floatright">
 						', showActions($entity) ,'
@@ -50,11 +57,13 @@ function template_faq_index()
 				</h3>
 			</div>
 			<div class="information windowbg">
-				<div  id="faq_', $entity->getId() ,'">
+				<div  id="faq_', $entity->getId() ,'" class="faq_toggle">
 				', $entity->getBody() ,'
 				</div>
 			</div>
 			<br />';
+
+        }
 
         showPagination();
     }
