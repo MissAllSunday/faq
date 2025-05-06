@@ -118,6 +118,8 @@ class FaqController extends BaseController
         ];
 
         if ($this->request->isPost()) {
+            validateToken(Faq::NAME . '-' . self::SUB_ACTION_ADD);
+
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
             
             if ($this->request->isSet('preview')) {
@@ -146,6 +148,8 @@ class FaqController extends BaseController
         ]);
 
         $this->setTemplateVars($templateVars);
+
+        createToken(Faq::NAME . '-' . self::SUB_ACTION_ADD);
     }
 
     public function single(): void

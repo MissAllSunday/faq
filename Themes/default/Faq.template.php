@@ -139,6 +139,7 @@ function template_faq_add(): void
         <input type="submit" name="save" value="', $txt['save'] ,'" class="button floatright">
         <input type="submit" name="preview" class="button floatright" value="', $txt['preview'] ,'" />
         <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+        <input type="hidden" name="', $context['faq-add_token_var'], '" value="', $context['faq-add_token'], '">
     </form>
     </div>';
 }
