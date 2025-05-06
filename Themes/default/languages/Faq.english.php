@@ -113,6 +113,11 @@ $txt['faq_menu_position'] = 'Select the position for the FAQ button in the menu'
 $txt['faq_menu_position_sub'] = 'By default is next to home.';
 $txt['faq_care'] = 'Show the mod author\'s copyright at the bottom of the FAQ page?';
 $txt['faq_care_sub'] = 'If checked, the copyright will be displayed only in the FAQ page, at the bottom, this will help the mod author to provide more useful and free mods.';
+$txt['faq_custom_message_title_default'] = 'Frequently Asked Questions - FAQ';
+$txt['faq_custom_message_title'] = 'Title for your custom message';
+$txt['faq_custom_message_title_sub'] = 'If leave empty it will display: ' . $txt['faq_custom_message_title_default'];
+$txt['faq_custom_message'] = 'Custom message to show at the top of the FAQ page';
+$txt['faq_custom_message_sub'] = 'This setting is for displaying a custom message at the top of the FAQ page, you can use BBC code. Leave it in blank for not showing anything.';
 $txt['faq_use_js'] = 'Use Javascript to hide the body?';
 $txt['faq_use_js_sub'] = 'If enable, this mod will use javascript to hide the FAQ content, this is useful if you have multiple FAQs and want to save some space, to show the content just click on the FAQ title/question.';
 $txt['faq_categories_list'] = 'FAQs within category ';
@@ -147,6 +152,13 @@ $txt['faq_error_faqCategory_delete'] = 'There was an error deleting the category
 $txt['faq_error_faqCategory_delete_default'] = 'The default category cannot be deleted, try updating it instead.';
 $txt['faq_error_faqCategory_generic'] = 'There was an problem with the category entry';
 
+// Permissions strings
+$txt['permissiongroup_simple_faq_per_simple'] = 'FAQ mod permissions';
+$txt['permissiongroup_faq_per_classic'] = 'FAQ mod permissions';
+$txt['permissionname_faq_view'] = 'View FAQs / Categories';
+$txt['permissionname_faq_add'] = 'Add|Edit FAQs / Categories';
+$txt['permissionname_faq_delete_any'] = 'Delete FAQs / Categories';
+
 // Template strings
 $txt['faq_id'] = 'ID';
 $txt['faq_last_edit'] = 'Last Edit';
@@ -160,13 +172,6 @@ $txt['faq_edit_log'] = 'Log';
 
 // For the sake of completeness, lets add a title entry for deleting an entry...
 $txt['faq_delete_title'] = 'Deleting an entry...';
-
-// Permissions strings
-$txt['permissiongroup_simple_faq_per_simple'] = 'FAQ mod permissions';
-$txt['permissiongroup_faq_per_classic'] = 'FAQ mod permissions';
-$txt['permissionname_faq_view'] = 'View any FAQs / Categories';
-$txt['permissionname_faq_add'] = 'Add|Edit FAQs / Categories';
-$txt['permissionname_faq_delete'] = 'Delete any FAQs / Categories';
 
 // Who's online strings
 $txt['whoall_faq'] = 'Viewing the <a href="'. $scripturl. '?action=faq">FAQ page</a>.';

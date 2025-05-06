@@ -13,7 +13,7 @@ class FaqAdmin
         self::PERMISSIONS_PAGE,
     ];
     public const PERMISSION_VIEW = 'view';
-    public const PERMISSION_DELETE = 'delete';
+    public const PERMISSION_DELETE = 'delete_any';
     public const PERMISSION_ADD = 'add';
     public const PERMISSIONS = [
         self::PERMISSION_VIEW,
@@ -28,6 +28,9 @@ class FaqAdmin
     public const SETTINGS_SORT_ORDER = 'sort_order';
     public const SETTINGS_MENU_POSITION = 'menu_position';
     public const SETTINGS_USE_JS = 'use_js';
+
+    public const SETTINGS_CUSTOM_MESSAGE = 'custom_message';
+    public const SETTINGS_CUSTOM_MESSAGE_TITLE = 'custom_message_title';
     public const SETTINGS_CARE = 'care';
     public const URL = 'action=admin;area=' . Faq::NAME;
     protected ?FaqUtils $utils;
@@ -108,6 +111,8 @@ class FaqAdmin
                 'subtext' => $this->utils->text('menu_position_sub')
             ],
             ['check', Faq::NAME .'_'. self::SETTINGS_USE_JS, 'subtext' => $this->utils->text('use_js_sub')],
+            ['large_text', Faq::NAME .'_'. self::SETTINGS_CUSTOM_MESSAGE, 'subtext' => $this->utils->text('custom_message_sub')],
+            ['text', Faq::NAME .'_'. self::SETTINGS_CUSTOM_MESSAGE_TITLE, 'subtext' => $this->utils->text('custom_message_title_sub')],
             ['check', Faq::NAME .'_'. self::SETTINGS_CARE, 'subtext' => $this->utils->text('care_sub')],
 
         ];

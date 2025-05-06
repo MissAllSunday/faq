@@ -18,6 +18,8 @@ function template_faq_index()
 
     showMessage();
 
+    showCustomMessage();
+
     showSideBar();
 
     $useJavaScript = $modSettings[Faq::NAME .'_'. FaqAdmin::SETTINGS_USE_JS];
@@ -244,7 +246,7 @@ function showActions(FaqEntity $entity): string
 
         return allowedTo(Faq::NAME . '_' . $action) ?
             '<a href="'. $url .'" class="you_sure">
-                '. $txt['faq_' . $textKey] .'</a>' :
+                '. $txt['faq_' . str_replace('_any', '', $textKey)] .'</a>' :
             '';
     }, [
         FaqAdmin::PERMISSION_DELETE,
@@ -330,6 +332,29 @@ function showMessage(): void
     global $context;
 
     echo $context[Faq::NAME]['message'];
+}
+
+function showCustomMessage(): void
+{
+    global $modSettings, $txt;
+
+    if (empty($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE])) {
+        return;
+    }
+
+    $customTitle = !empty($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE_TITLE]) ?
+        $modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE_TITLE] :
+        $txt['faq_custom_message_title_default'];
+
+    echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            <span class="ie6_header floatleft">', $customTitle ,'</span>
+        </h3>
+    </div>
+    <div class="information">
+        ', parse_bbc($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE]) ,'
+    </div>';
 }
 
 function showPagination(): void
