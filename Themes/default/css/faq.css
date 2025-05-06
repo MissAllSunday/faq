@@ -1,15 +1,38 @@
 .mainContent {
-	width: 100%;
-	display:table;
+	display: block;
 }
 
 .leftSide
 {
-	display: table-cell;
+	display: inline-block;
+	vertical-align: top;
+	width: 29%;
+
 }
 
 .rightSide
 {
-	display: table-cell;
-	width: 100%;
+	display: inline-block; vertical-align: top;
+	width: 69%;
+	margin-left: 3px;
+}
+
+.faqFadeIn {
+	animation: faqFadeInFunc 500ms;
+}
+@keyframes faqFadeInFunc {
+	0% {
+		display: block;
+		opacity: 0;
+	}
+	100% {
+		opacity: 1.0;
+	}
+}
+
+@media screen and (max-width: 720px){
+	.leftSide, .rightSide {
+		display: inline-block;
+		width: 99%;
+	}
 }

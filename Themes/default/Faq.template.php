@@ -1,398 +1,195 @@
 <?php
 
-/**
- * @package FAQ mod
- * @version 2.1
- * @author Jessica González <suki@missallsunday.com>
- * @copyright Copyright (c) 2014, Jessica González
- * @license https://www.mozilla.org/MPL/2.0/
- */
+use Faq\Controllers\CategoryController;
+use Faq\Controllers\FaqController;
+use Faq\Entities\CategoryEntity;
+use Faq\Entities\FaqEntity;
+use Faq\Faq;
+use Faq\FaqAdmin;
+use Faq\FaqUtils;
 
-
-function template_faq_main()
+function template_faq_index(): void
 {
 	global $txt, $context, $scripturl, $modSettings;
 
-	// The master div.
-	echo '
-	<div class="mainContent">';
+	$entities = $context[Faq::NAME]['entities'];
+    /* @var $utils FaqUtils */
+    $utils = $context[Faq::NAME]['utils'];
 
-	faq_header();
+    echo '
+<div class="mainContent">';
 
-	// Show a nice message if no FAQs are available.
-	if (empty($context['Faq']['all']))
-			echo '
-		<div class="information">
-			', $txt['Faq_no_faq'] ,'
-		</div>';
+    showMessage();
 
-	// There are some, lets show em all.
-	else
-	{
-		// Sidebar.
-		faq_sideBar();
+    showCustomMessage();
 
-		// The main div.
-		echo '
-		<div class="rightSide">';
-			foreach($context['Faq']['all'] as $faq)
-				echo '
+    showSideBar();
+
+    $useJavaScript = $modSettings[Faq::NAME .'_'. FaqAdmin::SETTINGS_USE_JS];
+
+    echo '
+	<div class="rightSide" >';
+
+    if (empty($entities)) {
+        echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            ', $context['page_title'] ,'
+        </h3>
+    </div>
+    <div class="information">
+        ', $txt['faq_no_faq'] ,'
+    </div>';
+    }
+    else {
+        /* @var FaqEntity $entity */
+        foreach($entities as $id =>$entity) {
+            $anchorHref = $useJavaScript ? '#faq_' . $entity->getId() :
+                $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
+                ';id='. $entity->getId();
+
+            $dataParsed = $utils->parse([
+                'body' => $entity->getBody(),
+                'title' => $entity->getName()]);
+
+            echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="floatleft">', $faq['link'] ,'</span>
+					<span class="floatleft">
+					    <a href="'. $anchorHref .'" class="faq_toggle_link" id="link_'. $entity->getId() .'">
+					        '. $dataParsed['title'] .'
+                        </a>
+                    </span>
 					<span class="floatright">
-						', $faq['crud']['edit'] ,'
-						', $faq['crud']['delete'] ,'
+						', showActions($entity) ,'
 					</span>
 				</h3>
 			</div>
 			<div class="information windowbg">
-				<div  id="faq_', $faq['id'] ,'">
-				', $faq['body'] ,'
+				<div  id="faq_', $entity->getId() ,'" class="faq_toggle">
+				', $dataParsed['body'] ,'
 				</div>
 			</div>
 			<br />';
 
-		echo '
-		</div>';
+        }
 
-		echo '
-		<div class="clear">';
+        showPagination();
+    }
 
-		// Pagination.
-		if (!empty($context['page_index']))
-			echo $context['page_index'];
-
-		// Button for adding a new entry.
-		if ($context['Faq']['permissions']['add'])
-			echo '
-			<div>
-				<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self">
-					<input type="submit" name="send" class="input_text" value="', $txt['Faq_add_send'] ,'" />
-				</form>
-			</div>';
-
-		echo '
-		</div>';
-	}
-
-	echo '
-	</div>';
+    echo '</div>
+</div>';
 }
 
-function template_faq_add()
+function template_faq_add(): void
 {
-	global $context, $scripturl, $txt;
+    global $txt, $context;
 
-	faq_header();
+    $entity = $context[Faq::NAME]['entity'];
 
-	// Sidebar.
-	faq_sideBar();
+    if (!empty($context[Faq::NAME]['errors'])) {
+        showErrors($context[Faq::NAME]['errors']);
+    }
 
-	// The main div.
-	echo '
-	<div class="">';
+    if (!empty($context[Faq::NAME]['preview'])) {
+        showPreview($context[Faq::NAME]['preview']);
+    }
 
-	// Show the preview
-	if (!empty($context['preview']))
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">', $context['preview']['title'] ,'</h3>
-		</div>
-		<div class="information">
-			', $context['preview']['body'] ,'
-		</div>
-		<br />';
+    echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            ', $context['page_title'] ,'
+        </h3>
+    </div>
 
-		echo '
-		<form action="', $scripturl, '?action=Faq;sa=add" method="post" target="_self" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\',\'title\');">
-			<div class="cat_bar">
-				<h3 class="catbg">
-					', $context['page_title'] ,'
-				</h3>
-			</div>
-			<div class="information">
-				<dl id="post_header">';
-
-			// Title.
-			echo '
-					<dt>
-						<span id="caption_subject">', $txt['Faq_title_edit'] ,'</span>
-					</dt>
-					<dd>
-						<input type="text" name="current[title]" size="55" tabindex="1" maxlength="255" value="', (isset($context['current']['title']) ? $context['current']['title'] : '') ,'" class="input_text" id="title"/>
-					</dd>';
-
-			// Category select field.
-			echo'
-					<dt>
-						<span id="caption_subject">', $txt['Faq_edit_category'] ,':</span>
-					</dt>
-					<dd>';
-
-			// Show the category select field.
-			if (!empty($context['Faq']['cats']))
-			{
-				echo '
-						<select name="current[cat_id]">';
-
-				foreach($context['Faq']['cats'] as $cats)
-					echo '
-							<option value="', $cats['id'] ,'" ', (isset($context['current']['cat_id']) && $cats['id'] == $context['current']['cat_id'] ? 'selected="selected"' : '') ,'>', $cats['name'] ,'</option>';
-
-				echo '
-						</select>';
-			}
-
-			else
-				echo '
-						<div class="Faq_warning">
-							', $context['Faq']['no_cat_admin'] ,'
-						</div>';
-
-			echo'
-					</dd>
-				</dl>';
-
-			echo template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
-
-			echo '
-				<div id="confirm_buttons">
-					<input type="hidden" id="', $context['session_var'], '" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-					<input type="submit" name="save" class="sbtn" value="', $txt['Faq_create_send'] ,'" />
-					<input type="submit" name="preview" class="sbtn" value="', $txt['preview'] ,'" />
-				</div>
-			</div>
-		</form>';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
+    <div class="roundframe"> 
+    <form
+        action="#"
+        method="post" 
+        accept-charset="UTF-8" 
+        name="'. Faq::NAME .'" 
+        id="'. Faq::NAME .'"
+        enctype="multipart/form-data"
+        target="_self">
+        <dl class="settings">
+            <dt>
+                <span id="caption_subject">', $txt['faq_form_title'] ,'</span>
+            </dt>
+            <dd>
+                <input 
+                    type="text" 
+                    name="', FaqEntity::TITLE ,'" 
+                    size="55" 
+                    tabindex="1" 
+                    maxlength="255" 
+                    value="', $entity->getTitle() ,'" />
+            </dd>
+            <dt>
+                <span class="smalltext">', $txt['faq_form_category'] ,'</span>
+            </dt>
+            <dd>
+                ', showCategoryField($entity) ,'
+            </dd>
+        </dl>
+        
+        <div>
+           ', template_control_richedit(FaqEntity::BODY, 'smileyBox_message', 'bbcBox_message') ,'
+        </div>
+        <br />
+        <input type="submit" name="save" value="', $txt['save'] ,'" class="button floatright">
+        <input type="submit" name="preview" class="button floatright" value="', $txt['preview'] ,'" />
+        <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+        <input type="hidden" name="', $context['faq-add_token_var'], '" value="', $context['faq-add_token'], '">
+    </form>
+    </div>';
 }
 
-function template_faq_single()
-{
-	global $context;
-
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="floatright nopadding" ', $context['Faq']['width'] ,'>';
-
-	// No direct access.
-	if (empty($context['Faq']['single']) || !is_array($context['Faq']['single']))
-		echo '
-		<div class="information">
-			', $txt['Faq_no_valid_id'] ,'
-		</div>';
-
-	else
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="floatleft">', $context['Faq']['single']['link'] ,'</span>
-				<span class="floatright">
-					', $context['Faq']['single']['crud']['edit'] ,'
-					', $context['Faq']['single']['crud']['delete'] ,'
-				</span>
-				<span class="clear" />
-			</h3>
-		</div>
-
-		<div class="windowbg">
-			<div class="content">
-				', $context['Faq']['single']['body'] ,'
-			</div>
-		</div>';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
-}
-
-function template_faq_manage()
-{
-	global $context, $txt, $scripturl;
-
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="rightSide">';
-
-	template_show_list('faq_manage');
-
-	echo '
-	</div>';
-}
-
-function template_faq_addCat()
-{
-	global $context, $scripturl, $txt;
-
-	// The main div.
-	echo '
-	<div>';
-
-	/* A nice form for adding a new cat */
-	echo '
-		<span class="clear upperframe">
-			<span></span>
-		</span>
-		<div class="roundframe rfix">
-			<div class="innerframe">
-				<form action="', $scripturl, '?action=Faq;sa=editCat'. (!empty($context['catID']) ? ';cat='. $context['catID'] : '') .'" method="post" target="_self">
-					<dl id="post_header">
-						<dt>
-							<span id="caption_subject">', $txt['Faq_editcat_send'] ,'</span>
-						</dt>
-						<dd>
-							<input type="text" name="title" size="55" tabindex="1" maxlength="255" value="', (!empty($context['currentCat']['name']) ? $context['currentCat']['name'] : '') ,'" class="input_text" /> <input type="submit" name="send" class="sbtn" value="', $txt['Faq_edit'] ,'" />
-						</dd>
-					</dl>
-				</form>
-			</div>
-		</div>
-		<span class="clear lowerframe">
-			<span></span>
-		</span><br />';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
-}
-
-function template_faq_list()
-{
-	global $txt, $context, $scripturl, $modSettings;
-
-	faq_header();
-
-	// Sidebar.
-	faq_sideBar();
-
-	// The main div.
-	echo '
-	<div class="floatright nopadding">';
-
-	/* No direct access */
-	if (empty($context['Faq']['all']) || !is_array($context['Faq']['all']))
-		echo '
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">
-				', $txt['lyrics_error_no_valid_action'] ,'
-			</div>
-			<span class="botslice"><span></span></span>
-		</div>';
-
-	else
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $context['page_title'] ,'</span>
-			</h3>
-		</div>
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">';
-
-		/* List */
-		echo '
-					<ul class="reset">';
-
-		foreach($context['Faq']['all'] as $all)
-			echo '
-						<li>
-							', $all['link'] ,'
-						</li>';
-
-		echo '
-					</ul>';
-
-		echo '
-			</div>
-			<span class="botslice"><span></span></span>
-		</div><br />';
-
-	/* Pagination */
-	if(!empty($context['page_index']))
-		echo '
-		<div style="text-align:center;">', $context['page_index'] ,'</div>';
-
-	echo '
-	</div>
-	<div class="clear"></div>';
-}
-
-function faq_header()
-{
-	global $txt, $scripturl, $context, $settings, $modSettings;
-
-	// Create a link for managing faq.
-	$memberlist_buttons = array(
-		'manage' => array('text' => 'Faq_manage', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manage', 'active'=> false),
-		'manageCat' => array('text' => 'Faq_manage_categories', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=Faq;sa=manageCat', 'active'=> false),
-	);
-
-	// Any message to display?
-	if (!empty($context['Faq']['update']))
-		foreach ($context['Faq']['update'] as $key => $message)
-			echo
-		'<div class="', $key ,'box">
-			', $message ,'
-		</div>';
-
-	echo '
-		<div class="pagesection">
-			', allowedTo(array('faq_edit', 'faq_delete', 'faq_add')) ? template_button_strip($memberlist_buttons, 'right') : '', '
-		</div>';
-
-	echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="floatleft">', $txt['Faq_main'] ,'</span>';
-
-	if (allowedTo('faq_search'))
-		echo '
-				<object id="quick_search">
-					<form action="', $scripturl, '?action=Faq;sa=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
-						<span class="generic_icons filter centericon"></span>
-						<input type="text" name="l_search_value" value="', $txt['search'] , '" onclick="if (this.value == \'', $txt['search'] , '\') this.value = \'\';" class="input_text" />
-						<select name="l_column">
-							<option value="body" selected="selected">', $txt['Faq_body'] ,'</option>
-							<option value="title">', $txt['Faq_title'] ,'</option>
-						</select>
-						<input type="submit" name="search_go" id="search_go" value="', $txt['search'] , '" class="button_submit" />
-					</form>
-				</object>';
-
-	echo '
-			</h3>
-		</div>';
-}
-
-function faq_sideBar()
+function showSideBar(): void
 {
 	global $context, $scripturl, $txt, $modSettings;
-
+    
 	echo '
 	<div class="leftSide" >';
 
+    if (allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW)) {
+        echo '
+		<div class="cat_bar">
+			<h3 class="catbg">
+				<span class="ie6_header floatleft">', $txt['search'] ,'</span>
+			</h3>
+		</div>
+		<div class="information">
+			<div class="content">
+                <object id="quick_search">
+                    <form action="', $scripturl ,'?action=', FaqController::ACTION ,';sa=', FaqController::SUB_ACTION_SEARCH ,'" 
+                    method="post" accept-charset="UTF-8" class="admin_search">
+                        <span class="generic_icons filter centericon"></span>
+                        <input 
+                            type="text"
+                            name="search_value"
+                            value=""
+                            class="input_text"
+                            required
+                        />
+                        <input 
+                            type="submit" 
+                            name="search" 
+                            id="search"
+                            value="', $txt['search'] , '" 
+                            class="button_submit" />
+                    </form>
+                </object>
+            </div>
+        </div>';
+    }
+
 	// Show a nice category list.
-	if (!empty($modSettings['Faq_show_catlist']))
+	if (!empty($modSettings['faq_show_catlist']))
 	{
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				', $txt['Faq_sidebar_faq_cats'] ,'
+				', $txt['faq_sidebar_faq_cats'] ,'
 			</h3>
 		</div>
 
@@ -400,11 +197,14 @@ function faq_sideBar()
 			<div class="content">
 				<ul class="reset">';
 
-		foreach($context['Faq']['cats'] as $all)
-			echo '
+        /* @var CategoryEntity $category */
+		foreach($context[Faq::NAME]['categories'] as $category) {
+            echo '
 					<li>
-						<a href="'. $scripturl .'?action=faq;sa=categories;fid='. $all['id'] .'">'. $all['name'] .'</a>
+						<a href="'. $scripturl .'?action=' . FaqController::ACTION .
+                ';sa=' . FaqController::SUB_ACTION_CATEGORY . ';id='. $category->getId() .'">'. $category->getName() .'</a>
 					</li>';
+        }
 
 		echo '
 				</ul>
@@ -413,13 +213,12 @@ function faq_sideBar()
 		<br />';
 	}
 
-	/* Latest FAQs, calling a model method from the view? naughty, naughty me! */
-	if (!empty($modSettings['Faq_show_latest']))
+	if (!empty($modSettings['faq_show_latest']))
 	{
 		echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['Faq_latest'] ,'</span>
+				<span class="ie6_header floatleft">', $txt[Faq::NAME .'_latest'] ,'</span>
 			</h3>
 		</div>
 
@@ -443,4 +242,138 @@ function faq_sideBar()
 
 	echo '
 	</div>';
+}
+
+function showActions(FaqEntity $entity): string
+{
+    global $txt, $scripturl;
+
+    return implode(' | ', array_map(function($action) use ($txt, $entity, $scripturl) {
+        $action = str_replace('_any', '', $action);
+        $textKey = $action === 'add' ? 'edit' :  $action;
+        $url = $scripturl . '?action=' . Faq::NAME . ';sa='. $action .';id='. $entity->getId();
+
+        return allowedTo(Faq::NAME . '_' . $action) ?
+            '<a href="'. $url .'" class="you_sure">
+                '. $txt['faq_' . $textKey] .'</a>' :
+            '';
+    }, [
+        FaqAdmin::PERMISSION_DELETE,
+        FaqAdmin::PERMISSION_ADD
+    ]));
+}
+
+function showCategoryField(FaqEntity $entity): string
+{
+    global $context, $txt;
+
+    if (empty($context[Faq::NAME]['categories'])) {
+        return '
+            <div class="Faq_warning">
+                '. $txt['faq_no_cat_admin'] .'
+            </div>';
+    }
+
+    $select = '
+        <select name="'. FaqEntity::CAT_ID .'">';
+
+    foreach($context[Faq::NAME]['categories'] as $category) {
+        $isSelected = $entity->getCatId() === $category->getCategoryId();
+
+        $select .= '
+            <option value="'. $category->id .'" '. ($isSelected ? 'selected="selected"' : '') .'>
+            '. $category->getCategoryName() .
+        '</option>';
+    }
+
+    $select .= '
+        </select>';
+
+    return $select;
+}
+
+function showPreview(array $preview): void
+{
+    global $txt;
+
+    if (empty($preview['body'])) {
+        return;
+    }
+
+    echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            ', $txt['preview'] ,' - ', $preview['title'] ,'
+        </h3>
+    </div>
+
+    <div class="roundframe"> 
+        ', $preview['body'] ,'
+    </div>
+    <br />';
+}
+
+function showErrors(string $errors): void
+{
+    global $txt;
+
+    echo '
+        <div class="errorbox" id="errors">
+		<dl>
+			<dt>
+				<strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
+			</dt>';
+
+    foreach (explode(',', $errors) as $errorKey) {
+        echo '
+			<dd class="error">
+				- <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
+			</dd>';
+    }
+
+    echo '
+		</dl>
+	</div>';
+}
+
+function showMessage(): void
+{
+    global $context;
+
+    echo $context[Faq::NAME]['message'];
+}
+
+function showCustomMessage(): void
+{
+    global $modSettings, $txt;
+
+    if (empty($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE])) {
+        return;
+    }
+
+    $customTitle = !empty($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE_TITLE]) ?
+        $modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE_TITLE] :
+        $txt['faq_custom_message_title_default'];
+
+    echo '
+    <div class="cat_bar">
+        <h3 class="catbg">
+            <span class="ie6_header floatleft">', $customTitle ,'</span>
+        </h3>
+    </div>
+    <div class="information">
+        ', parse_bbc($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE]) ,'
+    </div>';
+}
+
+function showPagination(): void
+{
+    global $context;
+
+    if (!empty($context[Faq::NAME]['pagination'])) {
+        echo '
+        <div class="pagesection">
+            <div class="pagelinks floatleft">', $context[Faq::NAME]['pagination'] ,'</div>
+        </div>';
+    }
 }

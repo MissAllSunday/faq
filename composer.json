@@ -1,6 +1,35 @@
 {
 	"name": "suki/faq",
+	"description": "SMF modification for creating Frequently Asked Questions page",
+	"type": "smf-module",
+	"license": "MPL-2.0",
+	"authors": [
+		{
+			"name": "Michel Mendiola",
+			"email": "suki@missallsunday.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Faq\\": "Sources/Faq/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Faq\\": "tests/"
+		}
+	},
+	"minimum-stability": "dev",
 	"require": {
-		"suki/ohara": "~1.0"
+		"php": ">=8.0",
+		"ext-ctype": "*"
+	},
+	"require-dev": {
+		"phpstan/phpstan": "2.0.x-dev",
+		"phpunit/phpunit": "^12"
+	},
+	"scripts": {
+		"phpstan": "phpstan analyze --memory-limit=1G -c phpstan.neon",
+		"phpunit": "phpunit -c phpunit.xml.dist"
 	}
 }
