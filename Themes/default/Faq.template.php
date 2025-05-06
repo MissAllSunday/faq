@@ -6,12 +6,15 @@ use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
+use Faq\FaqUtils;
 
-function template_faq_index()
+function template_faq_index(): void
 {
 	global $txt, $context, $scripturl, $modSettings;
 
 	$entities = $context[Faq::NAME]['entities'];
+    /* @var $utils FaqUtils */
+    $utils = $context[Faq::NAME]['utils'];
 
     echo '
 <div class="mainContent">';
@@ -45,12 +48,16 @@ function template_faq_index()
                 $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
                 ';id='. $entity->getId();
 
+            $dataParsed = $utils->parse([
+                'body' => $entity->getBody(),
+                'title' => $entity->getName()]);
+
             echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="floatleft">
 					    <a href="'. $anchorHref .'" class="faq_toggle_link" id="link_'. $entity->getId() .'">
-					        '. $entity->getName() .'
+					        '. $dataParsed['title'] .'
                         </a>
                     </span>
 					<span class="floatright">
@@ -60,7 +67,7 @@ function template_faq_index()
 			</div>
 			<div class="information windowbg">
 				<div  id="faq_', $entity->getId() ,'" class="faq_toggle">
-				', $entity->getBody() ,'
+				', $dataParsed['body'] ,'
 				</div>
 			</div>
 			<br />';

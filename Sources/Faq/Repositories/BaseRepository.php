@@ -194,10 +194,6 @@ abstract class BaseRepository implements RepositoryInterface
         while ($row = $this->fetchAssoc($request)) {
             $newEntity = $this->buildEntity();
 
-            if (isset($row[FaqEntity::TITLE])) {
-                $row = $this->utils->parse($row);
-            }
-
             $entities[$row[$this->entity->getIndexName()]] = $newEntity->setEntity(array_map(function ($column) {
                 return ctype_digit($column) ? ((int) $column) : $column;
             }, $row));

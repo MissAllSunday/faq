@@ -122,7 +122,9 @@ abstract class BaseController
         global $context;
 
         if (!isset($context[Faq::NAME])) {
-            $context[Faq::NAME] = [];
+            $context[Faq::NAME] = [
+                'utils' => $this->utils
+            ];
         }
 
         if (empty($context[Faq::NAME]['message'])) {
