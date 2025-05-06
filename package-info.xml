@@ -11,7 +11,7 @@
 		<license type="inline" parsebbc="false">
 			This Source Code Form is subject to the terms of the Mozilla Public
 			License, v. 2.0. If a copy of the MPL was not distributed with this
-			file, You can obtain one at https://mozilla.org/MPL/2.0/.
+			file, You can obtain one at https://www.mozilla.org/en-US/MPL/2.0/ .
 		</license>
 		<credits url="https://missallsunday.com" license="MPL" copyright="Michel Mendiola" licenseurl="https://www.mozilla.org/en-US/MPL/2.0/">
 			Faq mod
@@ -38,6 +38,7 @@
 		<remove-file name="$languagedir/Faq.english.php" />
 		<remove-file name="$themedir/Faq.template.php" />
 		<remove-file name="$themedir/css/faq.css" />
+		<remove-file name="$themedir/scripts/faqToggle.js" />
 		<remove-dir name="$sourcedir/Faq" />
 	</uninstall>
 </package-info>
