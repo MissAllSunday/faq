@@ -1,17 +1,17 @@
-**FAQ mod**, www.missallsunday.com
+**FAQ mod**, https://missallsunday.com
 
 This software is licensed under [MPL 2.0 license](https://www.mozilla.org/en-US/MPL/2.0/).
 
-######What is a FAQ mod:
+###### What is a FAQ mod:
 
 Is a modification for SMF which allows you to create a simple FAQ (Frequently Asked Questions) page
 
-######Requirements:
+###### Requirements:
 
 - SMF 2.1.x or greater.
 - PHP 8.0 or greater.
 
-######Features:
+###### Features:
 
 - No file edits, works on all themes
 - Categories, you can add as many categories as you want.
@@ -23,7 +23,7 @@ Is a modification for SMF which allows you to create a simple FAQ (Frequently As
 - You can use BBC code on your FAQs, this mod uses the SMF editor which make it easy to add/edit your FAQs.
 - Custom message to show at the top of your FAQ page
 
-######Change log
+###### Change log
 
 - 2.0
   - Restructured code
@@ -32,21 +32,21 @@ Is a modification for SMF which allows you to create a simple FAQ (Frequently As
   - Add custom message on top
   - Sanitize all inputs, adds validation to match against predefined types for each received inputs
 
--1.2
+- 1.2
   - Fixed a bug with the categories been reset when editing a faq.
   - Re-write in OOP, the mod now performs less queries by using the cache system if available.
 Some code improved.
 
--1.1
+- 1.1
   - Added categories
   - Permission to Add/Edit/Delete FAQs and Categories.
   - Lots of bugs fixed.
   - Previews.
 
--1.0.1
+- 1.0.1
   - Revamp of language strings.
   - Use of javascript:void(0) instead of # on Faq.template.php.
   - Fixed an issue with the WYSIWYG editor, thanks to Tenma.
 
--1.0
+- 1.0
   - Finished first version.
