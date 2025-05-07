@@ -25,7 +25,7 @@ function template_faq_index(): void
 
     showSideBar();
 
-    $useJavaScript = $modSettings[Faq::NAME .'_'. FaqAdmin::SETTINGS_USE_JS];
+    $useJavaScript = $utils->setting(FaqAdmin::SETTINGS_USE_JS);
 
     echo '
 	<div class="rightSide" >';
