@@ -15,27 +15,6 @@ class FaqRepository extends BaseRepository
         parent::__construct();
     }
 
-    public function getAll(int $start = 0, int $limit = 0): array
-    {
-        $needsPagination = $limit > 0;
-        $queryStringCount = $queryString = '
-            SELECT ' . (implode(',', $this->getColumns())) . '
-			FROM {db_prefix}' . $this->getTable()
-            . $this->buildOrderBy();
-        $params = [];
-
-        if ($needsPagination) {
-            $queryString .= '
-			{raw:limitQuery}';
-            $params = array_merge($params, ['limitQuery' => $this->buildLimitQuery($start, $limit)]);
-        }
-
-        return [
-            'total' => $needsPagination ? $this->count($queryStringCount) : count($entities),
-            'entities' => $entities,
-        ];
-    }
-
     /* @return array[EntityInterface] */
     public function getByCatId(int $id, int $start = 0): array
     {
@@ -58,25 +37,23 @@ class FaqRepository extends BaseRepository
     }
 
     /* @return array[EntityInterface] */
-    public function searchBy(string $searchValue, int $start = 0): array
+    public function searchBy(string $searchValue, int $start = 0, $limit = 0): array
     {
-        $queryString = '
-		SELECT ' . (implode(',', $this->getColumns())) . '
-		FROM {db_prefix}' . $this->getTable() . '
-		WHERE '. FaqEntity::TITLE .' LIKE {string:searchValue}
+        $needsPagination = $limit > 0;
+        $queryString = $this->buildQueryString('WHERE '. FaqEntity::TITLE .' LIKE {string:searchValue}
 		    OR '. FaqEntity::BODY .' LIKE {string:searchValue}'
-            . $this->buildOrderBy();
+            . $this->buildOrderBy() . '{raw:limitQuery}');
         $params = [
             'searchValue' => '%'. $searchValue .'%',
+            'limitQuery' => $this->buildLimitQuery($start, $limit),
         ];
 
-        $request = $this->db['db_query']('',$queryString . '{raw:limitQuery}',
-            array_merge($params, ['limitQuery' => $this->buildLimitQuery($start)])
-        );
+        $request = $this->db['db_query']('', $queryString, $params);
+        $entities = $this->prepareData($request);
 
         return [
-            'total' => $this->count($queryString, $params),
-            'entities' => $this->prepareData($request),
+            'total' => $needsPagination ? $this->count($queryString) : count($entities),
+            'entities' => $entities,
         ];
     }
 }

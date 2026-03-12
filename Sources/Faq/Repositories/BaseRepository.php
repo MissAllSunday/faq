@@ -125,10 +125,7 @@ abstract class BaseRepository implements RepositoryInterface
     public function getAll(int $start = 0, int $limit = 0): array
     {
         $needsPagination = $limit > 0;
-        $queryToCount = $queryString = '
-        SELECT ' . (implode(',', $this->getColumns())) . '
-        FROM {db_prefix}' . $this->getTable() .
-            $this->buildOrderBy();
+        $queryToCount = $queryString = $this->buildQueryString($this->buildOrderBy());
 
         $params = [];
 
@@ -145,29 +142,21 @@ abstract class BaseRepository implements RepositoryInterface
         ];
     }
 
-    public function buildPagination(int $start, string $paginationUrl, int $total = 0): string
+    protected function buildQueryString(string $identifier = '') : string
     {
-        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION);
-
-        if (empty($limit) || !$total) {
-            return '';
-        }
-
-       return constructPageIndex(
-            $paginationUrl,
-            $start,
-            $total,
-            $limit
-        );
+        return '
+        SELECT ' . (implode(',', $this->getColumns())) . '
+        FROM {db_prefix}' . $this->getTable() .
+            $identifier;
     }
 
-    protected function buildLimitQuery(int $start, int $limit): string
+    protected function buildLimitQuery(int $start, int $limit = 0): string
     {
 
-        return strtr('LIMIT {start}, {limit}', [
+        return $limit > 0 ? strtr('LIMIT {start}, {limit}', [
             '{start}' => $start,
             '{limit}' => $limit
-        ]);
+        ]) : '';
 
     }
 

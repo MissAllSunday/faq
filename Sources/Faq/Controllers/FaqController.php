@@ -53,25 +53,18 @@ class FaqController extends BaseController
 
     public function index(): void
     {
-        global $context;
-
         $this->checkAllowedTo(self::SUB_ACTION_INDEX);
 
         $start = $this->request->get('start', 0);
         $data = $this->service->getAll($start);
 
-        $this->setTemplateVars([
-            'entities' => $data['entities'],
-            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
-        ]);
+        $this->setTemplateVars($data);
     }
 
     public function search(): void
     {
-        global $context;
-
         if (!$this->request->isPost()) {
-            $this->redirect('', 'index');
+            $this->redirect('', self::SUB_ACTION_INDEX);
         }
 
         $this->checkAllowedTo(self::SUB_ACTION_SEARCH);
@@ -79,18 +72,16 @@ class FaqController extends BaseController
         $searchValue = $this->request->get('search_value');
 
         if (empty($searchValue)) {
-            $this->redirect(self::ERROR, 'index');
+            $this->redirect(self::ERROR, self::SUB_ACTION_INDEX);
         }
 
         $title = strtr($this->utils->text('search_title'),
             ['{searchValue}' => $searchValue]);
         $start = $this->request->get('start', 0);
-        $data = $this->repository->searchBy($searchValue, $start);
+        $data = $this->service->searchBy($searchValue, $start);
+        $data['pagination'] = $this->service->buildPagination($start, $data['total']);
 
-        $this->setTemplateVars([
-            'entities' => $data['entities'],
-            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
-        ], [
+        $this->setTemplateVars($data, [
             'sub_template' => Faq::NAME . '_index',
             'page_title' => $title,
         ]);

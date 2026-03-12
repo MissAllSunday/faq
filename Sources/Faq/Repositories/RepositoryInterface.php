@@ -11,8 +11,6 @@ interface RepositoryInterface
 
     public function getAll(int $start = 0, int $limit = 0): array;
 
-    public function buildPagination(int $start, string $paginationUrl): string;
-
     public function getTable(): string;
 
     public function getById(int $id): FaqEntity | CategoryEntity;
