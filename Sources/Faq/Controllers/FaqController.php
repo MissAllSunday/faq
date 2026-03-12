@@ -11,6 +11,7 @@ use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
 use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqList;
+use Faq\Services\FaqService;
 
 class FaqController extends BaseController
 {
@@ -33,21 +34,18 @@ class FaqController extends BaseController
         self::SUB_ACTION_CATEGORY,
     ];
 
-    protected RepositoryInterface $repository;
-    protected CategoryRepository $categoryRepository;
-    protected FaqUtils $utils;
+    protected ?FaqService $service;
+    protected ?FaqRequest $request;
 
     public function __construct(
         ?FaqRequest $request = null,
-        ?FaqRepository $repository = null,
-        CategoryRepository $categoryRepository = null)
+        ?FaqService $service = null)
     {
-        $this->repository = $repository ?? new FaqRepository();
-        $this->categoryRepository  = $categoryRepository ?? new CategoryRepository();
-        $this->utils = new FaqUtils();
+        $this->service = $service ?? new FaqService();
+        $this->request = $request ?? new FaqRequest();
 
         $this->setTemplateVars([
-            'categories' => $this->categoryRepository->getAll(false)['entities'],
+            'categories' => $this->service->getAllCategories()['entities'],
         ]);
 
         parent::__construct($request);
@@ -57,7 +55,7 @@ class FaqController extends BaseController
     {
         global $context;
 
-        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
+        $this->checkAllowedTo(self::SUB_ACTION_INDEX);
 
         $start = $this->request->get('start', 0);
         $data = $this->repository->getAll(true, $start);
@@ -76,7 +74,7 @@ class FaqController extends BaseController
             $this->redirect('', 'index');
         }
 
-        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
+        $this->checkAllowedTo(self::SUB_ACTION_SEARCH);
 
         $searchValue = $this->request->get('search_value');
 
@@ -101,12 +99,12 @@ class FaqController extends BaseController
 
     public function add(): void
     {
-        global $sourcedir, $txt;
+        global $sourcedir;
 
         // Needed for the WYSIWYG editor.
         require_once($sourcedir . '/Subs-Editor.php');
 
-        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD);
+        $this->checkAllowedTo(self::SUB_ACTION_ADD);
 
         $id = $this->request->get('id');
         $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
@@ -154,13 +152,13 @@ class FaqController extends BaseController
 
     public function single(): void
     {
-        $id = $this->request->get('id');
+        $id = $this->request->get(FaqEntity::ID);
 
         if (!$id) {
-            $this->redirect('', 'index');
+            $this->redirect('', self::SUB_ACTION_INDEX);
         }
 
-        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
+        $this->checkAllowedTo(self::SUB_ACTION_SINGLE);
 
         /** @var FaqEntity $entity */
         $entity = $this->repository->getById($id);
@@ -179,7 +177,7 @@ class FaqController extends BaseController
         $result = self::ERROR;
         $id = $this->request->get('id');
 
-        isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE);
+        $this->checkAllowedTo(self::SUB_ACTION_DELETE);
 
         if ($id) {
             $this->repository->delete([$id]);
@@ -193,7 +191,7 @@ class FaqController extends BaseController
     {
         global $context;
 
-        isAllowedTo([Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD, Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]);
+        $this->checkAllowedTo(self::SUB_ACTION_MANAGE);
 
         $context['sub_template'] = 'show_list';
         $context['default_list'] = 'faq_list';
@@ -240,6 +238,24 @@ class FaqController extends BaseController
         $logs[(int) $user_info['id']] = time();
 
         return json_encode($logs);
+    }
+
+    protected function checkAllowedTo(string $action)
+    {
+        $toCheck = match ($action) {
+            self::SUB_ACTION_MANAGE => [
+                Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
+                Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE
+            ],
+            self::SUB_ACTION_INDEX,
+            self::SUB_ACTION_CATEGORY,
+            self::SUB_ACTION_SINGLE,
+            self::SUB_ACTION_SEARCH => Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW,
+            self::SUB_ACTION_ADD    => Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
+            default                 => Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE,
+        };
+
+        isAllowedTo($toCheck);
     }
 
     protected function getSubActions(): array
