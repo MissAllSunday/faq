@@ -122,23 +122,26 @@ abstract class BaseRepository implements RepositoryInterface
         return $countTotal;
     }
 
-    public function getAll($needsPagination = true, int $start = 0): array
+    public function getAll(int $start = 0, int $limit = 0): array
     {
-        $queryStringCount = $queryString = '
-            SELECT ' . (implode(',', $this->getColumns())) . '
-			FROM {db_prefix}' . $this->getTable()
-            . $this->buildOrderBy();
+        $needsPagination = $limit > 0;
+        $queryToCount = $queryString = '
+        SELECT ' . (implode(',', $this->getColumns())) . '
+        FROM {db_prefix}' . $this->getTable() .
+            $this->buildOrderBy();
+
         $params = [];
 
         if ($needsPagination) {
-            $queryString .= '
-			{raw:limitQuery}';
-            $params = array_merge($params, ['limitQuery' => $this->buildLimitQuery($start)]);
+            $queryString .= ' {raw:limitQuery}';
+            $params['limitQuery'] = $this->buildLimitQuery($start, $limit);
         }
 
+        $entities = $this->prepareData($this->db['db_query']('', $queryString, $params));
+
         return [
-            'total' => $needsPagination ? $this->count($queryStringCount) : 0,
-            'entities' => $this->prepareData($this->db['db_query']('', $queryString, $params)),
+            'total' => $needsPagination ? $this->count($queryToCount) : count($entities),
+            'entities' => $entities,
         ];
     }
 
@@ -158,14 +161,13 @@ abstract class BaseRepository implements RepositoryInterface
         );
     }
 
-    protected function buildLimitQuery(int $start): string
+    protected function buildLimitQuery(int $start, int $limit): string
     {
-        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
 
-        return $limit ? strtr('LIMIT {start}, {limit}', [
+        return strtr('LIMIT {start}, {limit}', [
             '{start}' => $start,
             '{limit}' => $limit
-        ]) : '';
+        ]);
 
     }
 

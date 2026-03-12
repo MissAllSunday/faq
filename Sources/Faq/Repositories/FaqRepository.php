@@ -15,6 +15,27 @@ class FaqRepository extends BaseRepository
         parent::__construct();
     }
 
+    public function getAll(int $start = 0, int $limit = 0): array
+    {
+        $needsPagination = $limit > 0;
+        $queryStringCount = $queryString = '
+            SELECT ' . (implode(',', $this->getColumns())) . '
+			FROM {db_prefix}' . $this->getTable()
+            . $this->buildOrderBy();
+        $params = [];
+
+        if ($needsPagination) {
+            $queryString .= '
+			{raw:limitQuery}';
+            $params = array_merge($params, ['limitQuery' => $this->buildLimitQuery($start, $limit)]);
+        }
+
+        return [
+            'total' => $needsPagination ? $this->count($queryStringCount) : count($entities),
+            'entities' => $entities,
+        ];
+    }
+
     /* @return array[EntityInterface] */
     public function getByCatId(int $id, int $start = 0): array
     {

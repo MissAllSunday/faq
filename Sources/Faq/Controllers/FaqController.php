@@ -58,7 +58,7 @@ class FaqController extends BaseController
         $this->checkAllowedTo(self::SUB_ACTION_INDEX);
 
         $start = $this->request->get('start', 0);
-        $data = $this->repository->getAll(true, $start);
+        $data = $this->service->getAll($start);
 
         $this->setTemplateVars([
             'entities' => $data['entities'],
