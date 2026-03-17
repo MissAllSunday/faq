@@ -6,24 +6,24 @@ use Faq\Entities\CategoryEntity;
 use Faq\Entities\EntityInterface;
 use Faq\Entities\FaqEntity;
 use Faq\FaqAdmin;
-use Faq\FaqUtils;
+use Faq\FaqConfig;
 
 abstract class BaseRepository implements RepositoryInterface
 {
     protected $db;
     protected FaqEntity | CategoryEntity $entity;
-    protected FaqUtils $utils;
+    protected FaqConfig $config;
     protected string $sortMethod;
     protected string $sortOrder;
 
-    public function __construct()
+    public function __construct(?FaqConfig $config = null)
     {
         global $smcFunc;
 
         $this->db = $smcFunc;
-        $this->utils = new FaqUtils();
-        $this->sortMethod = $this->utils->setting(FaqAdmin::SETTINGS_SORT_METHOD, 'id');
-        $this->sortOrder = $this->utils->setting(FaqAdmin::SETTINGS_SORT_ORDER, 'ASC');
+        $this->config = $config ?? new FaqConfig();
+        $this->sortMethod = $this->config->setting(FaqAdmin::SETTINGS_SORT_METHOD, 'id');
+        $this->sortOrder = $this->config->setting(FaqAdmin::SETTINGS_SORT_ORDER, 'ASC');
     }
 
     public function insert(array $entityData): FaqEntity | CategoryEntity

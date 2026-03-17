@@ -6,15 +6,18 @@ use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
-use Faq\FaqUtils;
+use Faq\FaqConfig;
+use Faq\FaqParser;
 
 function template_faq_index(): void
 {
 	global $txt, $context, $scripturl, $modSettings;
 
 	$entities = $context[Faq::NAME]['entities'];
-    /* @var $utils FaqUtils */
-    $utils = $context[Faq::NAME]['utils'];
+    /* @var $config FaqConfig */
+    $config = new FaqConfig();
+    /* @var $parser FaqParser */
+    $parser = new FaqParser();
 
     echo '
 <div class="mainContent">';
@@ -25,7 +28,7 @@ function template_faq_index(): void
 
     showSideBar();
 
-    $useJavaScript = $utils->setting(FaqAdmin::SETTINGS_USE_JS);
+    $useJavaScript = $config->setting(FaqAdmin::SETTINGS_USE_JS);
 
     echo '
 	<div class="rightSide" >';
@@ -48,7 +51,7 @@ function template_faq_index(): void
                 $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
                 ';id='. $entity->getId();
 
-            $dataParsed = $utils->parse([
+            $dataParsed = $parser->parse([
                 'body' => $entity->getBody(),
                 'title' => $entity->getName()]);
 
@@ -184,7 +187,7 @@ function showSideBar(): void
     }
 
 	// Show a nice category list.
-	if (!empty($modSettings['faq_show_catlist']))
+	if (!empty($modSettings[FAQ::NAME . '_show_catlist']))
 	{
 		echo '
 		<div class="cat_bar">
@@ -213,12 +216,11 @@ function showSideBar(): void
 		<br />';
 	}
 
-	if (!empty($modSettings['faq_show_latest']))
-	{
-		echo '
+	if (!empty($modSettings[FAQ::NAME . '_show_latest'])) {
+        echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt[Faq::NAME .'_latest'] ,'</span>
+				<span class="ie6_header floatleft">', $txt[Faq::NAME . '_latest'], '</span>
 			</h3>
 		</div>
 
@@ -227,11 +229,15 @@ function showSideBar(): void
 			<div class="content">
 				<ul class="reset">';
 
-		foreach($context['Faq']['object']->getLatest($modSettings['Faq_show_latest']) as $all)
-			echo '
+        /* @var FaqEntity $faqEntity */
+        foreach ($context[FAQ::NAME]['latest'] as $faqEntity) {
+            // @TODO build a helper function to append the session stuff on all url vars
+            $url = $scripturl . '?action=' . Faq::NAME . ';sa='. FaqController::SUB_ACTION_SINGLE .';id='. $faqEntity->getId();
+            echo '
 					<li>
-						', $all['link'] ,'
+						<a href="', $url ,'">', $faqEntity->getName(), '</a>
 					</li>';
+        }
 
 		echo '
 				</ul>

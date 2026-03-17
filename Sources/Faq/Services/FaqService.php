@@ -2,8 +2,9 @@
 
 namespace Faq\Services;
 
+use Faq\Entities\FaqEntity;
 use Faq\FaqAdmin;
-use Faq\FaqUtils;
+use Faq\FaqConfig;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
 
@@ -11,22 +12,22 @@ class FaqService
 {
     protected CategoryRepository $categoryRepository;
     protected FaqRepository $faqRepository;
-    protected FaqUtils $utils;
+    protected FaqConfig $config;
 
     public function __construct(
         CategoryRepository $categoryRepository = null,
         FaqRepository $faqRepository = null,
-        FaqUtils $utils = null
+        FaqConfig $config = null
     )
     {
         $this->categoryRepository = $categoryRepository ?? new CategoryRepository();
         $this->faqRepository = $faqRepository ?? new FaqRepository();
-        $this->utils = $utils ?? new FaqUtils();
+        $this->config = $config ?? new FaqConfig();
     }
 
     public function getAll(int $start = 0): array
     {
-        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
+        $limit = $this->config->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
         $data = $this->faqRepository->getAll($start, $limit);
         $data['pagination'] = $this->buildPagination($start, $data['total']);
 
@@ -35,13 +36,24 @@ class FaqService
 
     public function getAllCategories(int $start = 0): array
     {
-        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
+        $limit = $this->config->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
+
         return $this->categoryRepository->getAll($start, $limit)['entities'];
+    }
+
+    public function getById(int $id = 0): FaqEntity
+    {
+        // No entity? send a brand new one
+        if (!$id) {
+            return $this->faqRepository->getEntity();
+        }  else {
+            return $this->faqRepository->getById($id);
+        }
     }
 
     public function searchBy(string $searchValue, int $start = 0): array
     {
-        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
+        $limit = $this->config->setting(FaqAdmin::SETTINGS_PAGINATION, 0);
         $data = $this->faqRepository->searchBy($searchValue, $start, $limit);
         $data['pagination'] = $this->buildPagination($start, $data['total']);
 
@@ -54,7 +66,7 @@ class FaqService
         global $context;
 
         $paginationUrl = $paginationUrl ?? $context['current_url'];
-        $limit = $this->utils->setting(FaqAdmin::SETTINGS_PAGINATION);
+        $limit = $this->config->setting(FaqAdmin::SETTINGS_PAGINATION);
 
         if (empty($limit) || !$total) {
             return '';
@@ -66,5 +78,12 @@ class FaqService
             $total,
             $limit
         );
+    }
+
+    public function getLatest(): array
+    {
+        $limit = $this->config->setting(FaqAdmin::SETTINGS_SHOW_LATEST, 0);
+
+        return ($limit > 1) ? $this->faqRepository->getLatest($limit) : [];
     }
 }

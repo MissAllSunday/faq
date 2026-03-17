@@ -5,14 +5,17 @@ namespace Faq\Repositories;
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\FaqAdmin;
+use Faq\FaqConfig;
 
 class FaqRepository extends BaseRepository
 {
-    public function __construct(?FaqEntity $entity = null)
-    {
+    public function __construct(
+        ?FaqEntity $entity = null,
+        ?FaqConfig $config = null
+    ) {
         $this->entity = $entity ?? new FaqEntity(FaqEntity::DEFAULT_VALUES);
 
-        parent::__construct();
+        parent::__construct($config);
     }
 
     /* @return array[EntityInterface] */
@@ -55,5 +58,16 @@ class FaqRepository extends BaseRepository
             'total' => $needsPagination ? $this->count($queryString) : count($entities),
             'entities' => $entities,
         ];
+    }
+
+    public function getLatest(int $limit = 5): array
+    {
+        $queryString = $this->buildQueryString(' ORDER BY ' . FaqEntity::ID . ' DESC {raw:limitQuery}');
+        $params = [
+            'limitQuery' => $this->buildLimitQuery(0, $limit),
+        ];
+
+        $request = $this->db['db_query']('', $queryString, $params);
+        return $this->prepareData($request);
     }
 }

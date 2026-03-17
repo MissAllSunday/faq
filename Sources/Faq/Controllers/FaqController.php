@@ -5,13 +5,16 @@ namespace Faq\Controllers;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
+use Faq\FaqConfig;
+use Faq\FaqParser;
 use Faq\FaqRequest;
-use Faq\FaqUtils;
+use Faq\FaqTranslator;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
 use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqList;
 use Faq\Services\FaqService;
+use Faq\Services\FaqValidation;
 
 class FaqController extends BaseController
 {
@@ -36,19 +39,26 @@ class FaqController extends BaseController
 
     protected ?FaqService $service;
     protected ?FaqRequest $request;
+    protected ?FaqParser $parser;
 
     public function __construct(
         ?FaqRequest $request = null,
-        ?FaqService $service = null)
-    {
+        ?FaqService $service = null,
+        ?FaqValidation $validation = null,
+        ?FaqConfig $config = null,
+        ?FaqTranslator $translator = null,
+        ?FaqParser $parser = null
+    ) {
         $this->service = $service ?? new FaqService();
         $this->request = $request ?? new FaqRequest();
+        $this->parser = $parser ?? new FaqParser();
 
         $this->setTemplateVars([
-            'categories' => $this->service->getAllCategories()['entities'],
+            'categories' => $this->service->getAllCategories(),
+            'latest' => $this->service->getLatest()
         ]);
 
-        parent::__construct($request);
+        parent::__construct($request, $validation, $config, $translator);
     }
 
     public function index(): void
@@ -75,7 +85,7 @@ class FaqController extends BaseController
             $this->redirect(self::ERROR, self::SUB_ACTION_INDEX);
         }
 
-        $title = strtr($this->utils->text('search_title'),
+        $title = strtr($this->translator->text('search_title'),
             ['{searchValue}' => $searchValue]);
         $start = $this->request->get('start', 0);
         $data = $this->service->searchBy($searchValue, $start);
@@ -97,8 +107,8 @@ class FaqController extends BaseController
 
         $this->checkAllowedTo(self::SUB_ACTION_ADD);
 
-        $id = $this->request->get('id');
-        $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
+        $id = $this->request->get(FaqEntity::ID, 0);
+        $entity = $this->service->getById($id);
         $templateVars = [
             'entity' => $entity,
             'categories' => $this->categoryRepository->getAll()['entities'],
@@ -112,7 +122,7 @@ class FaqController extends BaseController
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
             
             if ($this->request->isSet('preview')) {
-                $templateVars['preview'] = $this->utils->parse($data);
+                $templateVars['preview'] = $this->parser->parse($data);
             }
 
             $entity->setEntity($data);
@@ -152,7 +162,7 @@ class FaqController extends BaseController
         $this->checkAllowedTo(self::SUB_ACTION_SINGLE);
 
         /** @var FaqEntity $entity */
-        $entity = $this->repository->getById($id);
+        $entity = $this->service->getById($id);
 
         $this->setTemplateVars([
             'entities' => [$entity],
@@ -213,11 +223,11 @@ class FaqController extends BaseController
             'category' => $category,
         ], [
             'sub_template' => Faq::NAME . '_index',
-            'page_title' => strtr($this->utils->text('by_category'), [
+            'page_title' => strtr($this->translator->text('by_category'), [
                 '{categoryName}' => $category->getName(),
             ]),
         ]);
-        $this->overrideLinkTree(strtr($this->utils->text('by_category'), [
+        $this->overrideLinkTree(strtr($this->translator->text('by_category'), [
             '{categoryName}' => $category->getName(),
         ]));
     }

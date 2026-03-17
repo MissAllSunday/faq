@@ -4,8 +4,9 @@ namespace Faq\Controllers;
 
 use Faq\Faq as Faq;
 use Faq\FaqAdmin;
+use Faq\FaqConfig;
 use Faq\FaqRequest;
-use Faq\FaqUtils;
+use Faq\FaqTranslator;
 use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqValidation;
 
@@ -15,17 +16,23 @@ abstract class BaseController
     protected ?string $subAction = null;
     protected FaqValidation $validation;
     protected RepositoryInterface $repository;
-    protected FaqUtils $utils;
+    protected FaqConfig $config;
+    protected FaqTranslator $translator;
     protected int $id;
 
     const SUCCESS = 'info';
     const ERROR = 'error';
 
-    public function __construct(?FaqRequest $request = null, FaqValidation $validation = null)
-    {
+    public function __construct(
+        ?FaqRequest $request = null, 
+        ?FaqValidation $validation = null,
+        ?FaqConfig $config = null,
+        ?FaqTranslator $translator = null
+    ) {
         $this->request = $request ?? new FaqRequest();
         $this->validation = $validation ?? new FaqValidation();
-        $this->utils = new FaqUtils();
+        $this->config = $config ?? new FaqConfig();
+        $this->translator = $translator ?? new FaqTranslator();
     }
 
     protected function redirect(string $type = self::ERROR, string $subAction = 'generic'): void
@@ -48,7 +55,7 @@ abstract class BaseController
         }
 
         $message = explode('_', $_SESSION[$key]);
-        $text = $this->utils->text($_SESSION[$key]);
+        $text = $this->translator->text($_SESSION[$key]);
         unset($_SESSION[$key]);
 
         return '
@@ -80,11 +87,11 @@ abstract class BaseController
         $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = $action . '_' . $this->subAction;
-        $context['page_title'] = $this->utils->text($txtKey . $subAction . '_title');
+        $context['page_title'] = $this->translator->text($txtKey . $subAction . '_title');
         $context['current_url'] = $scripturl . $actionUrl . $subActionUrl;
         $context['linktree'][] = [
             'url' => $scripturl . $actionUrl,
-            'name' => $this->utils->text('index_title')];
+            'name' => $this->translator->text('index_title')];
 
         if ($this->subAction !== 'index') {
             $context['linktree'][] = [
@@ -94,7 +101,7 @@ abstract class BaseController
 
         loadCSSFile('faq.css', [], 'smf_faq');
 
-        if ($this->utils->setting(FaqAdmin::SETTINGS_USE_JS)) {
+        if ($this->config->setting(FaqAdmin::SETTINGS_USE_JS)) {
             loadJavascriptFile('faqToggle.js', ['defer' => true]);
         }
     }
@@ -122,9 +129,7 @@ abstract class BaseController
         global $context;
 
         if (!isset($context[Faq::NAME])) {
-            $context[Faq::NAME] = [
-                'utils' => $this->utils
-            ];
+            $context[Faq::NAME] = [];
         }
 
         if (empty($context[Faq::NAME]['message'])) {

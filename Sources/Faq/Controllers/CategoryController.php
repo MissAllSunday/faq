@@ -6,10 +6,13 @@ use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
+use Faq\FaqConfig;
 use Faq\FaqRequest;
+use Faq\FaqTranslator;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqList;
+use Faq\Services\FaqValidation;
 
 class CategoryController extends BaseController
 {
@@ -25,11 +28,14 @@ class CategoryController extends BaseController
 
     public function __construct(
         ?FaqRequest $request = null,
-        ?RepositoryInterface $categoryRepository = null)
-    {
+        ?RepositoryInterface $categoryRepository = null,
+        ?FaqValidation $validation = null,
+        ?FaqConfig $config = null,
+        ?FaqTranslator $translator = null
+    ) {
         $this->repository = $categoryRepository ?? new CategoryRepository();
 
-        parent::__construct($request);
+        parent::__construct($request, $validation, $config, $translator);
     }
 
     public function manage(): void

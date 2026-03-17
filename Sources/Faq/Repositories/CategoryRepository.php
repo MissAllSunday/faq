@@ -4,14 +4,17 @@ namespace Faq\Repositories;
 
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
+use Faq\FaqConfig;
 
 class CategoryRepository extends BaseRepository
 {
-    public function __construct(?CategoryEntity $entity = null)
-    {
+    public function __construct(
+        ?CategoryEntity $entity = null,
+        ?FaqConfig $config = null
+    ) {
         $this->entity = $entity ?? new CategoryEntity();
 
-        parent::__construct();
+        parent::__construct($config);
     }
 
     public function getAll($needsPagination = true, int $start = 0): array
