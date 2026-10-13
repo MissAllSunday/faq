@@ -8,9 +8,9 @@ use Faq\FaqConfig;
 
 class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
-    public function __construct(?CategoryEntity $entity = null, ?FaqConfig $config = null)
+    public function __construct(CategoryEntity $entity, FaqConfig $config)
     {
-        $this->entity = $entity ?? new CategoryEntity();
+        $this->entity = $entity;
 
         parent::__construct($config);
     }

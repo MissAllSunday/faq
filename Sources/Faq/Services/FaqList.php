@@ -23,15 +23,15 @@ class FaqList
 
     public function __construct(
         RepositoryInterface $repository,
-        int $start = 0,
-        ?FaqTranslator $translator = null,
-        ?FaqConfig $config = null
+        FaqTranslator $translator,
+        FaqConfig $config,
+        int $start = 0
     )
     {
         $this->repository = $repository;
+        $this->translator = $translator;
+        $this->config = $config;
         $this->start = $start;
-        $this->translator = $translator ?? new FaqTranslator();
-        $this->config = $config ?? new FaqConfig();
     }
 
     public function build(string $message = ''): void

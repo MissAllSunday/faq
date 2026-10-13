@@ -6,10 +6,13 @@ use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
+use Faq\FaqConfig;
+use Faq\FaqParser;
 use Faq\FaqRequest;
-use Faq\Repositories\CategoryRepository;
+use Faq\FaqTranslator;
 use Faq\Repositories\CategoryRepositoryInterface;
 use Faq\Services\FaqList;
+use Faq\Services\FaqValidation;
 
 class CategoryController extends BaseController
 {
@@ -29,15 +32,20 @@ class CategoryController extends BaseController
     protected CategoryRepositoryInterface $categoryRepository;
 
     public function __construct(
-        ?FaqRequest $request = null,
-        ?CategoryRepositoryInterface $categoryRepository = null)
+        FaqRequest $request,
+        FaqValidation $validation,
+        FaqTranslator $translator,
+        FaqConfig $config,
+        FaqParser $parser,
+        CategoryRepositoryInterface $categoryRepository
+    )
     {
-        $this->categoryRepository = $categoryRepository ?? new CategoryRepository();
+        parent::__construct($request, $validation, $translator, $config, $parser);
+
+        $this->categoryRepository = $categoryRepository;
 
         // Inherited members (save()) work against the generic contract.
         $this->repository = $this->categoryRepository;
-
-        parent::__construct($request);
     }
 
     public function manage(): void
@@ -49,7 +57,7 @@ class CategoryController extends BaseController
         $context['sub_template'] = 'show_list';
         $context['default_list'] = 'faq_list';
 
-        $categoryList = new FaqList($this->repository, $this->request->get('start', 0));
+        $categoryList = new FaqList($this->repository, $this->translator, $this->config, $this->request->get('start', 0));
         $categoryList->build($context[Faq::NAME]['message']);
     }
 

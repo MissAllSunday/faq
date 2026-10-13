@@ -9,9 +9,9 @@ use Faq\FaqConfig;
 
 class FaqRepository extends BaseRepository implements FaqRepositoryInterface
 {
-    public function __construct(?FaqEntity $entity = null, ?FaqConfig $config = null)
+    public function __construct(FaqEntity $entity, FaqConfig $config)
     {
-        $this->entity = $entity ?? new FaqEntity(FaqEntity::DEFAULT_VALUES);
+        $this->entity = $entity;
 
         parent::__construct($config);
     }

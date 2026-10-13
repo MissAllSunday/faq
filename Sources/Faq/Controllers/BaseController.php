@@ -13,7 +13,7 @@ use Faq\Services\FaqValidation;
 
 abstract class BaseController
 {
-    protected ?FaqRequest $request;
+    protected FaqRequest $request;
     protected ?string $subAction = null;
     protected FaqValidation $validation;
     protected RepositoryInterface $repository;
@@ -25,19 +25,23 @@ abstract class BaseController
     const SUCCESS = 'info';
     const ERROR = 'error';
 
+    /**
+     * Controllers are built by FaqRoute::makeController() only for our own actions,
+     * so every collaborator is required here: no `= null` + `new` fallbacks.
+     */
     public function __construct(
-        ?FaqRequest $request = null,
-        ?FaqValidation $validation = null,
-        ?FaqTranslator $translator = null,
-        ?FaqConfig $config = null,
-        ?FaqParser $parser = null
+        FaqRequest $request,
+        FaqValidation $validation,
+        FaqTranslator $translator,
+        FaqConfig $config,
+        FaqParser $parser
     )
     {
-        $this->request = $request ?? new FaqRequest();
-        $this->validation = $validation ?? new FaqValidation();
-        $this->translator = $translator ?? new FaqTranslator();
-        $this->config = $config ?? new FaqConfig();
-        $this->parser = $parser ?? new FaqParser();
+        $this->request = $request;
+        $this->validation = $validation;
+        $this->translator = $translator;
+        $this->config = $config;
+        $this->parser = $parser;
     }
 
     protected function redirect(string $type = self::ERROR, string $subAction = 'generic'): void

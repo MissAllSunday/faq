@@ -9,9 +9,7 @@ use Faq\FaqConfig;
 use Faq\FaqParser;
 use Faq\FaqRequest;
 use Faq\FaqTranslator;
-use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\CategoryRepositoryInterface;
-use Faq\Repositories\FaqRepository;
 use Faq\Repositories\FaqRepositoryInterface;
 use Faq\Services\FaqList;
 use Faq\Services\FaqValidation;
@@ -43,20 +41,34 @@ class FaqController extends BaseController
     protected FaqRepositoryInterface $faqRepository;
     protected CategoryRepositoryInterface $categoryRepository;
 
+    /**
+     * No queries and no $context writes here: the categories are loaded lazily by
+     * loadCategories() from the sub actions that actually render them.
+     */
     public function __construct(
-        ?FaqRequest $request = null,
-        ?FaqRepositoryInterface $repository = null,
-        ?CategoryRepositoryInterface $categoryRepository = null)
+        FaqRequest $request,
+        FaqValidation $validation,
+        FaqTranslator $translator,
+        FaqConfig $config,
+        FaqParser $parser,
+        FaqRepositoryInterface $faqRepository,
+        CategoryRepositoryInterface $categoryRepository
+    )
     {
-        // Built first: setTemplateVars() below already needs the translator and the parser.
-        parent::__construct($request);
+        parent::__construct($request, $validation, $translator, $config, $parser);
 
-        $this->faqRepository = $repository ?? new FaqRepository();
-        $this->categoryRepository  = $categoryRepository ?? new CategoryRepository();
+        $this->faqRepository = $faqRepository;
+        $this->categoryRepository = $categoryRepository;
 
         // Inherited members (save()) work against the generic contract.
         $this->repository = $this->faqRepository;
+    }
 
+    /**
+     * Loads the category list for the sidebar and the add form.
+     */
+    protected function loadCategories(): void
+    {
         $this->setTemplateVars([
             'categories' => $this->categoryRepository->getAll(false)['entities'],
         ]);
@@ -70,6 +82,8 @@ class FaqController extends BaseController
 
         $start = $this->request->get('start', 0);
         $data = $this->faqRepository->getAll(true, $start);
+
+        $this->loadCategories();
 
         $this->setTemplateVars([
             'entities' => $data['entities'],
@@ -98,6 +112,8 @@ class FaqController extends BaseController
         $start = $this->request->get('start', 0);
         $data = $this->faqRepository->searchBy($searchValue, $start);
 
+        $this->loadCategories();
+
         $this->setTemplateVars([
             'entities' => $data['entities'],
             'pagination' => $this->faqRepository->buildPagination($start, $context['current_url'], $data['total']),
@@ -121,10 +137,11 @@ class FaqController extends BaseController
         $entity = $id ? $this->faqRepository->getById($id) : $this->faqRepository->getEntity();
         $templateVars = [
             'entity' => $entity,
-            'categories' => $this->categoryRepository->getAll()['entities'],
             'errors' => '',
             'preview' => [],
         ];
+
+        $this->loadCategories();
 
         if ($this->request->isPost()) {
             $this->verifyToken(self::TOKEN_ACTION);
@@ -175,6 +192,8 @@ class FaqController extends BaseController
         /** @var FaqEntity $entity */
         $entity = $this->faqRepository->getById($id);
 
+        $this->loadCategories();
+
         $this->setTemplateVars([
             'entities' => [$entity],
         ], [
@@ -211,7 +230,7 @@ class FaqController extends BaseController
         $context['sub_template'] = 'show_list';
         $context['default_list'] = 'faq_list';
 
-        $faqList = new FaqList($this->repository, $this->request->get('start', 0));
+        $faqList = new FaqList($this->repository, $this->translator, $this->config, $this->request->get('start', 0));
         $faqList->build($context[Faq::NAME]['message']);
     }
 
@@ -230,6 +249,8 @@ class FaqController extends BaseController
         $category = $this->categoryRepository->getById($id);
         $start = $this->request->get('start', 0);
         $data = $this->faqRepository->getByCatId($id, $start);
+
+        $this->loadCategories();
 
         $this->setTemplateVars([
             'entities' => $data['entities'],

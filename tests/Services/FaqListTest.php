@@ -37,7 +37,7 @@ class FaqListTest extends TestCase
     private function makeFaqList(): MockObject
     {
         return $this->getMockBuilder(FaqList::class)
-            ->setConstructorArgs([$this->repository, 0, $this->translator, $this->config])
+            ->setConstructorArgs([$this->repository, $this->translator, $this->config, 0])
             ->onlyMethods(['createList'])
             ->getMock();
     }

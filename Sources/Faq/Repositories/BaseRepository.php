@@ -16,12 +16,12 @@ abstract class BaseRepository implements RepositoryInterface
     protected string $sortMethod;
     protected string $sortOrder;
 
-    public function __construct(?FaqConfig $config = null)
+    public function __construct(FaqConfig $config)
     {
         global $smcFunc;
 
         $this->db = $smcFunc;
-        $this->config = $config ?? new FaqConfig();
+        $this->config = $config;
         $this->sortMethod = $this->config->setting(FaqAdmin::SETTINGS_SORT_METHOD, 'id');
         $this->sortOrder = $this->config->setting(FaqAdmin::SETTINGS_SORT_ORDER, 'ASC');
     }

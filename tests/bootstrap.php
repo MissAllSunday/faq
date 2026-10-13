@@ -121,6 +121,93 @@ function cache_put_data($key, $data, $timeToLive)
     return null;
 }
 
+/**
+ * Records a call to one of the SMF mocks below so tests can assert on it.
+ */
+function faq_test_record(string $function, array $arguments = []): void
+{
+    $GLOBALS['faq_test_calls'][] = ['function' => $function, 'arguments' => $arguments];
+}
+
+function loadtemplate(string $templateName): void
+{
+    faq_test_record(__FUNCTION__, [$templateName]);
+}
+
+function isAllowedTo(array|string $permissionName): void
+{
+    faq_test_record(__FUNCTION__, [$permissionName]);
+}
+
+function checkSession(string $type = 'post', string $from_action = '', bool $is_fatal = true): string
+{
+    faq_test_record(__FUNCTION__, [$type, $from_action, $is_fatal]);
+
+    return '';
+}
+
+function validateToken(string $action, string $type = 'post', bool $reset = true): bool
+{
+    faq_test_record(__FUNCTION__, [$action, $type, $reset]);
+
+    return true;
+}
+
+function createToken(string $action, string $type = 'post'): array
+{
+    faq_test_record(__FUNCTION__, [$action, $type]);
+
+    return [];
+}
+
+function redirectexit(string $location = ''): void
+{
+    faq_test_record(__FUNCTION__, [$location]);
+}
+
+function loadCSSFile(string $fileName, array $options = [], string $id = ''): void
+{
+    faq_test_record(__FUNCTION__, [$fileName, $options, $id]);
+}
+
+function loadJavascriptFile(string $fileName, array $options = [], string $id = ''): void
+{
+    faq_test_record(__FUNCTION__, [$fileName, $options, $id]);
+}
+
+function censorText(string &$text): void
+{
+    faq_test_record(__FUNCTION__, [$text]);
+}
+
+function preparsecode(string &$text, bool $previewing = false): void
+{
+    faq_test_record(__FUNCTION__, [$text, $previewing]);
+}
+
+function constructPageIndex(
+    string $baseUrl,
+    int $start,
+    int $maxValue,
+    int $numPerPage,
+    bool $compact = false
+): string
+{
+    faq_test_record(__FUNCTION__, [$baseUrl, $start, $maxValue, $numPerPage, $compact]);
+
+    return '';
+}
+
+function create_control_richedit(array $editorOptions): void
+{
+    faq_test_record(__FUNCTION__, [$editorOptions]);
+}
+
+function createList(array $listOptions): void
+{
+    faq_test_record(__FUNCTION__, [$listOptions]);
+}
+
 $sourcedir = $boarddir = $boardurl = ROOT;
 $scripturl = 'localhost';
 
