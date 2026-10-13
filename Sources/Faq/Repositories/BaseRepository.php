@@ -195,7 +195,7 @@ abstract class BaseRepository implements RepositoryInterface
             $newEntity = $this->buildEntity();
 
             $entities[$row[$this->entity->getIndexName()]] = $newEntity->setEntity(array_map(function ($column) {
-                return ctype_digit($column) ? ((int) $column) : $column;
+                return ctype_digit((string) $column) ? ((int) $column) : $column;
             }, $row));
         }
         $this->freeResult($request);

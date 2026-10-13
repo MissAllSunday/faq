@@ -21,7 +21,7 @@ abstract class BaseController
     const SUCCESS = 'info';
     const ERROR = 'error';
 
-    public function __construct(?FaqRequest $request = null, FaqValidation $validation = null)
+    public function __construct(?FaqRequest $request = null, ?FaqValidation $validation = null)
     {
         $this->request = $request ?? new FaqRequest();
         $this->validation = $validation ?? new FaqValidation();

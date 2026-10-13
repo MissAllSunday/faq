@@ -40,7 +40,7 @@ class FaqController extends BaseController
     public function __construct(
         ?FaqRequest $request = null,
         ?FaqRepository $repository = null,
-        CategoryRepository $categoryRepository = null)
+        ?CategoryRepository $categoryRepository = null)
     {
         $this->repository = $repository ?? new FaqRepository();
         $this->categoryRepository  = $categoryRepository ?? new CategoryRepository();
