@@ -26,4 +26,19 @@ class FaqParser
 
         return $data;
     }
+
+    /**
+     * Parses an already stored BBC message (the custom message setting).
+     *
+     * No censoring and no preparsecode here: unlike FAQ bodies, this value is
+     * written by the admin settings form and rendered as it was saved.
+     */
+    public function parseMessage(string $message): string
+    {
+        global $sourcedir;
+
+        require_once($sourcedir . '/Subs-Post.php');
+
+        return parse_bbc($message);
+    }
 }

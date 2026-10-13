@@ -1,20 +1,18 @@
 <?php
 
-use Faq\Controllers\CategoryController;
 use Faq\Controllers\FaqController;
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
-use Faq\FaqParser;
+use Faq\FaqUrl;
 
 function template_faq_index(): void
 {
-	global $txt, $context, $scripturl, $modSettings;
+	global $txt, $context, $modSettings;
 
+	// Already censored and BBC parsed by the controller.
 	$entities = $context[Faq::NAME]['entities'];
-    /* @var $parser FaqParser */
-    $parser = $context[Faq::NAME]['parser'];
 
     echo '
 <div class="mainContent">';
@@ -42,32 +40,27 @@ function template_faq_index(): void
     </div>';
     }
     else {
-        /* @var FaqEntity $entity */
-        foreach($entities as $id =>$entity) {
-            $anchorHref = $useJavaScript ? '#faq_' . $entity->getId() :
-                $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
-                ';id='. $entity->getId();
-
-            $dataParsed = $parser->parse([
-                'body' => $entity->getBody(),
-                'title' => $entity->getName()]);
+        foreach($entities as $entity) {
+            $id = $entity['id'];
+            $anchorHref = $useJavaScript ? '#faq_' . $id :
+                FaqUrl::build(FaqController::ACTION, FaqController::SUB_ACTION_SINGLE, $id);
 
             echo '
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="floatleft">
-					    <a href="'. $anchorHref .'" class="faq_toggle_link" id="link_'. $entity->getId() .'">
-					        '. $dataParsed['title'] .'
+					    <a href="'. $anchorHref .'" class="faq_toggle_link" id="link_'. $id .'">
+					        '. $entity['title'] .'
                         </a>
                     </span>
 					<span class="floatright">
-						', showActions($entity) ,'
+						', showActions($id) ,'
 					</span>
 				</h3>
 			</div>
 			<div class="information windowbg">
-				<div  id="faq_', $entity->getId() ,'" class="faq_toggle">
-				', $dataParsed['body'] ,'
+				<div  id="faq_'. $id .'" class="faq_toggle">
+				', $entity['body'] ,'
 				</div>
 			</div>
 			<br />';
@@ -146,7 +139,7 @@ function template_faq_add(): void
 
 function showSideBar(): void
 {
-	global $context, $scripturl, $txt, $modSettings;
+	global $context, $txt, $modSettings;
     
 	echo '
 	<div class="leftSide" >';
@@ -161,7 +154,7 @@ function showSideBar(): void
 		<div class="information">
 			<div class="content">
                 <object id="quick_search">
-                    <form action="', $scripturl ,'?action=', FaqController::ACTION ,';sa=', FaqController::SUB_ACTION_SEARCH ,'" 
+                    <form action="', FaqUrl::build(FaqController::ACTION, FaqController::SUB_ACTION_SEARCH) ,'" 
                     method="post" accept-charset="UTF-8" class="admin_search">
                         <span class="generic_icons filter centericon"></span>
                         <input 
@@ -201,8 +194,11 @@ function showSideBar(): void
 		foreach($context[Faq::NAME]['categories'] as $category) {
             echo '
 					<li>
-						<a href="'. $scripturl .'?action=' . FaqController::ACTION .
-                ';sa=' . FaqController::SUB_ACTION_CATEGORY . ';id='. $category->getId() .'">'. $category->getName() .'</a>
+						<a href="'. FaqUrl::build(
+                FaqController::ACTION,
+                FaqController::SUB_ACTION_CATEGORY,
+                $category->getId()
+            ) .'">'. $category->getName() .'</a>
 					</li>';
         }
 
@@ -217,20 +213,22 @@ function showSideBar(): void
 	</div>';
 }
 
-function showActions(FaqEntity $entity): string
+function showActions(int $id): string
 {
-    global $context, $txt, $scripturl;
+    global $txt;
 
-    return implode(' | ', array_map(function($action) use ($context, $txt, $entity, $scripturl) {
+    return implode(' | ', array_map(function($action) use ($txt, $id) {
         $action = str_replace('_any', '', $action);
         $textKey = $action === 'add' ? 'edit' :  $action;
-        $url = $scripturl . '?action=' . Faq::NAME . ';sa='. $action .';id='. $entity->getId();
 
         // Delete is a GET link, it needs the session id to pass checkSession('get').
         // Edit links stay plain GET, they are read only.
-        if ($action === FaqController::SUB_ACTION_DELETE) {
-            $url .= ';' . $context['session_var'] . '=' . $context['session_id'];
-        }
+        $url = FaqUrl::build(
+            FaqController::ACTION,
+            $action,
+            $id,
+            $action === FaqController::SUB_ACTION_DELETE
+        );
 
         return allowedTo(Faq::NAME . '_' . $action) ?
             '<a href="'. $url .'" class="you_sure">
@@ -330,24 +328,23 @@ function showMessage(): void
 
 function showCustomMessage(): void
 {
-    global $modSettings, $txt;
+    global $context;
 
-    if (empty($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE])) {
+    // Title and already parsed body, provided by the controller.
+    $customMessage = $context[Faq::NAME]['customMessage'] ?? [];
+
+    if (empty($customMessage)) {
         return;
     }
-
-    $customTitle = !empty($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE_TITLE]) ?
-        $modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE_TITLE] :
-        $txt['faq_custom_message_title_default'];
 
     echo '
     <div class="cat_bar">
         <h3 class="catbg">
-            <span class="ie6_header floatleft">', $customTitle ,'</span>
+            <span class="ie6_header floatleft">', $customMessage['title'] ,'</span>
         </h3>
     </div>
     <div class="information">
-        ', parse_bbc($modSettings[Faq::NAME . '_' . FaqAdmin::SETTINGS_CUSTOM_MESSAGE]) ,'
+        ', $customMessage['body'] ,'
     </div>';
 }
 

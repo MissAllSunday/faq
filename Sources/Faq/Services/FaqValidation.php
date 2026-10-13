@@ -3,6 +3,7 @@
 namespace Faq\Services;
 
 use Faq\Entities\CategoryEntity;
+use Faq\Entities\EntityInterface;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\TypeError;
@@ -10,10 +11,10 @@ use Faq\ValidatorError;
 
 class FaqValidation
 {
-    protected FaqEntity|CategoryEntity $entity;
+    protected EntityInterface $entity;
     protected array $dataToSave = [];
 
-    public function isValid(CategoryEntity | FaqEntity $entity, array $dataToSave): string
+    public function isValid(EntityInterface $entity, array $dataToSave): string
     {
         $this->entity = $entity;
         $this->dataToSave = $dataToSave;

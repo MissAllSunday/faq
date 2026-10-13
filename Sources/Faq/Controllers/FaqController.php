@@ -74,6 +74,55 @@ class FaqController extends BaseController
         ]);
     }
 
+    /**
+     * Censors titles and parses BBC in bodies before handing entities to the
+     * template, so the template only echoes ready to print values.
+     *
+     * @param array<int, FaqEntity> $entities
+     * @return array<int, array{id: int, title: string, body: string}>
+     */
+    protected function prepareEntities(array $entities): array
+    {
+        $items = [];
+
+        foreach ($entities as $entity) {
+            $parsed = $this->parser->parse([
+                'title' => $entity->getName(),
+                'body' => $entity->getBody(),
+            ]);
+
+            $items[] = [
+                'id' => $entity->getId(),
+                'title' => $parsed['title'],
+                'body' => $parsed['body'],
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * The optional custom message shown above the FAQ list, already parsed.
+     *
+     * @return array{title: string, body: string}|array{}
+     */
+    protected function customMessage(): array
+    {
+        $message = (string) $this->config->setting(FaqAdmin::SETTINGS_CUSTOM_MESSAGE, '');
+
+        if ($message === '') {
+            return [];
+        }
+
+        return [
+            'title' => (string) $this->config->setting(
+                FaqAdmin::SETTINGS_CUSTOM_MESSAGE_TITLE,
+                $this->translator->text('custom_message_title_default')
+            ),
+            'body' => $this->parser->parseMessage($message),
+        ];
+    }
+
     public function index(): void
     {
         global $context;
@@ -86,7 +135,8 @@ class FaqController extends BaseController
         $this->loadCategories();
 
         $this->setTemplateVars([
-            'entities' => $data['entities'],
+            'entities' => $this->prepareEntities($data['entities']),
+            'customMessage' => $this->customMessage(),
             'pagination' => $this->faqRepository->buildPagination($start, $context['current_url'], $data['total']),
         ]);
     }
@@ -119,7 +169,8 @@ class FaqController extends BaseController
         $this->loadCategories();
 
         $this->setTemplateVars([
-            'entities' => $data['entities'],
+            'entities' => $this->prepareEntities($data['entities']),
+            'customMessage' => $this->customMessage(),
             'pagination' => $this->faqRepository->buildPagination($start, $context['current_url'], $data['total']),
         ], [
             'sub_template' => Faq::NAME . '_index',
@@ -201,7 +252,8 @@ class FaqController extends BaseController
         $this->loadCategories();
 
         $this->setTemplateVars([
-            'entities' => [$entity],
+            'entities' => $this->prepareEntities([$entity]),
+            'customMessage' => $this->customMessage(),
         ], [
             'sub_template' => Faq::NAME . '_index',
             'page_title' => $entity->getName(),
@@ -261,7 +313,8 @@ class FaqController extends BaseController
         $this->loadCategories();
 
         $this->setTemplateVars([
-            'entities' => $data['entities'],
+            'entities' => $this->prepareEntities($data['entities']),
+            'customMessage' => $this->customMessage(),
             'pagination' => $this->faqRepository->buildPagination($start, $context['current_url'], $data['total']),
             'category' => $category,
         ], [

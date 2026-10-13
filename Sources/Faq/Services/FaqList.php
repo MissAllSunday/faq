@@ -5,10 +5,10 @@ namespace Faq\Services;
 use Faq\Controllers\CategoryController;
 use Faq\Controllers\FaqController;
 use Faq\Entities\CategoryEntity;
-use Faq\Faq;
 use Faq\FaqAdmin;
 use Faq\FaqConfig;
 use Faq\FaqTranslator;
+use Faq\FaqUrl;
 use Faq\Repositories\RepositoryInterface;
 
 class FaqList
@@ -36,27 +36,26 @@ class FaqList
 
     public function build(string $message = ''): void
     {
-        global $context, $scripturl;
-
         $start = $this->start;
         $data = $this->repository->getAll(true, $start);
         $anchor = '<a href="{href}" class="you_sure">{title}</a>';
-        $session = ';' . $context['session_var'] . '=' . $context['session_id'];
 
         switch ($this->repository->getTable()) {
             case 'faq_categories':
-                $action = 'faqCategory';
+                $action = CategoryController::ACTION;
+                $manage = CategoryController::SUB_ACTION_MANAGE;
                 $add = 'category_add_title';
                 break;
             default:
-                $action = 'faq';
+                $action = FaqController::ACTION;
+                $manage = FaqController::SUB_ACTION_MANAGE;
                 $add = 'add_title';
         }
 
         $listOptions = [
             'id' => self::ID,
             'title' => $this->translator->text($add),
-            'base_href' => $scripturl . '?action=' . $action . ';sa=manage',
+            'base_href' => FaqUrl::build($action, $manage),
             'items_per_page' => $this->config->setting(FaqAdmin::SETTINGS_PAGINATION, 0),
             'get_count' => [
                 'value' => $data['total'],
@@ -88,7 +87,7 @@ class FaqList
                     ],
                     'data' => [
                         'function' => fn($rowData) => strtr($anchor, [
-                            '{href}' => $scripturl . '?action=' . $action .';sa=add;id=' . $rowData->getId(),
+                            '{href}' => FaqUrl::build($action, FaqController::SUB_ACTION_ADD, $rowData->getId()),
                             '{title}' => $this->translator->text('edit'),
                         ]),
                     ],
@@ -102,7 +101,13 @@ class FaqList
                             $rowData->getId() === CategoryEntity::DEFAULT_CATEGORY_ID) ?
                             $this->translator->text('delete') :
                             strtr($anchor, [
-                            '{href}' => $scripturl . '?action=' . $action .';sa=delete;id=' . $rowData->getId() . $session,
+                            // Deletes are GET links, they carry the session id for checkSession('get').
+                            '{href}' => FaqUrl::build(
+                                $action,
+                                FaqController::SUB_ACTION_DELETE,
+                                $rowData->getId(),
+                                true
+                            ),
                             '{title}' => $this->translator->text('delete'),
                         ]),
                     ],
@@ -115,7 +120,8 @@ class FaqList
                 ],
                 [
                     'position' => 'bottom_of_list',
-                    'value' => '<a class="button" type="submit" href="'. $scripturl . '?action=' . $action .';sa=add">
+                    'value' => '<a class="button" type="submit" href="'.
+                        FaqUrl::build($action, FaqController::SUB_ACTION_ADD) . '">
                         ' . $this->translator->text($add) . '</a>',
                 ],
             ],

@@ -8,6 +8,7 @@ use Faq\FaqConfig;
 use Faq\FaqParser;
 use Faq\FaqRequest;
 use Faq\FaqTranslator;
+use Faq\FaqUrl;
 use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqValidation;
 
@@ -116,7 +117,7 @@ abstract class BaseController
     }
     public function setSubAction(string $action, string $subAction): void
     {
-        global $context, $scripturl, $txt;
+        global $context, $txt;
 
         $id = $this->request->get('id');
         $txtKey = $action === Faq::NAME ? '' : (strtolower(str_replace(Faq::NAME, '', $action)) . '_');
@@ -125,19 +126,18 @@ abstract class BaseController
 
         //  move somewhere else?
         $subAction = ($id && $this->subAction === 'add' ? 'update' : $this->subAction);
-        $actionUrl = '?action=' . $this->getAction();
-        $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
+        $currentUrl = FaqUrl::build($this->getAction(), $this->subAction, $this->id);
         $context['sub_action'] = $this->subAction;
         $context['sub_template'] = $action . '_' . $this->subAction;
         $context['page_title'] = $this->translator->text($txtKey . $subAction . '_title');
-        $context['current_url'] = $scripturl . $actionUrl . $subActionUrl;
+        $context['current_url'] = $currentUrl;
         $context['linktree'][] = [
-            'url' => $scripturl . $actionUrl,
+            'url' => FaqUrl::build($this->getAction()),
             'name' => $this->translator->text('index_title')];
 
         if ($this->subAction !== 'index') {
             $context['linktree'][] = [
-                'url' => $scripturl . $actionUrl . $subActionUrl,
+                'url' => $currentUrl,
                 'name' => $txt[Faq::NAME . '_' . $txtKey . $subAction . '_title']];
         }
 
@@ -155,14 +155,12 @@ abstract class BaseController
 
     protected function overrideLinkTree(string $name): void
     {
-        global $context, $scripturl;
+        global $context;
 
         $id = $this->request->get('id');
-        $actionUrl = '?action=' . $this->getAction();
-        $subActionUrl = ($this->subAction ? (';sa=' . $this->subAction) : '') . ($id ? ';id=' . $id : '');
 
         $context['linktree'][array_key_last($context['linktree'])] = [
-            'url' => $scripturl . $actionUrl . $subActionUrl,
+            'url' => FaqUrl::build($this->getAction(), $this->subAction, $id),
             'name' => $name];
     }
 
@@ -171,10 +169,7 @@ abstract class BaseController
         global $context;
 
         if (!isset($context[Faq::NAME])) {
-            // TODO STEP 10: parse in the controller and drop this from $context.
-            $context[Faq::NAME] = [
-                'parser' => $this->parser
-            ];
+            $context[Faq::NAME] = [];
         }
 
         if (empty($context[Faq::NAME]['message'])) {

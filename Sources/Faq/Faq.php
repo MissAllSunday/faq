@@ -41,12 +41,12 @@ class Faq
             array_slice($menu_buttons, 0, $counter),
             [Faq::NAME => [
                 'title' => $this->translator->text('title_main'),
-                'href' => $this->buildUrl(FaqController::ACTION),
+                'href' => FaqUrl::build(FaqController::ACTION),
                 'show' => allowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW),
                 'sub_buttons' => [
                     'faq_category' => [
                         'title' => $this->translator->text('category_index_title'),
-                        'href' => $this->buildUrl(CategoryController::ACTION, CategoryController::SUB_ACTION_MANAGE),
+                        'href' => FaqUrl::build(CategoryController::ACTION, CategoryController::SUB_ACTION_MANAGE),
                         'show' => allowedTo([
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
@@ -54,7 +54,7 @@ class Faq
                     ],
                     'faq_manage' => [
                         'title' => $this->translator->text('manage_title'),
-                        'href' => $this->buildUrl(FaqController::ACTION, FaqController::SUB_ACTION_MANAGE),
+                        'href' => FaqUrl::build(FaqController::ACTION, FaqController::SUB_ACTION_MANAGE),
                         'show' => allowedTo([
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD,
                             Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]),
@@ -62,23 +62,12 @@ class Faq
                     ],
                     'faq_admin' => [
                         'title' => $this->translator->text('admin_panel'),
-                        'href' => $scripturl . '?action=admin;area=' . Faq::NAME,
+                        'href' => $scripturl . '?' . FaqAdmin::URL,
                         'show' => allowedTo('admin_forum'),
                     ],
                 ],
             ]],
             array_slice($menu_buttons, $counter)
         );
-    }
-
-    protected function buildUrl(string $action, ?string $subAction = null): string
-    {
-        global $scripturl;
-
-        return strtr('{url}?action={action}{subAction}', [
-            '{url}' => $scripturl,
-            '{action}' => $action,
-            '{subAction}' => $subAction ? (';sa=' . $subAction) : '',
-        ]);
     }
 }
