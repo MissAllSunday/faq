@@ -6,7 +6,7 @@ use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\FaqConfig;
 
-class CategoryRepository extends BaseRepository
+class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
     public function __construct(?CategoryEntity $entity = null, ?FaqConfig $config = null)
     {
@@ -15,7 +15,9 @@ class CategoryRepository extends BaseRepository
         parent::__construct($config);
     }
 
-    public function getAll($needsPagination = true, int $start = 0): array
+    /* Categories are always listed in full, so pagination is not applied. */
+    /* @return array{total: int, entities: array<int, CategoryEntity>} */
+    public function getAll(bool $needsPagination = true, int $start = 0): array
     {
         $queryString = '
             SELECT ' . (implode(',', $this->getColumns())) . '
@@ -40,5 +42,19 @@ class CategoryRepository extends BaseRepository
         );
 
         return $this->prepareData($request)[$id];
+    }
+
+    /**
+     * Reassigns every FAQ currently in the deleted category to the default one.
+     */
+    public function setDefaultCategoryId(int $categoryId): void
+    {
+        $this->db['db_query'](
+            '',
+            'UPDATE {db_prefix}' . FaqEntity::TABLE . '
+			SET '. FaqEntity::CAT_ID .' = {int:defaultId}
+			WHERE '. FaqEntity::CAT_ID .' = {int:id}',
+            ['defaultId' => CategoryEntity::DEFAULT_CATEGORY_ID, 'id' => $categoryId],
+        );
     }
 }

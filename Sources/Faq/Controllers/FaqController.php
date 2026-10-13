@@ -10,8 +10,9 @@ use Faq\FaqParser;
 use Faq\FaqRequest;
 use Faq\FaqTranslator;
 use Faq\Repositories\CategoryRepository;
+use Faq\Repositories\CategoryRepositoryInterface;
 use Faq\Repositories\FaqRepository;
-use Faq\Repositories\RepositoryInterface;
+use Faq\Repositories\FaqRepositoryInterface;
 use Faq\Services\FaqList;
 use Faq\Services\FaqValidation;
 
@@ -36,19 +37,22 @@ class FaqController extends BaseController
         self::SUB_ACTION_CATEGORY,
     ];
 
-    protected RepositoryInterface $repository;
-    protected CategoryRepository $categoryRepository;
+    protected FaqRepositoryInterface $faqRepository;
+    protected CategoryRepositoryInterface $categoryRepository;
 
     public function __construct(
         ?FaqRequest $request = null,
-        ?FaqRepository $repository = null,
-        ?CategoryRepository $categoryRepository = null)
+        ?FaqRepositoryInterface $repository = null,
+        ?CategoryRepositoryInterface $categoryRepository = null)
     {
         // Built first: setTemplateVars() below already needs the translator and the parser.
         parent::__construct($request);
 
-        $this->repository = $repository ?? new FaqRepository();
+        $this->faqRepository = $repository ?? new FaqRepository();
         $this->categoryRepository  = $categoryRepository ?? new CategoryRepository();
+
+        // Inherited members (save()) work against the generic contract.
+        $this->repository = $this->faqRepository;
 
         $this->setTemplateVars([
             'categories' => $this->categoryRepository->getAll(false)['entities'],
@@ -62,11 +66,11 @@ class FaqController extends BaseController
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
 
         $start = $this->request->get('start', 0);
-        $data = $this->repository->getAll(true, $start);
+        $data = $this->faqRepository->getAll(true, $start);
 
         $this->setTemplateVars([
             'entities' => $data['entities'],
-            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
+            'pagination' => $this->faqRepository->buildPagination($start, $context['current_url'], $data['total']),
         ]);
     }
 
@@ -89,11 +93,11 @@ class FaqController extends BaseController
         $title = strtr($this->translator->text('search_title'),
             ['{searchValue}' => $searchValue]);
         $start = $this->request->get('start', 0);
-        $data = $this->repository->searchBy($searchValue, $start);
+        $data = $this->faqRepository->searchBy($searchValue, $start);
 
         $this->setTemplateVars([
             'entities' => $data['entities'],
-            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
+            'pagination' => $this->faqRepository->buildPagination($start, $context['current_url'], $data['total']),
         ], [
             'sub_template' => Faq::NAME . '_index',
             'page_title' => $title,
@@ -111,7 +115,7 @@ class FaqController extends BaseController
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD);
 
         $id = $this->request->get('id');
-        $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
+        $entity = $id ? $this->faqRepository->getById($id) : $this->faqRepository->getEntity();
         $templateVars = [
             'entity' => $entity,
             'categories' => $this->categoryRepository->getAll()['entities'],
@@ -129,7 +133,7 @@ class FaqController extends BaseController
             }
 
             $entity->setEntity($data);
-            $errorMessage = $this->validation->isValid($this->repository->getEntity(), $data);
+            $errorMessage = $this->validation->isValid($entity, $data);
 
             if ($errorMessage) {
                 $templateVars['errors'] = $errorMessage;
@@ -165,7 +169,7 @@ class FaqController extends BaseController
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
 
         /** @var FaqEntity $entity */
-        $entity = $this->repository->getById($id);
+        $entity = $this->faqRepository->getById($id);
 
         $this->setTemplateVars([
             'entities' => [$entity],
@@ -184,7 +188,7 @@ class FaqController extends BaseController
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE);
 
         if ($id) {
-            $this->repository->delete([$id]);
+            $this->faqRepository->delete([$id]);
             $result = self::SUCCESS;
         }
 
@@ -218,11 +222,11 @@ class FaqController extends BaseController
 
         $category = $this->categoryRepository->getById($id);
         $start = $this->request->get('start', 0);
-        $data = $this->repository->getByCatId($id, $start);
+        $data = $this->faqRepository->getByCatId($id, $start);
 
         $this->setTemplateVars([
             'entities' => $data['entities'],
-            'pagination' => $this->repository->buildPagination($start, $context['current_url'], $data['total']),
+            'pagination' => $this->faqRepository->buildPagination($start, $context['current_url'], $data['total']),
             'category' => $category,
         ], [
             'sub_template' => Faq::NAME . '_index',

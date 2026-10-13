@@ -7,7 +7,7 @@ use Faq\Entities\FaqEntity;
 use Faq\FaqAdmin;
 use Faq\FaqConfig;
 
-class FaqRepository extends BaseRepository
+class FaqRepository extends BaseRepository implements FaqRepositoryInterface
 {
     public function __construct(?FaqEntity $entity = null, ?FaqConfig $config = null)
     {

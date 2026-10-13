@@ -58,17 +58,6 @@ abstract class BaseRepository implements RepositoryInterface
         );
     }
 
-    public function setDefaultCategoryId(int $categoryId): void
-    {
-        $this->db['db_query'](
-            '',
-            'UPDATE {db_prefix}' . FaqEntity::TABLE . '
-			SET '. FaqEntity::CAT_ID .' = {int:defaultId}
-			WHERE '. FaqEntity::CAT_ID .' = {int:id}',
-            ['defaultId' => CategoryEntity::DEFAULT_CATEGORY_ID, 'id' => $categoryId],
-        );
-    }
-
     public function getById(int $id): FaqEntity | CategoryEntity
     {
         $indexName = $this->entity->getIndexName();
@@ -122,7 +111,8 @@ abstract class BaseRepository implements RepositoryInterface
         return $countTotal;
     }
 
-    public function getAll($needsPagination = true, int $start = 0): array
+    /* @return array{total: int, entities: array<int, FaqEntity|CategoryEntity>} */
+    public function getAll(bool $needsPagination = true, int $start = 0): array
     {
         $queryStringCount = $queryString = '
             SELECT ' . (implode(',', $this->getColumns())) . '

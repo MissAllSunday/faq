@@ -9,9 +9,10 @@ interface RepositoryInterface
 {
     public function count(): int;
 
-    public function getAll($needsPagination = true, int $start = 0): array;
+    /* @return array{total: int, entities: array<int, FaqEntity|CategoryEntity>} */
+    public function getAll(bool $needsPagination = true, int $start = 0): array;
 
-    public function buildPagination(int $start, string $paginationUrl): string;
+    public function buildPagination(int $start, string $paginationUrl, int $total = 0): string;
 
     public function getTable(): string;
 
@@ -21,7 +22,7 @@ interface RepositoryInterface
 
     public function delete(array $ids): bool;
 
-    public function update(array $entityData, int $id): void;
+    public function insert(array $entityData): FaqEntity | CategoryEntity;
 
-    public function setDefaultCategoryId(int $categoryId): void;
+    public function update(array $entityData, int $id): void;
 }

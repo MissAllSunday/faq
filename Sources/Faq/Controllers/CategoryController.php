@@ -8,7 +8,7 @@ use Faq\Faq;
 use Faq\FaqAdmin;
 use Faq\FaqRequest;
 use Faq\Repositories\CategoryRepository;
-use Faq\Repositories\RepositoryInterface;
+use Faq\Repositories\CategoryRepositoryInterface;
 use Faq\Services\FaqList;
 
 class CategoryController extends BaseController
@@ -23,11 +23,16 @@ class CategoryController extends BaseController
         self::SUB_ACTION_DELETE,
     ];
 
+    protected CategoryRepositoryInterface $categoryRepository;
+
     public function __construct(
         ?FaqRequest $request = null,
-        ?RepositoryInterface $categoryRepository = null)
+        ?CategoryRepositoryInterface $categoryRepository = null)
     {
-        $this->repository = $categoryRepository ?? new CategoryRepository();
+        $this->categoryRepository = $categoryRepository ?? new CategoryRepository();
+
+        // Inherited members (save()) work against the generic contract.
+        $this->repository = $this->categoryRepository;
 
         parent::__construct($request);
     }
@@ -50,7 +55,7 @@ class CategoryController extends BaseController
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD);
 
         $id = $this->request->get('id');
-        $entity = $id ? $this->repository->getById($id) : $this->repository->getEntity();
+        $entity = $id ? $this->categoryRepository->getById($id) : $this->categoryRepository->getEntity();
         $templateVars = [
             'entity' => $entity,
             'errors' => '',
@@ -61,7 +66,7 @@ class CategoryController extends BaseController
             $data = array_intersect_key($this->request->all(), CategoryEntity::COLUMNS);
 
             $entity->setEntity($data);
-            $errorMessage = $this->validation->isValid($this->repository->getEntity(), $data);
+            $errorMessage = $this->validation->isValid($this->categoryRepository->getEntity(), $data);
 
             if ($errorMessage) {
                 $templateVars['errors'] = $errorMessage;
@@ -90,10 +95,10 @@ class CategoryController extends BaseController
             $this->redirect(self::ERROR, 'delete_default');
         }
 
-        $this->repository->delete([$id]);
+        $this->categoryRepository->delete([$id]);
 
         // Update all FAQs with this category to a default one
-        $this->repository->setDefaultCategoryId($id);
+        $this->categoryRepository->setDefaultCategoryId($id);
 
         $this->redirect(self::SUCCESS, 'delete');
     }

@@ -71,11 +71,15 @@ abstract class BaseController
 
     protected function save(array $data, ?int $id = null): void
     {
-        $call = $id ? 'update' : 'insert';
+        if ($id) {
+            $this->repository->update($data, $id);
 
-        $this->repository->{$call}($data, $id);
+            $this->redirect('info', 'update');
+        }
 
-        $this->redirect('info', $call);
+        $this->repository->insert($data);
+
+        $this->redirect('info', 'insert');
     }
     public function setSubAction(string $action, string $subAction): void
     {
