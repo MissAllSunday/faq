@@ -65,7 +65,6 @@ $txt['faq_no_cat'] = '<span style="color:red;">Without category</span>';
 $txt['faq_na'] = 'N/A';
 $txt['faq_sidebar_faq_cats'] = 'Categories';
 $txt['faq_you_sure'] = 'Are you sure you want to delete?';
-$txt['faq_latest'] = 'Latest FAQs';
 
 // Settings strings
 $txt['faq_desc'] = 'This page gathers all possible settings for the FAQ mod';
@@ -107,8 +106,6 @@ $txt['faq_use_preview'] = 'Show a short version of the FAQ in the main page.';
 $txt['faq_use_preview_sub'] = 'If enable, the main FAQ page will only show a fraction of the FAQS and the title will be converted to a link to a page that will display the entire FAQ.';
 $txt['faq_how_many'] = 'How many characters would be displayed before the body gets cut off.';
 $txt['faq_how_many_sub'] = 'The "'. $txt['faq_use_preview'] .'" setting must be enable for this to work.';
-$txt['faq_show_latest'] = 'Show the latest created FAQs on a list and how many';
-$txt['faq_show_latest_sub'] = 'Leave it in blank for not showing anything, otherwise type the mount of latest FAQs to show';
 $txt['faq_menu_position'] = 'Select the position for the FAQ button in the menu';
 $txt['faq_menu_position_sub'] = 'By default is next to home.';
 $txt['faq_care'] = 'Show the mod author\'s copyright at the bottom of the FAQ page?';

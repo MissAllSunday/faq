@@ -59,15 +59,15 @@ class FaqListTest extends TestCase
         $this->repository->method('getAll')
             ->willReturn(['total' => 5, 'entities' => [$mockEntity]]);
 
-        // Mock text translations (note: FaqList.php:49 passes literal '$add' due to a known bug)
+        // Mock text translations, keyed the way FaqTranslator::text() is called.
         $textMap = [
-            ["'\$add'" => 'Add FAQ'],
-            ['add_title' => 'Add FAQ'],
-            ['edit_id' => 'ID'],
-            ['edit_name' => 'Name'],
-            ['edit' => 'Edit'],
-            ['delete' => 'Delete'],
-            ['no_search_results' => 'No results found'],
+            'add_title' => 'Add FAQ',
+            'category_add_title' => 'Add Category',
+            'edit_id' => 'ID',
+            'edit_name' => 'Name',
+            'edit' => 'Edit',
+            'delete' => 'Delete',
+            'no_search_results' => 'No results found',
         ];
         $this->translator->method('text')
             ->willReturnCallback(fn(string $key) => $textMap[$key] ?? '');
@@ -93,6 +93,7 @@ class FaqListTest extends TestCase
         $this->assertEquals(FaqList::ID, $listOptions['id']);
         $this->assertEquals(10, $listOptions['items_per_page']);
         $this->assertEquals('Test Message', $listOptions['additional_rows'][0]['value']);
+        $this->assertEquals('Add FAQ', $listOptions['title']);
 
         // Test column structure
         $this->assertArrayHasKey('id', $listOptions['columns']);
@@ -118,15 +119,15 @@ class FaqListTest extends TestCase
         $this->repository->method('getAll')
             ->willReturn(['total' => 3, 'entities' => [$mockEntity]]);
 
-        // Mock text translations (note: FaqList.php:49 passes literal '$add' due to a known bug)
+        // Mock text translations, keyed the way FaqTranslator::text() is called.
         $textMap = [
-            ["'\$add'" => 'Add Category'],
-            ['category_add_title' => 'Add Category'],
-            ['edit_id' => 'ID'],
-            ['edit_name' => 'Name'],
-            ['edit' => 'Edit'],
-            ['delete' => 'Delete'],
-            ['no_search_results' => 'No results found'],
+            'add_title' => 'Add FAQ',
+            'category_add_title' => 'Add Category',
+            'edit_id' => 'ID',
+            'edit_name' => 'Name',
+            'edit' => 'Edit',
+            'delete' => 'Delete',
+            'no_search_results' => 'No results found',
         ];
         $this->translator->method('text')
             ->willReturnCallback(fn(string $key) => $textMap[$key] ?? '');
@@ -149,6 +150,7 @@ class FaqListTest extends TestCase
         $faqList->build();
 
         // Assertions
+        $this->assertEquals('Add Category', $listOptions['title']);
         $this->assertEquals('localhost?action=faqCategory;sa=manage', $listOptions['base_href']);
         $this->assertTrue(str_contains($listOptions['base_href'], 'action=faqCategory'));
 

@@ -41,7 +41,6 @@ class FaqList
         $start = $this->start;
         $data = $this->repository->getAll(true, $start);
         $anchor = '<a href="{href}" class="you_sure">{title}</a>';
-        // Deletes are GET links, they need the session id to pass checkSession('get').
         $session = ';' . $context['session_var'] . '=' . $context['session_id'];
 
         switch ($this->repository->getTable()) {
@@ -56,7 +55,7 @@ class FaqList
 
         $listOptions = [
             'id' => self::ID,
-            'title' => $this->translator->text('$add'),
+            'title' => $this->translator->text($add),
             'base_href' => $scripturl . '?action=' . $action . ';sa=manage',
             'items_per_page' => $this->config->setting(FaqAdmin::SETTINGS_PAGINATION, 0),
             'get_count' => [

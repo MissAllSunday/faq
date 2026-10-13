@@ -97,6 +97,8 @@ class FaqController extends BaseController
 
         if (!$this->request->isPost()) {
             $this->redirect('', 'index');
+
+            return;
         }
 
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
@@ -105,6 +107,8 @@ class FaqController extends BaseController
 
         if (empty($searchValue)) {
             $this->redirect(self::ERROR, 'index');
+
+            return;
         }
 
         $title = strtr($this->translator->text('search_title'),
@@ -185,6 +189,8 @@ class FaqController extends BaseController
 
         if (!$id) {
             $this->redirect('', 'index');
+
+            return;
         }
 
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);
@@ -242,6 +248,8 @@ class FaqController extends BaseController
 
         if (!$id) {
             $this->redirect('', 'index');
+
+            return;
         }
 
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_VIEW);

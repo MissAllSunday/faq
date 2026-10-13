@@ -53,25 +53,28 @@ function template_faqCategory_add(): void
     </div>';
 }
 
-function showErrors(string $errors): void
-{
-    global $txt;
+// Also declared in Faq.template.php, guarded so the load order does not matter.
+if (!function_exists('showErrors')) {
+    function showErrors(string $errors): void
+    {
+        global $txt;
 
-    echo '
-        <div class="errorbox" id="errors">
-		<dl>
-			<dt>
-				<strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
-			</dt>';
-
-    foreach (explode(',', $errors) as $errorKey) {
         echo '
-			<dd class="error">
-				- <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
-			</dd>';
-    }
+            <div class="errorbox" id="errors">
+            <dl>
+                <dt>
+                    <strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
+                </dt>';
 
-    echo '
-		</dl>
-	</div>';
+        foreach (explode(',', $errors) as $errorKey) {
+            echo '
+                <dd class="error">
+                    - <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
+                </dd>';
+        }
+
+        echo '
+            </dl>
+        </div>';
+    }
 }

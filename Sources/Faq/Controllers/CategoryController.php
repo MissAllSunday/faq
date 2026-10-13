@@ -103,6 +103,8 @@ class CategoryController extends BaseController
 
         if (!$id) {
             $this->redirect();
+
+            return;
         }
 
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE);
@@ -113,6 +115,8 @@ class CategoryController extends BaseController
         // Can't delete the default one
         if ($id === CategoryEntity::DEFAULT_CATEGORY_ID) {
             $this->redirect(self::ERROR, 'delete_default');
+
+            return;
         }
 
         $this->categoryRepository->delete([$id]);

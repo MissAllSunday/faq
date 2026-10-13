@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Faq;
 
 class FaqAdmin
@@ -23,7 +21,6 @@ class FaqAdmin
     public const SETTINGS_ENABLE = 'enable';
     public const SETTINGS_PAGINATION = 'num_faqs';
     public const SETTINGS_SHOW_CAT_LIST = 'show_catlist';
-    public const SETTINGS_SHOW_LATEST = 'show_latest';
     public const SETTINGS_SORT_METHOD = 'sort_method';
     public const SETTINGS_SORT_ORDER = 'sort_order';
     public const SETTINGS_MENU_POSITION = 'menu_position';
@@ -84,7 +81,6 @@ class FaqAdmin
             ['check', Faq::NAME . '_enable','subtext' => $this->translator->text('enable_sub')],
             ['int', Faq::NAME .'_'. self::SETTINGS_PAGINATION, 'size' => 3, 'subtext' => $this->translator->text('num_faqs_sub')],
             ['check', Faq::NAME .'_'. self::SETTINGS_SHOW_CAT_LIST, 'subtext' => $this->translator->text('show_catlist_sub')],
-            ['int', Faq::NAME .'_'. self::SETTINGS_SHOW_LATEST, 'size' => 3, 'subtext' => $this->translator->text('show_latest_sub')],
             ['select', Faq::NAME .'_'. self::SETTINGS_SORT_METHOD,
                 [
                     'id' => $this->translator->text('id'),

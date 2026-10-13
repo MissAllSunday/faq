@@ -213,33 +213,6 @@ function showSideBar(): void
 		<br />';
 	}
 
-	if (!empty($modSettings['faq_show_latest']))
-	{
-		echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt[Faq::NAME .'_latest'] ,'</span>
-			</h3>
-		</div>
-
-		<div class="windowbg nopadding">
-			<span class="topslice"><span></span></span>
-			<div class="content">
-				<ul class="reset">';
-
-		foreach($context['Faq']['object']->getLatest($modSettings['Faq_show_latest']) as $all)
-			echo '
-					<li>
-						', $all['link'] ,'
-					</li>';
-
-		echo '
-				</ul>
-			</div>
-		</div>
-		<br />';
-	}
-
 	echo '
 	</div>';
 }
@@ -283,12 +256,13 @@ function showCategoryField(FaqEntity $entity): string
     $select = '
         <select name="'. FaqEntity::CAT_ID .'">';
 
+    /* @var CategoryEntity $category */
     foreach($context[Faq::NAME]['categories'] as $category) {
-        $isSelected = $entity->getCatId() === $category->getCategoryId();
+        $isSelected = $entity->getCatId() === $category->getId();
 
         $select .= '
-            <option value="'. $category->id .'" '. ($isSelected ? 'selected="selected"' : '') .'>
-            '. $category->getCategoryName() .
+            <option value="'. $category->getId() .'" '. ($isSelected ? 'selected="selected"' : '') .'>
+            '. $category->getName() .
         '</option>';
     }
 
@@ -319,27 +293,32 @@ function showPreview(array $preview): void
     <br />';
 }
 
-function showErrors(string $errors): void
-{
-    global $txt;
+// Both Faq.template.php and FaqCategory.template.php need this and SMF only loads
+// the template matching the current action, so the declaration is guarded to make
+// the load order irrelevant.
+if (!function_exists('showErrors')) {
+    function showErrors(string $errors): void
+    {
+        global $txt;
 
-    echo '
-        <div class="errorbox" id="errors">
-		<dl>
-			<dt>
-				<strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
-			</dt>';
-
-    foreach (explode(',', $errors) as $errorKey) {
         echo '
-			<dd class="error">
-				- <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
-			</dd>';
-    }
+            <div class="errorbox" id="errors">
+            <dl>
+                <dt>
+                    <strong id="error_serious">', $txt['faq_validation_required'] ,'</strong>
+                </dt>';
 
-    echo '
-		</dl>
-	</div>';
+        foreach (explode(',', $errors) as $errorKey) {
+            echo '
+                <dd class="error">
+                    - <strong>', $txt['faq_edit_' . trim($errorKey)] , '</strong>
+                </dd>';
+        }
+
+        echo '
+            </dl>
+        </div>';
+    }
 }
 
 function showMessage(): void
