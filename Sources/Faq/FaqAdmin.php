@@ -33,12 +33,12 @@ class FaqAdmin
     public const SETTINGS_CUSTOM_MESSAGE_TITLE = 'custom_message_title';
     public const SETTINGS_CARE = 'care';
     public const URL = 'action=admin;area=' . Faq::NAME;
-    protected ?FaqUtils $utils;
+    protected ?FaqTranslator $translator;
     protected ?FaqRequest $request;
 
-    public function __construct(?FaqUtils $utils = null, ?FaqRequest $request = null)
+    public function __construct(?FaqTranslator $translator = null, ?FaqRequest $request = null)
 	{
-        $this->utils = $utils ?? new FaqUtils();
+        $this->translator = $translator ?? new FaqTranslator();
         $this->request = $request ?? new FaqRequest();
 	}
 
@@ -47,12 +47,12 @@ class FaqAdmin
         $this->loadRequiredFiles();
 
         $areas['config']['areas'][Faq::NAME] = [
-            'label' => $this->utils->text('admin_panel'),
+            'label' => $this->translator->text('admin_panel'),
             'function' => [$this, 'main'],
             'icon' => 'posts',
             'subsections' => [
-                self::SETTINGS_PAGE => [$this->utils->text('admin_settings')],
-                self::PERMISSIONS_PAGE => [$this->utils->text('admin_permissions')],
+                self::SETTINGS_PAGE => [$this->translator->text('admin_settings')],
+                self::PERMISSIONS_PAGE => [$this->translator->text('admin_permissions')],
             ],
         ];
     }
@@ -62,8 +62,8 @@ class FaqAdmin
         global $context;
 
         $context[$context['admin_menu_name']]['tab_data'] = [
-            'title' => $this->utils->text('admin_panel'),
-            'description' => $this->utils->text('admin_panel_desc'),
+            'title' => $this->translator->text('admin_panel'),
+            'description' => $this->translator->text('admin_panel_desc'),
             'tabs' => [
                 self::SETTINGS_PAGE => [],
                 self::PERMISSIONS_PAGE => []
@@ -81,39 +81,39 @@ class FaqAdmin
     public function settings(string $action): void
     {
         $configVars = [
-            ['check', Faq::NAME . '_enable','subtext' => $this->utils->text('enable_sub')],
-            ['int', Faq::NAME .'_'. self::SETTINGS_PAGINATION, 'size' => 3, 'subtext' => $this->utils->text('num_faqs_sub')],
-            ['check', Faq::NAME .'_'. self::SETTINGS_SHOW_CAT_LIST, 'subtext' => $this->utils->text('show_catlist_sub')],
-            ['int', Faq::NAME .'_'. self::SETTINGS_SHOW_LATEST, 'size' => 3, 'subtext' => $this->utils->text('show_latest_sub')],
+            ['check', Faq::NAME . '_enable','subtext' => $this->translator->text('enable_sub')],
+            ['int', Faq::NAME .'_'. self::SETTINGS_PAGINATION, 'size' => 3, 'subtext' => $this->translator->text('num_faqs_sub')],
+            ['check', Faq::NAME .'_'. self::SETTINGS_SHOW_CAT_LIST, 'subtext' => $this->translator->text('show_catlist_sub')],
+            ['int', Faq::NAME .'_'. self::SETTINGS_SHOW_LATEST, 'size' => 3, 'subtext' => $this->translator->text('show_latest_sub')],
             ['select', Faq::NAME .'_'. self::SETTINGS_SORT_METHOD,
                 [
-                    'id' => $this->utils->text('id'),
-                    'title' => $this->utils->text('title'),
-                    'cat_id' => $this->utils->text('category'),
+                    'id' => $this->translator->text('id'),
+                    'title' => $this->translator->text('title'),
+                    'cat_id' => $this->translator->text('category'),
                 ],
-                'subtext' => $this->utils->text('sort_method_sub')
+                'subtext' => $this->translator->text('sort_method_sub')
             ],
             ['select', Faq::NAME .'_'. self::SETTINGS_SORT_ORDER,
                 [
-                    'ASC' => $this->utils->text('sort_order_asc'),
-                    'DESC' => $this->utils->text('sort_order_desc'),
+                    'ASC' => $this->translator->text('sort_order_asc'),
+                    'DESC' => $this->translator->text('sort_order_desc'),
                 ],
-                'subtext' => $this->utils->text('sort_order_sub')
+                'subtext' => $this->translator->text('sort_order_sub')
             ],
             ['select', Faq::NAME .'_'. self::SETTINGS_MENU_POSITION,
                 [
-                    'home' => $this->utils->smfText('home'),
-                    'help' => $this->utils->smfText('help'),
-                    'search' => $this->utils->smfText('search'),
-                    'login' => $this->utils->smfText('login'),
-                    'register' => $this->utils->smfText('register')
+                    'home' => $this->translator->smfText('home'),
+                    'help' => $this->translator->smfText('help'),
+                    'search' => $this->translator->smfText('search'),
+                    'login' => $this->translator->smfText('login'),
+                    'register' => $this->translator->smfText('register')
                 ],
-                'subtext' => $this->utils->text('menu_position_sub')
+                'subtext' => $this->translator->text('menu_position_sub')
             ],
-            ['check', Faq::NAME .'_'. self::SETTINGS_USE_JS, 'subtext' => $this->utils->text('use_js_sub')],
-            ['large_text', Faq::NAME .'_'. self::SETTINGS_CUSTOM_MESSAGE, 'subtext' => $this->utils->text('custom_message_sub')],
-            ['text', Faq::NAME .'_'. self::SETTINGS_CUSTOM_MESSAGE_TITLE, 'subtext' => $this->utils->text('custom_message_title_sub')],
-            ['check', Faq::NAME .'_'. self::SETTINGS_CARE, 'subtext' => $this->utils->text('care_sub')],
+            ['check', Faq::NAME .'_'. self::SETTINGS_USE_JS, 'subtext' => $this->translator->text('use_js_sub')],
+            ['large_text', Faq::NAME .'_'. self::SETTINGS_CUSTOM_MESSAGE, 'subtext' => $this->translator->text('custom_message_sub')],
+            ['text', Faq::NAME .'_'. self::SETTINGS_CUSTOM_MESSAGE_TITLE, 'subtext' => $this->translator->text('custom_message_title_sub')],
+            ['check', Faq::NAME .'_'. self::SETTINGS_CARE, 'subtext' => $this->translator->text('care_sub')],
 
         ];
 
@@ -133,7 +133,7 @@ class FaqAdmin
                 'permissions',
                 Faq::NAME . '_' . $permission,
                 0,
-                $this->utils->smfText('permissionname_'. Faq::NAME . '_' . $permission),
+                $this->translator->smfText('permissionname_'. Faq::NAME . '_' . $permission),
             ];
         }
 
@@ -153,15 +153,19 @@ class FaqAdmin
 
     protected function setContext(string $action): void
     {
-        global $scripturl;
+        global $context, $scripturl;
 
-        $this->utils->setContext([
+        $values = [
             'sub_action' => $action,
-            'page_title' => $this->utils->text('admin_' . $action),
+            'page_title' => $this->translator->text('admin_' . $action),
             'post_url' => $scripturl . '?' . self::URL .';sa=' . $action . ';save',
             'sub_template' => 'show_settings',
-            'settings_title' =>  $this->utils->text('admin_' . $action),
-        ]);
+            'settings_title' =>  $this->translator->text('admin_' . $action),
+        ];
+
+        foreach ($values as $key => $value) {
+            $context[$key] = $value;
+        }
     }
 
     protected function loadRequiredFiles(): void

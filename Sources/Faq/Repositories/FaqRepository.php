@@ -5,14 +5,15 @@ namespace Faq\Repositories;
 use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\FaqAdmin;
+use Faq\FaqConfig;
 
 class FaqRepository extends BaseRepository
 {
-    public function __construct(?FaqEntity $entity = null)
+    public function __construct(?FaqEntity $entity = null, ?FaqConfig $config = null)
     {
         $this->entity = $entity ?? new FaqEntity(FaqEntity::DEFAULT_VALUES);
 
-        parent::__construct();
+        parent::__construct($config);
     }
 
     /* @return array[EntityInterface] */

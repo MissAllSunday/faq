@@ -5,14 +5,16 @@ namespace Faq\Services;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Faq\Entities\CategoryEntity;
-use Faq\FaqUtils;
+use Faq\FaqConfig;
+use Faq\FaqTranslator;
 use Faq\Repositories\RepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class FaqListTest extends TestCase
 {
     private MockObject $repository;
-    private MockObject $utils;
+    private MockObject $translator;
+    private MockObject $config;
 
     /**
      * @throws Exception
@@ -22,28 +24,22 @@ class FaqListTest extends TestCase
         global $scripturl;
 
         $this->repository = $this->createMock(RepositoryInterface::class);
-        $this->utils = $this->createMock(FaqUtils::class);
+        $this->translator = $this->createMock(FaqTranslator::class);
+        $this->config = $this->createMock(FaqConfig::class);
     }
 
     /**
-     * Create a partial mock of FaqList with the mocked FaqUtils injected.
+     * Create a partial mock of FaqList with the mocked collaborators injected
+     * through the constructor.
      *
      * @throws Exception
      */
     private function makeFaqList(): MockObject
     {
-        $faqList = $this->getMockBuilder(FaqList::class)
-            ->setConstructorArgs([$this->repository])
+        return $this->getMockBuilder(FaqList::class)
+            ->setConstructorArgs([$this->repository, 0, $this->translator, $this->config])
             ->onlyMethods(['createList'])
             ->getMock();
-
-        // Inject mocked FaqUtils into the partial mock
-        $reflection = new \ReflectionClass($faqList);
-        $property = $reflection->getProperty('utils');
-        $property->setAccessible(true);
-        $property->setValue($faqList, $this->utils);
-
-        return $faqList;
     }
 
     /**
@@ -73,11 +69,11 @@ class FaqListTest extends TestCase
             ['delete' => 'Delete'],
             ['no_search_results' => 'No results found'],
         ];
-        $this->utils->method('text')
+        $this->translator->method('text')
             ->willReturnCallback(fn(string $key) => $textMap[$key] ?? '');
 
         // Mock setting
-        $this->utils->method('setting')
+        $this->config->method('setting')
             ->with('num_faqs', 0)
             ->willReturn(10);
 
@@ -132,11 +128,11 @@ class FaqListTest extends TestCase
             ['delete' => 'Delete'],
             ['no_search_results' => 'No results found'],
         ];
-        $this->utils->method('text')
+        $this->translator->method('text')
             ->willReturnCallback(fn(string $key) => $textMap[$key] ?? '');
 
         // Mock setting
-        $this->utils->method('setting')
+        $this->config->method('setting')
             ->with('num_faqs', 0)
             ->willReturn(10);
 

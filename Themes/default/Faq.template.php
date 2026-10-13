@@ -6,15 +6,15 @@ use Faq\Entities\CategoryEntity;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
-use Faq\FaqUtils;
+use Faq\FaqParser;
 
 function template_faq_index(): void
 {
 	global $txt, $context, $scripturl, $modSettings;
 
 	$entities = $context[Faq::NAME]['entities'];
-    /* @var $utils FaqUtils */
-    $utils = $context[Faq::NAME]['utils'];
+    /* @var $parser FaqParser */
+    $parser = $context[Faq::NAME]['parser'];
 
     echo '
 <div class="mainContent">';
@@ -48,7 +48,7 @@ function template_faq_index(): void
                 $scripturl . '?action='. Faq::NAME .';sa='. FaqController::SUB_ACTION_SINGLE .
                 ';id='. $entity->getId();
 
-            $dataParsed = $utils->parse([
+            $dataParsed = $parser->parse([
                 'body' => $entity->getBody(),
                 'title' => $entity->getName()]);
 

@@ -5,12 +5,15 @@ namespace Faq\Controllers;
 use Faq\Entities\FaqEntity;
 use Faq\Faq;
 use Faq\FaqAdmin;
+use Faq\FaqConfig;
+use Faq\FaqParser;
 use Faq\FaqRequest;
-use Faq\FaqUtils;
+use Faq\FaqTranslator;
 use Faq\Repositories\CategoryRepository;
 use Faq\Repositories\FaqRepository;
 use Faq\Repositories\RepositoryInterface;
 use Faq\Services\FaqList;
+use Faq\Services\FaqValidation;
 
 class FaqController extends BaseController
 {
@@ -35,22 +38,21 @@ class FaqController extends BaseController
 
     protected RepositoryInterface $repository;
     protected CategoryRepository $categoryRepository;
-    protected FaqUtils $utils;
 
     public function __construct(
         ?FaqRequest $request = null,
         ?FaqRepository $repository = null,
         ?CategoryRepository $categoryRepository = null)
     {
+        // Built first: setTemplateVars() below already needs the translator and the parser.
+        parent::__construct($request);
+
         $this->repository = $repository ?? new FaqRepository();
         $this->categoryRepository  = $categoryRepository ?? new CategoryRepository();
-        $this->utils = new FaqUtils();
 
         $this->setTemplateVars([
             'categories' => $this->categoryRepository->getAll(false)['entities'],
         ]);
-
-        parent::__construct($request);
     }
 
     public function index(): void
@@ -84,7 +86,7 @@ class FaqController extends BaseController
             $this->redirect(self::ERROR, 'index');
         }
 
-        $title = strtr($this->utils->text('search_title'),
+        $title = strtr($this->translator->text('search_title'),
             ['{searchValue}' => $searchValue]);
         $start = $this->request->get('start', 0);
         $data = $this->repository->searchBy($searchValue, $start);
@@ -123,7 +125,7 @@ class FaqController extends BaseController
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
             
             if ($this->request->isSet('preview')) {
-                $templateVars['preview'] = $this->utils->parse($data);
+                $templateVars['preview'] = $this->parser->parse($data);
             }
 
             $entity->setEntity($data);
@@ -224,11 +226,11 @@ class FaqController extends BaseController
             'category' => $category,
         ], [
             'sub_template' => Faq::NAME . '_index',
-            'page_title' => strtr($this->utils->text('by_category'), [
+            'page_title' => strtr($this->translator->text('by_category'), [
                 '{categoryName}' => $category->getName(),
             ]),
         ]);
-        $this->overrideLinkTree(strtr($this->utils->text('by_category'), [
+        $this->overrideLinkTree(strtr($this->translator->text('by_category'), [
             '{categoryName}' => $category->getName(),
         ]));
     }
