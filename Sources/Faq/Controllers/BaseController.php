@@ -69,6 +69,35 @@ abstract class BaseController
     </div>';
     }
 
+    /**
+     * SMF session check (CSRF protection for GET links and POST forms).
+     *
+     * Kept behind a method so tests only need to mock one place.
+     *
+     * @param string $type 'get', 'post' or 'request'
+     */
+    protected function verifySession(string $type = 'post'): void
+    {
+        checkSession($type);
+    }
+
+    /**
+     * Validates a single use SMF token, fatals when it is missing or wrong.
+     */
+    protected function verifyToken(string $action, string $type = 'post'): void
+    {
+        validateToken($action, $type);
+    }
+
+    /**
+     * Creates a single use SMF token, the matching hidden fields must be
+     * emitted by the template.
+     */
+    protected function createSessionToken(string $action, string $type = 'post'): void
+    {
+        createToken($action, $type);
+    }
+
     protected function save(array $data, ?int $id = null): void
     {
         if ($id) {

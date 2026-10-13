@@ -23,6 +23,9 @@ class CategoryController extends BaseController
         self::SUB_ACTION_DELETE,
     ];
 
+    /** SMF token name for the add/edit form, single use. */
+    public const TOKEN_ACTION = Faq::NAME . '-' . self::ACTION . '-' . self::SUB_ACTION_ADD;
+
     protected CategoryRepositoryInterface $categoryRepository;
 
     public function __construct(
@@ -63,6 +66,9 @@ class CategoryController extends BaseController
         ];
 
         if ($this->request->isPost()) {
+            $this->verifySession('post');
+            $this->verifyToken(self::TOKEN_ACTION);
+
             $data = array_intersect_key($this->request->all(), CategoryEntity::COLUMNS);
 
             $entity->setEntity($data);
@@ -78,6 +84,9 @@ class CategoryController extends BaseController
         }
 
         $this->setTemplateVars($templateVars);
+
+        // Tokens are single use, a fresh one is needed for every render.
+        $this->createSessionToken(self::TOKEN_ACTION);
     }
 
     public function delete(): void
@@ -89,6 +98,9 @@ class CategoryController extends BaseController
         }
 
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE);
+
+        // Deletes are plain GET links, the session check is what stops CSRF.
+        $this->verifySession('get');
 
         // Can't delete the default one
         if ($id === CategoryEntity::DEFAULT_CATEGORY_ID) {

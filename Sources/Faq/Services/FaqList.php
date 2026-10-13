@@ -36,11 +36,13 @@ class FaqList
 
     public function build(string $message = ''): void
     {
-        global $scripturl;
+        global $context, $scripturl;
 
         $start = $this->start;
         $data = $this->repository->getAll(true, $start);
         $anchor = '<a href="{href}" class="you_sure">{title}</a>';
+        // Deletes are GET links, they need the session id to pass checkSession('get').
+        $session = ';' . $context['session_var'] . '=' . $context['session_id'];
 
         switch ($this->repository->getTable()) {
             case 'faq_categories':
@@ -101,7 +103,7 @@ class FaqList
                             $rowData->getId() === CategoryEntity::DEFAULT_CATEGORY_ID) ?
                             $this->translator->text('delete') :
                             strtr($anchor, [
-                            '{href}' => $scripturl . '?action=' . $action .';sa=delete;id=' . $rowData->getId(),
+                            '{href}' => $scripturl . '?action=' . $action .';sa=delete;id=' . $rowData->getId() . $session,
                             '{title}' => $this->translator->text('delete'),
                         ]),
                     ],

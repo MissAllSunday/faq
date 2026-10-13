@@ -139,7 +139,7 @@ function template_faq_add(): void
         <input type="submit" name="save" value="', $txt['save'] ,'" class="button floatright">
         <input type="submit" name="preview" class="button floatright" value="', $txt['preview'] ,'" />
         <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
-        <input type="hidden" name="', $context['faq-add_token_var'], '" value="', $context['faq-add_token'], '">
+        <input type="hidden" name="', $context[FaqController::TOKEN_ACTION . '_token_var'], '" value="', $context[FaqController::TOKEN_ACTION . '_token'], '">
     </form>
     </div>';
 }
@@ -246,12 +246,18 @@ function showSideBar(): void
 
 function showActions(FaqEntity $entity): string
 {
-    global $txt, $scripturl;
+    global $context, $txt, $scripturl;
 
-    return implode(' | ', array_map(function($action) use ($txt, $entity, $scripturl) {
+    return implode(' | ', array_map(function($action) use ($context, $txt, $entity, $scripturl) {
         $action = str_replace('_any', '', $action);
         $textKey = $action === 'add' ? 'edit' :  $action;
         $url = $scripturl . '?action=' . Faq::NAME . ';sa='. $action .';id='. $entity->getId();
+
+        // Delete is a GET link, it needs the session id to pass checkSession('get').
+        // Edit links stay plain GET, they are read only.
+        if ($action === FaqController::SUB_ACTION_DELETE) {
+            $url .= ';' . $context['session_var'] . '=' . $context['session_id'];
+        }
 
         return allowedTo(Faq::NAME . '_' . $action) ?
             '<a href="'. $url .'" class="you_sure">

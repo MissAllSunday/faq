@@ -1,6 +1,7 @@
 <?php
 
 
+use Faq\Controllers\CategoryController;
 use Faq\Entities\CategoryEntity;
 use Faq\Faq;
 
@@ -47,6 +48,7 @@ function template_faqCategory_add(): void
         <br />
         <input type="submit" name="save" value="', $txt['save'] ,'" class="button floatright">
         <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+        <input type="hidden" name="', $context[CategoryController::TOKEN_ACTION . '_token_var'], '" value="', $context[CategoryController::TOKEN_ACTION . '_token'], '">
     </form>
     </div>';
 }

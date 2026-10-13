@@ -37,6 +37,9 @@ class FaqController extends BaseController
         self::SUB_ACTION_CATEGORY,
     ];
 
+    /** SMF token name for the add/edit form, single use. */
+    public const TOKEN_ACTION = Faq::NAME . '-' . self::SUB_ACTION_ADD;
+
     protected FaqRepositoryInterface $faqRepository;
     protected CategoryRepositoryInterface $categoryRepository;
 
@@ -124,7 +127,7 @@ class FaqController extends BaseController
         ];
 
         if ($this->request->isPost()) {
-            validateToken(Faq::NAME . '-' . self::SUB_ACTION_ADD);
+            $this->verifyToken(self::TOKEN_ACTION);
 
             $data = array_intersect_key($this->request->all(), FaqEntity::COLUMNS);
             
@@ -155,7 +158,8 @@ class FaqController extends BaseController
 
         $this->setTemplateVars($templateVars);
 
-        createToken(Faq::NAME . '-' . self::SUB_ACTION_ADD);
+        // Tokens are single use, a fresh one is needed for every render.
+        $this->createSessionToken(self::TOKEN_ACTION);
     }
 
     public function single(): void
@@ -186,6 +190,9 @@ class FaqController extends BaseController
         $id = $this->request->get('id');
 
         isAllowedTo(Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE);
+
+        // Deletes are plain GET links, the session check is what stops CSRF.
+        $this->verifySession('get');
 
         if ($id) {
             $this->faqRepository->delete([$id]);
