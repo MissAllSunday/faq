@@ -19,13 +19,13 @@
 			"Faq\\": "tests/"
 		}
 	},
-	"minimum-stability": "dev",
+	"minimum-stability": "stable",
 	"require": {
 		"php": ">=8.0",
 		"ext-ctype": "*"
 	},
 	"require-dev": {
-		"phpstan/phpstan": "2.0.x-dev",
+		"phpstan/phpstan": "^2.0",
 		"phpunit/phpunit": "^12"
 	},
 	"scripts": {
