@@ -103,6 +103,43 @@ class FaqListTest extends TestCase
     }
 
     /**
+     * Regression: the list title must be resolved through the translator
+     * (translator->text('add_title')), never a literal '$add' string.
+     *
+     * @throws Exception
+     */
+    public function testBuildResolvesTitleViaTranslatorAddTitle(): void
+    {
+        $this->repository->method('getTable')->willReturn('faq_table');
+        $this->repository->method('getAll')
+            ->willReturn(['total' => 0, 'entities' => []]);
+        $this->config->method('setting')->willReturn(10);
+
+        // The title (and the bottom "add" button) must be sourced from the
+        // translator using the 'add_title' key.
+        $this->translator
+            ->expects($this->atLeastOnce())
+            ->method('text')
+            ->willReturnCallback(function (string $key) {
+                return match ($key) {
+                    'add_title' => 'Add FAQ',
+                    default => '',
+                };
+            });
+
+        $listOptions = null;
+        $faqList = $this->makeFaqList();
+        $faqList->method('createList')
+            ->willReturnCallback(function ($options) use (&$listOptions) {
+                $listOptions = $options;
+            });
+
+        $faqList->build();
+
+        $this->assertSame('Add FAQ', $listOptions['title']);
+    }
+
+    /**
      * @throws Exception
      */
     public function testBuildForCategoryTable(): void
