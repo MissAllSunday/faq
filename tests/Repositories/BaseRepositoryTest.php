@@ -5,6 +5,7 @@ namespace Faq\Repositories;
 use Faq\Entities\FaqEntity;
 use Faq\FaqAdmin;
 use Faq\FaqConfig;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,14 +32,14 @@ class TestBaseRepository extends BaseRepository
 class BaseRepositoryTest extends TestCase
 {
     private TestBaseRepository $repository;
-    private \PHPUnit\Framework\MockObject\MockObject $config;
+    private Stub $config;
 
     protected function setUp(): void
     {
         $GLOBALS['faq_test_calls'] = [];
         $GLOBALS['faq_pagination_limit'] = 0;
 
-        $this->config = $this->createMock(FaqConfig::class);
+        $this->config = $this->createStub(FaqConfig::class);
         $this->config->method('setting')->willReturnCallback(
             static function (string $key, $default = false) {
                 if ($key === FaqAdmin::SETTINGS_PAGINATION) {

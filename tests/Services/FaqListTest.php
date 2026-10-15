@@ -9,10 +9,11 @@ use Faq\FaqConfig;
 use Faq\FaqTranslator;
 use Faq\Repositories\RepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 
 class FaqListTest extends TestCase
 {
-    private MockObject $repository;
+    private Stub $repository;
     private MockObject $translator;
     private MockObject $config;
 
@@ -23,7 +24,7 @@ class FaqListTest extends TestCase
     {
         global $scripturl;
 
-        $this->repository = $this->createMock(RepositoryInterface::class);
+        $this->repository = $this->createStub(RepositoryInterface::class);
         $this->translator = $this->createMock(FaqTranslator::class);
         $this->config = $this->createMock(FaqConfig::class);
     }
@@ -52,7 +53,7 @@ class FaqListTest extends TestCase
         $this->repository->method('getTable')->willReturn('faq_table');
 
         // Mock entity
-        $mockEntity = $this->createMock(CategoryEntity::class);
+        $mockEntity = $this->createStub(CategoryEntity::class);
         $mockEntity->method('getId')->willReturn(1);
         $mockEntity->method('getName')->willReturn('Test FAQ');
 
@@ -69,7 +70,7 @@ class FaqListTest extends TestCase
             'delete' => 'Delete',
             'no_search_results' => 'No results found',
         ];
-        $this->translator->method('text')
+        $this->translator->expects(self::atLeastOnce())->method('text')
             ->willReturnCallback(fn(string $key) => $textMap[$key] ?? '');
 
         // Mock setting
@@ -81,7 +82,7 @@ class FaqListTest extends TestCase
         $listOptions = null;
         $faqList = $this->makeFaqList();
 
-        $faqList->method('createList')
+        $faqList->expects(self::once())->method('createList')
             ->willReturnCallback(function ($options) use (&$listOptions) {
                 $listOptions = $options;
             });
@@ -113,7 +114,7 @@ class FaqListTest extends TestCase
         $this->repository->method('getTable')->willReturn('faq_table');
         $this->repository->method('getAll')
             ->willReturn(['total' => 0, 'entities' => []]);
-        $this->config->method('setting')->willReturn(10);
+        $this->config->method('setting')->with('num_faqs', 0)->willReturn(10);
 
         // The title (and the bottom "add" button) must be sourced from the
         // translator using the 'add_title' key.
@@ -129,7 +130,7 @@ class FaqListTest extends TestCase
 
         $listOptions = null;
         $faqList = $this->makeFaqList();
-        $faqList->method('createList')
+        $faqList->expects(self::once())->method('createList')
             ->willReturnCallback(function ($options) use (&$listOptions) {
                 $listOptions = $options;
             });
@@ -149,7 +150,7 @@ class FaqListTest extends TestCase
         $this->repository->method('getTable')->willReturn('faq_categories');
 
         // Mock entity
-        $mockEntity = $this->createMock(CategoryEntity::class);
+        $mockEntity = $this->createStub(CategoryEntity::class);
         $mockEntity->method('getId')->willReturn(CategoryEntity::DEFAULT_CATEGORY_ID);
         $mockEntity->method('getName')->willReturn('Default Category');
 
@@ -166,7 +167,7 @@ class FaqListTest extends TestCase
             'delete' => 'Delete',
             'no_search_results' => 'No results found',
         ];
-        $this->translator->method('text')
+        $this->translator->expects(self::atLeastOnce())->method('text')
             ->willReturnCallback(fn(string $key) => $textMap[$key] ?? '');
 
         // Mock setting
@@ -178,7 +179,7 @@ class FaqListTest extends TestCase
         $listOptions = null;
         $faqList = $this->makeFaqList();
 
-        $faqList->method('createList')
+        $faqList->expects(self::once())->method('createList')
             ->willReturnCallback(function ($options) use (&$listOptions) {
                 $listOptions = $options;
             });

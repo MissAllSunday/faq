@@ -24,7 +24,7 @@ class FaqValidationTest extends TestCase
      */
     public function testValidFaqEntityValidation(): void
     {
-        $entity = $this->createMock(FaqEntity::class);
+        $entity = $this->createStub(FaqEntity::class);
         $entity->method('getColumns')->willReturn([
             'title' => 'string',
             'body' => 'string',
@@ -44,7 +44,7 @@ class FaqValidationTest extends TestCase
 
     public function testValidCategoryEntityValidation(): void
     {
-        $entity = $this->createMock(CategoryEntity::class);
+        $entity = $this->createStub(CategoryEntity::class);
         $entity->method('getColumns')->willReturn([
             'name' => 'string'
         ]);
@@ -60,7 +60,7 @@ class FaqValidationTest extends TestCase
 
     public function testMissingRequiredFields(): void
     {
-        $entity = $this->createMock(FaqEntity::class);
+        $entity = $this->createStub(FaqEntity::class);
         $entity->method('getColumns')->willReturn([
             'title' => 'string',
             'body' => 'string'
@@ -81,7 +81,7 @@ class FaqValidationTest extends TestCase
      */
     public function testInvalidStringType(): void
     {
-        $entity = $this->createMock(FaqEntity::class);
+        $entity = $this->createStub(FaqEntity::class);
         $entity->method('getColumns')->willReturn([
             'title' => 'string',
             'body' => 'string',
@@ -103,7 +103,7 @@ class FaqValidationTest extends TestCase
      */
     public function testInvalidIntType(): void
     {
-        $entity = $this->createMock(CategoryEntity::class);
+        $entity = $this->createStub(CategoryEntity::class);
         $entity->method('getColumns')->willReturn([
             'id' => 'int'
         ]);
@@ -123,7 +123,7 @@ class FaqValidationTest extends TestCase
      */
     public function testEmptyDataValidation(): void
     {
-        $entity = $this->createMock(FaqEntity::class);
+        $entity = $this->createStub(FaqEntity::class);
         $entity->method('getColumns')->willReturn([
             'title' => 'string',
             'body' => 'string'
@@ -139,7 +139,7 @@ class FaqValidationTest extends TestCase
      */
     public function testNullValuesAreConsideredMissing(): void
     {
-        $entity = $this->createMock(FaqEntity::class);
+        $entity = $this->createStub(FaqEntity::class);
         $entity->method('getColumns')->willReturn([
             'title' => 'string',
             'body' => 'string'

@@ -15,17 +15,18 @@ use Faq\Repositories\FaqRepositoryInterface;
 use Faq\Services\FaqValidation;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 class FaqControllerTest extends TestCase
 {
-    private MockObject $request;
-    private MockObject $validation;
-    private MockObject $translator;
-    private MockObject $config;
-    private MockObject $parser;
+    private Stub $request;
+    private Stub $validation;
+    private Stub $translator;
+    private Stub $config;
+    private Stub $parser;
     private MockObject $faqRepository;
-    private MockObject $categoryRepository;
+    private Stub $categoryRepository;
 
     /** @var array<string, mixed> values returned by FaqRequest::get() */
     private array $requestValues = [];
@@ -52,7 +53,7 @@ class FaqControllerTest extends TestCase
         $this->requestAll = [];
         $this->requestSet = [];
 
-        $this->request = $this->createMock(FaqRequest::class);
+        $this->request = $this->createStub(FaqRequest::class);
         $this->request->method('get')->willReturnCallback(
             fn (string $key, $default = null) => $this->requestValues[$key] ?? $default
         );
@@ -64,12 +65,12 @@ class FaqControllerTest extends TestCase
         );
         $this->request->method('history')->willReturn(['faq_index']);
 
-        $this->validation = $this->createMock(FaqValidation::class);
-        $this->translator = $this->createMock(FaqTranslator::class);
-        $this->config = $this->createMock(FaqConfig::class);
-        $this->parser = $this->createMock(FaqParser::class);
+        $this->validation = $this->createStub(FaqValidation::class);
+        $this->translator = $this->createStub(FaqTranslator::class);
+        $this->config = $this->createStub(FaqConfig::class);
+        $this->parser = $this->createStub(FaqParser::class);
         $this->faqRepository = $this->createMock(FaqRepositoryInterface::class);
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->createStub(CategoryRepositoryInterface::class);
 
         // Sensible defaults for the collaborators the sub actions touch.
         $this->config->method('setting')->willReturnCallback(
@@ -121,7 +122,7 @@ class FaqControllerTest extends TestCase
         ];
 
         $entity = new FaqEntity(FaqEntity::DEFAULT_VALUES);
-        $this->faqRepository->method('getEntity')->willReturn($entity);
+        $this->faqRepository->expects(self::once())->method('getEntity')->willReturn($entity);
         // A validation error keeps the save from happening.
         $this->validation->method('isValid')->willReturn('body');
 
@@ -169,7 +170,7 @@ class FaqControllerTest extends TestCase
     public function testAddChecksPermission(): void
     {
         // getEntity() has a union return type PHPUnit cannot auto-generate.
-        $this->faqRepository->method('getEntity')->willReturn(new FaqEntity(FaqEntity::DEFAULT_VALUES));
+        $this->faqRepository->expects(self::once())->method('getEntity')->willReturn(new FaqEntity(FaqEntity::DEFAULT_VALUES));
 
         $this->makeController()->add();
 

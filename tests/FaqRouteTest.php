@@ -5,6 +5,7 @@ namespace Faq;
 use Faq\Controllers\CategoryController;
 use Faq\Controllers\FaqController;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,8 +29,8 @@ class FaqRouteSpy extends FaqRoute
 
 class FaqRouteTest extends TestCase
 {
-    private MockObject $request;
-    private MockObject $config;
+    private Stub $request;
+    private Stub $config;
     private array $requestValues = [];
 
     protected function setUp(): void
@@ -40,13 +41,13 @@ class FaqRouteTest extends TestCase
         $modSettings['faq_enable'] = true;
 
         $this->requestValues = [];
-        $this->request = $this->createMock(FaqRequest::class);
+        $this->request = $this->createStub(FaqRequest::class);
         $this->request->method('get')->willReturnCallback(
             fn (string $key, $default = null) => $this->requestValues[$key] ?? $default
         );
         $this->request->method('history')->willReturn(['faq_index']);
 
-        $this->config = $this->createMock(FaqConfig::class);
+        $this->config = $this->createStub(FaqConfig::class);
         $this->config->method('setting')->willReturnCallback(
             fn (string $key, $default = false) => $key === FaqAdmin::SETTINGS_ENABLE ?
                 ($GLOBALS['modSettings']['faq_enable'] ?? false) : $default
@@ -182,7 +183,7 @@ class FaqRouteTest extends TestCase
     public function testDispatchChecksPermissionsBeforeRegistering(): void
     {
         $this->requestValues = ['action' => FaqController::ACTION, 'sa' => FaqController::SUB_ACTION_DELETE];
-        $controller = $this->createMock(FaqController::class);
+        $controller = $this->createStub(FaqController::class);
         $controller->method('isSubActionValid')->willReturn(true);
 
         $actions = [];
