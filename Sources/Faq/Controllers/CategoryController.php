@@ -82,7 +82,7 @@ class CategoryController extends BaseController
             }
 
             if ($this->request->isSet('save') && empty($errorMessage)) {
-                $this->save($data, $id);
+                $this->save($data, $id, self::SUB_ACTION_MANAGE);
             }
         }
 

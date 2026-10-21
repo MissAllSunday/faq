@@ -145,6 +145,7 @@ $txt['faq_info_faqCategory_insert'] = 'You have successfully added a new categor
 $txt['faq_info_faqCategory_update'] = 'You have successfully updated this category';
 $txt['faq_info_faq_delete'] = 'You have successfully deleted the entry';
 $txt['faq_info_faqCategory_delete'] = 'You have successfully deleted the category.';
+$txt['faq_error_faq_delete'] = 'There was an error deleting the FAQ entry, please try again or contact your administrator';
 $txt['faq_error_faqCategory_delete'] = 'There was an error deleting the category entry';
 $txt['faq_error_faqCategory_delete_default'] = 'The default category cannot be deleted, try updating it instead.';
 $txt['faq_error_faqCategory_generic'] = 'There was an problem with the category entry';

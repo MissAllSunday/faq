@@ -216,7 +216,7 @@ class FaqController extends BaseController
 
             if ($this->request->isSet('save') && empty($errorMessage)) {
                 $data[FaqEntity::LOG] = $this->upsertLog($entity->getLog());
-                $this->save($data, $id);
+                $this->save($data, $id, self::SUB_ACTION_MANAGE);
             }
         }
 
@@ -276,7 +276,7 @@ class FaqController extends BaseController
             $result = self::SUCCESS;
         }
 
-        $this->redirect($result, 'delete');
+        $this->redirect($result, 'delete', self::SUB_ACTION_MANAGE);
     }
 
     public function manage(): void

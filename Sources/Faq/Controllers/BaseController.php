@@ -60,15 +60,11 @@ abstract class BaseController
         $this->parser = $parser;
     }
 
-    protected function redirect(string $type = self::ERROR, string $subAction = 'generic'): void
+    protected function redirect(string $type = self::ERROR, string $subAction = 'generic', ?string $targetSubAction = null): void
     {
-        $action = $this->getAction();
-        $history = explode('_', $this->request->history()[0]);
-        $_SESSION[Faq::NAME . '_message'] = $type . '_' . $action . '_' . $subAction;
-        $id = !empty($history[2]) ? ';id=' . $history[2] : '';
-        $sa = (!empty($history[1]) && $history[1] !== 'index') ? (';sa=' . $history[1] . $id) : '';
+        $_SESSION[Faq::NAME . '_message'] = $type . '_' . $this->getAction() . '_' . $subAction;
 
-        redirectexit('action=' . $history[0] . $sa);
+        redirectexit(FaqUrl::build($this->getAction(), $targetSubAction));
     }
 
     function showMessage(): string
@@ -118,17 +114,17 @@ abstract class BaseController
         createToken($action, $type);
     }
 
-    protected function save(array $data, ?int $id = null): void
+    protected function save(array $data, ?int $id = null, ?string $targetSubAction = null): void
     {
         if ($id) {
             $this->repository->update($data, $id);
 
-            $this->redirect('info', 'update');
+            $this->redirect('info', 'update', $targetSubAction);
         }
 
         $this->repository->insert($data);
 
-        $this->redirect('info', 'insert');
+        $this->redirect('info', 'insert', $targetSubAction);
     }
     public function setSubAction(string $action, string $subAction): void
     {
