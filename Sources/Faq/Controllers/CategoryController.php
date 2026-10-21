@@ -50,15 +50,10 @@ class CategoryController extends BaseController
 
     public function manage(): void
     {
-        global $context;
-
         isAllowedTo([Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD, Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]);
 
-        $context['sub_template'] = 'show_list';
-        $context['default_list'] = 'faq_list';
-
         $categoryList = new FaqList($this->repository, $this->translator, $this->config, $this->request->get('start', 0));
-        $categoryList->build($context[Faq::NAME]['message']);
+        $categoryList->build($this->message());
     }
 
     public function add(): void

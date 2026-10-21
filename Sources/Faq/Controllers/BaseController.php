@@ -10,6 +10,7 @@ use Faq\FaqRequest;
 use Faq\FaqTranslator;
 use Faq\FaqUrl;
 use Faq\Repositories\RepositoryInterface;
+use Faq\Services\FaqList;
 use Faq\Services\FaqValidation;
 
 abstract class BaseController
@@ -25,6 +26,20 @@ abstract class BaseController
 
     const SUCCESS = 'info';
     const ERROR = 'error';
+
+    /**
+     * Top level $context overrides per sub action. Both controllers share the
+     * manage sub action, so one entry renders both admin lists through SMF's
+     * GenericList: template_show_list() needs default_list at the top level,
+     * not inside the mod's own context namespace.
+     */
+    const SUB_ACTION_CONTEXT = [
+        FaqController::SUB_ACTION_MANAGE => [
+            'sub_template' => 'show_list',
+            'default_list' => FaqList::ID,
+        ],
+    ];
+
 
     /**
      * Controllers are built by FaqRoute::makeController() only for our own actions,
@@ -128,7 +143,9 @@ abstract class BaseController
         $subAction = ($id && $this->subAction === 'add' ? 'update' : $this->subAction);
         $currentUrl = FaqUrl::build($this->getAction(), $this->subAction, $this->id);
         $context['sub_action'] = $this->subAction;
-        $context['sub_template'] = $action . '_' . $this->subAction;
+        $context = array_merge($context, self::SUB_ACTION_CONTEXT[$subAction] ?? [
+            'sub_template' => $action . '_' . $this->subAction,
+        ]);
         $context['page_title'] = $this->translator->text($txtKey . $subAction . '_title');
         $context['current_url'] = $currentUrl;
         $context['linktree'][] = [
@@ -164,7 +181,11 @@ abstract class BaseController
             'name' => $name];
     }
 
-    protected function setTemplateVars(array $vars, array $smfContextVars = []): void
+    /**
+     * The flash message left by redirect(), lazily stored in the mod context so
+     * sub actions that never call setTemplateVars() (the admin lists) can read it.
+     */
+    protected function message(): string
     {
         global $context;
 
@@ -172,9 +193,18 @@ abstract class BaseController
             $context[Faq::NAME] = [];
         }
 
-        if (empty($context[Faq::NAME]['message'])) {
+        if (!isset($context[Faq::NAME]['message'])) {
             $context[Faq::NAME]['message'] = $this->showMessage();
         }
+
+        return $context[Faq::NAME]['message'];
+    }
+
+    protected function setTemplateVars(array $vars, array $smfContextVars = []): void
+    {
+        global $context;
+
+        $this->message();
 
         $context[Faq::NAME] = array_merge($context[Faq::NAME], $vars);
 

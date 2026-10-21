@@ -11,7 +11,6 @@ function template_faq_index(): void
 {
 	global $txt, $context, $modSettings;
 
-	// Already censored and BBC parsed by the controller.
 	$entities = $context[Faq::NAME]['entities'];
 
     echo '
@@ -291,9 +290,6 @@ function showPreview(array $preview): void
     <br />';
 }
 
-// Both Faq.template.php and FaqCategory.template.php need this and SMF only loads
-// the template matching the current action, so the declaration is guarded to make
-// the load order irrelevant.
 if (!function_exists('showErrors')) {
     function showErrors(string $errors): void
     {

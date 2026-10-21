@@ -101,7 +101,6 @@ class FaqList
                             $rowData->getId() === CategoryEntity::DEFAULT_CATEGORY_ID) ?
                             $this->translator->text('delete') :
                             strtr($anchor, [
-                            // Deletes are GET links, they carry the session id for checkSession('get').
                             '{href}' => FaqUrl::build(
                                 $action,
                                 FaqController::SUB_ACTION_DELETE,

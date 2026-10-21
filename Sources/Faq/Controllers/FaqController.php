@@ -281,15 +281,10 @@ class FaqController extends BaseController
 
     public function manage(): void
     {
-        global $context;
-
         isAllowedTo([Faq::NAME . '_' . FaqAdmin::PERMISSION_ADD, Faq::NAME . '_' . FaqAdmin::PERMISSION_DELETE]);
 
-        $context['sub_template'] = 'show_list';
-        $context['default_list'] = 'faq_list';
-
         $faqList = new FaqList($this->repository, $this->translator, $this->config, $this->request->get('start', 0));
-        $faqList->build($context[Faq::NAME]['message']);
+        $faqList->build($this->message());
     }
 
     public function category(): void
